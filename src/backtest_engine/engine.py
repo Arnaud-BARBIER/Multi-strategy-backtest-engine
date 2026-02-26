@@ -1,5 +1,4 @@
 class BacktestEngine:
-    from collections import namedtuple
     Bar = namedtuple("Bar", ["Open", "High", "Low", "Close", "name"])
 
     def __init__(self, df: pd.DataFrame, cfg: BacktestConfig):
@@ -24,9 +23,9 @@ class BacktestEngine:
         self.lows = df["Low"].to_numpy()
         self.closes = df["Close"].to_numpy()
         self.signals = df["Signal"].to_numpy()
-        self.ema1s = df["EMA1"].to_numpy() if "EMA1" in df.columns else None
-        self.ema2s = df["EMA2"].to_numpy() if "EMA2" in df.columns else None
         self.atrs = df["ATR"].to_numpy() if "ATR" in df.columns else None
+        self.ema1s = df["EMA1_exit"].to_numpy() if "EMA1_exit" in df.columns else None
+        self.ema2s = df["EMA2_exit"].to_numpy() if "EMA2_exit" in df.columns else None
         self.index = df.index
 
         self.parsed_windows = [
@@ -249,7 +248,7 @@ class BacktestEngine:
 
         # Time filter
         cfg = self.cfg
-        atr_value = self.atrs[i] if (cfg.use_atr_sl_tp and self.atrs is not None) else None
+        atr_value = self.atrs[i-1] if (cfg.use_atr_sl_tp and self.atrs is not None) else None
         # windows est déjà garanti dans __init__
         if any(w is not None for w in self.parsed_windows):
             in_any_window = any(
@@ -579,6 +578,7 @@ class BacktestEngine:
     # --------- CORE ---------
     def run(self) -> pd.DataFrame:
         cfg = self.cfg
+
 
         for i in range(1, len(self.df)):
             ts = self.index[i]
