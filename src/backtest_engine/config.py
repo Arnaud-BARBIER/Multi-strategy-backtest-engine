@@ -12,12 +12,14 @@ class BacktestConfig:
     period_2: int = 100
     max_gap_size: Optional[float] = None
     period_atr: int = 14
-
+    
     # --- Filters ---
     Candle_Size_filter: bool = True
     Previous_Candle_same_direction: bool = True
     min_size_pct: float = 0.001
     max_size_pct: float = 0.02
+    Exit_filter_EMA1: int = 50
+    Exit_filter_EMA2: int = 100
 
     # --- TP/SL ---
     tp_pct: float = 0.05
