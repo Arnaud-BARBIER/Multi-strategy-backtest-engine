@@ -17,14 +17,21 @@ Key objectives:
 
 ### Architecture Overview
 
-DataPipeline (including Feature Engineering (EMA, ATR, etc.))
-   ↓
-Strategy Layer (entry signal generation)
-   ↓
-BacktestEngine (stateful execution logic)
-   ↓
- output
-Trade Analytics
+- **DataPipeline**
+  - Feature engineering (EMA, ATR, etc.)
+
+- **Strategy Layer**
+  - Entry signal generation
+
+- **BacktestEngine**
+  - Stateful execution logic
+  - Risk management
+  - Exit handling
+
+- **Trade Analytics**
+  - Performance metrics
+  - MAE / MFE tracking
+
 
 
 ### Signal Architecture
