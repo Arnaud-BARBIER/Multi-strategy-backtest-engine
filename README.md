@@ -1,8 +1,9 @@
 # Multi-strategy-backtest-engine
 Object-oriented backtesting framework featuring pluggable signal modules, configurable execution logic and state-managed trade lifecycle.
 
+## Project Overview 
 
-## Motivation
+#### Motivation
 
 This project was built to move from ad-hoc procedural backtesting
 to a modular, scalable architecture suitable for serious research.
@@ -14,7 +15,7 @@ Key objectives:
 - Prepare the ground for parameter optimization and multi-strategy testing
 
 
-## Architecture Overview
+### Architecture Overview
 
 DataPipeline (including Feature Engineering (EMA, ATR, etc.))
    ↓
