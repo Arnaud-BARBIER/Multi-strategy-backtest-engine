@@ -1,6 +1,9 @@
 # Multi-strategy-backtest-engine
 Object-oriented backtesting framework featuring pluggable signal modules, configurable execution logic and state-managed trade lifecycle.
 
+<img width="1108" height="693" alt="Screenshot 2026-02-26 at 22 24 52" src="https://github.com/user-attachments/assets/4630ed94-a429-454d-9ab7-455e5f808cfd" />
+
+
 ## Project Overview 
 
 ### Motivation
