@@ -9,7 +9,7 @@
 #   - EMA exit filters (EMA1, EMA2, EMA cross)
 #   - MaxEntries cap with sliding window + day/session reset
 #
-# Known performance bottlenecks (addressed in V3):
+# Known performance bottlenecks (addressed in V2.2):
 #   - df.iloc[i] inside the loop → repeated full-row extraction at every bar
 #   - df["col"].iloc[i] → double indexing, triggers pandas overhead each call
 #   - exit_mode recomputed at every bar instead of once before the loop
@@ -17,7 +17,7 @@
 #   - recent_entries list comprehension rebuilt entirely at every bar
 #   - df passed into exit_logic for EMA lookup → iloc[i] inside a nested call
 #
-# Superseded by V3 (class architecture + numpy array precomputation).
+# Superseded by V2.2 (class architecture + numpy array precomputation).
 # =============================================================================
 
 import pandas as pd
@@ -105,7 +105,7 @@ def compute_atr(df: pd.DataFrame, period: int = 14) -> pd.DataFrame:
     """
     Standard Average True Range — used for volatility-adjusted TP/SL.
     Computed once before the loop; accessed via iloc[i] in entry_logic.
-    Note: in V3 this is precomputed as a numpy array to avoid per-bar iloc cost.
+    Note: in V2.2 this is precomputed as a numpy array to avoid per-bar iloc cost.
     """
     high  = df["High"]
     low   = df["Low"]
@@ -199,7 +199,7 @@ def entry_logic(df, i, min_size_pct, max_size_pct,
     If all pass, a new position dict is returned — consumed by the main loop.
 
     Performance note: df["col"].iloc[i] is called here for prev_open/close
-    and ATR. In V3 these are precomputed as numpy arrays, eliminating
+    and ATR. In V2.2 these are precomputed as numpy arrays, eliminating
     repeated pandas indexing overhead (~10x speedup on large datasets).
     """
     windows = [time_window_1, time_window_2, time_window_3]
@@ -229,7 +229,7 @@ def entry_logic(df, i, min_size_pct, max_size_pct,
 
     entry_price = bar.Open
 
-    # ATR fetched via iloc — bottleneck flagged for V3 (precomputed array)
+    # ATR fetched via iloc — bottleneck flagged for V2.2 (precomputed array)
     atr_value = df["ATR"].iloc[i] if use_atr_sl_tp else None
 
     if use_atr_sl_tp and pd.isna(atr_value):
@@ -345,7 +345,7 @@ def exit_logic(pos, bar, i, allow_exit_on_entry_bar, df,
       ema   — SL fixed, TP triggered by EMA condition (only if trade is profitable)
 
     Performance note: in EMA mode, df["EMA1"].iloc[i] is called here on every
-    bar for every open position. In V3, EMA values are precomputed as numpy
+    bar for every open position. In V2.2, EMA values are precomputed as numpy
     arrays and accessed as self.ema1s[i] — eliminating repeated iloc overhead.
     """
     if not allow_exit_on_entry_bar and i == pos["entry_index"]:
@@ -377,7 +377,7 @@ def exit_logic(pos, bar, i, allow_exit_on_entry_bar, df,
     # =========================
     elif exit_mode == "ema":
 
-        # EMA values fetched via iloc — bottleneck flagged for V3
+        # EMA values fetched via iloc — bottleneck flagged for V2.2
         ema1 = df["EMA1"].iloc[i]
         ema2 = df["EMA2"].iloc[i]
         entry_price = pos["entry_price"]
@@ -479,7 +479,9 @@ def filtre_AND_Exit_StratV2(
     ─────────────────────────────────────────────────────────────
     MULTI-POSITION
       Positions stored as a list of dicts instead of scalar variables.
-      Each position carries its own entry_price, tp, sl, BE state.
+      Each position carries its own entry_price, tp, sl, BE state... 
+      the dict is created in the entry_logic function after one entry 
+      has been aproved.
       multi_entry=True allows stacking positions on repeated signals.
 
     SESSION FILTERING
@@ -497,14 +499,16 @@ def filtre_AND_Exit_StratV2(
       be_delay_bars prevents premature BE on volatile entries.
 
     ─────────────────────────────────────────────────────────────
-    Performance bottlenecks (addressed in V3):
-      - exit_mode recomputed at every bar → moved before loop in V3
+    Performance bottlenecks (addressed in V2.2):
+      - exit_mode recomputed at every bar 
       - df.iloc[i] called inside entry_logic and exit_logic → replaced
-        by numpy array precomputation in V3 (~10x speedup)
+        by numpy array precomputation in V2.2
       - positions.copy() + positions.remove() → replaced by surviving
-        list pattern in V3 (avoids O(n) scan per closed trade)
+        list pattern in V2.2 (avoids O(n) scan per closed trade)
       - recent_entries rebuilt via list comprehension each bar → replaced
-        by sliding pointer (j) in V3
+        by sliding pointer (j) in V2.2
+      - One last notable bottleneck was the session/day/periode candle count cap
+        reset. the optimisation done would be explained in the V2.2.  
     ─────────────────────────────────────────────────────────────
     """
 
@@ -518,13 +522,13 @@ def filtre_AND_Exit_StratV2(
     # BE state lives inside each position dict — not shared across positions
     # (be_armed, pending_be_sl initialized per position in entry_logic)
 
-    # exit_mode determined by EMA flags — recomputed each bar here (V3 moves this before loop)
+    # exit_mode determined by EMA flags — recomputed each bar here (V2.2 moves this before loop)
     for i in range(1, len(df)):
         ts       = df.index[i]
-        bar      = df.iloc[i]   # full row extraction — bottleneck flagged for V3
+        bar      = df.iloc[i]   # full row extraction — bottleneck flagged for V2.2
         sig_prev = df["Signal"].iloc[i - 1]
 
-        # exit_mode recomputed every bar — wasteful, moved before loop in V3
+        # exit_mode recomputed every bar — wasteful, moved before loop in V2.2
         exit_mode = "ema" if sum([EMA1_TP, EMA2_TP, EMA_CROSS_TP]) == 1 else "fixed"
 
         # ── Reverse ──────────────────────────────────────────────────────────
@@ -560,7 +564,7 @@ def filtre_AND_Exit_StratV2(
                 recent_entries  = []
                 last_session_id = current_session
 
-        # Sliding window cleanup — list comprehension rebuilt each bar (V3 uses pointer)
+        # Sliding window cleanup — list comprehension rebuilt each bar (V2.2 uses pointer)
         if MaxEntries4Periods:
             recent_entries = [idx for idx in recent_entries if i - idx < ME_Period_Y]
             if len(recent_entries) >= ME_X:
@@ -574,7 +578,7 @@ def filtre_AND_Exit_StratV2(
 
         # ── Exit ──────────────────────────────────────────────────────────────
         # positions.copy() used to iterate safely while removing closed positions.
-        # In V3 replaced by a surviving list pattern — avoids O(n) remove() scan.
+        # In V2.2 replaced by a surviving list pattern — avoids O(n) remove() scan.
         for pos in positions.copy():
 
             pos["sl"], pos["be_armed"], pos["pending_be_sl"], \
@@ -601,7 +605,7 @@ def filtre_AND_Exit_StratV2(
                     entry_price=pos["entry_price"], entry_time=pos["entry_time"],
                     ts=exit_event["exit_time"], exit_reason=exit_event["reason"],
                 ))
-                positions.remove(pos)  # O(n) scan — replaced by surviving list in V3
+                positions.remove(pos)  # O(n) scan — replaced by surviving list in V2.2
 
     return pd.DataFrame(trades)
 
