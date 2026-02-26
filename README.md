@@ -3,7 +3,7 @@ Object-oriented backtesting framework featuring pluggable signal modules, config
 
 ## Project Overview 
 
-#### Motivation
+### Motivation
 
 This project was built to move from ad-hoc procedural backtesting
 to a modular, scalable architecture suitable for serious research.
@@ -15,7 +15,7 @@ Key objectives:
 - Prepare the ground for parameter optimization and multi-strategy testing
 
 
-#### Architecture Overview
+### Architecture Overview
 
 DataPipeline (including Feature Engineering (EMA, ATR, etc.))
    ↓
@@ -77,7 +77,7 @@ to classify market states and dynamically adapt strategy parameters.
 
 
 
-# Engine R&D process 
+## Engine R&D process 
 
 
 
