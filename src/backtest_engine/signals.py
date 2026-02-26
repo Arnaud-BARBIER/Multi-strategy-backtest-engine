@@ -8,16 +8,6 @@ class Strategy_Signal:
                 raise ValueError(f"Unknown strategy: {cfg.strategy}")
             
         @staticmethod
-        def apply_exitfilter_indicators(df, cfg):
-            # Calcule EMA1/EMA2 seulement si nécessaire pour la sortie
-            if any([cfg.EMA1_TP, cfg.EMA2_TP, cfg.EMA_CROSS_TP]) and not cfg.strategy == "ema_cross" :
-                if "EMA1" not in df.columns:  # ← pas recalculé si déjà présent
-                    df["EMA1"] = df["Close"].ewm(span=cfg.period_1, adjust=False).mean()
-                if "EMA2" not in df.columns:
-                    df["EMA2"] = df["Close"].ewm(span=cfg.period_2, adjust=False).mean()
-            return df
-
-        @staticmethod
         def ema_cross(df: pd.DataFrame, period_1=50, period_2=100, max_gap_size=None) -> pd.DataFrame:
             d = df.copy()
             d["EMA1"] = d["Close"].ewm(span=period_1, adjust=False).mean()
@@ -53,4 +43,4 @@ class Strategy_Signal:
 
             d["Entry_Price"] = d["Open"].where(d["Signal"].shift(1) != 0)
             return d
-       
+ 
