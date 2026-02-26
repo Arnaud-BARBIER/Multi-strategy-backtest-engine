@@ -15,7 +15,7 @@ Key objectives:
 - Prepare the ground for parameter optimization and multi-strategy testing
 
 
-### Architecture Overview
+#### Architecture Overview
 
 DataPipeline (including Feature Engineering (EMA, ATR, etc.))
    ↓
@@ -27,7 +27,7 @@ BacktestEngine (stateful execution logic)
 Trade Analytics
 
 
-## Signal Architecture
+### Signal Architecture
 
 Clear separation between signal generation and conditional filtering logic.
 
@@ -36,7 +36,7 @@ while a unified filtering layer enables systematic refinement
 and optimised edge development across different models.
 
 
-## Main Core Features
+### Main Core Features
 
 - Stateful multi-position engine
 - Break-even logic with delayed activation
@@ -47,7 +47,7 @@ and optimised edge development across different models.
 - Observation metrics (MAE / MFE / hold analysis)
 - Optimized NumPy-based iteration for moderate scalability
 
-## Known Limitations
+### Known Limitations
 
 - No slippage / commission modeling yet
 - No portfolio-level allocation layer
@@ -55,7 +55,7 @@ and optimised edge development across different models.
 and statistical significance assessment.
 
 
-## Future Work
+### Future Work
 
 - Strategy injection abstraction layer
 - Portfolio allocation module
@@ -65,7 +65,7 @@ and statistical significance assessment.
 - Development of a robust statistical validation layer
 
 
-## Future Projects
+### Future Projects
 
 I Anticipate from statistical analysis to highlight
 that optimal parameter configurations vary significantly
