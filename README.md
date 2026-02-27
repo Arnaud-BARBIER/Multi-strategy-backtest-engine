@@ -1,7 +1,7 @@
 # Backtesting Engine
 ### A modular, class-based backtesting framework built for systematic research on OHLCV data
 
-<img width="1100" height="699" alt="Backtest Engine Screenshot" src="https://github.com/user-attachments/assets/32a9db9e-3aaa-4d65-8747-d04215617657" />
+<img width="1101" height="686" alt="Screenshot 2026-02-27 at 20 56 58" src="https://github.com/user-attachments/assets/801b26e6-cee9-4efc-8978-a1a0aac7c00c" />
 
 ---
 
