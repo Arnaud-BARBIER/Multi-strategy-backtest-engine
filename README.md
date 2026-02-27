@@ -5,12 +5,13 @@
 
 ---
 
-I built this after realizing that iterating on a monolithic backtest 
-script was getting in the way of doing actual research. Every time I 
-wanted to test a new exit condition, add a session filter, or tweak 
-the risk management, I was rewriting the same loop from scratch. 
-This project is the result of refactoring that mess into something 
-I can actually reuse.
+I built this after realizing that rebuilding a bar-by-bar simulation 
+loop across notebooks was not a research workflow, it was a 
+bottleneck. Every new strategy meant rewriting execution logic, 
+risk management, and session filters from scratch. This project 
+is the result of decoupling signal generation from the execution 
+engine, so strategy logic can be iterated independently from 
+the simulation layer.
 
 The engine is written in Python and designed around one idea: **signal generation and execution logic should be completely independent**. The operator bring a strategy that produces a `Signal` column and the engine handles everything else: entries, exits, position sizing, breakeven, atr trailing stops, session filtering, and later trade analytics and hypothesis testing.
 
