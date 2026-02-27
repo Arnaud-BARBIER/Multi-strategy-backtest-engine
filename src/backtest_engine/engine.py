@@ -49,6 +49,18 @@ class BacktestEngine:
         df = pipeline.build(ticker, start, end, cfg)
         return cls(df, cfg)
 
+    @classmethod #**kwargs is the mecanism Python used to allow an undefined number of argument. since the engine wont know the number of argument a strategy has
+    def from_df(cls, pipeline, ticker, start, end, cfg, strategy_fn, **strategy_kwargs):
+        """
+        strategy_kwargs : any parameters to pass to strategy_fn
+        e.g. rsi_period=20, oversold=25
+        """
+        df = pipeline.fetchdata(ticker, start, end)
+        df = pipeline.compute_atr(df, cfg.period_atr)
+        df = strategy_fn(df, **strategy_kwargs)  # ← kwargs transmitted here
+        df = DataPipeline.apply_exitfilter_indicators(df, cfg)
+        return cls(df, cfg)
+
     @staticmethod
     def parse_window(w):
         if w is None:
@@ -543,7 +555,7 @@ class BacktestEngine:
                 )
 
             # Exit
-            exit_event = self._exit_logic(i, bar, pos)
+            exit_event = self._exit_logic(i, bar, pos) # mettre signa_exit et creer une parti qui interprete ce signal
 
             if exit_event is not None:
                 if cfg.fast:
