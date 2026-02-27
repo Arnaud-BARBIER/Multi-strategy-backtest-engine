@@ -7,7 +7,7 @@
 
 I built this after realizing that iterating on a monolithic backtest script was getting in the way of doing actual research. Every time I wanted to test a new strategy, i was rewriting the same loop always adding the same exit condition or add a session filter. This project is the result of refactoring that into something I can actually reuse.
 
-The engine is written in Python and designed around one idea: **signal generation and execution logic should be completely independent**. The operator bring a strategy that produces a `Signal` column in `df` . The engine handles everything else: entries, exits, position sizing, breakeven, atr trailing stops, session filtering, and later trade analytics and hypothesis testing.
+The engine is written in Python and designed around one idea: **signal generation and execution logic should be completely independent**. The operator bring a strategy that produces a `Signal` column and the engine handles everything else: entries, exits, position sizing, breakeven, atr trailing stops, session filtering, and later trade analytics and hypothesis testing.
 
 ---
 
@@ -49,13 +49,11 @@ The engine never touches signal generation logic. A strategy only needs to retur
 ## Quickstart
 
 ```python
-# from a .ipynb
-
-%pip install git+https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine.git
+pip install git+https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine.git
 from backtest_engine import BacktestConfig, DataPipeline, BacktestEngine #,Strategy_Signal if you want to use a build in strategy
 
-# Plug in your own strategy and add as many parameters as you need ! 
-# The engine only reads the 'Signal' column (1 / -1 / 0) from the returned df.
+# Plug in your own strategy and define as many parameters as needed.
+# The engine only reads the 'Signal' column (1 / -1 / 0).
 def My_strategy(df, rsi_period=14, oversold=20, overbought=80):
     d = df.copy()
     delta = d["Close"].diff()
