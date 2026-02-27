@@ -8,6 +8,7 @@ class BacktestConfig:
     strategy: str = "ema_cross"
 
     # --- Data / indicators ---
+    timezone_shift: int = 0
     period_1: int = 50
     period_2: int = 100
     max_gap_size: Optional[float] = None
@@ -43,7 +44,7 @@ class BacktestConfig:
     # --- Engine behavior ---
     allow_exit_on_entry_bar: bool = True
     multi_entry: bool = True
-    reverse_mode: bool = False
+    reverse_mode: bool = False # close an opened position if an opposit signal occur
 
     # --- BE / runner trailing ---
     be_trigger_pct: Optional[float] = None
