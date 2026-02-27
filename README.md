@@ -5,8 +5,8 @@
 
 ---
 
-I built this after realizing that rebuilding a bar-by-bar simulation 
-loop across notebooks was not a research workflow, it was a 
+Rebuilding a bar-by-bar simulation 
+loop across notebooks was not a research workflow, but a 
 bottleneck. Every new strategy meant rewriting execution logic, 
 risk management, and session filters from scratch. This project 
 is the result of decoupling signal generation from the execution 
