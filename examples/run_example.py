@@ -17,7 +17,7 @@ def My_strategy(df, rsi_period=14, oversold=20, overbought=80):
 
 
 pipeline = DataPipeline("Your/path/")
-cfg = BacktestConfig(tp_pct=0.01, sl_pct=0.004)
+cfg = BacktestConfig(tp_pct=0.01, sl_pct=0.004,timezone_shift=1) # add or delete hours from datetime if your csv is not at the right time zone
 engine = BacktestEngine.from_df(
     pipeline, "XAUUSD_M5", "2021-01-01", "2026-01-01", cfg,
     strategy_fn=My_strategy, #<- omit this if using a built-in strategy (e.g. strategy='ema_cross' in cfg)
