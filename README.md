@@ -5,9 +5,9 @@
 
 ---
 
-I built this after realizing that iterating on a monolithic backtest script was getting in the way of doing actual research. Every time I wanted to test a different exit condition or add a session filter, I was rewriting the same loop. This project is the result of refactoring that into something I can actually reuse.
+I built this after realizing that iterating on a monolithic backtest script was getting in the way of doing actual research. Every time I wanted to test a new strategy, i was rewriting the same loop always adding the same exit condition or add a session filter. This project is the result of refactoring that into something I can actually reuse.
 
-The engine is written in Python and designed around one idea: **signal generation and execution logic should be completely independent**. You bring a strategy that produces a `Signal` column. The engine handles everything else — entries, exits, position sizing, breakeven, trailing stops, session filtering, and trade analytics.
+The engine is written in Python and designed around one idea: **signal generation and execution logic should be completely independent**. The operator bring a strategy that produces a `Signal` column in `df` . The engine handles everything else: entries, exits, position sizing, breakeven, atr trailing stops, session filtering, and later trade analytics and hypothesis testing.
 
 ---
 
