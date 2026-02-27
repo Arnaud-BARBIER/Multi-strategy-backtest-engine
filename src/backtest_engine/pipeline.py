@@ -7,13 +7,13 @@ class DataPipeline:
     def __init__(self, base_path: str):
         self.base_path = base_path
 
-    def fetchdata(self, ticker: str, start: str, end: str) -> pd.DataFrame:
+    def fetchdata(self, ticker: str, start: str, end: str, timezone_shift=1) -> pd.DataFrame:
         df = pd.read_csv(
             f"{self.base_path}/{ticker}.csv",
             header=None,
             names=["Datetime", "Open", "High", "Low", "Close", "Volume"],
         )
-        df["Datetime"] = pd.to_datetime(df["Datetime"]) + pd.Timedelta(hours=1)
+        df["Datetime"] = pd.to_datetime(df["Datetime"]) + pd.Timedelta(hours=timezone_shift)
         df = df.set_index("Datetime").sort_index()
         return df.loc[start:end]
 
@@ -41,8 +41,8 @@ class DataPipeline:
 
 
     def build(self, ticker, start, end, cfg):
-        df = self.fetchdata(ticker, start, end)
+        df = self.fetchdata(ticker, start, end, timezone_shift=cfg.timezone_shift)
         df = self.compute_atr(df, cfg.period_atr)
         df = Strategy_Signal.apply(df, cfg)
-        df = self.apply_exitfilter_indicators(df, cfg)  # ← self, pas Strategy_Signal
+        df = self.apply_exitfilter_indicators(df, cfg)  # ← self, no Strategy_Signal
         return df
