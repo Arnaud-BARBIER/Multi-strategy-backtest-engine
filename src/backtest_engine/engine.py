@@ -55,7 +55,7 @@ class BacktestEngine:
         strategy_kwargs : any parameters to pass to strategy_fn
         e.g. rsi_period=20, oversold=25
         """
-        df = pipeline.fetchdata(ticker, start, end)
+        df = pipeline.fetchdata(ticker, start, end, timezone_shift=cfg.timezone_shift)
         df = pipeline.compute_atr(df, cfg.period_atr)
         df = strategy_fn(df, **strategy_kwargs)  # ← kwargs transmitted here
         df = DataPipeline.apply_exitfilter_indicators(df, cfg)
