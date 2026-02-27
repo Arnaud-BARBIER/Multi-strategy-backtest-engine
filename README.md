@@ -1,4 +1,4 @@
-# Metals Futures Backtesting Engine
+# Backtesting Engine
 ### A modular, class-based backtesting framework built for systematic research on OHLCV data
 
 <img width="1100" height="699" alt="Backtest Engine Screenshot" src="https://github.com/user-attachments/assets/32a9db9e-3aaa-4d65-8747-d04215617657" />
