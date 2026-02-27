@@ -13,7 +13,7 @@ is the result of decoupling signal generation from the execution
 engine, so strategy logic can be iterated independently from 
 the simulation layer.
 
-The engine is written in Python and designed around one idea: **signal generation and execution logic should be completely independent**. The operator bring a strategy that produces a `Signal` column and the engine handles everything else: entries, exits, position sizing, breakeven, atr trailing stops, session filtering, and later trade analytics and hypothesis testing.
+The engine is written in Python and designed around one idea: **signal generation and execution logic should be completely independent**. The operator bring a strategy that produces a `Signal` column in the same DataFrame that will be used by the engine to handle everything else: entries, exits, position sizing, breakeven, atr trailing stops, session filtering, and later trade analytics and hypothesis testing.
 
 ---
 
@@ -43,7 +43,7 @@ The engine never touches signal generation logic. A strategy only needs to retur
 - Fixed or ATR-based TP/SL
 - EMA exit filters (price/EMA cross, EMA/EMA cross)
 - Session-based time filtering (up to 3 windows, overnight-compatible)
-- MaxEntries cap with sliding window — resets per day or per session
+- MaxEntries cap with sliding window, resets per day or per session
 - Reverse mode
 - Gap filter on signal generation
 - MAE/MFE intra-trade tracking
@@ -80,6 +80,7 @@ engine = BacktestEngine.from_df(
     rsi_period=14,
     oversold=20,
     overbought=80,
+    timezone_shift=1 #<- Broker timezone alignment with UTC offset
 )
 trades = engine.run()
 trades 
@@ -104,9 +105,9 @@ Timestamps can be manually shifted `cfg = BacktestConfig(timezone_shift=1)` to a
 
 ## Adding a Strategy
 
-##There are 2 ways to test your strategy:
+### There are 2 ways to test your strategy:
 
-1.
+### 1.
 By creating a function which returns a DataFrame 
 with a `Signal` column (`1` = long, `-1` = short, `0` = neutral) that you will assign to `df`.
 You can add as many setting as you want. Below is a usecase example :
