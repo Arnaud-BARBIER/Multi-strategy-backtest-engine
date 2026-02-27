@@ -103,70 +103,72 @@ Timestamps can be manually shifted `cfg = BacktestConfig(timezone_shift=1)` to a
 
 ---
 
-## Adding a Strategy
+## Running Your Strategy
 
-### There are 2 ways to test your strategy:
+There are two ways to plug your strategy into the engine.
 
-### 1.
-By creating a function which returns a DataFrame 
-with a `Signal` column (`1` = long, `-1` = short, `0` = neutral) that you will assign to `df`.
-You can add as many setting as you want. Below is a usecase example :
+---
 
+### Option A — External function (recommended)
+
+Write a function that takes a DataFrame and returns it with a `Signal` column
+(`1` = long, `-1` = short, `0` = neutral). Pass it directly to `from_df()`.
 ```python
-def ma_strategie(df, rsi_period=14, oversold=20, overbought=80):
+def my_strategy(df, rsi_period=14, oversold=20, overbought=80):
     d = df.copy()
     delta = d["Close"].diff()
-    gain = delta.clip(lower=0).rolling(rsi_period).mean()
-    loss = -delta.clip(upper=0).rolling(rsi_period).mean()
-    rsi = 100 - (100 / (1 + gain / loss))
+    gain  = delta.clip(lower=0).rolling(rsi_period).mean()
+    loss  = -delta.clip(upper=0).rolling(rsi_period).mean()
+    rsi   = 100 - (100 / (1 + gain / loss))
     d["Signal"] = 0
-    d.loc[rsi < oversold,  "Signal"] = 1
+    d.loc[rsi < oversold,   "Signal"] =  1
     d.loc[rsi > overbought, "Signal"] = -1
     return d
 
-pipeline = DataPipeline("/Users/arnaudbarbier/Desktop/Quant reaserch/Metals")
-cfg = BacktestConfig(tp_pct=0.01, sl_pct=0.004, timezone_shift=1)
+pipeline = DataPipeline("your/data/path")
+cfg      = BacktestConfig(tp_pct=0.01, sl_pct=0.004)
+
 engine = BacktestEngine.from_df(
     pipeline, "XAUUSD_M5", "2021-01-01", "2026-01-01", cfg,
-    strategy_fn=ma_strategie,
+    strategy_fn=my_strategy,
     rsi_period=14,
     oversold=20,
     overbought=80,
 )
 trades = engine.run()
 ```
-2. 
-Anther way could be hard coding it as a static method in `Strategy_Signal` that also returns a DataFrame
-with a `Signal` column (`1` = long, `-1` = short, `0` = neutral). 
 
+Strategy parameters are optional — if omitted, defaults defined in your function are used.
+
+---
+
+### Option B — Built-in strategy
+
+Add a static method to `Strategy_Signal`, register it in `apply()`,
+and declare any new parameters in `BacktestConfig`.
+The engine requires no changes.
 ```python
+# 1. Add your strategy to Strategy_Signal
 @staticmethod
 def my_strategy(df, param_1, param_2):
     d = df.copy()
-    # your signal logic
-    d["Signal"] = ...
+    d["Signal"] = ...  # your logic here
     return d
 
-# You also must Register it in Strategy_Signal
+# 2. Register it in apply()
 @staticmethod
 def apply(df, cfg):
     if cfg.strategy == "my_strategy":
         return Strategy_Signal.my_strategy(df, cfg.param_1, cfg.param_2)
 
-# Then plug it into BacktestConfig
+# 3. Add parameters to BacktestConfig
+param_1: float = ...
+param_2: float = ...
 
-    # --- Signal Generation and strategy Choice ---
-    strategy: str = "ema_cross"
-    strategy: str= "my_strategy" #<-- 
-
-# In the end, when configurating your backtest settings
-# you should be able to call it as a parameter. 
-
-cfg = BacktestConfig( strategy='my_strategy',
+# 4. Call it
+cfg = BacktestConfig(strategy="my_strategy", param_1=..., param_2=...)
+engine = BacktestEngine.from_ticker(pipeline, "XAUUSD_M5", "2021-01-01", "2026-01-01", cfg)
 ```
-
-The engine requires no changes.
-
 ---
 
 ## Version History
