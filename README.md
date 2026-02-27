@@ -25,7 +25,7 @@ BacktestEngine       — bar-by-bar simulation, stateful position management
 trades DataFrame     — entry/exit/return/MAE/MFE per trade
 ```
 
-The engine never touches signal generation logic. A strategy only needs to return a DataFrame with a `Signal` column — the rest is handled internally.
+The engine never touches signal generation logic. A strategy only needs to return a DataFrame with a `Signal` column the rest is handled internally.
 
 ---
 
