@@ -74,4 +74,4 @@ class BacktestConfig:
         if self.ME_X <= 0:
             raise ValueError("ME_X must be positive")
         if self.use_atr_sl_tp not in (0, 1, -1, 2):
-            raise ValueError("use_atr_sl_tp must be 0, 1, -1 or 2")
+            raise ValueError("use_atr_sl_tp must be 0=No use, 1=tp*atr & sl pct, -1=sl*atr & tp pct or 2=Both*atr")
