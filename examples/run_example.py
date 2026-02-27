@@ -1,5 +1,5 @@
 # from a .ipynb 
-%pip install --force-reinstall git+https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine.git
+%pip install git+https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine.git
 from backtest_engine import BacktestConfig, DataPipeline, BacktestEngine #,Strategy_Signal if you want to use a build in strategy
 
 # Plug in your own strategy and add as many parameters as you need ! 
