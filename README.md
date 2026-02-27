@@ -138,13 +138,13 @@ engine = BacktestEngine.from_df(
 trades = engine.run()
 ```
 
-Strategy parameters are optional — if omitted, defaults defined in your function are used.
+Strategy parameters are optional, if omitted, defaults defined in your function will be used.
 
 ---
 
 ### Option B — Built-in strategy
 
-Add a static method to `Strategy_Signal`, register it in `apply()`,
+Add a static method to `Strategy_Signal`, register it in `apply()` (located in the same class),
 and declare any new parameters in `BacktestConfig`.
 The engine requires no changes.
 ```python
