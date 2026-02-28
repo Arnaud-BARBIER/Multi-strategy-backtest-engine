@@ -15,10 +15,10 @@ class BacktestConfig:
     period_atr: int = 14
     
     # --- Filters ---
-    Candle_Size_filter: bool = True
+    Candle_Size_filter: bool = False
     Previous_Candle_same_direction: bool = True
-    min_size_pct: float = None
-    max_size_pct: float = None
+    min_size_pct: float = 0.001
+    max_size_pct: float = 0.01
     Exit_filter_EMA1: int = 50
     Exit_filter_EMA2: int = 100
 
