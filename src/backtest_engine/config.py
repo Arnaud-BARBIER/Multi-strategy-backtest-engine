@@ -17,17 +17,17 @@ class BacktestConfig:
     # --- Filters ---
     Candle_Size_filter: bool = True
     Previous_Candle_same_direction: bool = True
-    min_size_pct: float = 0.001
-    max_size_pct: float = 0.02
+    min_size_pct: float = None
+    max_size_pct: float = None
     Exit_filter_EMA1: int = 50
     Exit_filter_EMA2: int = 100
 
     # --- TP/SL ---
-    tp_pct: float = 0.05
-    sl_pct: float = 0.02
-    use_atr_sl_tp: int = 0        # 0=fixed, 1=ATR TP only, -1=ATR SL only, 2=both
-    tp_atr_mult: float = 2.0
-    sl_atr_mult: float = 1.0
+    tp_pct: float = None
+    sl_pct: float = None
+    use_atr_sl_tp: int = 0       # 0=fixed, 1=ATR TP only, -1=ATR SL only, 2=both
+    tp_atr_mult: float = None
+    sl_atr_mult: float = None
 
     # --- Exit mode toggles ---
     EMA1_TP: bool = False
@@ -36,9 +36,9 @@ class BacktestConfig:
     EMA_SL: bool = False
 
     # --- Entries cap ---
-    MaxEntries4Periods: bool = True
-    ME_X: int = 2
-    ME_Period_Y: int = 8
+    MaxEntries4Periods: bool = False
+    ME_X: int = None
+    ME_Period_Y: int = None
     ME_reset_mode: Optional[str] = None  # "day" / "session" / None
 
     # --- Engine behavior ---
@@ -60,7 +60,7 @@ class BacktestConfig:
 
     # --- Observation for MAE-MFE hold ---
     observation_hours: Optional[float] = None
-    timeframe_minutes: int = 5
+    timeframe_minutes: int = None
 
     # --- Fast preventing MAE MFE calculations ---
     fast: bool = True
