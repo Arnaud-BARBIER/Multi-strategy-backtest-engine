@@ -37,8 +37,8 @@ class BacktestConfig:
 
     # --- Entries cap ---
     MaxEntries4Periods: bool = False
-    ME_X: int = None
-    ME_Period_Y: int = None
+    ME_X: int = 2
+    ME_Period_Y: int = 8
     ME_reset_mode: Optional[str] = None  # "day" / "session" / None
 
     # --- Engine behavior ---
