@@ -70,8 +70,6 @@ class BacktestConfig:
             raise ValueError("EMA periods must be positive")
         if self.period_1 >= self.period_2:
             raise ValueError("period_1 must be less than period_2")
-        if self.tp_pct <= self.sl_pct:
-            raise ValueError("tp_pct must be greater than sl_pct")
         if self.ME_X <= 0:
             raise ValueError("ME_X must be positive")
         if self.use_atr_sl_tp not in (0, 1, -1, 2):
