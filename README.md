@@ -212,3 +212,23 @@ static configuration.
 
 This is a personal research project, not currently open for contributions.
 However if you have feedback or want to discuss the architecture, feel free to contact me.
+
+---
+
+## Future Updates before grid search 
+
+Focusing on essential reaserch features for the signal development phase.
+Prepare the groundwork for the upcoming grid search update.
+
+1. Plot chart + signals + entry/exits
+2. Entry delay ← to better control the look ahead bias, (even though it is already handled)
+3. Rename fast → track_mae_mfe   
+4. Optional Exit signal strategy
+5. Simple metrics equity, drawdown, commissions
+6. run(return_df=False) returning df optionnaly to better understand signal generation issues during the development phase
+8. Intra-candle path (tick/lower TF)
+
+
+
+
+
