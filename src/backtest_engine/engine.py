@@ -3,6 +3,7 @@ import numpy as np
 from collections import namedtuple
 from .config import BacktestConfig
 from .pipeline import DataPipeline
+import plotly.graph_objects as go
 
 class BacktestEngine:
     Bar = namedtuple("Bar", ["Open", "High", "Low", "Close", "name"])
