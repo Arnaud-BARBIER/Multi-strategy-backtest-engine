@@ -223,10 +223,9 @@ Prepare the groundwork for the upcoming grid search update.
 1. Plot chart + signals + entry/exits
 2. Returning df optionnaly to better understand signal generation issues during the development phase
 3. Entry delay ← to better control the look ahead bias, (even though it is already handled)
-4. Rename fast → track_mae_mfe   
-5. Optional Exit signal strategy
-6. Simple metrics equity, drawdown, commissions
-7. Intra-candle path (tick/lower TF)
+4. Optional Exit signal strategy
+5. Simple metrics equity, drawdown, commissions
+6. Intra-candle path (tick/lower TF)
 
 
 
