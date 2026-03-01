@@ -6,4 +6,4 @@ build-backend = "setuptools.build_meta"
 name = "backtest-engine"
 version = "0.1.0"
 requires-python = ">=3.10"
-dependencies = ["pandas", "numpy"]
+dependencies = ["pandas", "numpy", "plotly"]
