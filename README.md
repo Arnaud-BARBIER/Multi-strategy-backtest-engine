@@ -173,87 +173,116 @@ engine = BacktestEngine.from_ticker(pipeline, "XAUUSD_M5", "2021-01-01", "2026-0
 ## Configuration parameters (BacktestConfig)
 
 ### Signal & Entry
-strategy                       : str   — "ema_cross" or external via from_df/prepare
-entry_delay                    : int   — bars between signal and entry (default=1, anti look-ahead)
-max_gap_size                   : float — prevents entry if gap between Open[i] and Close[i-1] 
-                                         exceeds this threshold
-Candle_Size_filter             : bool  — filters entry based on signal candle body size
-min_size_pct                   : float — minimum body size of signal candle
-max_size_pct                   : float — maximum body size of signal candle
-Previous_Candle_same_direction : bool  — signal candle must be in the direction of the signal
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| strategy | str | `"ema_cross"` or external via `from_df` / `prepare` |
+| entry_delay | int | Bars between signal and entry. Default=1 (anti look-ahead) |
+| max_gap_size | float | Prevents entry if gap between `Open[i]` and `Close[i-1]` exceeds threshold |
+| Candle_Size_filter | bool | Filters entry based on signal candle body size |
+| min_size_pct | float | Minimum body size of signal candle |
+| max_size_pct | float | Maximum body size of signal candle |
+| Previous_Candle_same_direction | bool | Signal candle must be in the direction of the signal |
 
 ### Exit — TP/SL
-tp_pct         : float — fixed take profit as % of entry price
-sl_pct         : float — fixed stop loss as % of entry price
-use_atr_sl_tp  : int   — 0=fixed, 1=ATR*tp & sl_pct, -1=ATR*sl & tp_pct, 2=ATR*(sl+tp)
-tp_atr_mult    : float — ATR multiplier for take profit
-sl_atr_mult    : float — ATR multiplier for stop loss
-allow_exit_on_entry_bar : bool — if False, prevents TP/SL from triggering
-                                 on the same bar the trade was opened
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| tp_pct | float | Fixed take profit as % of entry price |
+| sl_pct | float | Fixed stop loss as % of entry price |
+| use_atr_sl_tp | int | `0`=fixed, `1`=ATR×tp & sl_pct, `-1`=ATR×sl & tp_pct, `2`=ATR×(sl+tp) |
+| tp_atr_mult | float | ATR multiplier for take profit |
+| sl_atr_mult | float | ATR multiplier for stop loss |
+| allow_exit_on_entry_bar | bool | If `False`, prevents TP/SL from triggering on entry bar |
 
 ### Exit — EMA mode
-EMA1_TP          : bool — exit if close crosses below EMA1 (long) or above (short)
-EMA2_TP          : bool — exit if close crosses below EMA2 (long) or above (short)
-EMA_CROSS_TP     : bool — exit when EMA1 crosses EMA2
-Exit_filter_EMA1 : int  — EMA1 period used for exit
-Exit_filter_EMA2 : int  — EMA2 period used for exit
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| EMA1_TP | bool | Exit if close crosses below EMA1 (long) or above (short) |
+| EMA2_TP | bool | Exit if close crosses below EMA2 (long) or above (short) |
+| EMA_CROSS_TP | bool | Exit when EMA1 crosses EMA2 |
+| Exit_filter_EMA1 | int | EMA1 period used for exit |
+| Exit_filter_EMA2 | int | EMA2 period used for exit |
 
 ### Exit — External signal
-exit_delay      : int  — bars between exit signal and execution (default=1, anti look-ahead)
-use_exit_signal : bool — enables external exit signal system
-                         requires ExitSignal column in df
 
-df["ExitSignal"]:
-    0  → nothing — normal SL/TP applies
-    1  → LIFO — closes the last opened position
-    2  → closes all long positions
-   -2  → closes all short positions
-    3  → closes all positions
-    N  → closes the position tagged N (requires SignalTag column)
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| exit_delay | int | Bars between exit signal and execution. Default=1 (anti look-ahead) |
+| use_exit_signal | bool | Enables external exit signal system. Requires `ExitSignal` column in df |
 
-df["SignalTag"]:
-    N  → tag assigned at entry, matched against ExitSignal value N
+**`df["ExitSignal"]` values:**
+
+| Value | Behavior |
+|-------|----------|
+| `0` | Nothing — normal SL/TP applies |
+| `1` | LIFO — closes the last opened position |
+| `2` | Closes all long positions |
+| `-2` | Closes all short positions |
+| `3` | Closes all positions |
+| `N` | Closes the position tagged N (requires `df["SignalTag"]`) |
 
 ### Break-Even
-be_trigger_pct : float — profit % required to arm break-even
-be_offset_pct  : float — BE level as % offset relative to entry price
-be_delay_bars  : int   — prevents BE activation during the first X bars after entry
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| be_trigger_pct | float | Profit % required to arm break-even |
+| be_offset_pct | float | BE level as % offset relative to entry price |
+| be_delay_bars | int | Prevents BE activation during the first X bars after entry |
 
 ### Runner trailing
-trailing_trigger_pct : float — profit % required to arm the trailing runner
-runner_trailing_mult : float — ATR multiplier for trailing stop
-                               note: below trailing_trigger, only BE and fixed SL 
-                               can trigger an exit
+
+> Below `trailing_trigger_pct`, only BE and fixed SL can trigger an exit.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| trailing_trigger_pct | float | Profit % required to arm the trailing runner |
+| runner_trailing_mult | float | ATR multiplier for trailing stop |
 
 ### Entry management
-multi_entry         : bool — allows multiple simultaneous positions
-MaxEntries4Periods  : bool — caps the number of entries over a rolling period
-ME_X                : int  — maximum number of entries allowed in the period
-ME_Period_Y         : int  — rolling window in bars for entry count
-ME_reset_mode       : str  — "day" / "session" / None — resets entry counter
-reverse_mode        : bool — closes opposite position when a reverse signal occurs
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| multi_entry | bool | Allows multiple simultaneous positions |
+| MaxEntries4Periods | bool | Caps the number of entries over a rolling period |
+| ME_X | int | Maximum number of entries allowed in the period |
+| ME_Period_Y | int | Rolling window in bars for entry count |
+| ME_reset_mode | str | `"day"` / `"session"` / `None` — resets entry counter |
+| reverse_mode | bool | Closes opposite position when a reverse signal occurs |
 
 ### Session filters
-time_window_1/2/3 : str — active trading windows e.g. "08:00-12:00"
-                          entries only allowed within these windows
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| time_window_1/2/3 | str | Active trading windows e.g. `"08:00-12:00"`. Entries only within these windows |
 
 ### Data
-timezone_shift  : int  — hour shift applied to datetime index
-period_atr      : int  — ATR calculation period
-period_1        : int  — fast EMA period (used with strategy="ema_cross")
-period_2        : int  — slow EMA period (used with strategy="ema_cross")
-crypto          : bool — if True, weekends are visible in charts (default=False)
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| timezone_shift | int | Hour shift applied to datetime index |
+| period_atr | int | ATR calculation period |
+| period_1 | int | Fast EMA period — used with `strategy="ema_cross"` |
+| period_2 | int | Slow EMA period — used with `strategy="ema_cross"` |
+| crypto | bool | If `True`, weekends are visible in charts. Default=`False` |
 
 ### MAE/MFE observation
-track_mae_mfe     : bool  — enables intrabar MAE/MFE tracking
-observation_hours : float — post-trade observation window for hold MAE/MFE
-timeframe_minutes : int   — timeframe in minutes, used to compute observation bars
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| track_mae_mfe | bool | Enables intrabar MAE/MFE tracking |
+| observation_hours | float | Post-trade observation window for hold MAE/MFE |
+| timeframe_minutes | int | Timeframe in minutes, used to compute observation bars |
+
+---
 
 ## Runtime arguments
 
-plot=False       — run() / prepare()    — plots chart at signal generation 
-                                          or post-backtest stage
-return_df=False  — run() / prepare()    — returns (trades, df) instead of trades only
+| Argument | Method | Description |
+|----------|--------|-------------|
+| `plot=False` | `run()` / `prepare()` | Plots chart at signal generation or post-backtest stage |
+| `return_df=False` | `run()` / `prepare()` | Returns `(trades, df)` instead of `trades` only |
 
 ---
 ## Version History
