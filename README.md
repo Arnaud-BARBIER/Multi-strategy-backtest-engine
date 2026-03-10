@@ -19,6 +19,11 @@ The engine is written in Python and designed around one idea: **signal generatio
 
 ## Architecture
 
+- Research layer   → signal_df / indicators / visual check
+- Execution layer  → backtest_njit
+- Analytics layer  → metrics + trades_df + df_after
+
+
 ```markdown
                                                 ┌────────────────────┐
                                                 │   1. DataPipeline  │
@@ -99,10 +104,6 @@ The engine is written in Python and designed around one idea: **signal generatio
                                                 │ - _plot_backtest         │
                                                 └──────────────────────────┘
 ```
-
-- Research layer   → signal_df / indicators / visual check
-- Execution layer  → backtest_njit
-- Analytics layer  → metrics + trades_df + df_after
 
 The engine never touches signal generation logic. A strategy only needs to return a DataFrame with a `Signal` column the rest is handled internally.
 
