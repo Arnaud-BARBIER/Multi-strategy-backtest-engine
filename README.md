@@ -127,7 +127,7 @@ The engine never touches signal generation logic. A strategy only needs to retur
 - Plotting 
 
 ---
-# How to use it
+# How to use it in 5 minutes
 
 installation
 
