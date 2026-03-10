@@ -1,7 +1,8 @@
 # Backtesting Engine
-### A modular, class-based backtesting framework built for systematic research on OHLCV data
+### A modular, class-based NUMBA otpimised backtesting framework built for systematic research on OHLCV data
 
-<img width="1101" height="686" alt="Screenshot 2026-02-27 at 20 56 58" src="https://github.com/user-attachments/assets/801b26e6-cee9-4efc-8978-a1a0aac7c00c" />
+<img width="1306" height="732" alt="Screenshot 2026-03-10 at 16 46 45" src="https://github.com/user-attachments/assets/66066bd7-f043-4f7d-89fe-020a5d59f02e" />
+
 
 ---
 
@@ -19,17 +20,90 @@ The engine is written in Python and designed around one idea: **signal generatio
 
 ## Architecture
 
+```markdown
+                                                ┌────────────────────┐
+                                                │   1. DataPipeline  │
+                                                │ fetchdata + ATR    │
+                                                └─────────┬──────────┘
+                                                          │
+                                                          ▼
+                                                ┌────────────────────┐
+                                                │  2. NJITEngine     │
+                                                │ init + arrays np   │
+                                                │ OHLC / ATR / time  │
+                                                │ JIT warmup         │
+                                                └─────────┬──────────┘
+                                                          │
+                                                          │ pre-engine research
+                                                          ▼
+                                                ┌──────────────────────────────────────┐
+                                                │ 3. signal_generation_inspection(...) │
+                                                │ - strategy_fn user or fallback EMA   │
+                                                │ - builds signal_df                   │
+                                                │ - optional plot signals              │
+                                                │ - returns df or signal array         │
+                                                │ - caches last_signal_df              │
+                                                └─────────┬────────────────────────────┘
+                                                          │
+                                                          ▼
+                                                ┌────────────────────┐
+                                                │ 4. signals array   │
+                                                │ np.ndarray[int8]   │
+                                                └─────────┬──────────┘
+                                                          │
+                                                          │ core execution
+                                                          ▼
+                                                ┌────────────────────┐
+                                                │ 5. run(...)        │
+                                                │ param resolution   │
+                                                │ sessions / filters │
+                                                │ exit arrays / tags │
+                                                └─────────┬──────────┘
+                                                          │
+                                                          ▼
+                                                ┌────────────────────┐
+                                                │ 6. backtest_njit   │
+                                                │ - entry logic      │
+                                                │ - TP/SL / ATR      │
+                                                │ - BE / trailing    │
+                                                │ - EMA exit         │
+                                                │ - exit signals     │
+                                                │ - MAE / MFE        │
+                                                └─────────┬──────────┘
+                                                          │
+                                                          ▼
+                                                ┌──────────────────────────┐
+                                                │ 7. compute_metrics_full  │
+                                                │ - returns / DD / Sharpe  │
+                                                │ - VaR / CVaR / tests     │
+                                                │ - trades_df              │
+                                                └─────────┬────────────────┘
+                                                          │
+                                                          │ optional post-engine layer
+                                                          ▼
+                                                ┌──────────────────────────┐
+                                                │ 8. _build_after_run_df   │
+                                                │ - reuse last_signal_df   │
+                                                │ - add EntryTradeID       │
+                                                │ - add ExitTradeID        │
+                                                │ - add trade_id           │
+                                                └─────────┬────────────────┘
+                                                          │
+                                                          ├──────────────► metrics["trades_df"]
+                                                          │
+                                                          ├──────────────► metrics["df_after"]
+                                                          │
+                                                          ▼
+                                                ┌──────────────────────────┐
+                                                │ 9. Plotting              │
+                                                │ - _plot_signal_df        │
+                                                │ - _plot_backtest         │
+                                                └──────────────────────────┘
 ```
-BacktestConfig       — all parameters in one place
-      ↓
-DataPipeline         — fetch OHLCV, compute ATR, build indicators
-      ↓
-Strategy_Signal      — generate Signal column (1 / -1 / 0)
-      ↓
-BacktestEngine       — bar-by-bar simulation, stateful position management
-      ↓
-trades DataFrame     — entry/exit/return/MAE/MFE per trade
-```
+
+Research layer   → signal_df / indicators / visual check
+Execution layer  → backtest_njit
+Analytics layer  → metrics + trades_df + df_after
 
 The engine never touches signal generation logic. A strategy only needs to return a DataFrame with a `Signal` column the rest is handled internally.
 
@@ -170,119 +244,313 @@ cfg = BacktestConfig(strategy="my_strategy", param_1=..., param_2=...)
 engine = BacktestEngine.from_ticker(pipeline, "XAUUSD_M5", "2021-01-01", "2026-01-01", cfg)
 ```
 ---
-## Configuration parameters (BacktestConfig)
+
+## NJIT Engine — Parameters Reference
+
+### Engine initialization
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `pipeline` | object | Data pipeline object. Must provide `fetchdata()` and `compute_atr()` |
+| `ticker` | str | Asset file / symbol passed to the pipeline |
+| `start` | str | Start date passed to `pipeline.fetchdata()` |
+| `end` | str | End date passed to `pipeline.fetchdata()` |
+| `cfg` | object | Config object used as default fallback for most `run()` parameters |
+| `atr_period` | int | ATR period used at engine initialization |
+| `MAX_TRADES` | int | Maximum number of trades preallocated in the Numba engine |
+| `MAX_POS` | int | Maximum number of simultaneous open positions |
+
+---
+
+### Signal generation & pre-engine inspection
+
+#### `signal_generation_inspection(...)`
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `strategy_fn` | callable | User strategy function returning a DataFrame with a signal column |
+| `signal_col` | str | Name of the signal column returned by the strategy. Default=`"Signal"` |
+| `plot` | bool | If `True`, plots the generated signals on an interactive chart |
+| `crypto` | bool | If `True`, disables weekend rangebreaks in plots |
+| `return_df_signals` | bool | If `True`, returns the full DataFrame; otherwise returns the signal array only |
+| `**kwargs` | any | Extra parameters passed directly to `strategy_fn` |
+
+**Behavior**
+- If `strategy_fn` is omitted, engine falls back to the built-in default EMA-vs-close signal generation.
+- The generated DataFrame is cached internally as `last_signal_df` for post-backtest inspection.
+
+---
+
+### Built-in signal helpers
+
+#### `signals_ema(...)`
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `span1` | int | First EMA period |
+| `span2` | int | Second EMA period |
+| `mode` | str | `"close_vs_ema"` or `"ema_cross"` |
+
+#### `signals_from_strategy(...)`
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `strategy_fn` | callable | User strategy returning a DataFrame |
+| `signal_col` | str | Column to extract as engine input |
+| `**kwargs` | any | Extra parameters passed to the strategy |
+
+---
+
+## Backtest execution
+
+### `run(...)`
 
 ### Signal & Entry
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| strategy | str | `"ema_cross"` or external via `from_df` / `prepare` |
-| entry_delay | int | Bars between signal and entry. Default=1 (anti look-ahead) |
-| max_gap_size | float | Prevents entry if gap between `Open[i]` and `Close[i-1]` exceeds threshold |
-| Candle_Size_filter | bool | Filters entry based on signal candle body size |
-| min_size_pct | float | Minimum body size of signal candle |
-| max_size_pct | float | Maximum body size of signal candle |
-| Previous_Candle_same_direction | bool | Signal candle must be in the direction of the signal |
+| `signals` | np.ndarray | Signal array sent to the Numba engine |
+| `entry_delay` | int | Bars between signal and entry. Default fallback from `cfg.entry_delay` |
+| `max_gap_signal` | float | Gap filter applied on the signal candle context |
+| `max_gap_entry` | float | Gap filter applied between actual entry bar open and previous close |
+| `candle_size_filter` | bool | Enables signal candle body-size filtering |
+| `min_size_pct` | float | Minimum allowed body size of the signal candle |
+| `max_size_pct` | float | Maximum allowed body size of the signal candle |
+| `prev_candle_direction` | bool | If `True`, signal candle must be in signal direction |
+| `multi_entry` | bool | If `True`, allows multiple concurrent positions |
+| `reverse_mode` | bool | If `True`, opposite signal closes opposite open positions before new entry |
+
+---
+
+### Time windows / session filters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `session_1` | tuple[str, str] or None | First active trading window, e.g. `("08:00","12:00")` |
+| `session_2` | tuple[str, str] or None | Second active trading window |
+| `session_3` | tuple[str, str] or None | Third active trading window |
+
+If all sessions are `None`, entries are allowed at all times.
+
+---
+
+### Entry cap / max entries logic
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `me_max` | int | Maximum allowed entries in the counting regime |
+| `me_period` | int | Rolling lookback period used in sliding entry cap |
+| `me_reset_mode` | int | Entry cap mode selector |
+
+**`me_reset_mode` values**
+
+| Value | Behavior |
+|-------|----------|
+| `0` | Disabled |
+| `1` | Day reset |
+| `2` | Session reset |
+| `3` | Sliding window only |
+| `4` | Session reset + sliding window |
+| `5` | Day reset + sliding window |
+
+---
 
 ### Exit — TP/SL
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| tp_pct | float | Fixed take profit as % of entry price |
-| sl_pct | float | Fixed stop loss as % of entry price |
-| use_atr_sl_tp | int | `0`=fixed, `1`=ATR×tp & sl_pct, `-1`=ATR×sl & tp_pct, `2`=ATR×(sl+tp) |
-| tp_atr_mult | float | ATR multiplier for take profit |
-| sl_atr_mult | float | ATR multiplier for stop loss |
-| allow_exit_on_entry_bar | bool | If `False`, prevents TP/SL from triggering on entry bar |
+| `tp_pct` | float | Fixed take profit as % of entry price |
+| `sl_pct` | float | Fixed stop loss as % of entry price |
+| `use_atr_sl_tp` | int | `0`=fixed, `1`=ATR TP + fixed SL, `-1`=ATR SL + fixed TP, `2`=ATR TP + ATR SL |
+| `tp_atr_mult` | float | ATR multiplier used for take profit |
+| `sl_atr_mult` | float | ATR multiplier used for stop loss |
+| `allow_exit_on_entry_bar` | bool | If `False`, blocks exits on the entry bar |
+
+---
 
 ### Exit — EMA mode
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| EMA1_TP | bool | Exit if close crosses below EMA1 (long) or above (short) |
-| EMA2_TP | bool | Exit if close crosses below EMA2 (long) or above (short) |
-| EMA_CROSS_TP | bool | Exit when EMA1 crosses EMA2 |
-| Exit_filter_EMA1 | int | EMA1 period used for exit |
-| Exit_filter_EMA2 | int | EMA2 period used for exit |
+| `exit_ema1` | np.ndarray | External EMA1 array used for EMA-based exit logic |
+| `exit_ema2` | np.ndarray | External EMA2 array used for EMA-based exit logic |
+| `use_ema1_tp` | bool | Exit on close vs EMA1 condition |
+| `use_ema2_tp` | bool | Exit on close vs EMA2 condition |
+| `use_ema_cross_tp` | bool | Exit on EMA1 / EMA2 cross condition |
+
+**EMA exit logic**
+- EMA exits are only allowed if the trade is already in profit.
+- If any EMA exit mode is active, engine switches to EMA exit mode.
+- Fixed SL / BE still have priority over EMA exits.
+
+---
 
 ### Exit — External signal
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| exit_delay | int | Bars between exit signal and execution. Default=1 (anti look-ahead) |
-| use_exit_signal | bool | Enables external exit signal system. Requires `ExitSignal` column in df |
+| `exit_signals` | np.ndarray | External exit signal array |
+| `signal_tags` | np.ndarray | Optional tag array used for targeted exits |
+| `use_exit_signal` | bool | Enables external exit signal logic |
+| `exit_delay` | int | Bars between exit signal and execution |
 
-**`df["ExitSignal"]` values:**
+**`exit_signals` values**
 
 | Value | Behavior |
 |-------|----------|
-| `0` | Nothing — normal SL/TP applies |
-| `1` | LIFO — closes the last opened position |
+| `0` | No external exit — normal engine logic applies |
+| `1` | LIFO exit — closes last opened position |
 | `2` | Closes all long positions |
 | `-2` | Closes all short positions |
 | `3` | Closes all positions |
-| `N` | Closes the position tagged N (requires `df["SignalTag"]`) |
+| `N` | Closes tagged position `N` if `signal_tags` is provided |
+
+---
 
 ### Break-Even
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| be_trigger_pct | float | Profit % required to arm break-even |
-| be_offset_pct | float | BE level as % offset relative to entry price |
-| be_delay_bars | int | Prevents BE activation during the first X bars after entry |
+| `be_trigger_pct` | float | Profit threshold required to arm break-even |
+| `be_offset_pct` | float | Break-even stop offset relative to entry |
+| `be_delay_bars` | int | Minimum bars before BE can arm |
 
-### Runner trailing
-
-> Below `trailing_trigger_pct`, only BE and fixed SL can trigger an exit.
-
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| trailing_trigger_pct | float | Profit % required to arm the trailing runner |
-| runner_trailing_mult | float | ATR multiplier for trailing stop |
-
-### Entry management
-
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| multi_entry | bool | Allows multiple simultaneous positions |
-| MaxEntries4Periods | bool | Caps the number of entries over a rolling period |
-| ME_X | int | Maximum number of entries allowed in the period |
-| ME_Period_Y | int | Rolling window in bars for entry count |
-| ME_reset_mode | str | `"day"` / `"session"` / `None` — resets entry counter |
-| reverse_mode | bool | Closes opposite position when a reverse signal occurs |
-
-### Session filters
-
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| time_window_1/2/3 | str | Active trading windows e.g. `"08:00-12:00"`. Entries only within these windows |
-
-### Data
-
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| timezone_shift | int | Hour shift applied to datetime index |
-| period_atr | int | ATR calculation period |
-| period_1 | int | Fast EMA period — used with `strategy="ema_cross"` |
-| period_2 | int | Slow EMA period — used with `strategy="ema_cross"` |
-| crypto | bool | If `True`, weekends are visible in charts. Default=`False` |
-
-### MAE/MFE observation
-
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| track_mae_mfe | bool | Enables intrabar MAE/MFE tracking |
-| observation_hours | float | Post-trade observation window for hold MAE/MFE |
-| timeframe_minutes | int | Timeframe in minutes, used to compute observation bars |
+**Convention**
+- BE is armed intrabar when threshold is reached.
+- BE becomes active only on the next bar.
 
 ---
 
-## Runtime arguments
+### Runner trailing
 
-| Argument | Method | Description |
-|----------|--------|-------------|
-| `plot=False` | `run()` / `prepare()` | Plots chart at signal generation or post-backtest stage |
-| `return_df=False` | `run()` / `prepare()` | Returns `(trades, df)` instead of `trades` only |
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `trailing_trigger_pct` | float | Profit threshold required to arm the runner trailing logic |
+| `runner_trailing_mult` | float | ATR multiplier used to compute runner stop |
+
+> Below `trailing_trigger_pct`, only fixed SL / BE can exit the trade.
+
+**Convention**
+- Runner is armed on trigger bar.
+- Runner becomes active on the next bar only.
+- Once active, trailing stop is updated from `Close - side * ATR * mult`.
+- If runner stop is still below activation threshold for long trades, or above for short trades, fixed SL / BE remains the only valid exit.
+
+---
+
+### Metrics & post-trade analytics
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `track_mae_mfe` | bool | If `True`, tracks intra-trade MAE/MFE |
+| `hold_minutes` | int | Post-exit observation window in minutes for hold MAE/MFE |
+| `bar_duration_min` | int | Duration of one bar in minutes |
+| `commission_pct` | float | Commission per side as % |
+| `spread_pct` | float | Spread cost as % |
+| `slippage_pct` | float | Slippage per side as % |
+| `alpha` | float | Tail quantile for VaR / CVaR |
+| `period_freq` | str | Resampling frequency for period-based return analysis, e.g. `"ME"` |
+
+---
+
+### Inspection & plotting after engine execution
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `return_df_after` | bool | If `True`, returns an annotated post-engine DataFrame in `metrics["df_after"]` |
+| `plot` | bool | If `True`, plots entries / exits after backtest |
+| `crypto` | bool | If `True`, disables weekend rangebreaks in plots |
+| `full_df_after` | bool | If `True`, returns the full post-engine DataFrame |
+| `window_before` | int | Number of bars before first trade kept in `df_after` if `full_df_after=False` |
+| `window_after` | int | Number of bars after last trade kept in `df_after` if `full_df_after=False` |
+
+---
+
+## Post-engine inspection output
+
+When `return_df_after=True`, engine adds:
+
+### `metrics["df_after"]`
+Annotated DataFrame containing:
+- original OHLC
+- original signal columns if previously cached through `signal_generation_inspection()`
+- `EntryTradeID`
+- `ExitTradeID`
+
+### `metrics["trades_df"]`
+Trade DataFrame containing:
+- `entry_time`
+- `exit_time`
+- `entry_idx`
+- `exit_idx`
+- `entry`
+- `exit`
+- `side`
+- `return`
+- `reason`
+- `mae_intra`
+- `mfe_intra`
+- `capture_ratio_intra`
+- `mae_hold`
+- `mfe_hold`
+- `capture_ratio_hold`
+- `trade_id` if post-engine annotation is enabled
+
+---
+
+## Plot helpers
+
+### `_plot_signal_df(...)`
+Plots:
+- candlesticks
+- long signal markers
+- short signal markers
+
+### `_plot_backtest(...)`
+Plots:
+- candlesticks
+- long / short entries
+- exit markers
+- line connecting each entry to its corresponding exit
+
+---
+
+## Metrics returned by `compute_metrics_full`
+
+| Key | Description |
+|-----|-------------|
+| `n_trades` | Number of closed trades |
+| `win_rate` | Share of positive-return trades |
+| `total_return_sum` | Sum of net trade returns |
+| `cum_return` | Compounded cumulative return |
+| `ann_return` | Annualized return |
+| `max_drawdown` | Maximum drawdown on compounded equity curve |
+| `max_underwater_trades` | Maximum consecutive underwater trades |
+| `calmar` | Annual return divided by absolute max drawdown |
+| `sharpe` | Trade-based annualized Sharpe |
+| `profit_factor` | Sum wins / absolute sum losses |
+| `avg_win` | Mean winning trade return |
+| `avg_loss` | Mean losing trade return |
+| `VaR` | Historical VaR at `alpha` |
+| `CVaR` | Historical CVaR at `alpha` |
+| `t_stat` | One-sample t-statistic vs 0 |
+| `p_value` | P-value of one-sample t-test |
+| `p_binom` | P-value of binomial test on win rate |
+| `period_freq` | Resampling frequency used |
+| `n_periods` | Number of non-zero resampled periods |
+| `n_periods_positive` | Number of positive periods |
+| `n_periods_negative` | Number of negative periods |
+| `pct_periods_positive` | Fraction of positive periods |
+| `worst_period` | Worst resampled period return |
+| `best_period` | Best resampled period return |
+| `period_cvar` | CVaR on period returns |
+| `avg_mae_intra` | Mean intra-trade MAE |
+| `avg_mfe_intra` | Mean intra-trade MFE |
+| `avg_capture_intra` | Mean intra-trade capture ratio |
+| `avg_mae_hold` | Mean post-exit MAE |
+| `avg_mfe_hold` | Mean post-exit MFE |
+| `avg_capture_hold` | Mean post-exit capture ratio |
+| `trades_df` | Full trade-level DataFrame |
 
 ---
 ## Version History
