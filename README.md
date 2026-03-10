@@ -127,94 +127,31 @@ The engine never touches signal generation logic. A strategy only needs to retur
 - Plotting 
 
 ---
+# How to use it
 
-## Quickstart, How to use 
+installation
 
-
-```python
-# from a .ipynb 
-%pip install git+https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine.git
-
-# Personalised strategy Usecase
-from backtest_engine import BacktestConfig, DataPipeline, NJITEngine
-
-# Plug in your own strategy and define as many parameters as needed.
-# The engine only reads the 'Signal' column (1 / -1 / 0).
-
-pipeline = DataPipeline("Your/path/to/csv/files")
-cfg = BacktestConfig(timezone_shift=1,crypto=False) 
-njit_engine = NJITEngine(pipeline,"XAUUSD_M5","2024-01-02","2024-02-16",cfg,MAX_TRADES=50_000,MAX_POS=600)
-
-# Generate signals from a user-defined strategy, The engine currently only reads the 'Signal' column (1 / -1 / 0).
-signal_df = njit_engine.signal_generation_inspection(
-    strategy_fn=my_strategy,
-    signal_col="Signal",
-    return_df_signals=True,
-    personalised_setting_1, 
-    ... # you can put as many settings as you want, in accordance with your current strategy 
-)
-
-print(signal_df[["Close", "RSI", "Signal"]].tail(20))
-
-signals = signal_df["Signal"].to_numpy(dtype=np.int8)
-
-rets, metrics = njit_engine.run(
-    signals,
-    return_df_after=True,
-    plot=False
-)
-
-trades_df = metrics["trades_df"]
-df_after = metrics["df_after"]
-
-print(trades_df.head())
-print(df_after[["Close", "RSI", "Signal", "EntryTradeID", "ExitTradeID"]].tail(50))
-#print(metrics_v2["win_rate"], metrics_v2["sharpe"])
-
+```bash
+pip install git+https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine.git
 ```
-### Core usage flow
-```python
-pipeline = DataPipeline("Your/path/to/csv/files")
-```
-Handles data loading from your local files.
-It reads the CSV, applies the optional timezone shift if needed, and returns the OHLCV DataFrame used by the engine.
 
-`cfg = BacktestConfig(...)`
+---
 
-Stores the default backtest settings.
-This is where you define the main behavior of the engine: TP/SL, sessions, filters, break-even, trailing, metrics settings, etc.
+## Core Architecture
 
-`signal_df = njit_engine.signal_generation_inspection(` or ``
+### `DataPipeline`
 
-Builds the engine instance.
-It loads the data through pipeline, computes ATR, converts everything into fast NumPy arrays, and prepares the Numba backtest core.
+Handles data loading from local CSV files.
 
-signal_df
+**Responsibilities:**
+- Load OHLCV data
+- Apply timezone shift
+- Return the DataFrame used by the engine
 
-DataFrame returned by signal_generation_inspection(...).
-It contains your price data plus all strategy columns, including the required Signal column.
 
-signals
-
-NumPy array extracted from signal_df["Signal"].
-This is the only mandatory strategy input for the execution engine.
-It must contain:
-
-1 → long signal
-
--1 → short signal
-
-0 → no action
-
-run(signals, ...)
-
-Launches the backtest.
-It executes the signals with the rules defined in cfg, unless you override some parameters directly in run().
-
-### Data Format
+**Data Format**
 
 CSV files should be placed in a local directory and named `{TICKER}.csv`.
-
 Expected columns (no header):
 
 ```
@@ -222,8 +159,253 @@ Datetime, Open, High, Low, Close, Volume
 ```
 <img width="479" height="76" alt="Screenshot 2026-02-27 at 19 35 20" src="https://github.com/user-attachments/assets/5ed1bdbc-77ab-407d-93e0-ee20cee58e47" />
 
-Timestamps can be manually shifted `cfg = BacktestConfig(timezone_shift=1)` to align with your broker timezone. 
+Timestamps can be manually shifted in `cfg = BacktestConfig(timezone_shift=1)` to align with your broker timezone. 
 
+
+---
+
+### `BacktestConfig` (`cfg`)
+
+Defines the default behavior of the engine.
+
+**Typical parameters:**
+
+| Category | Parameters |
+|---|---|
+| TP / SL | `tp_pct`, `sl_pct`, `use_atr_sl_tp` |
+| Session filters | `time_window_1`, `time_window_2` |
+| Candle filters | `Candle_Size_filter`, `min_size_pct`, `max_size_pct` |
+| Break-even | `be_trigger_pct`, `be_offset_pct`, `be_delay_bars` |
+| Trailing stop | `trailing_trigger_pct`, `runner_trailing_mult` |
+| Metrics | `track_mae_mfe`, `compute_metrics` |
+| Data | `timezone_shift`, `entry_delay` |
+
+**Best practice:**
+
+```python
+# cfg → store default behaviour
+# run() → override parameters temporarily
+
+cfg = BacktestConfig(tp_pct=0.05, sl_pct=0.003)
+rets, metrics = njit_engine.run(signals, tp_pct=0.02)  # temporary override
+```
+
+---
+
+### `NJITEngine`
+
+Builds the Numba-accelerated execution environment.
+
+**Responsibilities:**
+- Load data from `pipeline`
+- Compute ATR
+- Convert data to NumPy arrays
+- Prepare and warm up the JIT-compiled backtest engine
+
+---
+
+## Signal Rules
+
+The engine expects a NumPy array of signals:
+
+```python
+dtype = np.int8
+```
+
+| Value | Meaning |
+|---|---|
+| `1` | Long signal |
+| `-1` | Short signal |
+| `0` | No action |
+
+```python
+signals = np.array([0, 1, 0, -1, 0], dtype=np.int8)
+```
+
+---
+
+## Three Ways to Generate Signals
+
+### 1. Built-in strategy
+
+Fastest method when you do not need signal inspection.
+
+```python
+signals = njit_engine.signals_ema(
+    span1=30,
+    span2=100,
+    mode="close_vs_ema"
+)
+```
+
+---
+
+### 2. Custom strategy returning a DataFrame
+
+Useful when you want to inspect indicators and signals before running the engine.
+Your strategy must return a DataFrame containing a `"Signal"` column.
+
+```python
+signal_df = njit_engine.signal_generation_inspection(
+    strategy_fn=my_strategy,
+    signal_col="Signal",
+    return_df_signals=True,
+    my_param_1=10,
+    my_param_2=20
+)
+
+print(signal_df[["Close", "RSI", "Signal"]].tail(20))
+
+signals = signal_df["Signal"].to_numpy(dtype=np.int8)
+```
+
+---
+
+### 3. Custom strategy returning signals directly
+
+Useful when you do not need DataFrame inspection.
+
+```python
+signals = signals_rsi(
+    njit_engine,
+    rsi_period=14,
+    oversold=30,
+    overbought=70
+)
+```
+
+---
+
+## Running the Backtest
+
+```python
+rets, metrics = njit_engine.run(signals)
+```
+
+**Outputs:**
+
+| Object | Description |
+|---|---|
+| `rets` | NumPy array of trade returns |
+| `metrics` | Dictionary containing statistics and result DataFrames |
+
+---
+
+## Post-Backtest Outputs
+
+**Main objects inside `metrics`:**
+
+```python
+metrics["trades_df"]   # full trade history
+metrics["df_after"]    # annotated price DataFrame
+metrics["win_rate"]    # win rate
+metrics["sharpe"]      # Sharpe ratio
+```
+
+### Trade history
+
+```python
+trades_df = metrics["trades_df"]
+print(trades_df.head())
+```
+
+Contains:
+- Entry / exit price and time
+- Trade return
+- Exit reason (`SL`, `TP`, `BE`, `RUNNER_SL`, `EMA1_TP`, ...)
+- MAE / MFE intra-trade and hold-period statistics
+
+### Annotated price DataFrame
+
+To map executed trades back to the original bars:
+
+```python
+rets, metrics = njit_engine.run(
+    signals,
+    return_df_after=True
+)
+
+df_after = metrics["df_after"]
+
+print(
+    df_after[
+        ["Close", "RSI", "Signal", "EntryTradeID", "ExitTradeID"]
+    ].tail(50)
+)
+```
+
+---
+
+## Classic Use Case
+
+```python
+import numpy as np
+from backtest_engine import BacktestConfig, DataPipeline, NJITEngine
+
+
+def my_strategy(df, rsi_period=14, oversold=30, overbought=70):
+    d = df.copy()
+
+    delta = d["Close"].diff()
+    gain = delta.clip(lower=0).rolling(rsi_period).mean()
+    loss = -delta.clip(upper=0).rolling(rsi_period).mean()
+    rsi = 100 - (100 / (1 + gain / loss))
+
+    d["RSI"] = rsi
+    d["Signal"] = 0
+    d.loc[rsi < oversold, "Signal"] = 1
+    d.loc[rsi > overbought, "Signal"] = -1
+
+    return d
+
+
+pipeline = DataPipeline("Your/path/to/csv/files")
+
+cfg = BacktestConfig(
+    timezone_shift=1,
+    crypto=False,
+    tp_pct=0.002,
+    sl_pct=0.01
+)
+
+njit_engine = NJITEngine(
+    pipeline,
+    "XAUUSD_M5",
+    "2024-01-02",
+    "2024-02-16",
+    cfg,
+    MAX_TRADES=50_000,
+    MAX_POS=600
+)
+
+signal_df = njit_engine.signal_generation_inspection(
+    strategy_fn=my_strategy,
+    signal_col="Signal",
+    return_df_signals=True,
+    rsi_period=14,
+    oversold=30,
+    overbought=70
+)
+
+signals = signal_df["Signal"].to_numpy(dtype=np.int8)
+
+rets, metrics = njit_engine.run(
+    signals,
+    return_df_after=True
+)
+
+trades_df = metrics["trades_df"]
+df_after = metrics["df_after"]
+
+print(trades_df.head())
+print(metrics["win_rate"], metrics["sharpe"])
+```
+
+### Mental Model
+
+```
+Load data → define cfg → generate signals → run engine → inspect results
+```
 ---
 
 ## NJIT Engine — Parameters Reference
