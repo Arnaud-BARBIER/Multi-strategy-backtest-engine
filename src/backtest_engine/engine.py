@@ -10,6 +10,45 @@ from .signals import (
     signals_ema_vs_close_njit,
     signals_ema_cross_njit
 )
+
+# ══════════════════════════════════════════════════════════════════
+# 0. CONSTANTES
+# ══════════════════════════════════════════════════════════════════
+
+POS_SIDE             = 0
+POS_ENTRY_PRICE      = 1
+POS_TP               = 2
+POS_SL               = 3
+POS_ENTRY_IDX        = 4
+POS_BE_ARMED         = 5
+POS_BE_ACTIVE        = 6
+POS_BE_ARM_IDX       = 7
+POS_RUNNER_ARMED     = 8
+POS_RUNNER_ACTIVE    = 9
+POS_RUNNER_SL        = 10
+POS_TAG              = 11
+POS_PENDING_BE_SL    = 12
+POS_RUNNER_THRESHOLD = 13
+POS_MAE              = 14
+POS_MFE              = 15
+POS_N_COLS           = 16
+
+REASON_SL          = 1
+REASON_TP          = 2
+REASON_BE          = 3
+REASON_EMA1_TP     = 4
+REASON_EMA2_TP     = 5
+REASON_EMACROSS_TP = 6
+REASON_RUNNER_SL   = 7
+REASON_EXIT_SIG    = 8
+REASON_REVERSE     = 9
+
+REASON_LABELS = {
+    1: "SL", 2: "TP", 3: "BE",
+    4: "EMA1_TP", 5: "EMA2_TP", 6: "EMA_CROSS_TP",
+    7: "RUNNER_SL", 8: "EXIT_SIGNAL", 9: "REVERSE"
+}
+
 # ══════════════════════════════════════════════════════════════════
 # 3. HELPERS EXIT / ENTRY
 # ══════════════════════════════════════════════════════════════════
