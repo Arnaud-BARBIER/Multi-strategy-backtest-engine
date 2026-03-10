@@ -152,26 +152,6 @@ Builds the Numba-accelerated execution environment.
 
 ---
 
-## Signal Rules
-
-The engine expects a NumPy array of signals:
-
-```python
-dtype = np.int8
-```
-
-| Value | Meaning |
-|---|---|
-| `1` | Long signal |
-| `-1` | Short signal |
-| `0` | No action |
-
-```python
-signals = np.array([0, 1, 0, -1, 0], dtype=np.int8)
-```
-
----
-
 ## Three Ways to Generate Signals
 
 ### 1. Built-in strategy
@@ -188,7 +168,7 @@ signals = njit_engine.signals_ema(
 
 ---
 
-### 2. Custom strategy returning a DataFrame
+### 2. Custom strategy returning a DataFrame and/or plotting price chart with signals
 
 Useful when you want to inspect indicators and signals before running the engine.
 Your strategy must return a DataFrame containing a `"Signal"` column.
@@ -220,6 +200,25 @@ signals = signals_rsi(
     oversold=30,
     overbought=70
 )
+```
+---
+
+## Signal Rules
+
+The engine expects a NumPy array of signals thus your strategy must return it :
+
+```python
+dtype = np.int8
+```
+
+| Value | Meaning |
+|---|---|
+| `1` | Long signal |
+| `-1` | Short signal |
+| `0` | No action |
+
+```python
+signals = np.array([0, 1, 0, -1, 0], dtype=np.int8)
 ```
 
 ---
