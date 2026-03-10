@@ -1,6 +1,6 @@
 from .config import BacktestConfig
 from .engine import NJITEngine
-from .pipeline import DataPipeline
+from .DataPipeline import DataPipeline
 
 __all__ = [
     "BacktestConfig",
