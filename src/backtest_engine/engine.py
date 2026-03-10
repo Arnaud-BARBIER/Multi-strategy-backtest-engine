@@ -624,7 +624,6 @@ def compute_metrics_full(trade_returns, trade_sides, trade_entry_idx,
 # ══════════════════════════════════════════════════════════════════
 # 6. NJITEngine
 # ══════════════════════════════════════════════════════════════════
-
 class NJITEngine:
 
     def __init__(self, pipeline, ticker, start, end, cfg,
@@ -901,52 +900,98 @@ class NJITEngine:
             raise ValueError(f"strategy_fn must return a DataFrame with '{signal_col}'")
         return df_out[signal_col].to_numpy(dtype=np.int8)
 
-    def run(self, signals,
-            tp_pct=None, sl_pct=None,
-            use_atr_sl_tp=0, tp_atr_mult=2.0, sl_atr_mult=1.0,
-            entry_delay=None,
-            session_1=None, session_2=None, session_3=None,
-            max_gap_signal=None, max_gap_entry=None,
-            candle_size_filter=None, min_size_pct=None,
-            max_size_pct=None, prev_candle_direction=None,
-            allow_exit_on_entry_bar=None,
-            exit_ema1=None, exit_ema2=None,
-            use_ema1_tp=None, use_ema2_tp=None, use_ema_cross_tp=None,
-            exit_signals=None, signal_tags=None,
-            use_exit_signal=None, exit_delay=None,
-            be_trigger_pct=None, be_offset_pct=None, be_delay_bars=None,
-            trailing_trigger_pct=None, runner_trailing_mult=None,
-            multi_entry=None, reverse_mode=None,
-            me_max=0, me_period=0, me_reset_mode=0,
-            track_mae_mfe=True,
-            hold_minutes=0, bar_duration_min=5,
-            commission_pct=0.0, spread_pct=0.0, slippage_pct=0.0,
-            alpha=5, period_freq="ME",return_df_after=False,plot=False, crypto=False,full_df_after=False,
-            window_before=200, window_after=50):
+    def run(
+        self,
+        signals,
+        tp_pct=None, sl_pct=None,
+        use_atr_sl_tp=None, tp_atr_mult=None, sl_atr_mult=None,
+        entry_delay=None,
+        session_1=None, session_2=None, session_3=None,
+        max_gap_signal=None, max_gap_entry=None,
+        candle_size_filter=None, min_size_pct=None, max_size_pct=None,
+        prev_candle_direction=None,
+        allow_exit_on_entry_bar=None,
+        exit_ema1=None, exit_ema2=None, use_ema1_tp=None, use_ema2_tp=None,
+        use_ema_cross_tp=None,
+        exit_signals=None,
+        signal_tags=None,
+        use_exit_signal=None, exit_delay=None,
+        be_trigger_pct=None, be_offset_pct=None, be_delay_bars=None,
+        trailing_trigger_pct=None, runner_trailing_mult=None,
+        multi_entry=None, reverse_mode=None,
+        me_max=None, me_period=None, me_reset_mode=None,
+        track_mae_mfe=None, hold_minutes=None, bar_duration_min=None,
+        commission_pct=None, spread_pct=None, slippage_pct=None,
+        alpha=None, period_freq=None,
+        return_df_after=None, plot=None,crypto=None,
+        full_df_after=None, window_before=None, window_after=None,
+    ):
 
         cfg = self.cfg
-        tp_pct        = tp_pct       if tp_pct       is not None else (cfg.tp_pct  or 0.01)
-        sl_pct        = sl_pct       if sl_pct       is not None else (cfg.sl_pct  or 0.005)
-        entry_delay   = entry_delay  if entry_delay  is not None else cfg.entry_delay
-        max_gap_entry  = max_gap_entry  if max_gap_entry  is not None else (cfg.max_gap_size or 0.0)
-        max_gap_signal = max_gap_signal if max_gap_signal is not None else 0.0  # pas de fallback cfg — nouveau param
-        candle_size_filter    = candle_size_filter    if candle_size_filter    is not None else cfg.Candle_Size_filter
-        min_size_pct          = min_size_pct          if min_size_pct          is not None else cfg.min_size_pct
-        max_size_pct          = max_size_pct          if max_size_pct          is not None else cfg.max_size_pct
-        prev_candle_direction = prev_candle_direction if prev_candle_direction is not None else cfg.Previous_Candle_same_direction
-        allow_exit_on_entry_bar = allow_exit_on_entry_bar if allow_exit_on_entry_bar is not None else cfg.allow_exit_on_entry_bar
-        use_ema1_tp      = use_ema1_tp      if use_ema1_tp      is not None else cfg.EMA1_TP
-        use_ema2_tp      = use_ema2_tp      if use_ema2_tp      is not None else cfg.EMA2_TP
-        use_ema_cross_tp = use_ema_cross_tp if use_ema_cross_tp is not None else cfg.EMA_CROSS_TP
-        use_exit_signal  = use_exit_signal  if use_exit_signal  is not None else cfg.use_exit_signal
-        exit_delay       = exit_delay       if exit_delay       is not None else cfg.exit_delay
-        be_trigger_pct   = be_trigger_pct   if be_trigger_pct   is not None else (cfg.be_trigger_pct or 0.0)
-        be_offset_pct    = be_offset_pct    if be_offset_pct    is not None else cfg.be_offset_pct
-        be_delay_bars    = be_delay_bars    if be_delay_bars    is not None else cfg.be_delay_bars
-        trailing_trigger_pct = trailing_trigger_pct if trailing_trigger_pct is not None else (cfg.trailing_trigger_pct or 0.0)
-        runner_trailing_mult = runner_trailing_mult if runner_trailing_mult is not None else cfg.runner_trailing_mult
-        multi_entry  = multi_entry  if multi_entry  is not None else cfg.multi_entry
+
+        tp_pct = tp_pct if tp_pct is not None else cfg.tp_pct
+        sl_pct = sl_pct if sl_pct is not None else cfg.sl_pct
+
+        use_atr_sl_tp = use_atr_sl_tp if use_atr_sl_tp is not None else cfg.use_atr_sl_tp
+        tp_atr_mult = tp_atr_mult if tp_atr_mult is not None else cfg.tp_atr_mult
+        sl_atr_mult = sl_atr_mult if sl_atr_mult is not None else cfg.sl_atr_mult
+
+        entry_delay = entry_delay if entry_delay is not None else cfg.entry_delay
+
+        session_1 = session_1 if session_1 is not None else cfg.session_1
+        session_2 = session_2 if session_2 is not None else cfg.session_2
+        session_3 = session_3 if session_3 is not None else cfg.session_3
+
+        max_gap_signal = max_gap_signal if max_gap_signal is not None else cfg.max_gap_signal
+        max_gap_entry = max_gap_entry if max_gap_entry is not None else cfg.max_gap_entry
+
+        candle_size_filter = candle_size_filter if candle_size_filter is not None else cfg.candle_size_filter
+        min_size_pct = min_size_pct if min_size_pct is not None else cfg.min_size_pct
+        max_size_pct = max_size_pct if max_size_pct is not None else cfg.max_size_pct
+        prev_candle_direction = prev_candle_direction if prev_candle_direction is not None else cfg.prev_candle_direction
+
+        allow_exit_on_entry_bar = (
+            allow_exit_on_entry_bar
+            if allow_exit_on_entry_bar is not None
+            else cfg.allow_exit_on_entry_bar
+        )
+
+        use_ema1_tp = use_ema1_tp if use_ema1_tp is not None else cfg.use_ema1_tp
+        use_ema2_tp = use_ema2_tp if use_ema2_tp is not None else cfg.use_ema2_tp
+        use_ema_cross_tp = use_ema_cross_tp if use_ema_cross_tp is not None else cfg.use_ema_cross_tp
+
+        use_exit_signal = use_exit_signal if use_exit_signal is not None else cfg.use_exit_signal
+        exit_delay = exit_delay if exit_delay is not None else cfg.exit_delay
+
+        be_trigger_pct = be_trigger_pct if be_trigger_pct is not None else cfg.be_trigger_pct
+        be_offset_pct = be_offset_pct if be_offset_pct is not None else cfg.be_offset_pct
+        be_delay_bars = be_delay_bars if be_delay_bars is not None else cfg.be_delay_bars
+
+        trailing_trigger_pct = (
+            trailing_trigger_pct if trailing_trigger_pct is not None else cfg.trailing_trigger_pct
+        )
+        runner_trailing_mult = (
+            runner_trailing_mult if runner_trailing_mult is not None else cfg.runner_trailing_mult
+        )
+
+        multi_entry = multi_entry if multi_entry is not None else cfg.multi_entry
         reverse_mode = reverse_mode if reverse_mode is not None else cfg.reverse_mode
+
+        track_mae_mfe = track_mae_mfe if track_mae_mfe is not None else cfg.track_mae_mfe
+        hold_minutes = hold_minutes if hold_minutes is not None else cfg.hold_minutes
+        bar_duration_min = bar_duration_min if bar_duration_min is not None else cfg.bar_duration_min
+        commission_pct = commission_pct if commission_pct is not None else cfg.commission_pct
+        spread_pct = spread_pct if spread_pct is not None else cfg.spread_pct
+        slippage_pct = slippage_pct if slippage_pct is not None else cfg.slippage_pct
+        alpha = alpha if alpha is not None else cfg.alpha
+        period_freq = period_freq if period_freq is not None else cfg.period_freq
+
+        return_df_after = return_df_after if return_df_after is not None else cfg.return_df_after
+        plot = plot if plot is not None else cfg.plot
+        crypto = crypto if crypto is not None else cfg.crypto
+        full_df_after = full_df_after if full_df_after is not None else cfg.full_df_after
+        window_before = window_before if window_before is not None else cfg.window_before
+        window_after = window_after if window_after is not None else cfg.window_after
 
         s1_start = self._parse_session(session_1[0]) if session_1 else -1
         s1_end   = self._parse_session(session_1[1]) if session_1 else -1
@@ -960,16 +1005,9 @@ class NJITEngine:
         _e_sig  = exit_signals if exit_signals is not None else np.zeros(0, dtype=np.int8)
         _s_tags = signal_tags  if signal_tags  is not None else np.zeros(0, dtype=np.float64)
 
-        me_max        = me_max        if me_max        > 0 else (cfg.ME_X        if cfg.MaxEntries4Periods else 0)
-        me_period     = me_period     if me_period     > 0 else (cfg.ME_Period_Y if cfg.MaxEntries4Periods else 0)
-        me_reset_mode = me_reset_mode if me_reset_mode > 0 else (
-            5 if (cfg.MaxEntries4Periods and cfg.ME_reset_mode == "day") else
-            4 if (cfg.MaxEntries4Periods and cfg.ME_reset_mode == "session") else
-            3 if cfg.MaxEntries4Periods else
-            1 if cfg.ME_reset_mode == "day" else
-            2 if cfg.ME_reset_mode == "session" else
-            0
-        )
+        me_max = me_max if me_max is not None else cfg.me_max
+        me_period = me_period if me_period is not None else cfg.me_period
+        me_reset_mode = me_reset_mode if me_reset_mode is not None else cfg.me_reset_mode
 
         rets, sides, entry_idx, exit_idx, reasons, exit_prices, mae, mfe = backtest_njit(
             self.opens, self.highs, self.lows, self.closes, self.atrs,
@@ -1051,6 +1089,7 @@ class NJITEngine:
 
         return rets, metrics
 
+
     def grid_search(self, signals,
                     tp_values, sl_values,
                     commission_pct=0.0, spread_pct=0.0, slippage_pct=0.0,
@@ -1113,4 +1152,4 @@ class NJITEngine:
             columns=["tp", "sl", "sharpe", "win_rate", "mdd", "profit_factor", "cum_return"]
         )
         return df.sort_values(sort_by, ascending=False).reset_index(drop=True)
-    
+  
