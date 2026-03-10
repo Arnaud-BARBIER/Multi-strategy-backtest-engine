@@ -7,3 +7,4 @@ __all__ = [
     "NJITEngine",
     "signals_ema",
 ]
+__version__ = "0.1.0"
