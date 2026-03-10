@@ -1,49 +1,65 @@
-import pandas as pd
-import numpy as np
-import plotly.graph_objects as go
+# ══════════════════════════════════════════════════════════════════
+# 1. Default Indicators
+# ══════════════════════════════════════════════════════════════════
+@njit(cache=True)
+def ema_njit(closes, span):
+    n      = closes.shape[0]
+    ema    = np.empty(n, dtype=np.float64)
+    alpha  = 2.0 / (span + 1.0)
+    ema[0] = closes[0]
+    for i in range(1, n):
+        ema[i] = alpha * closes[i] + (1.0 - alpha) * ema[i - 1]
+    return ema
 
-class Strategy_Signal:
-        @staticmethod
-        def apply(df, cfg):
-            if cfg.strategy == "ema_cross":
-                return Strategy_Signal.ema_cross(df, cfg.period_1, cfg.period_2, cfg.max_gap_size)
-            else:
-                raise ValueError(f"Unknown strategy: {cfg.strategy}")
-            
-        @staticmethod
-        def ema_cross(df: pd.DataFrame, period_1=50, period_2=100, max_gap_size=None) -> pd.DataFrame:
-            d = df.copy()
-            d["EMA1"] = d["Close"].ewm(span=period_1, adjust=False).mean()
-            d["EMA2"] = d["Close"].ewm(span=period_2, adjust=False).mean()
 
-            if max_gap_size is not None:
-                gap_pct = (d["Open"] - d["Close"].shift(1)).abs() / d["Close"].shift(1)
-                gap_filter = gap_pct < max_gap_size
-            else:
-                gap_filter = pd.Series(True, index=d.index)
+@njit(cache=True)
+def atr_wilder_njit(highs, lows, closes, period):
+    n   = highs.shape[0]
+    tr  = np.empty(n, dtype=np.float64)
+    atr = np.full(n, np.nan, dtype=np.float64)
+    tr[0] = highs[0] - lows[0]
+    for i in range(1, n):
+        tr[i] = max(
+            highs[i] - lows[i],
+            abs(highs[i] - closes[i - 1]),
+            abs(lows[i]  - closes[i - 1])
+        )
+    total = 0.0
+    for i in range(period):
+        total += tr[i]
+    atr[period - 1] = total / period
+    for i in range(period, n):
+        atr[i] = (atr[i - 1] * (period - 1) + tr[i]) / period
+    return atr
 
-            d["Signal"] = np.where(
-                (d["EMA1"].shift(1) < d["Close"].shift(1)) & (d["EMA1"] > d["Close"]) & gap_filter,
-                -1,
-                np.where(
-                    (d["EMA1"].shift(1) > d["Close"].shift(1)) & (d["EMA1"] < d["Close"]) & gap_filter,
-                    1,
-                    0,
-                ),
-            )
+# ══════════════════════════════════════════════════════════════════
+# 2. Default strategy
+# ══════════════════════════════════════════════════════════════════
 
-            d["Signal2"] = 0
-            bull = (d["EMA2"].shift(1) > d["Close"].shift(1)) & (d["EMA2"] < d["Close"]) & gap_filter
-            bear = (d["EMA2"].shift(1) < d["Close"].shift(1)) & (d["EMA2"] > d["Close"]) & gap_filter
-            d.loc[bull, "Signal2"] = 1
-            d.loc[bear, "Signal2"] = -1
+@njit(cache=True)
+def signals_ema_vs_close_njit(opens, closes, span1, span2):
+    n      = closes.shape[0]
+    ema1   = ema_njit(closes, span1)
+    ema2   = ema_njit(closes, span2)
+    signal = np.zeros(n, dtype=np.int8)
+    for i in range(1, n):
+        if closes[i - 1] < ema1[i - 1] and closes[i] > ema1[i]:
+            signal[i] = 1
+        elif closes[i - 1] > ema1[i - 1] and closes[i] < ema1[i]:
+            signal[i] = -1
+    return ema1, ema2, signal
 
-            d["EMA_CROSS"] = 0
-            down_cross = (d["EMA1"].shift(1) > d["EMA2"].shift(1)) & (d["EMA1"] < d["EMA2"]) & gap_filter
-            up_cross = (d["EMA1"].shift(1) < d["EMA2"].shift(1)) & (d["EMA1"] > d["EMA2"]) & gap_filter
-            d.loc[up_cross, "EMA_CROSS"] = 1
-            d.loc[down_cross, "EMA_CROSS"] = -1
 
-            d["Entry_Price"] = d["Open"].where(d["Signal"].shift(1) != 0)
-            return d
- 
+@njit(cache=True)
+def signals_ema_cross_njit(closes, span1, span2):
+    n      = closes.shape[0]
+    ema1   = ema_njit(closes, span1)
+    ema2   = ema_njit(closes, span2)
+    signal = np.zeros(n, dtype=np.int8)
+    for i in range(1, n):
+        if ema1[i - 1] < ema2[i - 1] and ema1[i] > ema2[i]:
+            signal[i] = 1
+        elif ema1[i - 1] > ema2[i - 1] and ema1[i] < ema2[i]:
+            signal[i] = -1
+    return ema1, ema2, signal
+
