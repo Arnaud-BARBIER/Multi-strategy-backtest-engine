@@ -1,6 +1,18 @@
 from .config import BacktestConfig
-from .pipeline import DataPipeline
-from .signals import Strategy_Signal
-from .engine import BacktestEngine
+from .engine import NJITEngine, compute_metrics_full
+from .signals import (
+    ema_njit,
+    atr_wilder_njit,
+    signals_ema_vs_close_njit,
+    signals_ema_cross_njit,
+)
 
-__all__ = ["BacktestConfig", "DataPipeline", "Strategy_Signal", "BacktestEngine"]
+__all__ = [
+    "BacktestConfig",
+    "NJITEngine",
+    "compute_metrics_full",
+    "ema_njit",
+    "atr_wilder_njit",
+    "signals_ema_vs_close_njit",
+    "signals_ema_cross_njit",
+]
