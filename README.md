@@ -130,41 +130,88 @@ The engine never touches signal generation logic. A strategy only needs to retur
 
 ## Quickstart, How to use 
 
+
 ```python
-pip install git+https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine.git
-from backtest_engine import BacktestConfig, DataPipeline, BacktestEngine #,Strategy_Signal if you want to use a build in strategy
+# from a .ipynb 
+%pip install git+https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine.git
+
+# Personalised strategy Usecase
+from backtest_engine import BacktestConfig, DataPipeline, NJITEngine
 
 # Plug in your own strategy and define as many parameters as needed.
 # The engine only reads the 'Signal' column (1 / -1 / 0).
-def My_strategy(df, rsi_period=14, oversold=20, overbought=80):
-    d = df.copy()
-    delta = d["Close"].diff()
-    gain = delta.clip(lower=0).rolling(rsi_period).mean()
-    loss = -delta.clip(upper=0).rolling(rsi_period).mean()
-    rsi = 100 - (100 / (1 + gain / loss))
-    d["Signal"] = 0
-    d.loc[rsi < oversold,  "Signal"] = 1
-    d.loc[rsi > overbought, "Signal"] = -1
-    return d
 
+pipeline = DataPipeline("Your/path/to/csv/files")
+cfg = BacktestConfig(timezone_shift=1,crypto=False) 
+njit_engine = NJITEngine(pipeline,"XAUUSD_M5","2024-01-02","2024-02-16",cfg,MAX_TRADES=50_000,MAX_POS=600)
 
-pipeline = DataPipeline("Your/path/")
-cfg = BacktestConfig(tp_pct=0.01, sl_pct=0.004)
-engine = BacktestEngine.from_df(
-    pipeline, "XAUUSD_M5", "2021-01-01", "2026-01-01", cfg,
-    strategy_fn=My_strategy, #<- omit this if using a built-in strategy (e.g. strategy='ema_cross' in cfg)
-    rsi_period=14,
-    oversold=20,
-    overbought=80,
-    timezone_shift=1 #<- Broker timezone alignment with UTC offset
+# Generate signals from a user-defined strategy, The engine currently only reads the 'Signal' column (1 / -1 / 0).
+signal_df = njit_engine.signal_generation_inspection(
+    strategy_fn=my_strategy,
+    signal_col="Signal",
+    return_df_signals=True,
+    personalised_setting_1, 
+    ... # you can put as many settings as you want, in accordance with your current strategy 
 )
-trades = engine.run()
-trades 
+
+print(signal_df[["Close", "RSI", "Signal"]].tail(20))
+
+signals = signal_df["Signal"].to_numpy(dtype=np.int8)
+
+rets, metrics = njit_engine.run(
+    signals,
+    return_df_after=True,
+    plot=False
+)
+
+trades_df = metrics["trades_df"]
+df_after = metrics["df_after"]
+
+print(trades_df.head())
+print(df_after[["Close", "RSI", "Signal", "EntryTradeID", "ExitTradeID"]].tail(50))
+#print(metrics_v2["win_rate"], metrics_v2["sharpe"])
+
 ```
+### Core usage flow
+```python
+pipeline = DataPipeline("Your/path/to/csv/files")
+```
+Handles data loading from your local files.
+It reads the CSV, applies the optional timezone shift if needed, and returns the OHLCV DataFrame used by the engine.
 
----
+`cfg = BacktestConfig(...)`
 
-## Data Format
+Stores the default backtest settings.
+This is where you define the main behavior of the engine: TP/SL, sessions, filters, break-even, trailing, metrics settings, etc.
+
+`signal_df = njit_engine.signal_generation_inspection(` or ``
+
+Builds the engine instance.
+It loads the data through pipeline, computes ATR, converts everything into fast NumPy arrays, and prepares the Numba backtest core.
+
+signal_df
+
+DataFrame returned by signal_generation_inspection(...).
+It contains your price data plus all strategy columns, including the required Signal column.
+
+signals
+
+NumPy array extracted from signal_df["Signal"].
+This is the only mandatory strategy input for the execution engine.
+It must contain:
+
+1 → long signal
+
+-1 → short signal
+
+0 → no action
+
+run(signals, ...)
+
+Launches the backtest.
+It executes the signals with the rules defined in cfg, unless you override some parameters directly in run().
+
+### Data Format
 
 CSV files should be placed in a local directory and named `{TICKER}.csv`.
 
@@ -177,74 +224,6 @@ Datetime, Open, High, Low, Close, Volume
 
 Timestamps can be manually shifted `cfg = BacktestConfig(timezone_shift=1)` to align with your broker timezone. 
 
----
-
-## Running Your Strategy
-
-There are two ways to plug your strategy into the engine.
-
----
-
-### Option A — External function (recommended)
-
-Write a function that takes a DataFrame and returns it with a `Signal` column
-(`1` = long, `-1` = short, `0` = neutral). Pass it directly to `from_df()`.
-```python
-def my_strategy(df, rsi_period=14, oversold=20, overbought=80):
-    d = df.copy()
-    delta = d["Close"].diff()
-    gain  = delta.clip(lower=0).rolling(rsi_period).mean()
-    loss  = -delta.clip(upper=0).rolling(rsi_period).mean()
-    rsi   = 100 - (100 / (1 + gain / loss))
-    d["Signal"] = 0
-    d.loc[rsi < oversold,   "Signal"] =  1
-    d.loc[rsi > overbought, "Signal"] = -1
-    return d
-
-pipeline = DataPipeline("your/data/path")
-cfg      = BacktestConfig(tp_pct=0.01, sl_pct=0.004)
-
-engine = BacktestEngine.from_df(
-    pipeline, "XAUUSD_M5", "2021-01-01", "2026-01-01", cfg,
-    strategy_fn=my_strategy,
-    rsi_period=14,
-    oversold=20,
-    overbought=80,
-)
-trades = engine.run()
-```
-
-Strategy parameters are optional, if omitted, defaults defined in your function will be used.
-
----
-
-### Option B — Built-in strategy
-
-Add a static method to `Strategy_Signal`, register it in `apply()` (located in the same class),
-and declare any new parameters in `BacktestConfig`.
-The engine requires no changes.
-```python
-# 1. Add your strategy to Strategy_Signal
-@staticmethod
-def my_strategy(df, param_1, param_2):
-    d = df.copy()
-    d["Signal"] = ...  # your logic here
-    return d
-
-# 2. Register it in apply()
-@staticmethod
-def apply(df, cfg):
-    if cfg.strategy == "my_strategy":
-        return Strategy_Signal.my_strategy(df, cfg.param_1, cfg.param_2)
-
-# 3. Add parameters to BacktestConfig
-param_1: float = ...
-param_2: float = ...
-
-# 4. Call it
-cfg = BacktestConfig(strategy="my_strategy", param_1=..., param_2=...)
-engine = BacktestEngine.from_ticker(pipeline, "XAUUSD_M5", "2021-01-01", "2026-01-01", cfg)
-```
 ---
 
 ## NJIT Engine — Parameters Reference
