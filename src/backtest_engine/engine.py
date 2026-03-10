@@ -6,8 +6,9 @@ from scipy import stats as scipy_stats
 
 from .signals import (
     ema_njit,
+    atr_wilder_njit,
     signals_ema_vs_close_njit,
-    signals_ema_cross_njit,
+    signals_ema_cross_njit
 )
 # ══════════════════════════════════════════════════════════════════
 # 3. HELPERS EXIT / ENTRY
