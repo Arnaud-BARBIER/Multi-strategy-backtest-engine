@@ -1,5 +1,5 @@
 # Backtesting Engine
-### A modular, class-based NUMBA otpimised backtesting framework built for systematic research on OHLCV data
+### A modular, class-based, Numba-optimized backtesting framework built for systematic research on OHLCV data
 
 <img width="1306" height="732" alt="Screenshot 2026-03-10 at 16 46 45" src="https://github.com/user-attachments/assets/66066bd7-f043-4f7d-89fe-020a5d59f02e" />
 
@@ -10,9 +10,8 @@ Rebuilding a bar-by-bar simulation
 loop across notebooks was not a research workflow, but a 
 bottleneck. Every new strategy meant rewriting execution logic, 
 risk management, and session filters from scratch. This project 
-is the result of decoupling signal generation from the execution 
-engine, so strategy logic can be iterated independently from 
-the simulation layer.
+emerged from the need to decouple signal research from trade simulation, 
+so hypotheses can be tested rapidly without rebuilding the execution stack each time.
 
 The engine is written in Python and designed around one idea: **signal generation and execution logic should be completely independent**. The operator bring a strategy that produces a `Signal` column in the same DataFrame that will be used by the engine to handle everything else: entries, exits, position sizing, breakeven, atr trailing stops, session filtering, and later trade analytics and hypothesis testing.
 
@@ -101,9 +100,9 @@ The engine is written in Python and designed around one idea: **signal generatio
                                                 └──────────────────────────┘
 ```
 
-Research layer   → signal_df / indicators / visual check
-Execution layer  → backtest_njit
-Analytics layer  → metrics + trades_df + df_after
+- Research layer   → signal_df / indicators / visual check
+- Execution layer  → backtest_njit
+- Analytics layer  → metrics + trades_df + df_after
 
 The engine never touches signal generation logic. A strategy only needs to return a DataFrame with a `Signal` column the rest is handled internally.
 
@@ -112,6 +111,7 @@ The engine never touches signal generation logic. A strategy only needs to retur
 ## Main Features
 
 - Multi-position management with per-position state
+- Fast Numba execution
 - Breakeven logic with configurable trigger, offset, and delay
 - ATR-based trailing stop with two-phase activation
 - Fixed or ATR-based TP/SL
@@ -122,7 +122,8 @@ The engine never touches signal generation logic. A strategy only needs to retur
 - Gap filter on signal generation
 - MAE/MFE intra-trade tracking
 - Hold-period observation (post-exit price behavior analysis)
-- NumPy array precomputation for loop performance
+- Trade log + annotated post-run dataframe
+- Plotting 
 
 ---
 
@@ -565,28 +566,34 @@ The current Version is the V3.3.
 | V2.2    | Multi-position, ATR, breakeven, session filtering, EMA exits |
 | V3      | Class architecture — `BacktestConfig`, `DataPipeline`, `BacktestEngine` |
 | V3.3    | Signal/engine separation — plug-and-play strategy layer | 
+| V4    | Pandas to Numba transition — inspection possibility | 
+
 
 ---
 
 ## Known Limitations
 
-- No slippage or commission modeling
-- No portfolio-level allocation
+- No multiple setups, or exit strategy architecture
 - No formal walk-forward validation or statistical significance testing yet
+- No portfolio-level allocation
 
 ---
 
 ## What's Next
 
-The immediate next step is grid search and walk-forward validation to assess
-whether the edge identified in-sample holds out-of-sample.
+The immediate next step is to extend the engine toward a more complete set of primitive strategy structures.
 
-Longer term, I expect with the EMA price cross strategy, statistical analysis 
-to show that optimal parameters vary significantly across market regimes : 
-trending vs ranging conditions respond very differently to an EMA-based entry. 
-The plan is to address this with a regime detection layer using XGBoost, classifying 
-market states and adapting parameters dynamically rather than using a single 
-static configuration.
+This includes:
+
+- **multi-signal interpretation**, so several entry signals can coexist and be processed differently;
+- **entry setup aggregation**, to classify each trade by the technical context in which it was opened;
+- **setup-to-exit linkage**, so a trade can inherit a specific exit logic from its entry profile;
+- **stateful trade management**, allowing exit behavior to evolve during the life of the trade when new conditions appear;
+- **context and regime tagging**, to make trades conditional on volatility regime, session, trend/range environment, or custom research labels;
+- **time-based execution primitives**, such as cooldown, max holding period, next open / next close exits, and execution caps by period;
+- **richer research instrumentation**, so each trade can later be studied not only by outcome, but also by setup quality, regime, and management path.
+
+The broader objective is to progressively build a research framework where strategy design, execution, and statistical validation remain modular. In that architecture, the user focuses on expressing hypotheses and market logic at each level of the strategy, so the framework can test not just isolated signals, but the full analytical structure that links signals, context, and decision rules.
 
 ---
 
@@ -595,19 +602,6 @@ static configuration.
 This is a personal research project, not currently open for contributions.
 However if you have feedback or want to discuss the architecture, feel free to contact me.
 
----
-
-## Future Updates before grid search 
-
-Focusing on essential reaserch features for the signal development phase.
-Prepare the groundwork for the upcoming grid search update.
-
-1. Plot chart + signals + entry/exits
-2. Returning df optionnaly to better understand signal generation issues during the development phase
-3. Entry delay ← to better control the look ahead bias, (even though it is already handled)
-4. Optional Exit signal strategy
-5. Simple metrics equity, drawdown, commissions
-6. Intra-candle path (tick/lower TF)
 
 
 
