@@ -24,87 +24,35 @@ The engine is written in Python and designed around one idea: **signal generatio
 - Analytics layer  → metrics + trades_df + df_after
 
 
-```markdown
-                                                ┌────────────────────┐
-                                                │   1. DataPipeline  │
-                                                │ fetchdata + ATR    │
-                                                └─────────┬──────────┘
-                                                          │
-                                                          ▼
-                                                ┌────────────────────┐
-                                                │  2. NJITEngine     │
-                                                │ init + arrays np   │
-                                                │ OHLC / ATR / time  │
-                                                │ JIT warmup         │
-                                                └─────────┬──────────┘
-                                                          │
-                                                          │ pre-engine research
-                                                          ▼
-                                                ┌──────────────────────────────────────┐
-                                                │ 3. signal_generation_inspection(...) │
-                                                │ - strategy_fn user or fallback EMA   │
-                                                │ - builds signal_df                   │
-                                                │ - optional plot signals              │
-                                                │ - returns df or signal array         │
-                                                │ - caches last_signal_df              │
-                                                └─────────┬────────────────────────────┘
-                                                          │
-                                                          ▼
-                                                ┌────────────────────┐
-                                                │ 4. signals array   │
-                                                │ np.ndarray[int8]   │
-                                                └─────────┬──────────┘
-                                                          │
-                                                          │ core execution
-                                                          ▼
-                                                ┌────────────────────┐
-                                                │ 5. run(...)        │
-                                                │ param resolution   │
-                                                │ sessions / filters │
-                                                │ exit arrays / tags │
-                                                └─────────┬──────────┘
-                                                          │
-                                                          ▼
-                                                ┌────────────────────┐
-                                                │ 6. backtest_njit   │
-                                                │ - entry logic      │
-                                                │ - TP/SL / ATR      │
-                                                │ - BE / trailing    │
-                                                │ - EMA exit         │
-                                                │ - exit signals     │
-                                                │ - MAE / MFE        │
-                                                └─────────┬──────────┘
-                                                          │
-                                                          ▼
-                                                ┌──────────────────────────┐
-                                                │ 7. compute_metrics_full  │
-                                                │ - returns / DD / Sharpe  │
-                                                │ - VaR / CVaR / tests     │
-                                                │ - trades_df              │
-                                                └─────────┬────────────────┘
-                                                          │
-                                                          │ optional post-engine layer
-                                                          ▼
-                                                ┌──────────────────────────┐
-                                                │ 8. _build_after_run_df   │
-                                                │ - reuse last_signal_df   │
-                                                │ - add EntryTradeID       │
-                                                │ - add ExitTradeID        │
-                                                │ - add trade_id           │
-                                                └─────────┬────────────────┘
-                                                          │
-                                                          ├──────────────► metrics["trades_df"]
-                                                          │
-                                                          ├──────────────► metrics["df_after"]
-                                                          │
-                                                          ▼
-                                                ┌──────────────────────────┐
-                                                │ 9. Plotting              │
-                                                │ - _plot_signal_df        │
-                                                │ - _plot_backtest         │
-                                                └──────────────────────────┘
+## Engine Flow
 ```
-
+DataPipeline          NJITEngine            signal_generation_inspection
+fetchdata      ──►  init + JIT warmup ──►   strategy_fn / EMA fallback
+                       OHLC / ATR arrays    signal_df + optional plot
+                                                        │
+                                                        ▼
+                                                 signals [np.int8] 
+                                                        │
+                                                        ▼
+                                     run() — param resolution / sessions / filters
+                                                        │
+                                                        ▼
+                                     backtest_njit — entry · TP/SL · BE · trailing
+                                                      EMA exit · signals · MAE/MFE
+                                                        │
+                                                        ▼
+                                     compute_metrics_full — returns · Sharpe · VaR
+                                                            DD · trades_df
+                                                        │
+                                              ┌─────────┴─────────┐
+                                              ▼                   ▼
+                                      trades_df             df_after
+                                                       (EntryID / ExitID)
+                                                        │
+                                                        ▼
+                                               Plotting (optional)
+                                          _plot_signal_df / _plot_backtest
+```
 The engine never touches signal generation logic. A strategy only needs to return a DataFrame with a `Signal` column the rest is handled internally.
 
 ---
@@ -127,7 +75,7 @@ The engine never touches signal generation logic. A strategy only needs to retur
 - Plotting 
 
 ---
-# How to use it in 5 minutes
+# Get started in 5 minutes 
 
 installation
 
