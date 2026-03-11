@@ -90,8 +90,11 @@ pip install git+https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine
 ### `DataPipeline`
 
 Handles data loading from local CSV files.
-
+```python
+pipeline = DataPipeline("/Your/Data/CSV/Path")
+```
 **Responsibilities:**
+
 - Load OHLCV data
 - Apply timezone shift
 - Return the DataFrame used by the engine
@@ -149,7 +152,17 @@ Builds the Numba-accelerated execution environment.
 - Compute ATR
 - Convert data to NumPy arrays
 - Prepare and warm up the JIT-compiled backtest engine
-
+```python  
+njit_engine = NJITEngine(
+    pipeline,
+    "XAUUSD_M5",
+    "2023-01-02",
+    "2026-02-16",
+    cfg,
+    MAX_TRADES=50_000,
+    MAX_POS=600,
+)
+```
 ---
 
 ## Three Ways to Generate Signals
