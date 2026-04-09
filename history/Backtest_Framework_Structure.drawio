@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36" version="29.6.1" pages="2">
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36" pages="2">
   <diagram name="Page-1" id="CTPV-LFNBwMFuLYzp0Fe">
-    <mxGraphModel dx="5615" dy="3438" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="3687" dy="3162" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -720,6 +720,129 @@
         </mxCell>
         <mxCell id="fsXBV382Pedvk9DkeL8k-198" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="insersition helpers fonctions de rolling et autre par défaut&amp;nbsp;" vertex="1">
           <mxGeometry height="85" width="120" x="-1270" y="-215" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-37" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="Xz1aV-5h3Na0VjmybFTl-20" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-18" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="NJITEngine&amp;nbsp;&lt;div&gt;def run()&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="120" x="-1250" y="-1660" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-40" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="Xz1aV-5h3Na0VjmybFTl-21">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-19" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="config override" vertex="1">
+          <mxGeometry height="60" width="120" x="-1250" y="-1470" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-39" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="Xz1aV-5h3Na0VjmybFTl-19">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-20" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="bundle&amp;nbsp;&lt;div&gt;signals&amp;nbsp;&lt;/div&gt;&lt;div&gt;Setup&lt;/div&gt;&lt;div&gt;execution_contex&lt;/div&gt;&lt;div&gt;statefull engine&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="140" x="-1260" y="-1574.5" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-41" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="Xz1aV-5h3Na0VjmybFTl-23">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-45" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="Xz1aV-5h3Na0VjmybFTl-22" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-21" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="bloc use exit system&lt;div&gt;&amp;nbsp;creation des matrices à partir d&#39;execution context&lt;/div&gt;" vertex="1">
+          <mxGeometry height="70" width="120" x="-1250" y="-1390" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-22" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="comprend :&lt;div&gt;profile, strategy, link to setup&lt;/div&gt;&lt;div&gt;politique manuelle&lt;/div&gt;&lt;div&gt;statefull engine cols creation&lt;/div&gt;" vertex="1">
+          <mxGeometry height="100" width="140" x="-1430" y="-1405" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-42" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="Xz1aV-5h3Na0VjmybFTl-24">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-23" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="feature&lt;div&gt;creation des arrays features si pas déjà fait&lt;/div&gt;" vertex="1">
+          <mxGeometry height="70" width="120" x="-1250" y="-1295" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-43" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="Xz1aV-5h3Na0VjmybFTl-27">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-24" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="creation des matrices de gestion intratrade&lt;div&gt;—————&lt;/div&gt;&lt;div&gt;entrée des parametres PAPP&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="120" x="-1250" y="-1210" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-34" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-25" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="Xz1aV-5h3Na0VjmybFTl-31">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-25" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;div style=&quot;text-align: start;&quot;&gt;&lt;i style=&quot;color: light-dark(rgb(76, 76, 76), rgb(172, 172, 172)); background-color: transparent;&quot;&gt;if use_exit_system: charge les matrices runtime du système de sortie depuis ExecutionContext, sinon injecte des placeholders Nan&lt;/i&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="200" x="-1520" y="-1100" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-32" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-26" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="Xz1aV-5h3Na0VjmybFTl-31">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-26" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;div style=&quot;text-align: start;&quot;&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;Le bloc if multi_setup_mode valide et normalise les métadonnées de sélection de setup (selected_setup_id, selected_score) afin que chaque signal puisse être relié au setup d’entrée qui l’a généré.&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="110" width="200" x="-1740" y="-1105" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-35" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-27" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="Xz1aV-5h3Na0VjmybFTl-31" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-44" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-27" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="Xz1aV-5h3Na0VjmybFTl-28">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-27" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;span style=&quot;font-size: 12px;&quot;&gt;De s1_start à _s_tags, run() convertit les paramètres de sessions et les entrées optionnelles d’exit en formats NumPy simples, directement exploitables par le moteur NJIT.&lt;/span&gt;" vertex="1">
+          <mxGeometry height="120" width="180" x="-1280" y="-1105" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-28" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="_parse_session()" vertex="1">
+          <mxGeometry height="35" width="150" x="-1075" y="-1169" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-36" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-29" style="rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-1190" y="-880" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-29" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;span style=&quot;font-size: 12px;&quot;&gt;Le bloc forced_flat convertit une règle de clôture forcée temporelle (fin de journée ou avant weekend) en paramètres runtime numériques utilisables par backtest_njit()&lt;/span&gt;" vertex="1">
+          <mxGeometry height="110" width="180" x="-1070" y="-1100" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-33" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-30" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-1190" y="-880" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-30" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;span style=&quot;font-size: 12px;&quot;&gt;build_regime_context() prépare les tableaux runtime décrivant l’état de régime et ses overrides. Dans le flow actuel, ils permettent surtout au moteur backtest_njit() d’adapter la logique de sortie au régime, pas de re-sélectionner le setup d’entrée.&lt;/span&gt;" vertex="1">
+          <mxGeometry height="130" width="200" x="-860" y="-1105" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-50" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-31" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="Xz1aV-5h3Na0VjmybFTl-47">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-51" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-31" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="Xz1aV-5h3Na0VjmybFTl-49">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-31" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;span style=&quot;font-size: 12px;&quot;&gt;entré des arguments dans backtest_njit() dans core_engine.py&lt;/span&gt;" vertex="1">
+          <mxGeometry height="70" width="200" x="-1290" y="-880" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-56" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-47" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="Xz1aV-5h3Na0VjmybFTl-53">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-57" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-47" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="Xz1aV-5h3Na0VjmybFTl-52">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-1230" y="-700" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-59" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-47" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="Xz1aV-5h3Na0VjmybFTl-54">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-47" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;span style=&quot;font-size: 12px;&quot;&gt;compute_metrics_full avec outputs de&amp;nbsp;&lt;/span&gt;backtest_njit()&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp;&lt;/span&gt;" vertex="1">
+          <mxGeometry height="70" width="200" x="-1330" y="-765" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-49" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;span style=&quot;font-size: 12px;&quot;&gt;phase_events_df est un journal des changements de phase générés par le moteur stateful pendant le backtest. Il complète trades_df, mais n’est pas issu du pipeline d’enrichissement de contexte post-backtest.&lt;/span&gt;" vertex="1">
+          <mxGeometry height="100" width="240" x="-1080" y="-780" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-52" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="if plot_result&lt;div&gt;Appel&amp;nbsp;&lt;span style=&quot;color: rgb(54, 249, 246); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre;&quot;&gt;_plot_results&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: rgb(54, 249, 246); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre;&quot;&gt;dans &lt;/span&gt;&lt;span style=&quot;color: rgb(254, 68, 80); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre;&quot;&gt;Njit_plots&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: rgb(254, 68, 80); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre;&quot;&gt;plot des charts &lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: rgb(254, 68, 80); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre;&quot;&gt;des retours&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="100" width="140" x="-1430" y="-550" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-53" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="if plot_backtest&lt;div&gt;Appel&amp;nbsp;&lt;span style=&quot;color: rgb(54, 249, 246); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre;&quot;&gt;_plot_backtest &lt;/span&gt;&lt;/div&gt;&lt;div&gt;pour plot une chart des trades&lt;/div&gt;" vertex="1">
+          <mxGeometry height="70" width="155" x="-1165" y="-550" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-61" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-54" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="Xz1aV-5h3Na0VjmybFTl-60">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-54" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="if return_df_after&lt;div&gt;Appel&amp;nbsp;&lt;span style=&quot;color: rgb(54, 249, 246); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre;&quot;&gt;_build_after_run_df&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: rgb(54, 249, 246); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre;&quot;&gt;pour inspecter le df apres &lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: rgb(54, 249, 246); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre;&quot;&gt;backtest&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="210" x="-1335" y="-630" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-60" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="return rets, metrics" vertex="1">
+          <mxGeometry height="60" width="120" x="-1290" y="-420" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
