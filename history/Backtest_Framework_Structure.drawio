@@ -1,11 +1,14 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36" pages="2">
   <diagram name="Page-1" id="CTPV-LFNBwMFuLYzp0Fe">
-    <mxGraphModel dx="3424" dy="2983" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="4294" dy="4182" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-104" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#76608a;fontColor=#ffffff;strokeColor=#432D57;" value="" vertex="1">
+          <mxGeometry height="529" width="470" x="-2965" y="-1209" as="geometry" />
+        </mxCell>
         <mxCell id="Xz1aV-5h3Na0VjmybFTl-69" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#647687;fontColor=#ffffff;strokeColor=#314354;" value="" vertex="1">
-          <mxGeometry height="1250" width="1550" x="-1930" y="-1600" as="geometry" />
+          <mxGeometry height="1250" width="1740" x="-2150" y="-1600" as="geometry" />
         </mxCell>
         <mxCell id="fsXBV382Pedvk9DkeL8k-178" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#cdeb8b;strokeColor=#36393d;" value="" vertex="1">
           <mxGeometry height="400" width="1080" x="-960" y="-320" as="geometry" />
@@ -728,7 +731,7 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="Xz1aV-5h3Na0VjmybFTl-18" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#647687;fontColor=#ffffff;strokeColor=#314354;" value="&lt;b&gt;&lt;font style=&quot;font-size: 20px; color: rgb(0, 0, 0);&quot;&gt;NJITEngine&amp;nbsp;&lt;/font&gt;&lt;/b&gt;&lt;div&gt;&lt;b&gt;&lt;font style=&quot;font-size: 20px; color: rgb(0, 0, 0);&quot;&gt;def run()&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;" vertex="1">
-          <mxGeometry height="60" width="120" x="-1260" y="-1540" as="geometry" />
+          <mxGeometry height="60" width="120" x="-1390" y="-1580" as="geometry" />
         </mxCell>
         <mxCell id="Xz1aV-5h3Na0VjmybFTl-63" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-19" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="Xz1aV-5h3Na0VjmybFTl-71">
           <mxGeometry relative="1" as="geometry">
@@ -749,14 +752,14 @@
             <mxPoint x="-1190" y="-880" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-67" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-21" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="Xz1aV-5h3Na0VjmybFTl-22">
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-21" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="bloc &lt;b&gt;use exit system&lt;/b&gt;&lt;div&gt;&amp;nbsp;creation des matrices à partir d&#39;execution context&lt;/div&gt;" vertex="1">
+          <mxGeometry height="70" width="120" x="-1420" y="-1335" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-166" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-22" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="Xz1aV-5h3Na0VjmybFTl-21" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-21" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="bloc &lt;b&gt;use exit system&lt;/b&gt;&lt;div&gt;&amp;nbsp;creation des matrices à partir d&#39;execution context&lt;/div&gt;" vertex="1">
-          <mxGeometry height="70" width="120" x="-1390" y="-1300" as="geometry" />
-        </mxCell>
         <mxCell id="Xz1aV-5h3Na0VjmybFTl-22" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="comprend :&lt;div&gt;profile, strategy, link to setup&lt;/div&gt;&lt;div&gt;politique manuelle&lt;/div&gt;&lt;div&gt;statefull engine cols creation&lt;/div&gt;" vertex="1">
-          <mxGeometry height="100" width="140" x="-1470" y="-1450" as="geometry" />
+          <mxGeometry height="70" width="175" x="-1494" y="-1435" as="geometry" />
         </mxCell>
         <mxCell id="Xz1aV-5h3Na0VjmybFTl-66" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-23" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="Xz1aV-5h3Na0VjmybFTl-71">
           <mxGeometry relative="1" as="geometry">
@@ -780,7 +783,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="Xz1aV-5h3Na0VjmybFTl-25" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=center;" value="&lt;div style=&quot;&quot;&gt;&lt;i style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;font style=&quot;color: light-dark(rgb(245, 245, 245), rgb(255, 255, 255));&quot;&gt;&lt;b&gt;if use_exit_system:&lt;/b&gt; charge les matrices runtime du système de sortie depuis ExecutionContext, sinon injecte des placeholders Nan&lt;/font&gt;&lt;/i&gt;&lt;/div&gt;" vertex="1">
-          <mxGeometry height="80" width="200" x="-1760" y="-1180" as="geometry" />
+          <mxGeometry height="80" width="200" x="-1790" y="-1260" as="geometry" />
         </mxCell>
         <mxCell id="Xz1aV-5h3Na0VjmybFTl-32" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-26" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="Xz1aV-5h3Na0VjmybFTl-71">
           <mxGeometry relative="1" as="geometry">
@@ -788,7 +791,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="Xz1aV-5h3Na0VjmybFTl-26" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;div style=&quot;text-align: start;&quot;&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;Le bloc if &lt;b&gt;multi_setup_mode&lt;/b&gt; valide et normalise les métadonnées de sélection de setup (selected_setup_id, selected_score) afin que chaque signal puisse être relié au setup d’entrée qui l’a généré.&lt;/span&gt;&lt;/div&gt;" vertex="1">
-          <mxGeometry height="110" width="200" x="-1900" y="-1080" as="geometry" />
+          <mxGeometry height="110" width="200" x="-1930" y="-990" as="geometry" />
         </mxCell>
         <mxCell id="Xz1aV-5h3Na0VjmybFTl-35" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-27" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="Xz1aV-5h3Na0VjmybFTl-71" value="">
           <mxGeometry relative="1" as="geometry">
@@ -811,14 +814,6 @@
         </mxCell>
         <mxCell id="Xz1aV-5h3Na0VjmybFTl-29" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;span style=&quot;font-size: 12px;&quot;&gt;Le bloc &lt;b&gt;forced_flat &lt;/b&gt;convertit une règle de clôture forcée temporelle (fin de journée ou avant weekend) en paramètres runtime numériques utilisables par backtest_njit()&lt;/span&gt;" vertex="1">
           <mxGeometry height="110" width="180" x="-827" y="-1180" as="geometry" />
-        </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-33" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-30" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="Xz1aV-5h3Na0VjmybFTl-71">
-          <mxGeometry relative="1" as="geometry">
-            <mxPoint x="-1190" y="-880" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-30" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;span style=&quot;font-size: 12px;&quot;&gt;&lt;b&gt;build_regime_context() &lt;/b&gt;prépare les tableaux runtime décrivant l’état de régime et ses overrides. Dans le flow actuel, ils permettent surtout au moteur backtest_njit() d’adapter la logique de sortie au régime, pas de re-sélectionner le setup d’entrée.&lt;/span&gt;" vertex="1">
-          <mxGeometry height="130" width="200" x="-613" y="-1115" as="geometry" />
         </mxCell>
         <mxCell id="Xz1aV-5h3Na0VjmybFTl-50" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-71" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="Xz1aV-5h3Na0VjmybFTl-47">
           <mxGeometry relative="1" as="geometry">
@@ -889,28 +884,299 @@
           <mxGeometry height="60" width="180" x="-890" y="-1400" as="geometry" />
         </mxCell>
         <mxCell id="Xz1aV-5h3Na0VjmybFTl-86" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="multi_setup_layer.py&lt;div&gt;class&amp;nbsp;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;SetupSpec |&amp;nbsp;&lt;/span&gt;DecisionConfig&lt;/div&gt;" vertex="1">
-          <mxGeometry height="60" width="170" x="-2030" y="-1370" as="geometry" />
+          <mxGeometry height="60" width="170" x="-2840" y="-1380" as="geometry" />
         </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-94" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-87" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="Xz1aV-5h3Na0VjmybFTl-89" value="">
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-105" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-87" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="Xz1aV-5h3Na0VjmybFTl-96">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="Xz1aV-5h3Na0VjmybFTl-87" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="setup_df normalisé" vertex="1">
-          <mxGeometry height="35" width="120" x="-2140" y="-1295" as="geometry" />
+          <mxGeometry height="35" width="120" x="-2800" y="-1265" as="geometry" />
         </mxCell>
         <mxCell id="Xz1aV-5h3Na0VjmybFTl-88" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="_validate_setup_df&amp;nbsp;&lt;div&gt;-&amp;gt; valide si les settings sont juste&lt;/div&gt;" vertex="1">
-          <mxGeometry height="70" width="120" x="-2280" y="-1280" as="geometry" />
+          <mxGeometry height="70" width="120" x="-2940" y="-1150" as="geometry" />
         </mxCell>
         <mxCell id="Xz1aV-5h3Na0VjmybFTl-95" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-89" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="Xz1aV-5h3Na0VjmybFTl-88" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-107" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-89" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="Xz1aV-5h3Na0VjmybFTl-102" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
         <mxCell id="Xz1aV-5h3Na0VjmybFTl-89" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;span style=&quot;font-size: 12px;&quot;&gt;_build_setup_matrices&lt;/span&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;Aggrege les score aux setups sors un index&lt;/span&gt;&lt;/div&gt;" vertex="1">
-          <mxGeometry height="70" width="120" x="-2140" y="-1230" as="geometry" />
+          <mxGeometry height="70" width="120" x="-2765" y="-1100" as="geometry" />
         </mxCell>
         <mxCell id="Xz1aV-5h3Na0VjmybFTl-90" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-86" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="Xz1aV-5h3Na0VjmybFTl-87">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-96" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;div style=&quot;color: rgb(187, 187, 187); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; line-height: 18px; white-space: pre;&quot;&gt;&lt;span style=&quot;color: rgb(54, 249, 246);&quot;&gt;aggregate_and_decide_njit&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;color: rgb(187, 187, 187); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; line-height: 18px; white-space: pre;&quot;&gt;&lt;span style=&quot;color: rgb(54, 249, 246);&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;" vertex="1">
-          <mxGeometry height="70" width="120" x="-2140" y="-1140" as="geometry" />
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-100" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-96" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="Xz1aV-5h3Na0VjmybFTl-89" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-96" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#76608a;fontColor=#ffffff;strokeColor=#432D57;" value="&lt;div style=&quot;line-height: 18px; color: rgb(187, 187, 187);&quot;&gt;&lt;span style=&quot;color: rgb(54, 249, 246);&quot;&gt;&lt;font color=&quot;#005f5c&quot; face=&quot;Menlo, Monaco, Courier New, monospace&quot;&gt;&lt;span style=&quot;font-size: 12px; white-space: pre;&quot;&gt;&lt;b&gt;multi_setup_layer.py&lt;/b&gt;&lt;/span&gt;&lt;/font&gt;&lt;b style=&quot;color: light-dark(rgb(54, 249, 246), rgb(0, 95, 92)); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre;&quot;&gt;&lt;/b&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;color: rgb(187, 187, 187); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; line-height: 18px; white-space: pre;&quot;&gt;&lt;span style=&quot;color: rgb(54, 249, 246);&quot;&gt;&lt;b&gt;aggregate_and_decide&lt;/b&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;color: rgb(187, 187, 187); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; line-height: 18px; white-space: pre;&quot;&gt;&lt;span style=&quot;color: rgb(54, 249, 246);&quot;&gt;fonction wrapper&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="70" width="170" x="-2790" y="-1190" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-106" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-101" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="Xz1aV-5h3Na0VjmybFTl-96" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-170" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-123" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;curved=1;" target="Xz1aV-5h3Na0VjmybFTl-168">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-2340" y="-1500" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-101" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="injection&lt;div&gt;regime_context&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="120" x="-2630" y="-1330" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-111" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-102" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="Xz1aV-5h3Na0VjmybFTl-108">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-2540" y="-1020" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-113" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-102" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="Xz1aV-5h3Na0VjmybFTl-112">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-102" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;span style=&quot;color: rgb(0, 95, 92); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre;&quot;&gt;&lt;b&gt;aggregate_and_decide_njit&lt;/b&gt;&lt;/span&gt;" vertex="1">
+          <mxGeometry height="60" width="190" x="-2605" y="-1155" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-108" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;fillColor=#76608a;fontColor=#ffffff;strokeColor=#432D57;" value="&lt;div style=&quot;color: rgb(187, 187, 187); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; line-height: 18px; white-space: pre;&quot;&gt;&lt;div style=&quot;&quot;&gt;&lt;p data-pm-slice=&quot;1 1 []&quot;&gt;    return {&lt;/p&gt;&lt;p&gt;        &quot;signals&quot;: signals,&lt;/p&gt;&lt;p&gt;        &quot;selected_setup_id&quot;: selected_setup_id,&lt;/p&gt;&lt;p&gt;        &quot;selected_score&quot;: selected_score,&lt;/p&gt;&lt;p&gt;        &quot;best_long_score&quot;: best_long_score,&lt;/p&gt;&lt;p&gt;        &quot;best_short_score&quot;: best_short_score,&lt;/p&gt;&lt;p&gt;        &quot;best_long_setup_id&quot;: best_long_setup_id,&lt;/p&gt;&lt;p&gt;        &quot;best_short_setup_id&quot;: best_short_setup_id,&lt;/p&gt;&lt;p&gt;    }&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="280" width="415" x="-2922.5" y="-985" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-131" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-112" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="Xz1aV-5h3Na0VjmybFTl-130" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-112" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Utilisation des matrice, creation du score en fonction activation manuelle + regime. puis retourne le setup gagnant par bar et son id." vertex="1">
+          <mxGeometry height="100" width="171" x="-2450" y="-1330" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-129" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-114" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" target="Xz1aV-5h3Na0VjmybFTl-117">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-114" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="regime_policy.py&lt;div&gt;Array Regime par bar&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="120" x="-2790" y="-1950" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-124" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-115" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="Xz1aV-5h3Na0VjmybFTl-123" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-115" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;div style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; line-height: 18px; white-space: pre;&quot;&gt;&lt;span&gt;&lt;font style=&quot;color: rgb(0, 123, 255);&quot;&gt;build_regime_context()&lt;/font&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; line-height: 18px; white-space: pre;&quot;&gt;&lt;span&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="180" x="-2645" y="-1737" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-119" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-116" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.75;entryY=0;entryDx=0;entryDy=0;" target="Xz1aV-5h3Na0VjmybFTl-101">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-116" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="return Class RegimeContext&lt;div&gt;&lt;span style=&quot;color: rgb(187, 187, 187); font-family: -apple-system, &amp;quot;system-ui&amp;quot;, sans-serif; font-size: 13px; font-style: italic; text-align: start; background-color: rgb(34, 34, 34);&quot;&gt;&amp;nbsp;contient les matrices prêtes à être consommées par les fonctions rapides.&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="230" x="-2630" y="-1515" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-121" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-117" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="Xz1aV-5h3Na0VjmybFTl-115" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-117" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Class&amp;nbsp;&lt;span style=&quot;color: rgb(254, 68, 80); background-color: rgb(38, 35, 53); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre;&quot;&gt;RegimePolicy&lt;/span&gt;&lt;div&gt;&lt;span style=&quot;color: rgb(187, 187, 187); font-family: -apple-system, &amp;quot;system-ui&amp;quot;, sans-serif; font-size: 13px; font-style: italic; text-align: start; background-color: rgb(34, 34, 34);&quot;&gt;décrit ce qu’on veut faire par régime,&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: rgb(187, 187, 187); font-family: -apple-system, &amp;quot;system-ui&amp;quot;, sans-serif; font-size: 13px; font-style: italic; text-align: start; background-color: rgb(34, 34, 34);&quot;&gt;exit_profile override&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: rgb(187, 187, 187); font-family: -apple-system, &amp;quot;system-ui&amp;quot;, sans-serif; font-size: 13px; font-style: italic; text-align: start; background-color: rgb(34, 34, 34);&quot;&gt;exit_strat override pour toute pos&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="230" x="-2670" y="-1837" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-120" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-118" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="Xz1aV-5h3Na0VjmybFTl-117" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-118" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="vecteur regime discretiser" vertex="1">
+          <mxGeometry height="60" width="120" x="-2615" y="-1927" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-127" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-123" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="Xz1aV-5h3Na0VjmybFTl-116">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-123" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;span style=&quot;font-size: 12px;&quot;&gt;prend un régime déjà discrétisé, une politique de régime, et les setups disponibles. Il construit les matrices qui disent comment chaque régime modifie les scores d’entrée et quels exits il force éventuellement.&lt;/span&gt;" vertex="1">
+          <mxGeometry height="80" width="310" x="-2690" y="-1640" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-135" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-130" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.75;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="Xz1aV-5h3Na0VjmybFTl-102">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-130" parent="1" style="text;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" value="&lt;div style=&quot;line-height: 18px;&quot;&gt;&lt;div style=&quot;&quot;&gt;&lt;p data-pm-slice=&quot;1 1 []&quot;&gt;&amp;nbsp; &amp;nbsp; return (&lt;/p&gt;&lt;p&gt;        signals, selected_setup_id, selected_score,&lt;/p&gt;&lt;p&gt;        best_long_score, best_short_score,&lt;/p&gt;&lt;p&gt;        best_long_setup_id, best_short_setup_id,&lt;/p&gt;&lt;p&gt;    )&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="170" width="250" x="-2400" y="-1170" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-134" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-108" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="Xz1aV-5h3Na0VjmybFTl-152">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-137" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;div style=&quot;text-align: start;&quot;&gt;&lt;span style=&quot;color: rgb(249, 126, 114); font-family: -apple-system, &amp;quot;system-ui&amp;quot;, sans-serif; font-size: 13px;&quot;&gt;execution_binding.py&lt;/span&gt;&lt;font color=&quot;#4c4c4c&quot; face=&quot;-apple-system, system-ui, sans-serif&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;&lt;ul class=&quot;text-size-chat leading-relaxed extension:leading-normal mt-0 mb-4  list-disc pl-4&quot; style=&quot;box-sizing: border-box; border: 0px solid; margin-top: calc(var(--spacing)*0); margin-right: 0px; margin-bottom: calc(var(--spacing)*4); margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: calc(var(--spacing)*4); list-style-position: initial; list-style-image: initial; --tw-leading: var(--leading-normal); line-height: var(--leading-normal); font-size: 13px; color: rgb(187, 187, 187); font-family: -apple-system, &amp;quot;system-ui&amp;quot;, sans-serif; text-align: start;&quot;&gt;&lt;ul class=&quot;text-size-chat leading-relaxed extension:leading-normal mt-0 mb-4  list-disc pl-4&quot; style=&quot;box-sizing: border-box; border: 0px solid; margin-top: calc(var(--spacing)*0); margin-right: 0px; margin-bottom: calc(var(--spacing)*4); margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: calc(var(--spacing)*4); list-style: disc; --tw-leading: var(--leading-normal); line-height: var(--leading-normal); color: rgb(187, 187, 187);&quot;&gt;&lt;li class=&quot;text-size-chat leading-relaxed extension:leading-normal mb-1.5&quot; style=&quot;box-sizing: border-box; border: 0px solid; margin-top: 0px; margin-right: 0px; margin-bottom: calc(var(--spacing)*1.5); margin-left: 0px; padding: 0px; --tw-leading: var(--leading-normal); line-height: var(--leading-normal); font-size: var(--codex-chat-font-size);&quot;&gt;orchestre la compilation&lt;/li&gt;&lt;li class=&quot;text-size-chat leading-relaxed extension:leading-normal mb-1.5&quot; style=&quot;box-sizing: border-box; border: 0px solid; margin-top: 0px; margin-right: 0px; margin-bottom: calc(var(--spacing)*1.5); margin-left: 0px; padding: 0px; --tw-leading: var(--leading-normal); line-height: var(--leading-normal); font-size: var(--codex-chat-font-size);&quot;&gt;construit&amp;nbsp;&lt;span class=&quot;_inlineMarkdown_3nxm6_25 inline-markdown text-size-chat-sm font-mono blend bg-token-text-code-block-background rounded-sm px-1.5 py-0.5 leading-none extension:bg-token-foreground/10 electron:bg-token-list-hover-background/60&quot; style=&quot;box-sizing: border-box; border: 0px solid; margin: 0px; padding: 0px; border-radius: var(--radius-sm); background-color: color-mix(in oklab,var(--color-token-foreground)10%,transparent); padding-inline: calc(var(--spacing)*1.5); padding-block: calc(var(--spacing)*.5); font-family: var(--font-mono); --tw-leading: 1 !important; line-height: 1 !important; font-size: calc(var(--codex-chat-font-size) - 1px);&quot;&gt;ExecutionContext&lt;/span&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/ul&gt;" vertex="1">
+          <mxGeometry height="95" width="190" x="-2765" y="-2610" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-139" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Exit_system.py" vertex="1">
+          <mxGeometry height="37" width="120" x="-2695" y="-2450" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-206" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-141" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="Xz1aV-5h3Na0VjmybFTl-142" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-141" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;" value="&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&lt;b&gt;&lt;font style=&quot;color: rgb(51, 8, 240);&quot;&gt;compile_exit_profiles()&lt;/font&gt;&lt;/b&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;Compile les specs de profile&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;Input:&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;-&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre; color: rgb(254, 68, 80);&quot;&gt;list&lt;/span&gt;&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre; color: rgb(255, 126, 219);&quot;&gt;[&lt;/span&gt;&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre; color: rgb(254, 68, 80);&quot;&gt;ExitProfileSpec&lt;/span&gt;&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre; color: rgb(255, 126, 219);&quot;&gt;]&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;-&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;color: rgb(254, 68, 80); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre;&quot;&gt;BacktestConfig&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;Output:&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre;&quot;&gt;compiled_profiles&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;=&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre;&quot;&gt;compiled&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;=&lt;/span&gt;&lt;span style=&quot;background-color: transparent; font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre; color: rgb(254, 68, 80);&quot;&gt;list&lt;/span&gt;&lt;span style=&quot;background-color: transparent; font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre; color: rgb(255, 126, 219);&quot;&gt;[&lt;/span&gt;&lt;span style=&quot;background-color: transparent; font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre; color: rgb(254, 68, 80);&quot;&gt;CompiledExitProfile&lt;/span&gt;&lt;span style=&quot;background-color: transparent; font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre; color: rgb(255, 126, 219);&quot;&gt;]&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="143" width="392.5" x="-1712.5" y="-2533" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-207" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-142" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="Xz1aV-5h3Na0VjmybFTl-147" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-142" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;" value="&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&lt;b&gt;Class CompiledExitProfile&lt;/b&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;Profile complet prêt pour matrice&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;Input:&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;- ExitProfileSpec&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;- defaults cfg&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;Output:&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;- exit_profile_id&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;- cfg&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="190" width="220" x="-1670" y="-2350" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-189" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-147" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-1640" y="-1770" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-147" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;" value="&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&lt;b&gt;&lt;font style=&quot;color: rgb(54, 9, 255);&quot;&gt;build_exit_profile_rt_matrix&lt;/font&gt;()&lt;/b&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;Encode les profils en matrice runtime&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;Input:&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;- compiled_profiles =&amp;nbsp;&lt;/span&gt;&lt;b style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;Class CompiledExitProfile&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;Mécanisme:&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;- 1 profile = 1 ligne&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;- 1 paramètre = 1 colonne&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;Output:&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;- profile_rt_matrix=&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre;&quot;&gt;rt&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;- shape: (n_profiles, N_EXIT_RT_COLS)&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;Ex:&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;- profile_rt_matrix[pid, RT_TP_PCT]&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;- profile_rt_matrix[pid, RT_SL_PCT]&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="310" width="200" x="-1430" y="-2310" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-196" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-149" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fillColor=#f8cecc;strokeColor=#b85450;" target="Xz1aV-5h3Na0VjmybFTl-194">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-149" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;" value="&lt;div&gt;&lt;div style=&quot;color: rgb(187, 187, 187); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; line-height: 18px; white-space: pre;&quot;&gt;&lt;div style=&quot;&quot;&gt;&lt;span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;setup_exit_binding =&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt; {&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;    &lt;/span&gt;&lt;span style=&quot;color: rgb(249, 126, 114);&quot;&gt;0&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;: {&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 139, 57);&quot;&gt;&quot;exit_profile_id&quot;&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;: &lt;/span&gt;&lt;span style=&quot;color: rgb(249, 126, 114);&quot;&gt;0&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;, &lt;/span&gt;&lt;span style=&quot;color: rgb(255, 139, 57);&quot;&gt;&quot;exit_strategy_id&quot;&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;: &lt;/span&gt;&lt;span style=&quot;color: rgb(249, 126, 114);&quot;&gt;0&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;},&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;    &lt;/span&gt;&lt;span style=&quot;color: rgb(249, 126, 114);&quot;&gt;1&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;: {&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 139, 57);&quot;&gt;&quot;exit_profile_id&quot;&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;: &lt;/span&gt;&lt;span style=&quot;color: rgb(249, 126, 114);&quot;&gt;2&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;, &lt;/span&gt;&lt;span style=&quot;color: rgb(255, 139, 57);&quot;&gt;&quot;exit_strategy_id&quot;&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;: &lt;/span&gt;&lt;span style=&quot;color: rgb(249, 126, 114);&quot;&gt;1&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;},&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;}&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="127" width="400" x="-965" y="-2800" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-151" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;b&gt;StrategyEngine.py&lt;/b&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;StrategyEngine transforme des objets déclaratifs utilisateur en inputs runtime. super().run() transmet ces inputs au moteur NJITEngine.run(), qui exécute réellement le backtest.&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="110" width="229" x="-320" y="-2340" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-153" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-152" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="Xz1aV-5h3Na0VjmybFTl-26" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-152" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#647687;fontColor=#ffffff;strokeColor=#314354;" value="&lt;b&gt;&lt;font style=&quot;font-size: 20px; color: rgb(0, 0, 0);&quot;&gt;NJITEngine&amp;nbsp;&lt;/font&gt;&lt;/b&gt;&lt;div&gt;&lt;b&gt;&lt;font style=&quot;font-size: 20px; color: rgb(0, 0, 0);&quot;&gt;def run()&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="120" x="-2101" y="-965" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-163" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-193" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;curved=1;" target="Xz1aV-5h3Na0VjmybFTl-25">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-1450" y="-1600" />
+              <mxPoint x="-1360" y="-1540" />
+              <mxPoint x="-1470" y="-1470" />
+            </Array>
+            <mxPoint x="-1540" y="-1640" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-164" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-193" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;curved=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" target="Xz1aV-5h3Na0VjmybFTl-24">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-1450" y="-1600" />
+              <mxPoint x="-1360" y="-1540" />
+              <mxPoint x="-1470" y="-1470" />
+              <mxPoint x="-1520" y="-1380" />
+            </Array>
+            <mxPoint x="-1540" y="-1640" as="sourcePoint" />
+            <mxPoint x="-1670" y="-1200" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-167" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-193" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.25;entryY=0;entryDx=0;entryDy=0;curved=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" target="Xz1aV-5h3Na0VjmybFTl-22">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-1450" y="-1600" />
+              <mxPoint x="-1380" y="-1550" />
+              <mxPoint x="-1400" y="-1500" />
+              <mxPoint x="-1450" y="-1500" />
+            </Array>
+            <mxPoint x="-1540" y="-1640" as="sourcePoint" />
+            <mxPoint x="-1470" y="-1249" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-169" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-168" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="Xz1aV-5h3Na0VjmybFTl-71">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-168" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;span style=&quot;font-size: 12px;&quot;&gt;&lt;b&gt;build_regime_context() &lt;/b&gt;prépare les tableaux runtime décrivant l’état de régime et ses overrides. Dans le flow actuel, ils permettent surtout au moteur backtest_njit() d’adapter la logique de sortie au régime, pas de re-sélectionner le setup d’entrée.&lt;/span&gt;" vertex="1">
+          <mxGeometry height="130" width="200" x="-1961" y="-1169" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-187" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-175" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-1635" y="-1770" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-175" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;" value="&lt;span style=&quot;font-size: 12px;&quot;&gt;compile_setup_exit_binding&lt;/span&gt;&lt;div&gt;intput :&amp;nbsp;&lt;br&gt;&lt;div&gt;&lt;div style=&quot;color: rgb(187, 187, 187); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; line-height: 18px; white-space: pre;&quot;&gt;&lt;div style=&quot;&quot;&gt;&lt;span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;        &lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219); font-style: italic;&quot;&gt;setup_exit_binding&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 255, 255);&quot;&gt;=&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219); font-style: italic;&quot;&gt;setup_exit_binding&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;        &lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219); font-style: italic;&quot;&gt;strategy_profile_binding&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 255, 255);&quot;&gt;=&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219); font-style: italic;&quot;&gt;strategy_profile_binding&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;        &lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219); font-style: italic;&quot;&gt;n_setups&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 255, 255);&quot;&gt;=&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219); font-style: italic;&quot;&gt;n_setups&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;        &lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219); font-style: italic;&quot;&gt;n_strategies&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 255, 255);&quot;&gt;=&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219); font-style: italic;&quot;&gt;n_strategies&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;output : &lt;/span&gt;&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;setup_to_exit_profile&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;, &lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;setup_to_exit_strategy&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="150" width="410" x="-1300" y="-1860" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-181" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-177" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-1635" y="-1770" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-177" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;span style=&quot;font-size: 12px;&quot;&gt;build_position_rule_matrices&lt;/span&gt;" vertex="1">
+          <mxGeometry height="60" width="170" x="-2060" y="-1777" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-198" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-190" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fillColor=#f8cecc;strokeColor=#b85450;" target="Xz1aV-5h3Na0VjmybFTl-194">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-190" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;" value="&lt;div style=&quot;color: rgb(187, 187, 187); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; line-height: 18px; white-space: pre;&quot;&gt;&lt;br&gt;&lt;/div&gt;&lt;div style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; line-height: 18px; white-space: pre; color: rgb(187, 187, 187);&quot;&gt;&lt;span style=&quot;font-style: italic; color: rgb(255, 126, 219);&quot;&gt;&lt;div style=&quot;line-height: 18px; color: rgb(187, 187, 187);&quot;&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;strategy_profile_binding = &lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;{&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;color: light-dark(rgb(187, 187, 187), rgb(76, 76, 76));&quot;&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;    &lt;/span&gt;&lt;span style=&quot;color: rgb(249, 126, 114);&quot;&gt;0&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;: {&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 139, 57);&quot;&gt;&quot;default_profile_id&quot;&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;: &lt;/span&gt;&lt;span style=&quot;color: rgb(249, 126, 114);&quot;&gt;0&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;, &lt;/span&gt;&lt;span style=&quot;color: rgb(255, 139, 57);&quot;&gt;&quot;allowed_profile_ids&quot;&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;: [&lt;/span&gt;&lt;span style=&quot;color: rgb(249, 126, 114);&quot;&gt;0&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;, &lt;/span&gt;&lt;span style=&quot;color: rgb(249, 126, 114);&quot;&gt;1&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;]},&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;color: light-dark(rgb(187, 187, 187), rgb(76, 76, 76));&quot;&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;    &lt;/span&gt;&lt;span style=&quot;color: rgb(249, 126, 114);&quot;&gt;1&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;: {&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 139, 57);&quot;&gt;&quot;default_profile_id&quot;&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;: &lt;/span&gt;&lt;span style=&quot;color: rgb(249, 126, 114);&quot;&gt;2&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;, &lt;/span&gt;&lt;span style=&quot;color: rgb(255, 139, 57);&quot;&gt;&quot;allowed_profile_ids&quot;&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;: [&lt;/span&gt;&lt;span style=&quot;color: rgb(249, 126, 114);&quot;&gt;2&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;, &lt;/span&gt;&lt;span style=&quot;color: rgb(249, 126, 114);&quot;&gt;3&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;]},&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;color: light-dark(rgb(187, 187, 187), rgb(76, 76, 76));&quot;&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;}&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="107" width="490" x="-965" y="-2640" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-193" parent="1" style="rhombus;whiteSpace=wrap;html=1;" value="output&amp;nbsp;&lt;span style=&quot;color: rgb(0, 95, 92); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre;&quot;&gt;build_execution_context:&lt;/span&gt;&lt;div&gt;&lt;font color=&quot;#005f5c&quot; face=&quot;Menlo, Monaco, Courier New, monospace&quot;&gt;&lt;b&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;Class &lt;/span&gt;&lt;span style=&quot;font-size: 12px; white-space: pre;&quot;&gt;ExecutionContext&lt;/span&gt;&lt;br&gt;&lt;/b&gt;&lt;/font&gt;&lt;div&gt;&amp;nbsp;&lt;/div&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="100" width="210" x="-1720" y="-1660" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-197" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-194" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fillColor=#f8cecc;strokeColor=#b85450;" target="Xz1aV-5h3Na0VjmybFTl-175">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-880" y="-2240" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-204" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-194" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0;entryDx=0;entryDy=0;fillColor=#fff2cc;strokeColor=#d6b656;" target="Xz1aV-5h3Na0VjmybFTl-141">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-1510" y="-2390" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-213" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-194" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;curved=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" target="Xz1aV-5h3Na0VjmybFTl-212">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-1790" y="-2586" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-194" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;div style=&quot;color: rgb(187, 187, 187); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; line-height: 18px; white-space: pre;&quot;&gt;&lt;span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;appel externe et utilisation output execution_binding.py&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; line-height: 18px; white-space: pre;&quot;&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;execution_context&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt; &lt;/span&gt;&lt;span style=&quot;color: rgb(255, 255, 255);&quot;&gt;&lt;font style=&quot;color: rgb(11, 11, 11);&quot;&gt;=&lt;/font&gt;&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt; &lt;/span&gt;&lt;span style=&quot;color: rgb(54, 249, 246);&quot;&gt;build_execution_context&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;(&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="70" width="406" x="-1475" y="-2621.5" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-203" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-202" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;fillColor=#fff2cc;strokeColor=#d6b656;" target="Xz1aV-5h3Na0VjmybFTl-194">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-202" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;" value="&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&lt;b&gt;ExitProfileSpec&lt;/b&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;Spec utilisateur du profil de sortie&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;Input:&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;- tp_pct / sl_pct&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;- use_atr_sl_tp&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;- be_trigger_pct / be_offset_pct&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;- trailing_trigger_pct&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;- max_holding_bars&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;- partial_config / pyramid_config / phases&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;Output:&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;- exit_profile_specs&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="210" width="230" x="-1640" y="-2850" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-215" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-208" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-1640" y="-1770" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-208" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;div style=&quot;color: rgb(187, 187, 187); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; line-height: 18px; white-space: pre;&quot;&gt;&lt;span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt; &lt;/span&gt;&lt;span style=&quot;color: rgb(54, 249, 246);&quot;&gt;build_exit_strategy_rt_matrix&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;(&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;color: rgb(187, 187, 187); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; line-height: 18px; white-space: pre;&quot;&gt;&lt;span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;input : out = &lt;/span&gt;&lt;/span&gt;&lt;span style=&quot;color: rgb(254, 68, 80);&quot;&gt;list&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;[&lt;/span&gt;&lt;span style=&quot;color: rgb(254, 68, 80);&quot;&gt;CompiledExitStrategy&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;]&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;color: rgb(187, 187, 187); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; line-height: 18px; white-space: pre;&quot;&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;output : &lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;strategy_rt_matrix&lt;/span&gt;&lt;span style=&quot;color: light-dark(rgb(255, 126, 219), rgb(181, 70, 150)); background-color: transparent;&quot;&gt;=rt np.ndarray&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="290" x="-2002.5" y="-2260" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-211" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-210" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;curved=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" target="Xz1aV-5h3Na0VjmybFTl-194">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-1750" y="-2600" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-210" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;b&gt;Class ExitStrategySpec&lt;/b&gt;&lt;div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;Spec utilisateur du profil de sortie&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div style=&quot;color: rgb(187, 187, 187); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; line-height: 18px; white-space: pre;&quot;&gt;&lt;span&gt;&lt;span style=&quot;color: rgb(254, 68, 80);&quot;&gt;Class StatefulConfig&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;(&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="201" x="-1880" y="-2850" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-214" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-212" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="Xz1aV-5h3Na0VjmybFTl-208">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-217" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-194" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;curved=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" target="Xz1aV-5h3Na0VjmybFTl-216">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-1770" y="-2600" />
+              <mxPoint x="-2130" y="-2540" />
+            </Array>
+            <mxPoint x="-1630" y="-2590" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-219" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-212" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;curved=1;" target="Xz1aV-5h3Na0VjmybFTl-218">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-2050" y="-2500" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-212" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;" value="&lt;div style=&quot;color: rgb(187, 187, 187); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; line-height: 18px; white-space: pre;&quot;&gt;&lt;span&gt;&lt;span style=&quot;color: rgb(54, 249, 246);&quot;&gt;compile_exit_strategies&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;(&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;color: rgb(187, 187, 187); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; line-height: 18px; white-space: pre;&quot;&gt;&lt;span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;input class &lt;/span&gt;&lt;/span&gt;&lt;b style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-family: Helvetica; white-space: normal;&quot;&gt;ExitStrategySpec&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;color: rgb(187, 187, 187); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; line-height: 18px; white-space: pre;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-family: Helvetica; white-space: normal;&quot;&gt;output&lt;/span&gt;&lt;span&gt;&lt;span style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); font-family: Helvetica; white-space: normal;&quot;&gt;:&amp;nbsp; out =&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;color: rgb(254, 68, 80);&quot;&gt;list&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;[&lt;/span&gt;&lt;span style=&quot;color: rgb(254, 68, 80);&quot;&gt;CompiledExitStrategy&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;]&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="83" width="260" x="-1990" y="-2533" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-216" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;div style=&quot;color: rgb(187, 187, 187); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; line-height: 18px; white-space: pre;&quot;&gt;&lt;span style=&quot;color: rgb(54, 249, 246);&quot;&gt;&lt;span style=&quot;color: rgb(54, 249, 246);&quot;&gt;build_stateful_cfg_rt_matrix&lt;/span&gt;()&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;color: rgb(187, 187, 187); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; line-height: 18px; white-space: pre;&quot;&gt;&lt;span style=&quot;color: rgb(54, 249, 246);&quot;&gt;Input : &lt;/span&gt;&lt;span style=&quot;color: rgb(254, 68, 80);&quot;&gt;ExitStrategySpec&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;color: rgb(187, 187, 187); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; line-height: 18px; white-space: pre;&quot;&gt;&lt;span style=&quot;color: rgb(254, 68, 80);&quot;&gt;output : &lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;stateful_cfg_rt&lt;/span&gt;&lt;span style=&quot;color: light-dark(rgb(254, 68, 80), rgb(255, 109, 120)); background-color: transparent;&quot;&gt;=rt&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="230" x="-2160" y="-2338" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-218" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;div style=&quot;color: rgb(187, 187, 187); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; line-height: 18px; white-space: pre;&quot;&gt;&lt;span style=&quot;color: rgb(54, 249, 246);&quot;&gt;&lt;span style=&quot;color: rgb(54, 249, 246);&quot;&gt;build_exit_strategy_rt_matrix&lt;/span&gt;()&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;color: rgb(187, 187, 187); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; line-height: 18px; white-space: pre;&quot;&gt;&lt;span style=&quot;color: rgb(54, 249, 246);&quot;&gt;Input : &lt;/span&gt;&lt;span style=&quot;color: rgb(255, 109, 120); text-align: left; background-color: transparent;&quot;&gt;CompiledExitStrategy&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;color: rgb(187, 187, 187); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; line-height: 18px; white-space: pre;&quot;&gt;&lt;span style=&quot;color: rgb(254, 68, 80);&quot;&gt;output : &lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;stateful_cfg_rt&lt;/span&gt;&lt;span style=&quot;color: light-dark(rgb(254, 68, 80), rgb(255, 109, 120)); background-color: transparent;&quot;&gt;=rt&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="230" x="-2320" y="-2260" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-220" parent="1" style="text;whiteSpace=wrap;html=1;" value="&lt;div style=&quot;forced-color-adjust: none; box-shadow: none !important; color: rgb(255, 255, 255); font-family: Helvetica; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(27, 29, 30); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;&quot;&gt;&lt;span style=&quot;forced-color-adjust: none; box-shadow: none !important; font-size: 12px;&quot;&gt;Mécanisme:&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;forced-color-adjust: none; box-shadow: none !important; color: rgb(255, 255, 255); font-family: Helvetica; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(27, 29, 30); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;&quot;&gt;&lt;span style=&quot;forced-color-adjust: none; box-shadow: none !important; font-size: 12px;&quot;&gt;- parcourt les ExitProfileSpec&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;forced-color-adjust: none; box-shadow: none !important; color: rgb(255, 255, 255); font-family: Helvetica; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(27, 29, 30); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;&quot;&gt;&lt;span style=&quot;forced-color-adjust: none; box-shadow: none !important; font-size: 12px;&quot;&gt;- attribue exit_profile_id&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;forced-color-adjust: none; box-shadow: none !important; color: rgb(255, 255, 255); font-family: Helvetica; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(27, 29, 30); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;&quot;&gt;&lt;span style=&quot;forced-color-adjust: none; box-shadow: none !important; font-size: 12px;&quot;&gt;- remplace les valeurs None par cfg&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="220" x="-1540" y="-2501.5" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
