@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36" pages="2">
   <diagram name="Page-1" id="CTPV-LFNBwMFuLYzp0Fe">
-    <mxGraphModel dx="5719" dy="5156" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="6021" dy="5362" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -785,7 +785,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="Xz1aV-5h3Na0VjmybFTl-26" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;div style=&quot;text-align: start;&quot;&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;Le bloc if &lt;b&gt;multi_setup_mode&lt;/b&gt; valide et normalise les métadonnées de sélection de setup (selected_setup_id, selected_score) afin que chaque signal puisse être relié au setup d’entrée qui l’a généré.&lt;/span&gt;&lt;/div&gt;" vertex="1">
-          <mxGeometry height="110" width="200" x="-1930" y="-990" as="geometry" />
+          <mxGeometry height="110" width="200" x="-2050" y="-1005" as="geometry" />
         </mxCell>
         <mxCell id="Xz1aV-5h3Na0VjmybFTl-35" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-27" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="Xz1aV-5h3Na0VjmybFTl-71" value="">
           <mxGeometry relative="1" as="geometry">
@@ -799,15 +799,15 @@
           <mxGeometry height="120" width="180" x="-1010" y="-1270" as="geometry" />
         </mxCell>
         <mxCell id="Xz1aV-5h3Na0VjmybFTl-28" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;b&gt;_parse_session()&lt;/b&gt;" vertex="1">
-          <mxGeometry height="35" width="150" x="-770" y="-1305" as="geometry" />
+          <mxGeometry height="35" width="150" x="-785" y="-1284" as="geometry" />
         </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-36" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-29" style="rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="Xz1aV-5h3Na0VjmybFTl-71">
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-36" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-29" style="rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="Xz1aV-5h3Na0VjmybFTl-71">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="-1190" y="-880" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="Xz1aV-5h3Na0VjmybFTl-29" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;span style=&quot;font-size: 12px;&quot;&gt;Le bloc &lt;b&gt;forced_flat &lt;/b&gt;convertit une règle de clôture forcée temporelle (fin de journée ou avant weekend) en paramètres runtime numériques utilisables par backtest_njit()&lt;/span&gt;" vertex="1">
-          <mxGeometry height="110" width="180" x="-820" y="-1169" as="geometry" />
+          <mxGeometry height="110" width="180" x="-800" y="-1160" as="geometry" />
         </mxCell>
         <mxCell id="Xz1aV-5h3Na0VjmybFTl-50" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-71" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="Xz1aV-5h3Na0VjmybFTl-47">
           <mxGeometry relative="1" as="geometry">
@@ -861,119 +861,7 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="Xz1aV-5h3Na0VjmybFTl-81" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="feature.py manque Liaison avec feature.py&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;font-family: -apple-system, &amp;quot;system-ui&amp;quot;, sans-serif; font-size: 13px; text-align: left; color: rgb(187, 187, 187);&quot;&gt;interface normalisée&amp;nbsp;&lt;/span&gt;&lt;span class=&quot;_inlineMarkdown_3nxm6_25 inline-markdown text-size-chat-sm font-mono blend bg-token-text-code-block-background rounded-sm px-1.5 py-0.5 leading-none extension:bg-token-foreground/10 electron:bg-token-list-hover-background/60&quot; style=&quot;box-sizing: border-box; border: 0px solid; margin: 0px; padding: 0px; border-radius: var(--radius-sm); background-color: color-mix(in oklab,var(--color-token-foreground)10%,transparent); padding-inline: calc(var(--spacing)*1.5); padding-block: calc(var(--spacing)*.5); font-family: var(--font-mono); font-size: calc(var(--codex-chat-font-size) - 1px); text-align: left; color: rgb(187, 187, 187); --tw-leading: 1 !important; line-height: 1 !important;&quot;&gt;matrix + names + col_map&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;" vertex="1">
-          <mxGeometry height="87" width="180" x="-268" y="-1757" as="geometry" />
-        </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-86" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="multi_setup_layer.py&lt;div&gt;class&amp;nbsp;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;SetupSpec |&amp;nbsp;&lt;/span&gt;DecisionConfig&lt;/div&gt;" vertex="1">
-          <mxGeometry height="60" width="170" x="-3110" y="-1260" as="geometry" />
-        </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-105" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-87" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="Xz1aV-5h3Na0VjmybFTl-96">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-87" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="setup_df normalisé" vertex="1">
-          <mxGeometry height="35" width="120" x="-3050" y="-1160" as="geometry" />
-        </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-88" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="_validate_setup_df&amp;nbsp;&lt;div&gt;-&amp;gt; valide si les settings sont juste&lt;/div&gt;" vertex="1">
-          <mxGeometry height="70" width="120" x="-3140" y="-965" as="geometry" />
-        </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-95" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-89" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="Xz1aV-5h3Na0VjmybFTl-88" value="">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-107" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-89" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="Xz1aV-5h3Na0VjmybFTl-102" value="">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-89" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;span style=&quot;font-size: 12px;&quot;&gt;_build_setup_matrices&lt;/span&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;Aggrege les score aux setups sors un index&lt;/span&gt;&lt;/div&gt;" vertex="1">
-          <mxGeometry height="70" width="120" x="-2970" y="-970" as="geometry" />
-        </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-90" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-86" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="Xz1aV-5h3Na0VjmybFTl-87">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-100" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-96" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="Xz1aV-5h3Na0VjmybFTl-89" value="">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-96" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#76608a;fontColor=#ffffff;strokeColor=#432D57;" value="&lt;div style=&quot;line-height: 18px; color: rgb(187, 187, 187);&quot;&gt;&lt;span style=&quot;color: rgb(54, 249, 246);&quot;&gt;&lt;font color=&quot;#005f5c&quot; face=&quot;Menlo, Monaco, Courier New, monospace&quot;&gt;&lt;span style=&quot;font-size: 12px; white-space: pre;&quot;&gt;&lt;b&gt;multi_setup_layer.py&lt;/b&gt;&lt;/span&gt;&lt;/font&gt;&lt;b style=&quot;color: light-dark(rgb(54, 249, 246), rgb(0, 95, 92)); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre;&quot;&gt;&lt;/b&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;color: rgb(187, 187, 187); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; line-height: 18px; white-space: pre;&quot;&gt;&lt;span style=&quot;color: rgb(54, 249, 246);&quot;&gt;&lt;b&gt;aggregate_and_decide&lt;/b&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;color: rgb(187, 187, 187); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; line-height: 18px; white-space: pre;&quot;&gt;&lt;span style=&quot;color: rgb(54, 249, 246);&quot;&gt;fonction wrapper&lt;/span&gt;&lt;/div&gt;" vertex="1">
-          <mxGeometry height="70" width="170" x="-3040" y="-1070" as="geometry" />
-        </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-106" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-101" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="Xz1aV-5h3Na0VjmybFTl-96" value="">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-170" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-123" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;curved=1;" target="Xz1aV-5h3Na0VjmybFTl-168">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="-2340" y="-1500" />
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-101" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="injection&lt;div&gt;regime_context&lt;/div&gt;" vertex="1">
-          <mxGeometry height="60" width="120" x="-2800" y="-1260" as="geometry" />
-        </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-111" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-102" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="Xz1aV-5h3Na0VjmybFTl-108">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="-2735" y="-880" />
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-113" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-102" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="Xz1aV-5h3Na0VjmybFTl-112">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-102" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;span style=&quot;color: rgb(0, 95, 92); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre;&quot;&gt;&lt;b&gt;aggregate_and_decide_njit&lt;/b&gt;&lt;/span&gt;" vertex="1">
-          <mxGeometry height="60" width="190" x="-2810" y="-960" as="geometry" />
-        </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-108" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;fillColor=#76608a;fontColor=#ffffff;strokeColor=#432D57;" value="&lt;div style=&quot;color: rgb(187, 187, 187); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; line-height: 18px; white-space: pre;&quot;&gt;&lt;div style=&quot;&quot;&gt;&lt;p data-pm-slice=&quot;1 1 []&quot;&gt;    return {&lt;/p&gt;&lt;p&gt;        &quot;signals&quot;: signals,&lt;/p&gt;&lt;p&gt;        &quot;selected_setup_id&quot;: selected_setup_id,&lt;/p&gt;&lt;p&gt;        &quot;selected_score&quot;: selected_score,&lt;/p&gt;&lt;p&gt;        &quot;best_long_score&quot;: best_long_score,&lt;/p&gt;&lt;p&gt;        &quot;best_short_score&quot;: best_short_score,&lt;/p&gt;&lt;p&gt;        &quot;best_long_setup_id&quot;: best_long_setup_id,&lt;/p&gt;&lt;p&gt;        &quot;best_short_setup_id&quot;: best_short_setup_id,&lt;/p&gt;&lt;p&gt;    }&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;" vertex="1">
-          <mxGeometry height="280" width="415" x="-3117.5" y="-845" as="geometry" />
-        </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-131" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-112" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="Xz1aV-5h3Na0VjmybFTl-130" value="">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-112" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Utilisation des matrice, creation du score en fonction activation manuelle + regime. puis retourne le setup gagnant par bar et son id." vertex="1">
-          <mxGeometry height="100" width="171" x="-2746" y="-1085" as="geometry" />
-        </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-129" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-114" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" target="Xz1aV-5h3Na0VjmybFTl-117">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-114" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="regime_policy.py&lt;div&gt;Array Regime par bar&lt;/div&gt;" vertex="1">
-          <mxGeometry height="60" width="120" x="-2985" y="-1810" as="geometry" />
-        </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-124" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-115" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="Xz1aV-5h3Na0VjmybFTl-123" value="">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-115" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;div style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; line-height: 18px; white-space: pre;&quot;&gt;&lt;span&gt;&lt;font style=&quot;color: rgb(0, 123, 255);&quot;&gt;build_regime_context()&lt;/font&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; line-height: 18px; white-space: pre;&quot;&gt;&lt;span&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;" vertex="1">
-          <mxGeometry height="60" width="180" x="-2840" y="-1597" as="geometry" />
-        </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-119" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-116" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.75;entryY=0;entryDx=0;entryDy=0;" target="Xz1aV-5h3Na0VjmybFTl-101">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-116" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="return Class RegimeContext&lt;div&gt;&lt;span style=&quot;color: rgb(187, 187, 187); font-family: -apple-system, &amp;quot;system-ui&amp;quot;, sans-serif; font-size: 13px; font-style: italic; text-align: start; background-color: rgb(34, 34, 34);&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;color: rgb(187, 187, 187); font-family: -apple-system, &amp;quot;system-ui&amp;quot;, sans-serif; font-size: 13px; font-style: italic; text-align: start;&quot;&gt;contient les matrices prêtes à être consommées par les fonctions rapides.&lt;/span&gt;&lt;/div&gt;" vertex="1">
-          <mxGeometry height="80" width="230" x="-2825" y="-1375" as="geometry" />
-        </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-121" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-117" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="Xz1aV-5h3Na0VjmybFTl-115" value="">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-117" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Class&amp;nbsp;&lt;span style=&quot;color: rgb(254, 68, 80); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre; background-color: light-dark(#ffffff, var(--ge-dark-color, #121212));&quot;&gt;RegimePolicy&lt;/span&gt;&lt;div&gt;&lt;span style=&quot;color: rgb(187, 187, 187); font-family: -apple-system, &amp;quot;system-ui&amp;quot;, sans-serif; font-size: 13px; font-style: italic; text-align: start; background-color: light-dark(#ffffff, var(--ge-dark-color, #121212));&quot;&gt;décrit ce qu’on veut faire par régime,&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: rgb(187, 187, 187); font-family: -apple-system, &amp;quot;system-ui&amp;quot;, sans-serif; font-size: 13px; font-style: italic; text-align: start; background-color: light-dark(#ffffff, var(--ge-dark-color, #121212));&quot;&gt;exit_profile override&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: rgb(187, 187, 187); font-family: -apple-system, &amp;quot;system-ui&amp;quot;, sans-serif; font-size: 13px; font-style: italic; text-align: start; background-color: light-dark(#ffffff, var(--ge-dark-color, #121212));&quot;&gt;exit_strat override pour toute pos&lt;/span&gt;&lt;/div&gt;" vertex="1">
-          <mxGeometry height="80" width="230" x="-2865" y="-1697" as="geometry" />
-        </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-120" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-118" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="Xz1aV-5h3Na0VjmybFTl-117" value="">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-118" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="vecteur regime discretiser" vertex="1">
-          <mxGeometry height="60" width="120" x="-2810" y="-1787" as="geometry" />
-        </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-127" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-123" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="Xz1aV-5h3Na0VjmybFTl-116">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-123" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;span style=&quot;font-size: 12px;&quot;&gt;prend un régime déjà discrétisé, une politique de régime, et les setups disponibles. Il construit les matrices qui disent comment chaque régime modifie les scores d’entrée et quels exits il force éventuellement.&lt;/span&gt;" vertex="1">
-          <mxGeometry height="80" width="310" x="-2885" y="-1500" as="geometry" />
-        </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-135" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-130" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.75;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="Xz1aV-5h3Na0VjmybFTl-102">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-130" parent="1" style="text;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" value="&lt;div style=&quot;line-height: 18px;&quot;&gt;&lt;div style=&quot;&quot;&gt;&lt;p data-pm-slice=&quot;1 1 []&quot;&gt;&amp;nbsp; &amp;nbsp; return (&lt;/p&gt;&lt;p&gt;        signals, selected_setup_id, selected_score,&lt;/p&gt;&lt;p&gt;        best_long_score, best_short_score,&lt;/p&gt;&lt;p&gt;        best_long_setup_id, best_short_setup_id,&lt;/p&gt;&lt;p&gt;    )&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;" vertex="1">
-          <mxGeometry height="170" width="250" x="-2540" y="-1065" as="geometry" />
-        </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-134" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-108" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="Xz1aV-5h3Na0VjmybFTl-152">
-          <mxGeometry relative="1" as="geometry" />
+          <mxGeometry height="87" width="180" x="-253" y="-1797" as="geometry" />
         </mxCell>
         <mxCell id="Xz1aV-5h3Na0VjmybFTl-206" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-141" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="Xz1aV-5h3Na0VjmybFTl-142" value="">
           <mxGeometry relative="1" as="geometry" />
@@ -1001,13 +889,7 @@
         <mxCell id="Xz1aV-5h3Na0VjmybFTl-149" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;" value="&lt;div&gt;&lt;div style=&quot;color: rgb(187, 187, 187); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; line-height: 18px; white-space: pre;&quot;&gt;&lt;div style=&quot;&quot;&gt;&lt;span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;setup_exit_binding =&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt; {&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;    &lt;/span&gt;&lt;span style=&quot;color: rgb(249, 126, 114);&quot;&gt;0&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;: {&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 139, 57);&quot;&gt;&quot;exit_profile_id&quot;&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;: &lt;/span&gt;&lt;span style=&quot;color: rgb(249, 126, 114);&quot;&gt;0&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;, &lt;/span&gt;&lt;span style=&quot;color: rgb(255, 139, 57);&quot;&gt;&quot;exit_strategy_id&quot;&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;: &lt;/span&gt;&lt;span style=&quot;color: rgb(249, 126, 114);&quot;&gt;0&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;},&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;    &lt;/span&gt;&lt;span style=&quot;color: rgb(249, 126, 114);&quot;&gt;1&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;: {&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 139, 57);&quot;&gt;&quot;exit_profile_id&quot;&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;: &lt;/span&gt;&lt;span style=&quot;color: rgb(249, 126, 114);&quot;&gt;2&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;, &lt;/span&gt;&lt;span style=&quot;color: rgb(255, 139, 57);&quot;&gt;&quot;exit_strategy_id&quot;&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;: &lt;/span&gt;&lt;span style=&quot;color: rgb(249, 126, 114);&quot;&gt;1&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;},&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;}&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;" vertex="1">
           <mxGeometry height="127" width="400" x="-1400" y="-2917" as="geometry" />
         </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-153" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-152" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="Xz1aV-5h3Na0VjmybFTl-26" value="">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-152" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#647687;fontColor=#ffffff;strokeColor=#314354;" value="&lt;b&gt;&lt;font style=&quot;font-size: 20px; color: rgb(0, 0, 0);&quot;&gt;NJITEngine&amp;nbsp;&lt;/font&gt;&lt;/b&gt;&lt;div&gt;&lt;b&gt;&lt;font style=&quot;font-size: 20px; color: rgb(0, 0, 0);&quot;&gt;def run()&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;" vertex="1">
-          <mxGeometry height="60" width="120" x="-2101" y="-965" as="geometry" />
-        </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-163" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-193" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;curved=1;" target="Xz1aV-5h3Na0VjmybFTl-25">
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-163" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-193" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;curved=1;fillColor=#f8cecc;strokeColor=#b85450;" target="Xz1aV-5h3Na0VjmybFTl-25">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="-1450" y="-1600" />
@@ -1017,7 +899,7 @@
             <mxPoint x="-1540" y="-1640" as="sourcePoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-164" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-193" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;curved=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" target="Xz1aV-5h3Na0VjmybFTl-24">
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-164" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-193" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;curved=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;fillColor=#f8cecc;strokeColor=#b85450;" target="Xz1aV-5h3Na0VjmybFTl-24">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="-1450" y="-1600" />
@@ -1029,7 +911,7 @@
             <mxPoint x="-1670" y="-1200" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-167" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-193" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.25;entryY=0;entryDx=0;entryDy=0;curved=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" target="Xz1aV-5h3Na0VjmybFTl-22">
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-167" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-193" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.25;entryY=0;entryDx=0;entryDy=0;curved=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;fillColor=#f8cecc;strokeColor=#b85450;" target="Xz1aV-5h3Na0VjmybFTl-22">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="-1450" y="-1600" />
@@ -1045,7 +927,7 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="Xz1aV-5h3Na0VjmybFTl-168" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;span style=&quot;font-size: 12px;&quot;&gt;&lt;b&gt;build_regime_context() &lt;/b&gt;prépare les tableaux runtime décrivant l’état de régime et ses overrides. Dans le flow actuel, ils permettent surtout au moteur backtest_njit() d’adapter la logique de sortie au régime, pas de re-sélectionner le setup d’entrée.&lt;/span&gt;" vertex="1">
-          <mxGeometry height="130" width="200" x="-1961" y="-1169" as="geometry" />
+          <mxGeometry height="130" width="200" x="-1890" y="-1150" as="geometry" />
         </mxCell>
         <mxCell id="Xz1aV-5h3Na0VjmybFTl-187" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-175" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="Xz1aV-5h3Na0VjmybFTl-193">
           <mxGeometry relative="1" as="geometry">
@@ -1259,11 +1141,18 @@
         <mxCell id="Xz1aV-5h3Na0VjmybFTl-275" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;span style=&quot;color: rgb(255, 109, 120); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; text-align: left; white-space: pre;&quot;&gt;SignalPrep &lt;/span&gt;&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; text-align: left; white-space: pre;&quot;&gt;&lt;font style=&quot;color: rgb(227, 205, 208);&quot;&gt;viens &lt;/font&gt;&lt;/span&gt;&lt;div&gt;&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; text-align: left; white-space: pre;&quot;&gt;&lt;font style=&quot;color: rgb(227, 205, 208);&quot;&gt;de backtst_bundle&lt;/font&gt;&lt;/span&gt;&amp;nbsp;&lt;/div&gt;" vertex="1">
           <mxGeometry height="60" width="150" x="-410" y="-2320" as="geometry" />
         </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-297" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-276" style="edgeStyle=none;shape=filledEdge;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.75;entryY=0;entryDx=0;entryDy=0;" target="Xz1aV-5h3Na0VjmybFTl-18">
-          <mxGeometry relative="1" as="geometry" />
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-297" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-276" style="edgeStyle=none;shape=filledEdge;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;curved=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" target="Xz1aV-5h3Na0VjmybFTl-26">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-1370" y="-1620" />
+              <mxPoint x="-1390" y="-1560" />
+              <mxPoint x="-2070" y="-1060" />
+            </Array>
+            <mxPoint x="-1760" y="-1460" as="targetPoint" />
+          </mxGeometry>
         </mxCell>
         <mxCell id="Xz1aV-5h3Na0VjmybFTl-276" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;" value="Appel dans run(&lt;div&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;signal =&amp;nbsp;&lt;span style=&quot;color: rgb(214, 89, 98); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre;&quot;&gt;SignalPrep&lt;/span&gt;.signals,&lt;div&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre; color: rgb(255, 126, 219);&quot;&gt;selected_setup_id = &lt;span style=&quot;color: rgb(214, 89, 98);&quot;&gt;SignalPrep&lt;/span&gt;.&lt;/span&gt;&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre; color: rgb(255, 126, 219);&quot;&gt;selected_setup_id,&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;" vertex="1">
-          <mxGeometry height="78.5" width="440" x="-1410" y="-1793" as="geometry" />
+          <mxGeometry height="78.5" width="440" x="-1480" y="-1828.5" as="geometry" />
         </mxCell>
         <mxCell id="Xz1aV-5h3Na0VjmybFTl-292" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-278" style="edgeStyle=none;shape=link;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0.25;entryY=1;entryDx=0;entryDy=0;" target="Xz1aV-5h3Na0VjmybFTl-281">
           <mxGeometry relative="1" as="geometry" />
@@ -1327,6 +1216,19 @@
             <Array as="points">
               <mxPoint x="920" y="-2410" />
             </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-360" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-324" style="edgeStyle=none;shape=filledEdge;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=1;exitDx=0;exitDy=0;curved=1;fillColor=#dae8fc;strokeColor=#6c8ebf;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="Xz1aV-5h3Na0VjmybFTl-361">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1260" y="-2220" />
+              <mxPoint x="320" y="-1820" />
+              <mxPoint x="-650" y="-2070" />
+              <mxPoint x="-480" y="-1960" />
+              <mxPoint x="-890" y="-1900" />
+              <mxPoint x="-900" y="-1800" />
+            </Array>
+            <mxPoint x="-1868.6420355902778" y="-1470" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="Xz1aV-5h3Na0VjmybFTl-324" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="injection&lt;div&gt;regime_context&lt;/div&gt;" vertex="1">
@@ -1395,10 +1297,10 @@
         <mxCell id="Xz1aV-5h3Na0VjmybFTl-352" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;" value="&lt;div style=&quot;color: rgb(187, 187, 187); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; line-height: 18px; white-space: pre;&quot;&gt;&lt;div style=&quot;&quot;&gt;&lt;span&gt;&lt;span style=&quot;color: rgb(254, 68, 80);&quot;&gt;PartialConfig&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;(&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;            &lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219); font-style: italic;&quot;&gt;n_levels&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 255, 255);&quot;&gt;=&lt;/span&gt;&lt;span style=&quot;color: rgb(249, 126, 114);&quot;&gt;2&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;            &lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219); font-style: italic;&quot;&gt;spacing&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 255, 255);&quot;&gt;=&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;[&lt;/span&gt;&lt;span style=&quot;color: rgb(254, 68, 80);&quot;&gt;OnRR&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;(&lt;/span&gt;&lt;span style=&quot;color: rgb(249, 126, 114);&quot;&gt;1.0&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;), &lt;/span&gt;&lt;span style=&quot;color: rgb(254, 68, 80);&quot;&gt;OnRR&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;(&lt;/span&gt;&lt;span style=&quot;color: rgb(249, 126, 114);&quot;&gt;2.0&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;)],&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;            &lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219); font-style: italic;&quot;&gt;sizing&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 255, 255);&quot;&gt;=&lt;/span&gt;&lt;span style=&quot;color: rgb(254, 68, 80);&quot;&gt;DistributionFn&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;(&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219); font-style: italic;&quot;&gt;mode&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 255, 255);&quot;&gt;=&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 139, 57);&quot;&gt;&quot;equal&quot;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;" vertex="1">
           <mxGeometry height="90" width="340" x="-1650" y="-3120" as="geometry" />
         </mxCell>
-        <mxCell id="Xz1aV-5h3Na0VjmybFTl-355" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-354" style="edgeStyle=none;shape=filledEdge;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.75;exitDx=0;exitDy=0;curved=1;">
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-355" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-354" style="edgeStyle=none;shape=filledEdge;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.75;exitDx=0;exitDy=0;curved=1;entryX=1;entryY=0;entryDx=0;entryDy=0;fillColor=#fff2cc;strokeColor=#d6b656;" target="Xz1aV-5h3Na0VjmybFTl-23">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="-1405" y="-1559" />
+              <mxPoint x="-1430" y="-1560" />
               <mxPoint x="-915" y="-1479" />
             </Array>
             <mxPoint x="-1120" y="-1604" as="sourcePoint" />
@@ -1406,7 +1308,20 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="Xz1aV-5h3Na0VjmybFTl-354" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;div style=&quot;line-height: 18px;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: rgb(255, 126, 219);&quot;&gt;&lt;font color=&quot;#b54696&quot; face=&quot;Menlo, Monaco, Courier New, monospace&quot;&gt;&lt;span style=&quot;font-size: 12px; white-space: pre;&quot;&gt;&lt;i&gt;Appel arguments dans run(&lt;/i&gt;&lt;/span&gt;&lt;/font&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; line-height: 18px; white-space: pre;&quot;&gt;&lt;span style=&quot;background-color: transparent; color: rgb(255, 126, 219); font-style: italic;&quot;&gt;features&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: rgb(255, 255, 255);&quot;&gt;=&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: rgb(255, 126, 219);&quot;&gt;compiled_features&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: rgb(255, 126, 219);&quot;&gt;.&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: rgb(255, 126, 219);&quot;&gt;matrix&lt;/span&gt;&lt;/div&gt;" vertex="1">
-          <mxGeometry height="60" width="260" x="-1165" y="-1685" as="geometry" />
+          <mxGeometry height="60" width="260" x="-1062" y="-1620" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-362" edge="1" parent="1" source="Xz1aV-5h3Na0VjmybFTl-361" style="edgeStyle=none;shape=filledEdge;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;curved=1;entryX=0.25;entryY=0;entryDx=0;entryDy=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" target="Xz1aV-5h3Na0VjmybFTl-168">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-1400" y="-1580" />
+              <mxPoint x="-1690" y="-1430" />
+              <mxPoint x="-1860" y="-1210" />
+            </Array>
+            <mxPoint x="-1560" y="-1530" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Xz1aV-5h3Na0VjmybFTl-361" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;" value="&lt;div style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; line-height: 18px; white-space: pre;&quot;&gt;&lt;span&gt;&lt;span style=&quot;color: rgb(255, 126, 219); font-style: italic;&quot;&gt;regime&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;: &lt;/span&gt;&lt;span style=&quot;color: rgb(254, 68, 80);&quot;&gt;np&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;.&lt;/span&gt;&lt;span style=&quot;color: rgb(254, 68, 80);&quot;&gt;ndarray&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt; &lt;/span&gt;&lt;font color=&quot;#36f9f6&quot;&gt;| &lt;/font&gt;&lt;/span&gt;&lt;span style=&quot;color: rgb(249, 126, 114); background-color: transparent;&quot;&gt;None =&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219); background-color: transparent;&quot;&gt; &lt;/span&gt;&lt;span style=&quot;color: rgb(249, 126, 114); background-color: transparent;&quot;&gt;None&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219); background-color: transparent;&quot;&gt;, &lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;color: rgb(187, 187, 187); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; line-height: 18px; white-space: pre;&quot;&gt;&lt;span&gt;&lt;span style=&quot;color: rgb(255, 126, 219); font-style: italic;&quot;&gt;regime_policy = &lt;/span&gt;&lt;span style=&quot;color: rgb(249, 126, 114);&quot;&gt;None&lt;/span&gt;&lt;span style=&quot;color: rgb(255, 126, 219);&quot;&gt;,&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;color: rgb(187, 187, 187); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; line-height: 18px; white-space: pre;&quot;&gt;&lt;span&gt;&lt;span style=&quot;color: rgb(255, 126, 219); font-style: italic;&quot;&gt;regime_context = &lt;/span&gt;&lt;span style=&quot;color: rgb(249, 126, 114);&quot;&gt;Non&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="260" x="-1337.5" y="-1710" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
