@@ -5,7 +5,7 @@
 import pandas as pd
 import numpy as np
 
-from backtest_engine import BacktestConfig, DataPipeline, NJITEngine
+from backtest_engine import *
 
 
 def rsi_strategy(df, rsi_period=14, oversold=30, overbought=70):
