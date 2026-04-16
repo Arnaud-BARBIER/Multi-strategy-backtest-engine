@@ -88,21 +88,33 @@ The main research note included in this repository shows a typical workflow end-
 ### Baseline EMA strategy
 <img width="489" height="356" alt="Screenshot 2026-04-16 at 22 28 38" src="https://github.com/user-attachments/assets/3830f3bf-0eac-4b89-9b5f-99b773be2d0a" />
 <img width="1143" height="569" alt="Screenshot 2026-04-16 at 22 29 03" src="https://github.com/user-attachments/assets/9ae98fbd-1704-4754-8da0-ef69ea712c32" />
-### Regime construction on H1
+
+### Regime construction on H1 resampled to M5
+
+<img width="535" height="359" alt="Screenshot 2026-04-16 at 22 44 59" src="https://github.com/user-attachments/assets/de47f1bc-cc42-47a7-a136-d0e56a4abb03" />
+<img width="387" height="264" alt="Screenshot 2026-04-16 at 22 45 49" src="https://github.com/user-attachments/assets/9a2d5f08-2707-401a-bd32-e0c2d1a9367e" />
 
 ### Projection to M5 execution data
 <img width="1087" height="790" alt="Screenshot 2026-04-16 at 22 27 06" src="https://github.com/user-attachments/assets/924ceba1-f3ee-4c59-9a08-21c37c040e1a" />
-#### Regime-aware filtering
+
+### Regime-aware filtering
+<img width="480" height="362" alt="Screenshot 2026-04-16 at 22 51 57" src="https://github.com/user-attachments/assets/9d16b8dc-1f2a-47c4-80a1-5c168a4e56b4" />
 <img width="1149" height="586" alt="Screenshot 2026-04-16 at 22 29 46" src="https://github.com/user-attachments/assets/c9959956-3f88-430c-b79c-7076687a9657" />
-#### Addition of a second setup with different logic
+
+### Addition of a second setup with different logic
 **Pre regime filtering**
+
 <img width="488" height="359" alt="Screenshot 2026-04-16 at 22 30 48" src="https://github.com/user-attachments/assets/f5f8368e-2266-47f5-a50e-2f409c4cb1f6" />
 <img width="1147" height="572" alt="Screenshot 2026-04-16 at 22 34 23" src="https://github.com/user-attachments/assets/30e09411-451b-46f3-a9c5-0f3b466ca094" />
+
 **Post regime filtering**
+
 <img width="487" height="357" alt="Screenshot 2026-04-16 at 22 32 11" src="https://github.com/user-attachments/assets/f1ece8fd-62b4-4b80-aade-cf9070dd4b37" />
 <img width="1147" height="574" alt="Screenshot 2026-04-16 at 22 34 39" src="https://github.com/user-attachments/assets/4f66c291-2c5c-4e40-b7d2-31714a0b809c" />
-#### Setup routing and post-trade analysis
+
+### Setup routing and post-trade analysis
 <img width="1154" height="576" alt="Screenshot 2026-04-16 at 22 32 34" src="https://github.com/user-attachments/assets/d7074d16-5b90-4f6a-98af-e1ba4275a320" />
+<img width="1202" height="384" alt="Screenshot 2026-04-16 at 22 51 02" src="https://github.com/user-attachments/assets/889b381a-fcb4-43b2-8a71-e8d6817a31a1" />
 
 Recommended entry point:
 
