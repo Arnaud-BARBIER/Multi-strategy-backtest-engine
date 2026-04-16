@@ -2,7 +2,7 @@
 
 A modular Python backtesting framework for systematic strategy research on OHLCV data.
 
-This project was built to make quantitative research more structured, testable, and reusable. Instead of rewriting execution logic, filters, and risk rules for each new idea, the framework separates signal research from trade simulation so that strategies can be evaluated inside a consistent execution environment.
+This project was built to make quantitative research more structured, testable, and reusable. With today’s AI tools, creating trading ideas or coding individual strategies is becoming increasingly accessible. The real challenge is not generation, but validation. If each strategy is built and tested in isolation, especially through one-off AI-generated code, the research process quickly becomes inconsistent, hard to trust, and inefficient. A reliable framework matters because it provides a stable environment in which ideas can be tested under coherent assumptions and compared meaningfully. Instead of rewriting execution logic, filters, and risk rules for each new idea, the framework separates signal research from trade simulation so that strategies can be evaluated inside a consistent execution environment.
 
 The engine is designed for bar-based research workflows and supports signal inspection, regime-aware strategy routing, execution-aware backtesting, and trade-level post-analysis.
 
@@ -27,13 +27,14 @@ The objective is to let the user focus on market logic while the framework handl
 ## Core capabilities
 
 - Modular signal research on OHLCV data
-- Fast Numba-based execution
+- Fast Numba-based execution (0.3 seconds per run)
 - Separation between signal generation and execution logic
 - Built-in and user-defined strategies
 - Setup-based strategy routing
 - Regime-aware filtering and activation
 - Configurable exit profiles
-- Realistic execution assumptions:
+- Configurable exit strategies with a Numba-compatible execution bridge
+- Realistic execution assumptions for CFD:
   - spread
   - commission
   - slippage
@@ -55,7 +56,7 @@ A large part of systematic research is not signal generation itself, but the abi
 
 This framework was built around that idea.
 
-It provides a structured research workflow where most of the infrastructure is already handled, so the user can stay focused on strategy logic, learn a few conventions, and bind the components together.
+It provides a structured research workflow where most of the infrastructure is already handled, so the user can stay focused on strategy logic, learn only a few conventions, and bind the components together.
 
 In practice, it is meant to support workflows such as:
 
@@ -82,7 +83,7 @@ A typical workflow with the engine looks like this:
 
 ## Main example notebook
 
-The main research note included in this repository shows this workflow end-to-end:
+The main research note included in this repository shows a typical workflow end-to-end:
 
 - baseline EMA strategy
 - regime construction on H1
