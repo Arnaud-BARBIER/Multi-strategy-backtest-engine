@@ -86,11 +86,20 @@ A typical workflow with the engine looks like this:
 The main research note included in this repository shows a typical workflow end-to-end:
 
 - baseline EMA strategy
+<img width="489" height="356" alt="Screenshot 2026-04-16 at 22 28 38" src="https://github.com/user-attachments/assets/3830f3bf-0eac-4b89-9b5f-99b773be2d0a" />
+<img width="1143" height="569" alt="Screenshot 2026-04-16 at 22 29 03" src="https://github.com/user-attachments/assets/9ae98fbd-1704-4754-8da0-ef69ea712c32" />
 - regime construction on H1
 - projection to M5 execution data
+<img width="1087" height="790" alt="Screenshot 2026-04-16 at 22 27 06" src="https://github.com/user-attachments/assets/924ceba1-f3ee-4c59-9a08-21c37c040e1a" />
 - regime-aware filtering
+<img width="1149" height="586" alt="Screenshot 2026-04-16 at 22 29 46" src="https://github.com/user-attachments/assets/c9959956-3f88-430c-b79c-7076687a9657" />
 - addition of a second setup with different logic
+pre regime filtering
+<img width="488" height="359" alt="Screenshot 2026-04-16 at 22 30 48" src="https://github.com/user-attachments/assets/f5f8368e-2266-47f5-a50e-2f409c4cb1f6" />
+post regime filtering
+<img width="487" height="357" alt="Screenshot 2026-04-16 at 22 32 11" src="https://github.com/user-attachments/assets/f1ece8fd-62b4-4b80-aade-cf9070dd4b37" />
 - setup routing and post-trade analysis
+<img width="1154" height="576" alt="Screenshot 2026-04-16 at 22 32 34" src="https://github.com/user-attachments/assets/d7074d16-5b90-4f6a-98af-e1ba4275a320" />
 
 Recommended entry point:
 
