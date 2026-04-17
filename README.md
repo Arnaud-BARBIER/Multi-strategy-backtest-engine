@@ -25,7 +25,7 @@ At a high level, it helps structure the workflow from:
 Instead of rebuilding these layers for each new strategy, the user works inside a reusable architecture where the research logic remains explicit and modular.
 
 ---
-### Architecture
+### Research Workflow Architecture
 
 <img width="907" height="469" alt="Screenshot 2026-04-17 at 18 44 44" src="https://github.com/user-attachments/assets/bb59d262-d3d8-451e-ba51-0c7de7b16894" />
 <img width="907" height="669" alt="Screenshot 2026-04-17 at 18 39 09" src="https://github.com/user-attachments/assets/b97358bd-aa58-4b6d-802a-921204707eb4" />
