@@ -147,7 +147,7 @@ The main research note included in this repository shows a typical workflow end-
 
 Recommended entry point:
 
-`notebooks/Regime_Aware_Strategy_Research.ipynb`
+`examples/Framework_Research_Workflow_Demo.ipynb`
 
 ---
 
