@@ -7,11 +7,6 @@ This document gives a more explicit map of the framework around its real center:
 - upstream modules feed a run
 - downstream modules explain what happened after a run
 
-This view intentionally ignores:
-
-- `backtest_bundle.py`
-- `StrategyEngine.py`
-
 because they are not part of the current public core scope.
 
 ---
