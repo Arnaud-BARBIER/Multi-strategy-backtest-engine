@@ -8,31 +8,78 @@ The engine is designed for bar-based research workflows and supports signal insp
 
 ---
 
-## What this project is
+## What the framework provides
 
-It is a research framework built to help move from a raw strategy idea to a reproducible and interpretable backtest workflow, with a clear separation between:
+The framework is organized as a set of research layers that reduce friction between idea generation and reliable evaluation.
 
+At a high level, it helps structure the workflow from:
+
+- market data
+- feature construction
 - signal generation
-- execution logic
-- trade management
-- contextual filtering
+- setup selection
+- regime conditioning
+- execution and trade management
 - post-trade analysis
 
-The objective is to let the user focus on market logic while the framework handles the surrounding research infrastructure.
+Instead of rebuilding these layers for each new strategy, the user works inside a reusable architecture where the research logic remains explicit and modular.
+
+---
+
+## Technical layers
+
+### 1. Data layer
+
+The engine starts from standardized OHLCV data and provides a consistent base for multi-timeframe research.  
+This includes data loading, alignment, resampling, and synchronization across execution and higher-timeframe context.
+
+This matters because many research errors come from inconsistent indexing, ad hoc resampling, or manual preprocessing repeated across notebooks.
+
+### 2. Feature layer
+
+Features can be defined, reused, compiled, and attached to the research workflow without being tightly coupled to one specific strategy.  
+This makes it easier to experiment with indicators, contextual variables, and higher-level market descriptors while keeping the logic traceable.
+
+### 3. Signal layer
+
+A strategy can remain simple: it only needs to express entry logic and produce a signal or a setup-compatible output.  
+The framework then handles the rest of the research stack around it.
+
+This separation is important because it prevents execution assumptions from being silently mixed into signal generation.
+
+### 4. Setup layer
+
+Signals can be promoted into named setups and combined inside a multi-setup workflow.  
+This allows different entry logics to coexist, be scored, filtered, and routed in a unified structure rather than being tested in isolation.
+
+### 5. Regime layer
+
+The framework supports regime-aware filtering and routing, so setups can be activated, deactivated, or directionally constrained depending on market state.  
+This makes it possible to test not only whether a strategy works, but also under which conditions it works.
+
+### 6. Execution layer
+
+The backtest engine handles realistic bar-based execution assumptions, including trade management, session filters, forced-flat logic, costs, and configurable exits.  
+This creates a more stable and consistent testing environment than one-off strategy scripts built around a single idea.
+
+### 7. Post-analysis layer
+
+Results can be analyzed at the trade, setup, regime, and context level.  
+This is a key part of the framework: the goal is not only to generate a backtest, but to make the edge interpretable and easier to diagnose.
 
 ---
 
 ## Core capabilities
 
-- Modular signal research on OHLCV data
-- Fast Numba-based execution (0.3 seconds per run)
-- Separation between signal generation and execution logic
-- Built-in and user-defined strategies
-- Setup-based strategy routing
-- Regime-aware filtering and activation
+- Standardized OHLCV research workflow
+- Multi-timeframe data alignment and context projection
+- Reusable feature and indicator integration
+- Built-in and user-defined signal generation
+- Setup-based signal aggregation and routing
+- Regime-aware filtering and directional control
 - Configurable exit profiles
 - Configurable exit strategies with a Numba-compatible execution bridge
-- Realistic execution assumptions for CFD:
+- Realistic CFD execution assumptions:
   - spread
   - commission
   - slippage
@@ -45,37 +92,21 @@ The objective is to let the user focus on market logic while the framework handl
   - exit reason breakdown
   - setup-level and regime-level analysis
 - Context enrichment for post-trade research
+- Fast Numba-based execution
 
 ---
 
-## Why it matters
+## What this reduces in practice
 
-A large part of systematic research is not signal generation itself, but the ability to test ideas inside a clean and reproducible process.
+The framework is designed to reduce research friction in a few specific ways:
 
-This framework was built around that idea.
+- less repeated boilerplate across notebooks
+- cleaner separation between market logic and execution logic
+- easier comparison across strategies under consistent assumptions
+- easier reuse of features, setups, and regime logic
+- more interpretable results once trades have been executed
 
-It provides a structured research workflow where most of the infrastructure is already handled, so the user can stay focused on strategy logic, learn only a few conventions, and bind the components together.
-
-In practice, it is meant to support workflows such as:
-
-- validating a raw trading signal under realistic execution constraints
-- testing whether a signal only works in a specific market regime
-- routing multiple setups depending on context
-- comparing trade management profiles
-- analyzing edge by setup, regime, and trade context
-
----
-
-## Example research workflow
-
-A typical workflow with the engine looks like this:
-
-1. Define or inspect a raw strategy signal
-2. Run a baseline backtest under realistic constraints
-3. Add context or regime information
-4. Filter or route setups conditionally
-5. Bind setup-specific exit logic
-6. Analyze results at the trade, setup, and regime level
+In practice, this means the user can spend more time refining hypotheses and less time rebuilding infrastructure around each new test.
 
 ---
 
@@ -110,7 +141,7 @@ The main research note included in this repository shows a typical workflow end-
 <img width="487" height="357" alt="Screenshot 2026-04-16 at 22 32 11" src="https://github.com/user-attachments/assets/f1ece8fd-62b4-4b80-aade-cf9070dd4b37" />
 <img width="1147" height="574" alt="Screenshot 2026-04-16 at 22 34 39" src="https://github.com/user-attachments/assets/4f66c291-2c5c-4e40-b7d2-31714a0b809c" />
 
-### Setup routing and post-trade analysis
+### Multi-Setup routing and post-trade analysis
 <img width="1154" height="576" alt="Screenshot 2026-04-16 at 22 32 34" src="https://github.com/user-attachments/assets/d7074d16-5b90-4f6a-98af-e1ba4275a320" />
 <img width="1202" height="384" alt="Screenshot 2026-04-16 at 22 51 02" src="https://github.com/user-attachments/assets/889b381a-fcb4-43b2-8a71-e8d6817a31a1" />
 
