@@ -61,6 +61,8 @@ This makes it possible to test not only whether a strategy works, but also under
 
 The backtest engine handles realistic bar-based execution assumptions, including trade management, session filters, forced-flat logic, costs, and configurable exits.  
 This creates a more stable and consistent testing environment than one-off strategy scripts built around a single idea.
+Execution costs are modeled explicitly through spread, slippage, and per-lot commission inputs, and are converted into trade-level relative return costs during backtest execution.
+See `docs/technical_guide.md` for the execution cost model and conventions.
 
 ### 7. Post-analysis layer
 
