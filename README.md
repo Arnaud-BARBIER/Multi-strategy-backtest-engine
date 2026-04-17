@@ -27,7 +27,7 @@ Instead of rebuilding these layers for each new strategy, the user works inside 
 ---
 ### Framework Architecture Overview
 
-<img width="907" height="469" alt="Screenshot 2026-04-17 at 18 44 44" src="https://github.com/user-attachments/assets/bb59d262-d3d8-451e-ba51-0c7de7b16894" />
+<img width="907" height="466" alt="Screenshot 2026-04-17 at 18 46 23" src="https://github.com/user-attachments/assets/fa2c9c0a-1048-4295-b043-eaee555f737f" />
 <img width="907" height="669" alt="Screenshot 2026-04-17 at 18 39 09" src="https://github.com/user-attachments/assets/b97358bd-aa58-4b6d-802a-921204707eb4" />
 <img width="907" height="705" alt="Screenshot 2026-04-17 at 18 39 50" src="https://github.com/user-attachments/assets/981027ca-1c3f-45b3-bdf3-99bcca362833" />
 <img width="907" height="72" alt="Screenshot 2026-04-17 at 18 40 21" src="https://github.com/user-attachments/assets/98c073a1-116a-4bce-ab1d-083f4628e795" />
