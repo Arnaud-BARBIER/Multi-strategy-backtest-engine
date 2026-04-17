@@ -25,7 +25,14 @@ At a high level, it helps structure the workflow from:
 Instead of rebuilding these layers for each new strategy, the user works inside a reusable architecture where the research logic remains explicit and modular.
 
 ---
+### Architecture
 
+<img width="905" height="603" alt="Screenshot 2026-04-17 at 18 16 25" src="https://github.com/user-attachments/assets/0eff51c2-ecf7-48c3-8657-69d300018345" />
+<img width="906" height="564" alt="Screenshot 2026-04-17 at 18 17 14" src="https://github.com/user-attachments/assets/724d76a3-9d69-4866-b10f-ad7d5bf89693" />
+<img width="905" height="712" alt="Screenshot 2026-04-17 at 18 17 46" src="https://github.com/user-attachments/assets/132b66b1-ad5b-44ce-937c-4a3ea4d84a71" />
+<img width="906" height="34" alt="Screenshot 2026-04-17 at 18 18 30" src="https://github.com/user-attachments/assets/6716b6ac-b48e-4932-a261-9123119ea727" />
+
+--- 
 ## Technical layers
 
 ### 1. Data layer
