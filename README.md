@@ -10,8 +10,6 @@ The engine is designed for bar-based research workflows and supports signal insp
 
 ## What this project is
 
-This is not just a collection of trading scripts.
-
 It is a research framework built to help move from a raw strategy idea to a reproducible and interpretable backtest workflow, with a clear separation between:
 
 - signal generation
