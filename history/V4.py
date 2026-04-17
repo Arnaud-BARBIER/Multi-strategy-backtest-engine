@@ -1833,3 +1833,98 @@ class NJITEngine:
             setup_dfs=setup_dfs,
             decision_cfg=decision_cfg,
         )
+
+
+#------------------------------- tests ------------------------------------
+
+pipeline = DataPipeline("/Users/arnaudbarbier/Desktop/Quant reaserch/Metals/CSV/Metals")
+cfg = BacktestConfig(
+    # signal defaults
+    period_1=30,
+    period_2=100,
+
+    # entry logic
+    entry_delay=1,
+    prev_candle_direction=False,
+
+    # session filters
+    session_1=("08:00", "12:00"),
+    session_2=("13:00", "17:00"),
+    session_3=None,
+
+    # candle filter
+    candle_size_filter=True,
+    min_size_pct=0.000,
+    max_size_pct=0.1,
+
+    # TP / SL
+    tp_pct=0.002,
+    sl_pct=0.01,
+
+    # break-even
+    be_trigger_pct=0.005,
+    be_offset_pct=0.001,
+    be_delay_bars=5,
+
+    # runner trailing
+    trailing_trigger_pct=0.005,
+    runner_trailing_mult=3,
+
+    # entry cap logic
+    me_max=3,
+    me_period=10,
+    me_reset_mode=3,
+
+    # metrics
+    track_mae_mfe=True,
+    hold_minutes=2 * 60,
+    bar_duration_min=5,
+
+    # optional preprocessing
+    timezone_shift=1,
+)
+
+# appel type avec stratégie ema close par défaut 
+njit_engine = NJITEngine(
+    pipeline, "XAUUSD_M5", "2026-01-02", "2026-01-10", cfg,    MAX_TRADES   = 50_000,
+    MAX_POS      = 600
+)
+
+
+signals = njit_engine.signals_ema(
+    span1 = 30,#cfg.period_1,   # 50
+    span2 = cfg.period_2,   # 100
+    mode  = "close_vs_ema", # même logique que Strategy_Signal.ema_cross()
+)
+
+rets, metrics_v2 = njit_engine.run(
+    signals,
+    tp_pct=0.002,
+    sl_pct=0.01,
+    be_trigger_pct=0.005,
+    be_offset_pct=0.001,
+    be_delay_bars=5,
+    me_max=1,
+    me_reset_mode=2,
+    me_period=100,
+    session_1 = ("08:00", "12:00"),
+    session_2 = ("13:00", "17:00"),
+    session_3 = ("01:30", "06:00"),  # désactivée
+    track_mae_mfe=True,
+    hold_minutes=2*60,
+    bar_duration_min=5,
+    candle_size_filter=True, min_size_pct=0.000, max_size_pct=0.1,
+    entry_delay=1,  
+    prev_candle_direction=False,
+    trailing_trigger_pct=0.005,
+    runner_trailing_mult=3,
+    plot=True,
+    #entry_on_close=True,
+    entry_on_signal_close_price=True,
+    cooldown_entries=1, cooldown_bars=1000, cooldown_mode=2,
+    multi_setup_mode=False,
+)
+
+print(metrics_v2)
+#print("cfg trailing:", cfg.trailing_trigger_pct, cfg.runner_trailing_mult)
+print("V2 reasons:", metrics_v2["trades_df"]["reason"].value_counts())
