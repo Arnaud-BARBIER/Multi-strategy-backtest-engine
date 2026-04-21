@@ -4,7 +4,6 @@ This guide documents the low-level framework directly from the source code.
 
 Scope:
 - included: `BacktestConfig`, `DataPipeline`, `Data`, `Feature`, `FeatureRuntime`, `FeatureResult`, `SetupSpec`, `DecisionConfig`, `RegimePolicy`, `RegimeContext`, `ExitProfileSpec`, `ExitStrategySpec`, `ExecutionContext`, `TradeContextEngine`, `NJITEngine`, and their related helpers
-- excluded on purpose: `StrategyEngine`, `BacktestBundle`, and higher-level convenience wrappers
 
 The goal is to explain the framework as a coherent research workflow:
 
