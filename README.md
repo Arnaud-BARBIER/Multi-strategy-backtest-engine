@@ -2,6 +2,8 @@
 
 A modular Python backtesting framework for systematic strategy research on OHLCV data.
 
+Take a strategy idea → test it under consistent execution assumptions → analyze performance, risk, and market conditions where it works → refine how conditional edge is captured
+
 This project was built to make quantitative research more structured, testable, and reusable. With today’s AI tools, creating trading ideas or coding individual strategies is becoming increasingly accessible. The real challenge is not generation, but validation. If each strategy is built and tested in isolation, especially through one-off AI-generated code, the research process quickly becomes inconsistent, hard to trust, and inefficient. A reliable framework matters because it provides a stable environment in which ideas can be tested under coherent assumptions and compared meaningfully. Instead of rewriting execution logic, filters, and risk rules for each new idea, the framework separates signal research from trade simulation so that strategies can be evaluated inside a consistent execution environment.
 
 The engine is designed for bar-based research workflows and supports signal inspection, regime-aware strategy routing, execution-aware backtesting, and trade-level post-analysis.
