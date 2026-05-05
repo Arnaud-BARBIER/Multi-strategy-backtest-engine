@@ -1576,10 +1576,24 @@
         <mxCell id="6dhOamhlTKAIieXlP7nk-122" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;setup_exec_cfg = self._build_setup_execution_cfg_arrays(&lt;/span&gt;&lt;/div&gt;" vertex="1">
           <mxGeometry height="60" width="310" x="-980" y="-1380" as="geometry" />
         </mxCell>
-        <mxCell id="nOHTNKw7TvhBWdolb10K-71" edge="1" parent="1" source="6dhOamhlTKAIieXlP7nk-128" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.75;entryY=1;entryDx=0;entryDy=0;" target="nOHTNKw7TvhBWdolb10K-3">
-          <mxGeometry relative="1" as="geometry" />
+        <mxCell id="nOHTNKw7TvhBWdolb10K-148" edge="1" parent="1" source="6dhOamhlTKAIieXlP7nk-128" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="nOHTNKw7TvhBWdolb10K-147">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-3560" y="-2170" />
+              <mxPoint x="-3598" y="-2170" />
+              <mxPoint x="-3821" y="-2169" />
+            </Array>
+          </mxGeometry>
         </mxCell>
-        <mxCell id="nOHTNKw7TvhBWdolb10K-72" edge="1" parent="1" source="6dhOamhlTKAIieXlP7nk-128" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="nOHTNKw7TvhBWdolb10K-11">
+        <mxCell id="nOHTNKw7TvhBWdolb10K-149" edge="1" parent="1" source="6dhOamhlTKAIieXlP7nk-128" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.75;entryY=0;entryDx=0;entryDy=0;" target="nOHTNKw7TvhBWdolb10K-11">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-3560" y="-2169" />
+              <mxPoint x="-4100" y="-2169" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="nOHTNKw7TvhBWdolb10K-152" edge="1" parent="1" source="6dhOamhlTKAIieXlP7nk-128" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.75;entryY=1;entryDx=0;entryDy=0;" target="nOHTNKw7TvhBWdolb10K-3">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="6dhOamhlTKAIieXlP7nk-128" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;font style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 250, 22));&quot;&gt;run_orders()&lt;/font&gt;" vertex="1">
@@ -1616,7 +1630,7 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="6dhOamhlTKAIieXlP7nk-142" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;" value="&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; if order_entry_guard and cfg is not None:&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &lt;font style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 88, 169));&quot;&gt;guard_cfg&lt;/font&gt; = self._build_order_guard_cfg_arrays(&lt;/span&gt;&lt;/div&gt;" vertex="1">
-          <mxGeometry height="60" width="320" x="-4364.37" y="-1985" as="geometry" />
+          <mxGeometry height="60" width="320" x="-4548" y="-1975" as="geometry" />
         </mxCell>
         <mxCell id="6dhOamhlTKAIieXlP7nk-147" edge="1" parent="1" source="6dhOamhlTKAIieXlP7nk-143" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="6dhOamhlTKAIieXlP7nk-144" value="">
           <mxGeometry relative="1" as="geometry" />
@@ -1630,44 +1644,35 @@
         <mxCell id="6dhOamhlTKAIieXlP7nk-144" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;" value="&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &lt;font style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 22, 174));&quot;&gt;prep&lt;/font&gt; = build_order_prep(&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; order_specs=order_specs,&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; order_policies=order_policies,&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; df=price_df,&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; feature_df=feature_df,&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; feature_map=feature_context.col_map,&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; entry_guard_fn=&lt;font style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 2, 48));&quot;&gt;entry_guard_fn&lt;/font&gt;,&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; )&lt;/span&gt;&lt;/div&gt;" vertex="1">
           <mxGeometry height="140" width="255.62" x="-4332.19" y="-1760" as="geometry" />
         </mxCell>
-        <mxCell id="6dhOamhlTKAIieXlP7nk-155" edge="1" parent="1" source="6dhOamhlTKAIieXlP7nk-148" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="6dhOamhlTKAIieXlP7nk-154" value="">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="6dhOamhlTKAIieXlP7nk-148" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;span style=&quot;font-size: 12px;&quot;&gt;def _build_order_events_df(self, &lt;font style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 21, 173));&quot;&gt;prep&lt;/font&gt;: OrderPrep, bar_index, event_tuple):&lt;/span&gt;" vertex="1">
-          <mxGeometry height="60" width="410" x="-3525" y="-1820" as="geometry" />
-        </mxCell>
-        <mxCell id="6dhOamhlTKAIieXlP7nk-157" edge="1" parent="1" source="6dhOamhlTKAIieXlP7nk-149" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="6dhOamhlTKAIieXlP7nk-148" value="">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="nOHTNKw7TvhBWdolb10K-21" edge="1" parent="1" source="6dhOamhlTKAIieXlP7nk-149" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="nOHTNKw7TvhBWdolb10K-20" value="">
+        <mxCell id="nOHTNKw7TvhBWdolb10K-159" edge="1" parent="1" source="6dhOamhlTKAIieXlP7nk-149" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" target="nOHTNKw7TvhBWdolb10K-158">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="6dhOamhlTKAIieXlP7nk-149" parent="1" style="rhombus;whiteSpace=wrap;html=1;" value="&lt;div&gt;&lt;span style=&quot;text-align: left;&quot;&gt;prepare_order_inputs&lt;/span&gt;&lt;/div&gt;return&amp;nbsp;&lt;font style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 21, 173));&quot;&gt;prep&lt;/font&gt;: OrderPrep" vertex="1">
           <mxGeometry height="100" width="121" x="-3740" y="-1840" as="geometry" />
         </mxCell>
-        <mxCell id="6dhOamhlTKAIieXlP7nk-159" edge="1" parent="1" source="6dhOamhlTKAIieXlP7nk-154" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="6dhOamhlTKAIieXlP7nk-158" value="">
+        <mxCell id="nOHTNKw7TvhBWdolb10K-172" edge="1" parent="1" source="6dhOamhlTKAIieXlP7nk-154" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" target="6dhOamhlTKAIieXlP7nk-158">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="6dhOamhlTKAIieXlP7nk-154" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="filters settings helpers&amp;nbsp;&lt;div&gt;_pares_session&lt;/div&gt;" vertex="1">
-          <mxGeometry height="50" width="120" x="-3380" y="-1720" as="geometry" />
+          <mxGeometry height="50" width="120" x="-3296.25" y="-1618" as="geometry" />
         </mxCell>
         <mxCell id="nOHTNKw7TvhBWdolb10K-24" edge="1" parent="1" source="6dhOamhlTKAIieXlP7nk-158" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="6dhOamhlTKAIieXlP7nk-160" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="6dhOamhlTKAIieXlP7nk-158" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;" value="&lt;span style=&quot;font-size: 12px;&quot;&gt;order_guard_cfg =&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: transparent; font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; _build_order_guard_cfg_arrays(&lt;/span&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; self,&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; fallback_cfg,&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; setup_cfg_binding=None,&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; order_specs=None,&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; execution_context=None,&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; session_1=None,&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; session_2=None,&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; session_3=None,&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; ):&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;output :&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;order_guard_cfg&amp;nbsp;&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;=&amp;nbsp; out&amp;nbsp;&lt;/span&gt;&lt;/div&gt;" vertex="1">
-          <mxGeometry height="170" width="324.06" x="-3480" y="-1640" as="geometry" />
+          <mxGeometry height="170" width="324.06" x="-3316" y="-1550" as="geometry" />
         </mxCell>
         <mxCell id="nOHTNKw7TvhBWdolb10K-25" edge="1" parent="1" source="6dhOamhlTKAIieXlP7nk-160" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="6dhOamhlTKAIieXlP7nk-161" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="6dhOamhlTKAIieXlP7nk-160" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;span style=&quot;font-size: 12px;&quot;&gt;result=backtest_orders_njit()&lt;/span&gt;" vertex="1">
-          <mxGeometry height="60" width="188.75" x="-3412.35" y="-1430" as="geometry" />
+          <mxGeometry height="60" width="188.75" x="-3275.91" y="-1305" as="geometry" />
         </mxCell>
         <mxCell id="nOHTNKw7TvhBWdolb10K-27" edge="1" parent="1" source="6dhOamhlTKAIieXlP7nk-161" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="nOHTNKw7TvhBWdolb10K-26" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="6dhOamhlTKAIieXlP7nk-161" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;span style=&quot;font-size: 12px;&quot;&gt;order_events_df = self._build_order_events_df&lt;/span&gt;" vertex="1">
-          <mxGeometry height="60" width="189.37" x="-3410.31" y="-1325" as="geometry" />
+          <mxGeometry height="30.37" width="293.06" x="-3328.06" y="-1185.1899999999998" as="geometry" />
         </mxCell>
         <mxCell id="nOHTNKw7TvhBWdolb10K-77" edge="1" parent="1" source="nOHTNKw7TvhBWdolb10K-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.25;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="nOHTNKw7TvhBWdolb10K-76">
           <mxGeometry relative="1" as="geometry" />
@@ -1687,11 +1692,11 @@
         <mxCell id="nOHTNKw7TvhBWdolb10K-10" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;" value="&lt;span style=&quot;font-size: 12px;&quot;&gt;_empty_order_prep(n_bars, feature_names)&lt;/span&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;_coerce_orders_df(_call_order_fn(spec, df, feature_df))&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; empty_policy = _clean_string_series(out[&quot;order_policy&quot;]).str.len() == 0&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;font-size: 12px;&quot;&gt;&lt;br&gt;&lt;/div&gt;&lt;/div&gt;" vertex="1">
           <mxGeometry height="100" width="200" x="-909" y="-3210" as="geometry" />
         </mxCell>
-        <mxCell id="nOHTNKw7TvhBWdolb10K-13" edge="1" parent="1" source="nOHTNKw7TvhBWdolb10K-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.75;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="6dhOamhlTKAIieXlP7nk-140">
+        <mxCell id="nOHTNKw7TvhBWdolb10K-150" edge="1" parent="1" source="nOHTNKw7TvhBWdolb10K-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.75;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" target="6dhOamhlTKAIieXlP7nk-140">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="nOHTNKw7TvhBWdolb10K-11" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;" value="&lt;span style=&quot;font-size: 12px;&quot;&gt;orders = self._multi_asset_orders_df_to_order_prep(orders, features=features)&lt;/span&gt;" vertex="1">
-          <mxGeometry height="60" width="330" x="-4030" y="-2140" as="geometry" />
+          <mxGeometry height="60" width="330" x="-4347.5" y="-2149" as="geometry" />
         </mxCell>
         <mxCell id="nOHTNKw7TvhBWdolb10K-109" edge="1" parent="1" source="nOHTNKw7TvhBWdolb10K-20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="nOHTNKw7TvhBWdolb10K-108" value="">
           <mxGeometry relative="1" as="geometry" />
@@ -1703,7 +1708,7 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="nOHTNKw7TvhBWdolb10K-26" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="metrics = compute_metrics_full(" vertex="1">
-          <mxGeometry height="60" width="207.97" x="-3419.6099999999997" y="-1229" as="geometry" />
+          <mxGeometry height="60" width="207.97" x="-3255.6099999999997" y="-1104.37" as="geometry" />
         </mxCell>
         <mxCell id="nOHTNKw7TvhBWdolb10K-36" edge="1" parent="1" source="nOHTNKw7TvhBWdolb10K-28" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" target="nOHTNKw7TvhBWdolb10K-33">
           <mxGeometry relative="1" as="geometry" />
@@ -1711,23 +1716,26 @@
         <mxCell id="nOHTNKw7TvhBWdolb10K-37" edge="1" parent="1" source="nOHTNKw7TvhBWdolb10K-28" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="nOHTNKw7TvhBWdolb10K-34">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
+        <mxCell id="nOHTNKw7TvhBWdolb10K-176" edge="1" parent="1" source="nOHTNKw7TvhBWdolb10K-28" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" target="nOHTNKw7TvhBWdolb10K-175">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
         <mxCell id="nOHTNKw7TvhBWdolb10K-28" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;" value="&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; _attach_stateful_local_metrics(&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; metrics,&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; local_result,&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; runtime_bar_index,&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; local_state_format,&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; )&lt;/span&gt;&lt;/div&gt;" vertex="1">
-          <mxGeometry height="90" width="210" x="-3410.31" y="-1120" as="geometry" />
+          <mxGeometry height="90" width="210" x="-3246.31" y="-995.37" as="geometry" />
         </mxCell>
         <mxCell id="nOHTNKw7TvhBWdolb10K-40" edge="1" parent="1" source="nOHTNKw7TvhBWdolb10K-33" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="nOHTNKw7TvhBWdolb10K-38">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="nOHTNKw7TvhBWdolb10K-33" parent="1" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;align=left;" value="&lt;blockquote style=&quot;margin: 0 0 0 40px; border: none; padding: 0px;&quot;&gt;&lt;div style=&quot;&quot;&gt;if getattr(self, &quot;is_multi_asset&quot;, False) and full_context:&lt;/div&gt;&lt;div style=&quot;&quot;&gt;build_full_context(&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; orders_df=metrics[&quot;orders_df&quot;],&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; trades_df=metrics[&quot;trades_df&quot;],&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; metrics=metrics,&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; features=features,&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; meta={&quot;mode&quot;: &quot;multi_asset&quot;, &quot;execution&quot;: &quot;unified_run_orders&quot;},&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; local_arrays=metrics.get(&quot;stateful_local_arrays&quot;),&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; local_df=metrics.get(&quot;stateful_local_df&quot;),&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; )&lt;/div&gt;&lt;/blockquote&gt;" vertex="1">
-          <mxGeometry height="150" width="458" x="-3292" y="-990" as="geometry" />
+          <mxGeometry height="150" width="458" x="-3128" y="-865.37" as="geometry" />
         </mxCell>
         <mxCell id="nOHTNKw7TvhBWdolb10K-39" edge="1" parent="1" source="nOHTNKw7TvhBWdolb10K-34" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="nOHTNKw7TvhBWdolb10K-38">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="nOHTNKw7TvhBWdolb10K-34" parent="1" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;align=left;" value="&lt;blockquote style=&quot;margin: 0px 0px 0px 40px; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; padding: 0px;&quot;&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;if plot_after:&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;self._plot_backtest(&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&lt;div&gt;&amp;nbsp;if plot_results:&lt;/div&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; _plot_results(metrics, label=label)&lt;/div&gt;&lt;/span&gt;&lt;/div&gt;&lt;/blockquote&gt;" vertex="1">
-          <mxGeometry height="80" width="213.75" x="-3510" y="-990" as="geometry" />
+          <mxGeometry height="80" width="213.75" x="-3346" y="-865.37" as="geometry" />
         </mxCell>
         <mxCell id="nOHTNKw7TvhBWdolb10K-38" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;span style=&quot;font-size: 12px;&quot;&gt;&lt;font style=&quot;color: light-dark(rgb(0, 0, 0), rgb(244, 255, 30));&quot;&gt;return&lt;/font&gt; rets, metrics&lt;/span&gt;" vertex="1">
-          <mxGeometry height="60" width="120" x="-3343.6" y="-750" as="geometry" />
+          <mxGeometry height="60" width="120" x="-3179.6" y="-625.37" as="geometry" />
         </mxCell>
         <mxCell id="nOHTNKw7TvhBWdolb10K-69" edge="1" parent="1" source="nOHTNKw7TvhBWdolb10K-42" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=0.75;entryDx=0;entryDy=0;" target="nOHTNKw7TvhBWdolb10K-6">
           <mxGeometry relative="1" as="geometry" />
@@ -1832,7 +1840,7 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="nOHTNKw7TvhBWdolb10K-96" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;" value="&lt;span style=&quot;font-size: 12px;&quot;&gt;patched_orders, patch_df, rejected_df = &lt;font style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 35, 244));&quot;&gt;from .multi_asset_engine&lt;/font&gt;&amp;nbsp;apply_multi_asset_stateful_order_outputs(&amp;nbsp;&lt;/span&gt;" vertex="1">
-          <mxGeometry height="60" width="360" x="-4580" y="-2610" as="geometry" />
+          <mxGeometry height="60" width="360" x="-4580" y="-2670" as="geometry" />
         </mxCell>
         <mxCell id="nOHTNKw7TvhBWdolb10K-102" edge="1" parent="1" source="nOHTNKw7TvhBWdolb10K-97" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.25;entryY=1;entryDx=0;entryDy=0;" target="nOHTNKw7TvhBWdolb10K-96">
           <mxGeometry relative="1" as="geometry" />
@@ -1941,6 +1949,52 @@
         </mxCell>
         <mxCell id="nOHTNKw7TvhBWdolb10K-133" parent="1" style="rhombus;whiteSpace=wrap;html=1;align=left;" value="&lt;span style=&quot;font-size: 12px;&quot;&gt;&lt;font style=&quot;color: light-dark(rgb(0, 0, 0), rgb(12, 255, 48));&quot;&gt;return&lt;/font&gt; final_rets, final_metrics&lt;/span&gt;" vertex="1">
           <mxGeometry height="80" width="80" x="-4540" y="-1070" as="geometry" />
+        </mxCell>
+        <mxCell id="nOHTNKw7TvhBWdolb10K-146" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;" value="Reste a répertorié :&amp;nbsp;&lt;div&gt;Multi-Asset&amp;nbsp;&lt;/div&gt;&lt;div&gt;Allocation mode pour run_order et run&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="208.59" x="-4108.59" y="-3110" as="geometry" />
+        </mxCell>
+        <mxCell id="nOHTNKw7TvhBWdolb10K-151" edge="1" parent="1" source="nOHTNKw7TvhBWdolb10K-147" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="6dhOamhlTKAIieXlP7nk-140" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="nOHTNKw7TvhBWdolb10K-147" parent="1" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;align=left;" value="&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; if allocation is not None:&lt;font style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 25, 236));&quot;&gt;&amp;nbsp;&lt;/font&gt;&lt;/span&gt;&lt;span style=&quot;background-color: transparent; font-size: 12px;&quot;&gt;&lt;font style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 25, 236));&quot;&gt;from .portfolio_allocation&lt;/font&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; orders = normalize_order_weights(orders, allocation)&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="368.59" x="-4005.31" y="-2149" as="geometry" />
+        </mxCell>
+        <mxCell id="nOHTNKw7TvhBWdolb10K-161" edge="1" parent="1" source="nOHTNKw7TvhBWdolb10K-158" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="nOHTNKw7TvhBWdolb10K-20">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-3453" y="-1640" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="nOHTNKw7TvhBWdolb10K-163" edge="1" parent="1" source="nOHTNKw7TvhBWdolb10K-158" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.75;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;" target="nOHTNKw7TvhBWdolb10K-162">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="nOHTNKw7TvhBWdolb10K-158" parent="1" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;align=left;" value="&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; if allocation is not None:&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; normalized_orders_df = normalize_order_weights(orders.orders_df, allocation)&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; if len(normalized_orders_df) == len(orders.orders_df):&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; if len(old_weight) != len(new_weight) or not np.allclose(&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; old_weight.to_numpy(dtype=np.float64),&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; new_weight.to_numpy(dtype=np.float64),&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; equal_nan=True,&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; ):&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; orders = self._replace_order_weights(orders, normalized_orders_df)&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="170" width="470" x="-3570.47" y="-1900" as="geometry" />
+        </mxCell>
+        <mxCell id="nOHTNKw7TvhBWdolb10K-170" edge="1" parent="1" source="nOHTNKw7TvhBWdolb10K-162" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" target="nOHTNKw7TvhBWdolb10K-169">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="nOHTNKw7TvhBWdolb10K-162" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;span style=&quot;font-size: 12px;&quot;&gt;compiled_allocation = compile_allocation_for_orders(orders.orders_df, allocation)&lt;/span&gt;" vertex="1">
+          <mxGeometry height="40" width="470" x="-3070" y="-1740" as="geometry" />
+        </mxCell>
+        <mxCell id="nOHTNKw7TvhBWdolb10K-174" edge="1" parent="1" source="nOHTNKw7TvhBWdolb10K-167" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;endArrow=none;endFill=0;" target="6dhOamhlTKAIieXlP7nk-161">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="nOHTNKw7TvhBWdolb10K-167" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;span style=&quot;font-size: 12px;&quot;&gt;def _build_order_events_df(self, &lt;font style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 21, 173));&quot;&gt;prep&lt;/font&gt;: OrderPrep, bar_index, event_tuple):&lt;/span&gt;" vertex="1">
+          <mxGeometry height="60" width="410" x="-3010" y="-1200" as="geometry" />
+        </mxCell>
+        <mxCell id="nOHTNKw7TvhBWdolb10K-171" edge="1" parent="1" source="nOHTNKw7TvhBWdolb10K-169" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.75;exitDx=0;exitDy=0;" target="6dhOamhlTKAIieXlP7nk-154">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="nOHTNKw7TvhBWdolb10K-169" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;" value="&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; local_pack = (&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; empty_local_action_pack(len(runtime_opens))&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; if local_action_pack is None&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; else coerce_local_action_pack(local_action_pack, n=len(runtime_opens))&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; )&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="90" width="450" x="-3120" y="-1660" as="geometry" />
+        </mxCell>
+        <mxCell id="nOHTNKw7TvhBWdolb10K-177" edge="1" parent="1" source="nOHTNKw7TvhBWdolb10K-175" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="nOHTNKw7TvhBWdolb10K-38">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="nOHTNKw7TvhBWdolb10K-175" parent="1" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;align=left;" value="&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; if allocation_result:&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; allocation_df = self._build_allocation_df(&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; runtime_bar_index,&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; allocation_result,&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; compiled_allocation.group_external_id,&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; )&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="85.37" width="295" x="-2665" y="-862.69" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
