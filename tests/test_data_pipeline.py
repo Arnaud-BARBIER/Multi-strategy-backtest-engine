@@ -11,7 +11,7 @@ from _support import prepare_import_path
 
 prepare_import_path()
 
-import Backtest_Git as bt  # noqa: E402
+import backtest_engine as bt  # noqa: E402
 
 
 class TestDataPipeline(unittest.TestCase):
