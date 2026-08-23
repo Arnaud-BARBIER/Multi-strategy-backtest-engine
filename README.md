@@ -2,7 +2,7 @@
 
 [![tests](https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine/actions/workflows/tests.yml/badge.svg)](https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine/actions/workflows/tests.yml)
 
-**A backtesting engine where refuting a result costs one line – which is why it happens.**
+**A backtesting engine where refuting a result costs one line, which is why it happens.**
 
 ---
 
@@ -12,15 +12,15 @@ Two halves that are only worth anything together.
 
 **An accounting core.** A Numba-compiled multi-asset kernel over a ledger that closes:
 cash tiers, borrow tranches with overnight carry, multi-currency, accrued fees,
-dividends. Its job is to make a number *real* – to ensure that the return being measured
+dividends. Its job is to make a number *real*, to ensure that the return being measured
 is one an account could actually have earned, after financing, fees and currency.
 
 **A validation layer.** Baselines, nulls, sample-size accounting, carrier resolution. Its
 job is to say when that number *means nothing*.
 
-The design constraint is the cost of the second half. Refuting a result properly – a
+The design constraint is the cost of the second half. Refuting a result properly, a
 volatility-matched baseline, a sizing null, a reachable frontier, in/out-of-sample
-discipline – normally takes longer than producing the result in the first place, which is
+discipline, normally takes longer than producing the result in the first place, which is
 why it is usually skipped, and why it stays an intention rather than a practice. Here a
 run records itself, and each refutation is a single call against that record.
 
@@ -32,7 +32,7 @@ refuted out of virtue. It was refuted because refuting was the cheapest thing to
 ## Result
 
 Textbook mean-variance optimisation, run through the validation layer, does not beat
-equal weighting on this configuration – and the layer reports that it cannot detect a
+equal weighting on this configuration, and the layer reports that it cannot detect a
 sizing effect either way.
 
 | | strategy | 1/N absolute | 1/N matched | gap vs absolute |
@@ -42,14 +42,14 @@ sizing effect either way.
 | max drawdown | −24.76 % | −32.28 % | −25.03 % | +7.52 pt |
 | certainty equivalent, γ = 3 | 1.26 % | 2.23 % | 1.88 % | −0.96 pt |
 
-**Verdict: `ADDS_NOTHING`** – the certainty equivalent is 0.96 pt/year lower at γ = 3.
+**Verdict: `ADDS_NOTHING`**, the certainty equivalent is 0.96 pt/year lower at γ = 3.
 
 Both baselines are rebuilt by the engine itself, through the same accounting machinery as
 the strategy. They pay the same 2 % management fee, the same 5 % performance fee, the
 same spread and commission, in the same currencies. **The only thing swapped is the
 weighting rule.** A baseline computed gross of fees against a strategy computed net is
 the most common way to manufacture an edge that does not exist; here it is not possible,
-because the baseline is not computed – it is *run*.
+because the baseline is not computed, it is *run*.
 
 The two levels differ in one respect: `absolute` strips the cash reserves and stays
 invested, `matched` keeps every piece of machinery including the 30 % of reserves. The
@@ -73,7 +73,7 @@ On top of it sits the cash policy under test: a 20 % dynamic reserve and a 10 % 
 reserve, a 2 % annual management fee accrued yearly and paid quarterly, a 5 %
 performance fee with a high-water mark, and spot execution costs.
 
-Nothing proprietary – it is a textbook construction, used here as a subject with a known
+Nothing proprietary, it is a textbook construction, used here as a subject with a known
 answer.
 
 The question is not whether it makes money. The question is whether the framework can
@@ -83,7 +83,7 @@ The finding sits in a known family. DeMiguel, Garlappi & Uppal (2009), *Optimal 
 Naive Diversification*, show that 1/N beats mean-variance out of sample across most of
 the datasets they test, because estimation error on the inputs costs more than the
 optimisation recovers. The objective used here is a downside-risk one rather than
-mean-variance, so this is not a replication of their result – but it is the same
+mean-variance, so this is not a replication of their result, but it is the same
 mechanism: a rule fitted to a 100-bar window, applied to the next 50 bars, losing to a
 rule that estimates nothing.
 
@@ -96,13 +96,13 @@ sample size that would be needed to settle it.
 
 | component | difference | t | reading |
 |---|---:|---:|---|
-| weighting – strategy vs 1/N with identical machinery | −0.84 pt | −0.63 | not detectable |
-| cash policy – the 30 % of reserves, isolated | −1.02 pt | −1.37 | not detectable; ~99 decisions would be needed |
-| **total** – strategy vs 1/N fully invested | **−1.86 pt** | | |
+| weighting, strategy vs 1/N with identical machinery | −0.84 pt | −0.63 | not detectable |
+| cash policy, the 30 % of reserves, isolated | −1.02 pt | −1.37 | not detectable; ~99 decisions would be needed |
+| **total**, strategy vs 1/N fully invested | **−1.86 pt** | | |
 
 The sizing null works by keeping the basket the strategy chose at each rebalance and
 replacing its weights with equal weights inside that basket. The optimiser's output is
-destroyed; everything else – dates, names, cash, fees, costs – is held fixed. What
+destroyed; everything else, dates, names, cash, fees, costs, is held fixed. What
 disappears is exactly the information the optimiser claims to add.
 
 Two things are worth stating plainly.
@@ -117,12 +117,12 @@ N_eff = 46 decisions -> nothing finer than p ~ 0.02 is resolvable here
 ```
 
 **The mechanism that is supposed to earn its keep is the one that shows least.** The
-optimiser – the part with the mathematics in it, the part that justifies the whole
-construction – moves the result by −0.84 pt with a t of −0.63. Meanwhile the plumbing
+optimiser, the part with the mathematics in it, the part that justifies the whole
+construction, moves the result by −0.84 pt with a t of −0.63. Meanwhile the plumbing
 underneath it, a cash reserve rule with no theory behind it at all, moves it by more.
 That ordering is the result.
 
-### Stochastic discount factor – does the cash actually pay in bad states?
+### Stochastic discount factor, does the cash actually pay in bad states?
 
 The framework holds cash and redeploys it. The question is whether that cash arrives
 when it is worth the most, or merely reduces exposure everywhere.
@@ -137,7 +137,7 @@ Returns are weighted by the stochastic discount factor m ∝ (1 + r_M)^(−γ), 
 the world where the benchmark fell count for more.
 
 The weighted return **falls** as γ rises. Deployments do not concentrate in bad states.
-This is de-risking, not insurance – the distinction that a raw return comparison cannot
+This is de-risking, not insurance, the distinction that a raw return comparison cannot
 make.
 
 Supporting counts: 26 benchmark drawdown episodes below −10 %; cash deployed in 5 of
@@ -169,12 +169,12 @@ That blend is the reachable frontier, and it is what the strategy has to beat.
 | 0.0 % | −0.74 pt |
 | 2.0 % | −1.42 pt |
 
-**Verdict: `DOMINATED`** – below the capital market line at every risk-free rate tested.
+**Verdict: `DOMINATED`**, below the capital market line at every risk-free rate tested.
 The same risk was available with more return by simply holding less of the benchmark.
 
 The rate is swept, not assumed, because the conclusion depends on it. Over the tested
 range the sign never changes, and extrapolating the relationship, it would take a
-risk-free rate below roughly −2 % to flip the verdict – which is to say the conclusion
+risk-free rate below roughly −2 % to flip the verdict, which is to say the conclusion
 does not rest on the assumption.
 
 One correction matters here and it works against the strategy. A de-levered blend suffers
@@ -221,7 +221,7 @@ not a number.
 
 The series that carries performance depends on the execution mode: closed trades in
 algorithmic mode, NAV-equity in allocation mode, `strategy_twr_index` in investment mode.
-Reading the wrong one produces numbers that are wrong and silent – a measured case in
+Reading the wrong one produces numbers that are wrong and silent, a measured case in
 this project reported a −11.1 % drawdown where the correct carrier gave −5.2 %. Carrier
 selection is therefore resolved by the mode, not by the caller.
 
@@ -230,16 +230,16 @@ selection is therefore resolved by the mode, not by the caller.
 ## Accounting
 
 **Weights are the unit of the *weighted return*. They are not the unit of what an account
-actually earned.** Everything between those two quantities – management and performance
+actually earned.** Everything between those two quantities, management and performance
 fees on their own clocks, execution costs that depend on turnover rather than position,
 financing whose carry depends on how long a borrow tranche has been open, currency
-translation, drift between rebalance dates – lives outside the space of weights. This
+translation, drift between rebalance dates, lives outside the space of weights. This
 engine exists to compute that difference.
 
 It is also what makes the nulls above legitimate. The sizing null perturbs the weight
 channel *while freezing everything else*: same dates, same fees, same costs, same
 currencies. That freeze is what makes −0.84 pt attributable to the optimiser. Without an
-accounting core there is nothing to freeze, and the fee load wanders into the residual –
+accounting core there is nothing to freeze, and the fee load wanders into the residual,
 which is how a strategy net of fees ends up being compared against a baseline that is
 not.
 
@@ -258,16 +258,16 @@ features.
 What the ledger models, all of it exercised by the identities above rather than merely
 implemented:
 
-- **Cash tiers** – fixed and dynamic reserve, tappable cushion, deep-reserve vault with
+- **Cash tiers**, fixed and dynamic reserve, tappable cushion, deep-reserve vault with
   auto-restore
-- **Borrowing** – persistent tranches with overnight carry, closed only by policy
+- **Borrowing**, persistent tranches with overnight carry, closed only by policy
   (margin, expiration) or by an explicit action, per-asset and per-group targeting
-- **Multi-currency** – cross-rate triangulation when the base currency and the asset
+- **Multi-currency**, cross-rate triangulation when the base currency and the asset
   currencies do not share a leg
-- **Fees** – management fee accrued annually and paid quarterly, on NAV / on profit / on
+- **Fees**, management fee accrued annually and paid quarterly, on NAV / on profit / on
   both; performance fee with high-water mark
-- **Income** – dividends as an FX-neutral cash flow
-- **Intra-period watchers** – barwise scanning with a per-period fire budget, so a
+- **Income**, dividends as an FX-neutral cash flow
+- **Intra-period watchers**, barwise scanning with a per-period fire budget, so a
   triggered rule cannot silently rewrite the whole path
 
 This layer is the part of the project that is least visible in a performance chart and
@@ -278,12 +278,12 @@ most visible in a due-diligence conversation.
 ## Architecture
 
 **What is published.** This repository is a snapshot of the algorithmic engine as it stood
-in April 2026 – enough to define a signal, run it under a realistic execution model, and
+in April 2026, enough to define a signal, run it under a realistic execution model, and
 inspect the resulting trades. It is a working subset, not a reduced demo: the tests below
 run against it.
 
 **What is not.** The allocation and investment engine that produced the results above is
-private – the ledger, the cash and borrowing machinery, the fee accrual, the currency layer,
+private, the ledger, the cash and borrowing machinery, the fee accrual, the currency layer,
 and the validation layer itself. It is covered by 401 tests. Every measurement on this page
 comes from it, and every test described above is specified precisely enough to be
 reimplemented against any return series.
@@ -295,12 +295,12 @@ reimplemented against any return series.
 <img width="907" height="72" alt="Pipeline strip" src="https://github.com/user-attachments/assets/98c073a1-116a-4bce-ab1d-083f4628e795" />
 
 A Numba-compiled multi-asset kernel underneath; the research surface stays in Python.
-Three execution modes – algorithmic, allocation, investment – share one accounting core,
+Three execution modes, algorithmic, allocation, investment, share one accounting core,
 which is why the carrier-selection rule above is enforced rather than documented.
 
 Signal logic and execution assumptions are kept separate by construction: a strategy
 expresses intent, and never sees fills, costs, or cash. That separation is what makes the
-nulls below possible at all – the sizing null works by wrapping the decision function and
+nulls below possible at all, the sizing null works by wrapping the decision function and
 flattening its output, which is only well-defined if the decision function does not know
 about execution.
 
@@ -314,7 +314,7 @@ records what each module is responsible for, so the method can be reimplemented.
 | `validation_run_record.py` | automatic run capture and replay primitive |
 | `validation_window.py` | IS/OOS cloning with a declared warm-up |
 | `validation_naive_baseline.py` | two-level baseline: reserves stripped, or every piece of machinery kept |
-| `validation_nulls.py` | sizing null – wraps the decision function, flattens magnitudes |
+| `validation_nulls.py` | sizing null, wraps the decision function, flattens magnitudes |
 | `validation_sdf.py` | purchasing power as a stochastic discount factor |
 | `validation_leverage.py` | reachable frontier, volatility and drawdown matching |
 | `validation_performance.py` | carrier resolution by mode, triage, PSR / MinTRL, CE, γ* |
@@ -358,9 +358,9 @@ python -m unittest discover -s tests -v
 
 ## Examples
 
-`examples/run_example.py` – a minimal end-to-end run: data in, signal, execution, trades out.
+`examples/run_example.py`, a minimal end-to-end run: data in, signal, execution, trades out.
 
-`examples/Framework_Research_Workflow_Demo.ipynb` – the full algorithmic workflow: features,
+`examples/Framework_Research_Workflow_Demo.ipynb`, the full algorithmic workflow: features,
 setups, regime routing, post-trade analysis. It is a large notebook and renders slowly on
 GitHub; clone it to read it comfortably.
 
