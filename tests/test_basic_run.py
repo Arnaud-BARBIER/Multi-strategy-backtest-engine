@@ -12,7 +12,7 @@ from _support import make_price_df, prepare_import_path
 
 prepare_import_path()
 
-import Backtest_Git as bt  # noqa: E402
+import backtest_engine as bt  # noqa: E402
 
 
 def _fake_backtest_njit(
@@ -89,7 +89,7 @@ def _fake_compute_metrics_full(
 
 class TestBasicRun(unittest.TestCase):
     def test_run_returns_metrics_and_annotated_dataframe(self) -> None:
-        njit_module = importlib.import_module("Backtest_Git.NJITEngine")
+        njit_module = importlib.import_module("backtest_engine.NJITEngine")
 
         cfg = bt.BacktestConfig(
             multi_setup_mode=False,

@@ -11,7 +11,7 @@ from _support import make_price_df, prepare_import_path
 
 prepare_import_path()
 
-import Backtest_Git as bt  # noqa: E402
+import backtest_engine as bt  # noqa: E402
 
 
 def _simple_signal_df(df):
@@ -24,7 +24,7 @@ def _simple_signal_df(df):
 
 class TestSetupPipeline(unittest.TestCase):
     def test_prepare_signal_inputs_and_execution_context(self) -> None:
-        njit_module = importlib.import_module("Backtest_Git.NJITEngine")
+        njit_module = importlib.import_module("backtest_engine.NJITEngine")
 
         with patch.object(njit_module.NJITEngine, "_warmup", lambda self: None):
             engine = bt.NJITEngine(main_df=make_price_df(20), cfg=bt.BacktestConfig())

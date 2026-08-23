@@ -1,165 +1,344 @@
 # Multi-Strategy Backtest Engine
 
-A modular Python backtesting framework for systematic strategy research on OHLCV data.
+[![tests](https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine/actions/workflows/tests.yml/badge.svg)](https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine/actions/workflows/tests.yml)
 
-**Take a strategy idea → test it under consistent execution assumptions → analyze performance, risk, and edge drivers → refine how conditional edge is captured**
-
-This project was built to make quantitative research more structured, testable, and reusable. With today’s AI tools, creating trading ideas or coding individual strategies is becoming increasingly accessible. The real challenge is not generation, but validation. If each strategy is built and tested in isolation, especially through one-off AI-generated code, the research process quickly becomes inconsistent, hard to trust, and inefficient. A reliable framework matters because it provides a stable environment in which ideas can be tested under coherent assumptions and compared meaningfully. Instead of rewriting execution logic, filters, and risk rules for each new idea, the framework separates signal research from trade simulation so that strategies can be evaluated inside a consistent execution environment.
-
-The engine is designed for bar-based research workflows and supports signal inspection, regime-aware strategy routing, execution-aware backtesting, and trade-level post-analysis.
+**A backtesting engine where refuting a result costs one line — which is why it happens.**
 
 ---
 
-## What the framework provides
+## What this is
 
-The framework is organized as a set of research layers that reduce friction between idea generation and reliable evaluation.
+Two halves that are only worth anything together.
 
-At a high level, it helps structure the workflow from:
+**An accounting core.** A Numba-compiled multi-asset kernel over a ledger that closes:
+cash tiers, borrow tranches with overnight carry, multi-currency, accrued fees,
+dividends. Its job is to make a number *real* — to ensure that the return being measured
+is one an account could actually have earned, after financing, fees and currency.
 
-- market data
-- feature construction
-- signal generation
-- setup selection
-- regime conditioning
-- execution and trade management
-- post-trade analysis
+**A validation layer.** Baselines, nulls, sample-size accounting, carrier resolution. Its
+job is to say when that number *means nothing*.
 
-Instead of rebuilding these layers for each new strategy, the user works inside a reusable architecture where the research logic remains explicit and modular.
+The design constraint is the cost of the second half. Refuting a result properly — a
+volatility-matched baseline, a sizing null, a reachable frontier, in/out-of-sample
+discipline — normally takes longer than producing the result in the first place, which is
+why it is usually skipped, and why it stays an intention rather than a practice. Here a
+run records itself, and each refutation is a single call against that record.
 
----
-### Framework Architecture Overview
-
-<img width="907" height="466" alt="Screenshot 2026-04-17 at 18 46 23" src="https://github.com/user-attachments/assets/fa2c9c0a-1048-4295-b043-eaee555f737f" />
-<img width="907" height="669" alt="Screenshot 2026-04-17 at 18 39 09" src="https://github.com/user-attachments/assets/b97358bd-aa58-4b6d-802a-921204707eb4" />
-<img width="907" height="705" alt="Screenshot 2026-04-17 at 18 39 50" src="https://github.com/user-attachments/assets/981027ca-1c3f-45b3-bdf3-99bcca362833" />
-<img width="907" height="72" alt="Screenshot 2026-04-17 at 18 40 21" src="https://github.com/user-attachments/assets/98c073a1-116a-4bce-ab1d-083f4628e795" />
-
---- 
-## Technical layers
-
-### 1. Data layer
-
-The engine starts from standardized OHLCV data and provides a consistent base for multi-timeframe research.  
-This includes data loading, alignment, resampling, and synchronization across execution and higher-timeframe context.
-
-This matters because many research errors come from inconsistent indexing, ad hoc resampling, or manual preprocessing repeated across notebooks.
-
-### 2. Feature layer
-
-Features can be defined, reused, compiled, and attached to the research workflow without being tightly coupled to one specific strategy.  
-This makes it easier to experiment with indicators, contextual variables, and higher-level market descriptors while keeping the logic traceable.
-
-### 3. Signal layer
-
-A strategy can remain simple: it only needs to express entry logic and produce a signal or a setup-compatible output.  
-The framework then handles the rest of the research stack around it.
-
-This separation is important because it prevents execution assumptions from being silently mixed into signal generation.
-
-### 4. Setup layer
-
-Signals can be promoted into named setups and combined inside a multi-setup workflow.  
-This allows different entry logics to coexist, be scored, filtered, and routed in a unified structure rather than being tested in isolation.
-
-### 5. Regime layer
-
-The framework supports regime-aware filtering and routing, so setups can be activated, deactivated, or directionally constrained depending on market state.  
-This makes it possible to test not only whether a strategy works, but also under which conditions it works.
-
-### 6. Execution layer
-
-The backtest engine handles realistic bar-based execution assumptions, including trade management, session filters, forced-flat logic, costs, and configurable exits.  
-This creates a more stable and consistent testing environment than one-off strategy scripts built around a single idea.
-
-Execution costs are modeled explicitly through spread, slippage, and per-lot commission inputs, and are converted into trade-level relative return costs during backtest execution.
-See `docs/technical_guide.md` for the execution cost model and conventions.
-
-### 7. Post-analysis layer
-
-Results can be analyzed at the trade, setup, regime, and context level.  
-This is a key part of the framework: the goal is not only to generate a backtest, but to make the edge interpretable and easier to diagnose.
+That is the whole point, and it is the reason for the result below. The strategy was not
+refuted out of virtue. It was refuted because refuting was the cheapest thing to do.
 
 ---
 
-## Core capabilities
+## Result
 
-- Standardized OHLCV research workflow
-- Multi-timeframe data alignment and context projection
-- Reusable feature and indicator integration
-- Built-in and user-defined signal generation
-- Setup-based signal aggregation and routing
-- Regime-aware filtering and directional control
-- Configurable exit profiles
-- Configurable exit strategies with a Numba-compatible execution bridge
-- Realistic CFD execution assumptions:
-  - spread
-  - commission
-  - slippage
-  - entry delay
-  - session filters
-  - forced-flat logic
-- Trade-level analytics:
-  - MAE / MFE
-  - hold analysis
-  - exit reason breakdown
-  - setup-level and regime-level analysis
-- Context enrichment for post-trade research
-- Fast Numba-based execution
+Textbook mean-variance optimisation, run through the validation layer, does not beat
+equal weighting on this configuration — and the layer reports that it cannot detect a
+sizing effect either way.
+
+| | strategy | 1/N absolute | 1/N matched | gap vs absolute |
+|---|---:|---:|---:|---:|
+| CAGR | 1.94 % | 3.80 % | 2.78 % | **−1.86 pt** |
+| annualised volatility | 8.14 % | 12.26 % | 9.32 % | −4.12 pt |
+| max drawdown | −24.76 % | −32.28 % | −25.03 % | +7.52 pt |
+| certainty equivalent, γ = 3 | 1.26 % | 2.23 % | 1.88 % | −0.96 pt |
+
+**Verdict: `ADDS_NOTHING`** — the certainty equivalent is 0.96 pt/year lower at γ = 3.
+
+Both baselines are rebuilt by the engine itself, through the same accounting machinery as
+the strategy. They pay the same 2 % management fee, the same 5 % performance fee, the
+same spread and commission, in the same currencies. **The only thing swapped is the
+weighting rule.** A baseline computed gross of fees against a strategy computed net is
+the most common way to manufacture an edge that does not exist; here it is not possible,
+because the baseline is not computed — it is *run*.
+
+The two levels differ in one respect: `absolute` strips the cash reserves and stays
+invested, `matched` keeps every piece of machinery including the 30 % of reserves. The
+gap between them is therefore the price of the cash policy, isolated.
+
+<!-- FIGURE F1: cumulative curves (strategy / 1/N absolute / 1/N vol-matched) + drawdown panel. Dark theme _C. -->
+
+Run: 5 assets, daily bars, 2013–2022 in-sample, 2,298 bars, 46 rebalance decisions,
+50-bar rebalance interval, 100-bar covariance lookback. 2022–2026 is held out and has
+not been looked at.
+
+**The strategy under test.** A rolling portfolio optimiser on a downside-risk objective:
+it minimises the longest underwater duration observed over the estimation window. At
+every 50th bar it re-estimates over the trailing 100 bars and solves for long-only
+weights, capped at 35 % per asset, with any weight below 1 % dropped to zero, using 6
+seeded restarts warm-started from the previous weights. The cap forces at least three
+positions and the floor lets the optimiser drop names, so the basket varies between three
+and five. The book is rebalanced to those weights and held until the next decision.
+
+On top of it sits the cash policy under test: a 20 % dynamic reserve and a 10 % fixed
+reserve, a 2 % annual management fee accrued yearly and paid quarterly, a 5 %
+performance fee with a high-water mark, and spot execution costs.
+
+Nothing proprietary — it is a textbook construction, used here as a subject with a known
+answer.
+
+The question is not whether it makes money. The question is whether the framework can
+tell.
+
+The finding sits in a known family. DeMiguel, Garlappi & Uppal (2009), *Optimal Versus
+Naive Diversification*, show that 1/N beats mean-variance out of sample across most of
+the datasets they test, because estimation error on the inputs costs more than the
+optimisation recovers. The objective used here is a downside-risk one rather than
+mean-variance, so this is not a replication of their result — but it is the same
+mechanism: a rule fitted to a 100-bar window, applied to the next 50 bars, losing to a
+rule that estimates nothing.
 
 ---
 
-## What this reduces in practice
+## Where the gap comes from
 
-The framework is designed to reduce research friction in a few specific ways:
+The −1.86 pt is decomposed, not asserted, and each component is reported with the
+sample size that would be needed to settle it.
 
-- less repeated boilerplate across notebooks
-- cleaner separation between market logic and execution logic
-- easier comparison across strategies under consistent assumptions
-- easier reuse of features, setups, and regime logic
-- more interpretable results once trades have been executed
+| component | difference | t | reading |
+|---|---:|---:|---|
+| weighting — strategy vs 1/N with identical machinery | −0.84 pt | −0.63 | not detectable |
+| cash policy — the 30 % of reserves, isolated | −1.02 pt | −1.37 | not detectable; ~99 decisions would be needed |
+| **total** — strategy vs 1/N fully invested | **−1.86 pt** | | |
 
-In practice, this means the user can spend more time refining hypotheses and less time rebuilding infrastructure around each new test.
+The sizing null works by keeping the basket the strategy chose at each rebalance and
+replacing its weights with equal weights inside that basket. The optimiser's output is
+destroyed; everything else — dates, names, cash, fees, costs — is held fixed. What
+disappears is exactly the information the optimiser claims to add.
+
+Two things are worth stating plainly.
+
+**Neither component is distinguishable from zero.** The honest reading is not "the
+optimiser adds nothing" and not "the cash policy costs 1 pt". It is that 46 decisions
+cannot resolve effects of this size, and the layer says so rather than reporting the
+point estimates as findings:
+
+```
+N_eff = 46 decisions -> nothing finer than p ~ 0.02 is resolvable here
+```
+
+**The mechanism that is supposed to earn its keep is the one that shows least.** The
+optimiser — the part with the mathematics in it, the part that justifies the whole
+construction — moves the result by −0.84 pt with a t of −0.63. Meanwhile the plumbing
+underneath it, a cash reserve rule with no theory behind it at all, moves it by more.
+That ordering is the result.
+
+### Stochastic discount factor — does the cash actually pay in bad states?
+
+The framework holds cash and redeploys it. The question is whether that cash arrives
+when it is worth the most, or merely reduces exposure everywhere.
+
+| weighting | mean return per deployment |
+|---|---:|
+| unweighted | 0.0089 % |
+| m-weighted, γ = 1 | 0.0065 % |
+| m-weighted, γ = 3 | 0.0014 % |
+
+Returns are weighted by the stochastic discount factor m ∝ (1 + r_M)^(−γ), so states of
+the world where the benchmark fell count for more.
+
+The weighted return **falls** as γ rises. Deployments do not concentrate in bad states.
+This is de-risking, not insurance — the distinction that a raw return comparison cannot
+make.
+
+Supporting counts: 26 benchmark drawdown episodes below −10 %; cash deployed in 5 of
+them (19 %); 44 deployments in total, 99.4 % of them into the book rather than into
+fees; mean cash holding 30.9 % of NAV.
+
+**Verdict: `PARTIAL`.**
+
+<!-- FIGURE F2: mean deployment return at gamma = 0 / 1 / 3, bars, descending. Dark theme _C. -->
+
+Identity used, and tested by strict equality in the test suite: the purchasing-power
+weight 1/(1 + r_M) *is* the stochastic discount factor at γ = 1. The two code paths must
+return bit-identical results.
 
 ---
 
-## Main example notebook
+## Was the strategy's risk profile worth paying for?
 
-The main research note included in this repository shows a typical workflow end-to-end:
+The strategy carries 8.14 % volatility against the benchmark's 12.26 %. Comparing their
+raw returns is meaningless: it takes less risk, so it should return less. The question
+that matters is whether an investor needed the model at all to obtain that risk profile.
 
-### Baseline EMA strategy
-<img width="489" height="356" alt="Screenshot 2026-04-16 at 22 28 38" src="https://github.com/user-attachments/assets/3830f3bf-0eac-4b89-9b5f-99b773be2d0a" />
-<img width="1143" height="569" alt="Screenshot 2026-04-16 at 22 29 03" src="https://github.com/user-attachments/assets/9ae98fbd-1704-4754-8da0-ef69ea712c32" />
+They did not. Holding 66.4 % of the benchmark and 33.6 % in cash reproduces the
+strategy's volatility exactly, by construction, with two instruments and no estimation.
+That blend is the reachable frontier, and it is what the strategy has to beat.
 
-### Regime construction on H1 resampled to M5
+| assumed risk-free rate | strategy − blend |
+|---|---:|
+| 0.0 % | −0.74 pt |
+| 2.0 % | −1.42 pt |
 
-<img width="535" height="359" alt="Screenshot 2026-04-16 at 22 44 59" src="https://github.com/user-attachments/assets/de47f1bc-cc42-47a7-a136-d0e56a4abb03" />
-<img width="387" height="264" alt="Screenshot 2026-04-16 at 22 45 49" src="https://github.com/user-attachments/assets/9a2d5f08-2707-401a-bd32-e0c2d1a9367e" />
+**Verdict: `DOMINATED`** — below the capital market line at every risk-free rate tested.
+The same risk was available with more return by simply holding less of the benchmark.
 
-### Projection to M5 execution data
-<img width="1087" height="790" alt="Screenshot 2026-04-16 at 22 27 06" src="https://github.com/user-attachments/assets/924ceba1-f3ee-4c59-9a08-21c37c040e1a" />
+The rate is swept, not assumed, because the conclusion depends on it. Over the tested
+range the sign never changes, and extrapolating the relationship, it would take a
+risk-free rate below roughly −2 % to flip the verdict — which is to say the conclusion
+does not rest on the assumption.
 
-### Regime-aware filtering
-<img width="480" height="362" alt="Screenshot 2026-04-16 at 22 51 57" src="https://github.com/user-attachments/assets/9d16b8dc-1f2a-47c4-80a1-5c168a4e56b4" />
-<img width="1149" height="586" alt="Screenshot 2026-04-16 at 22 29 46" src="https://github.com/user-attachments/assets/c9959956-3f88-430c-b79c-7076687a9657" />
+One correction matters here and it works against the strategy. A de-levered blend suffers
+less volatility drag than the benchmark, so its compounded return sits *above* the
+straight line drawn between cash and the benchmark: the reachable frontier bows upward,
+by (σ²/2)·w·(1−w) ≈ 0.17 pt at this weight. Judging the strategy against the straight
+line would have understated the blend and flattered the strategy by that amount. The
+curve is used instead.
 
-### Addition of a second setup with different logic
-**Pre regime filtering**
+---
 
-<img width="488" height="359" alt="Screenshot 2026-04-16 at 22 30 48" src="https://github.com/user-attachments/assets/f5f8368e-2266-47f5-a50e-2f409c4cb1f6" />
-<img width="1147" height="572" alt="Screenshot 2026-04-16 at 22 34 23" src="https://github.com/user-attachments/assets/30e09411-451b-46f3-a9c5-0f3b466ca094" />
+## What this framework refuses to do
 
-**Post regime filtering**
+Most of the engineering effort went into the cases where the correct output is an error,
+not a number.
 
-<img width="487" height="357" alt="Screenshot 2026-04-16 at 22 32 11" src="https://github.com/user-attachments/assets/f1ece8fd-62b4-4b80-aade-cf9070dd4b37" />
-<img width="1147" height="574" alt="Screenshot 2026-04-16 at 22 34 39" src="https://github.com/user-attachments/assets/4f66c291-2c5c-4e40-b7d2-31714a0b809c" />
+**It refuses to produce a number it cannot support.**
+- Comparing an in-sample result to an out-of-sample result raises, rather than returning
+  a flattering difference.
+- Estimating over a period with no data raises.
+- A decision function that receives no returns raises, instead of silently sizing on
+  zeros.
 
-### Multi-Setup routing and post-trade analysis
-<img width="1154" height="576" alt="Screenshot 2026-04-16 at 22 32 34" src="https://github.com/user-attachments/assets/d7074d16-5b90-4f6a-98af-e1ba4275a320" />
-<img width="1202" height="384" alt="Screenshot 2026-04-16 at 22 51 02" src="https://github.com/user-attachments/assets/889b381a-fcb4-43b2-8a71-e8d6817a31a1" />
+**It refuses to report significance it did not earn.**
+- No p-value is attached to a deterministic baseline. Equal-weight is a single object,
+  not a distribution: the output is a difference, and the report says so.
+- Effective N counts **decisions**, not bars. 2,298 bars is not 2,298 observations; 46
+  rebalances is the sample size, and the t-statistic sums differences per rebalance
+  period before testing.
+- Tightening the rebalance grid buys no statistical power. At constant history, going
+  from n to 2n blocks leaves t invariant. This is demonstrated in the test suite
+  specifically so that the behaviour cannot be gamed.
 
-Recommended entry point:
+**It refuses to hide an assumption inside a point estimate.**
+- Where a conclusion depends on an input, the reported output is the **threshold at
+  which the conclusion flips**, not a single number derived from a convenient
+  assumption. The risk-free rate is swept, never assumed.
+- The reachable frontier is not treated as a straight line. A de-levered blend suffers
+  less volatility drag, so the true frontier bows above the naive interpolation between
+  cash and the benchmark. Judging the strategy against the straight line would flatter
+  it. It is judged against the curve.
 
-`examples/Framework_Research_Workflow_Demo.ipynb`
+**It refuses to let the wrong series be measured.**
+
+The series that carries performance depends on the execution mode: closed trades in
+algorithmic mode, NAV-equity in allocation mode, `strategy_twr_index` in investment mode.
+Reading the wrong one produces numbers that are wrong and silent — a measured case in
+this project reported a −11.1 % drawdown where the correct carrier gave −5.2 %. Carrier
+selection is therefore resolved by the mode, not by the caller.
+
+---
+
+## Accounting
+
+**Weights are the unit of the *weighted return*. They are not the unit of what an account
+actually earned.** Everything between those two quantities — management and performance
+fees on their own clocks, execution costs that depend on turnover rather than position,
+financing whose carry depends on how long a borrow tranche has been open, currency
+translation, drift between rebalance dates — lives outside the space of weights. This
+engine exists to compute that difference.
+
+It is also what makes the nulls above legitimate. The sizing null perturbs the weight
+channel *while freezing everything else*: same dates, same fees, same costs, same
+currencies. That freeze is what makes −0.84 pt attributable to the optimiser. Without an
+accounting core there is nothing to freeze, and the fee load wanders into the residual —
+which is how a strategy net of fees ends up being compared against a baseline that is
+not.
+
+The ledger itself is verified by identities that must close, not by a list of supported
+features.
+
+| identity | enforced where |
+|---|---|
+| `NAV_gross = NAV_equity + borrowed` | every bar |
+| cash ledger sums to zero across all flows | every bar |
+| fee accrued over the year = Σ quarterly payouts | period boundary |
+| purchasing-power weight at γ = 1 ≡ SDF at γ = 1 | strict equality test |
+
+<!-- FIGURE F3: stacked NAV decomposition over time (book / cash / cushion / vault, borrowed as a negative band). Dark theme _C. -->
+
+What the ledger models, all of it exercised by the identities above rather than merely
+implemented:
+
+- **Cash tiers** — fixed and dynamic reserve, tappable cushion, deep-reserve vault with
+  auto-restore
+- **Borrowing** — persistent tranches with overnight carry, closed only by policy
+  (margin, expiration) or by an explicit action, per-asset and per-group targeting
+- **Multi-currency** — cross-rate triangulation when the base currency and the asset
+  currencies do not share a leg
+- **Fees** — management fee accrued annually and paid quarterly, on NAV / on profit / on
+  both; performance fee with high-water mark
+- **Income** — dividends as an FX-neutral cash flow
+- **Intra-period watchers** — barwise scanning with a per-period fire budget, so a
+  triggered rule cannot silently rewrite the whole path
+
+This layer is the part of the project that is least visible in a performance chart and
+most visible in a due-diligence conversation.
+
+---
+
+## Architecture
+
+**What is published.** This repository is a snapshot of the algorithmic engine as it stood
+in April 2026 — enough to define a signal, run it under a realistic execution model, and
+inspect the resulting trades. It is a working subset, not a reduced demo: the tests below
+run against it.
+
+**What is not.** The allocation and investment engine that produced the results above is
+private — the ledger, the cash and borrowing machinery, the fee accrual, the currency layer,
+and the validation layer itself. It is covered by 401 tests. Every measurement on this page
+comes from it, and every test described above is specified precisely enough to be
+reimplemented against any return series.
+
+
+<img width="907" height="466" alt="Framework architecture overview" src="https://github.com/user-attachments/assets/fa2c9c0a-1048-4295-b043-eaee555f737f" />
+<img width="907" height="669" alt="Layer decomposition" src="https://github.com/user-attachments/assets/b97358bd-aa58-4b6d-802a-921204707eb4" />
+<img width="907" height="705" alt="Execution and accounting flow" src="https://github.com/user-attachments/assets/981027ca-1c3f-45b3-bdf3-99bcca362833" />
+<img width="907" height="72" alt="Pipeline strip" src="https://github.com/user-attachments/assets/98c073a1-116a-4bce-ab1d-083f4628e795" />
+
+A Numba-compiled multi-asset kernel underneath; the research surface stays in Python.
+Three execution modes — algorithmic, allocation, investment — share one accounting core,
+which is why the carrier-selection rule above is enforced rather than documented.
+
+Signal logic and execution assumptions are kept separate by construction: a strategy
+expresses intent, and never sees fills, costs, or cash. That separation is what makes the
+nulls below possible at all — the sizing null works by wrapping the decision function and
+flattening its output, which is only well-defined if the decision function does not know
+about execution.
+
+### Validation layer
+
+The measurements above come from this layer. It is not in this repository; the table
+records what each module is responsible for, so the method can be reimplemented.
+
+| module | responsibility |
+|---|---|
+| `validation_run_record.py` | automatic run capture and replay primitive |
+| `validation_window.py` | IS/OOS cloning with a declared warm-up |
+| `validation_naive_baseline.py` | two-level baseline: reserves stripped, or every piece of machinery kept |
+| `validation_nulls.py` | sizing null — wraps the decision function, flattens magnitudes |
+| `validation_sdf.py` | purchasing power as a stochastic discount factor |
+| `validation_leverage.py` | reachable frontier, volatility and drawdown matching |
+| `validation_performance.py` | carrier resolution by mode, triage, PSR / MinTRL, CE, γ* |
+| `spec_template.py` | prints a spec as a form to be filled in |
+
+---
+
+## Limits
+
+Written deliberately, because the argument of this repository is that stated limits are
+worth more than an equity curve.
+
+- **46 decisions.** That is the sample size. Effects smaller than roughly 2 pt of CAGR
+  are not establishable here by any method, and the report says so rather than reporting
+  them.
+- **One regime.** 2013–2022 is a single macro environment. Nothing here generalises to a
+  regime the sample does not contain.
+- **One configuration.** Five assets, a 50-bar rebalance, a 100-bar lookback. The result
+  is a statement about this configuration, not about mean-variance optimisation in
+  general.
+- **The out-of-sample window has not been used.** 2022–2026 is reserved. Reporting it now
+  would convert it into a second in-sample.
+- **Costs are modelled, not observed.** Spread, slippage, commission and borrow carry are
+  parameters, and no claim is made that they match any specific broker.
 
 ---
 
@@ -167,3 +346,24 @@ Recommended entry point:
 
 ```bash
 pip install "git+https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine.git@main"
+```
+
+## Tests
+
+```bash
+python -m unittest discover -s tests -v
+```
+
+---
+
+## Examples
+
+| notebook | one invariant |
+|---|---|
+| `examples/00_does_mean_variance_beat_1_over_n.ipynb` | the result above, end to end, in under two minutes |
+| `examples/01_allocation_decision.ipynb` | weights in, ledger out, nothing hidden |
+| `examples/02_investment_accounting.ipynb` | the identities close |
+| `examples/03_resume_parity.ipynb` | a stateful resume matches a single continuous run |
+| `examples/04_validation_carrier.ipynb` | the wrong carrier gives the wrong drawdown |
+
+Each links to the automated test that enforces the same invariant.
