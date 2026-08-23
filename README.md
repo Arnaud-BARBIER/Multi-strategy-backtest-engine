@@ -358,12 +358,11 @@ python -m unittest discover -s tests -v
 
 ## Examples
 
-| notebook | one invariant |
-|---|---|
-| `examples/00_does_mean_variance_beat_1_over_n.ipynb` | the result above, end to end, in under two minutes |
-| `examples/01_allocation_decision.ipynb` | weights in, ledger out, nothing hidden |
-| `examples/02_investment_accounting.ipynb` | the identities close |
-| `examples/03_resume_parity.ipynb` | a stateful resume matches a single continuous run |
-| `examples/04_validation_carrier.ipynb` | the wrong carrier gives the wrong drawdown |
+`examples/run_example.py` — a minimal end-to-end run: data in, signal, execution, trades out.
 
-Each links to the automated test that enforces the same invariant.
+`examples/Framework_Research_Workflow_Demo.ipynb` — the full algorithmic workflow: features,
+setups, regime routing, post-trade analysis. It is a large notebook and renders slowly on
+GitHub; clone it to read it comfortably.
+
+The allocation notebook that produced the results at the top of this page runs against the
+private engine and is not published here.
