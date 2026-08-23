@@ -1,0 +1,1128 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Multi-Strategy Backtest Engine · Arnaud Barbier</title>
+<meta name="description" content="Un moteur de backtest multi-actifs et la couche de validation qui a écarté la stratégie d'allocation tournant dessus. Résultat mesuré, hypothèses nulles, limites.">
+<meta name="author" content="Arnaud Barbier">
+<link rel="canonical" href="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/">
+<meta property="og:title" content="Multi-Strategy Backtest Engine · Arnaud Barbier">
+<meta property="og:description" content="Un moteur de backtest multi-actifs et la couche de validation qui a écarté la stratégie d'allocation tournant dessus. Résultat mesuré, hypothèses nulles, limites.">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:locale:alternate" content="en_GB">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Multi-Strategy Backtest Engine · Arnaud Barbier">
+<meta name="twitter:description" content="Un moteur de backtest multi-actifs et la couche de validation qui a écarté la stratégie d'allocation tournant dessus. Résultat mesuré, hypothèses nulles, limites.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>%E2%9A%96%EF%B8%8F</text></svg>">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap">
+
+<style>
+:root{
+  --bg:#FFFFFF; --panel:#FFFFFF; --well:#F5F6F7;
+  --hair:#C9CCD1; --hard:#101215; --soft:#E3E5E8;
+  --ink:#101215; --sub:#54585F; --faint:#868B93;
+  --red:#C8102E; --red-well:#FBF0F1;
+  --f-sans:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --f-term:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0e1117; --panel:#161b22; --well:#12171f;
+    --hair:#21262d; --hard:#3d444d; --soft:#1b2028;
+    --ink:#e6edf3; --sub:#8b949e; --faint:#6e7681;
+    --red:#F0625F; --red-well:#1F1517;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0e1117; --panel:#161b22; --well:#12171f;
+  --hair:#21262d; --hard:#3d444d; --soft:#1b2028;
+  --ink:#e6edf3; --sub:#8b949e; --faint:#6e7681;
+  --red:#F0625F; --red-well:#1F1517;
+}
+
+*{box-sizing:border-box}
+body{
+  background:var(--bg);color:var(--ink);
+  font-family:var(--f-sans);font-size:16px;line-height:1.58;
+  margin:0;padding:0 1.5rem 5rem;-webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1080px;margin:0 auto}
+
+/* ---------- masthead ---------- */
+.mast{padding:2.25rem 0 0;border-bottom:3px solid var(--hard)}
+.mast-top{
+  display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem;
+  font-family:var(--f-sans);font-size:.7rem;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--sub);
+  padding-bottom:.7rem;border-bottom:1px solid var(--hair);
+}
+h1{
+  font-family:var(--f-sans);font-weight:700;
+  font-size:clamp(2.15rem,5.6vw,3.5rem);line-height:1.02;
+  letter-spacing:-.03em;text-wrap:balance;
+  margin:2.25rem 0 0;max-width:17ch;
+}
+.lede{font-size:1.06rem;color:var(--sub);max-width:60ch;margin:1.35rem 0 2.25rem;}
+.tickers{
+  display:flex;flex-wrap:wrap;gap:0;margin:0 0 2.25rem;
+  border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);
+}
+.tickers div{
+  font-family:var(--f-sans);font-size:.74rem;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--sub);
+  padding:.6rem 1.05rem .6rem 0;margin-right:1.05rem;
+  border-right:1px solid var(--hair);
+}
+.tickers div:last-child{border-right:none;margin-right:0}
+
+/* ---------- headline figures ---------- */
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:0;margin-bottom:2.5rem}
+.fig{padding:0 1.25rem 0 0;margin-right:1.25rem;border-right:1px solid var(--hair)}
+.fig:last-child{border-right:none;margin-right:0;padding-right:0}
+.fig .k{font-family:var(--f-sans);font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+.fig .v{font-family:var(--f-sans);font-size:2rem;font-weight:600;letter-spacing:-.03em;margin-top:.45rem;font-variant-numeric:tabular-nums;line-height:1}
+.fig .n{font-size:.8rem;color:var(--sub);margin-top:.45rem;line-height:1.4}
+.neg{color:var(--red)}
+.subject{
+  border:1px solid var(--hard);padding:1.15rem 1.25rem;margin:0 0 2.25rem;max-width:74ch;
+}
+.subject .lbl{
+  font-size:.65rem;letter-spacing:.16em;text-transform:uppercase;color:var(--red);
+  font-weight:600;margin-bottom:.7rem;
+}
+.subject p{font-size:.92rem;margin:0 0 .8rem;max-width:none}
+.subject p:last-child{margin-bottom:0;color:var(--sub)}
+
+.units{
+  font-family:var(--f-sans);font-variant-numeric:tabular-nums;font-size:.71rem;line-height:1.65;color:var(--faint);
+  border-top:1px solid var(--hair);padding:.7rem 0 0;margin:0 0 2.5rem;max-width:78ch;
+}
+.units b{color:var(--sub);font-weight:600}
+@media (max-width:640px){
+  .fig{border-right:none;border-bottom:1px solid var(--hair);padding:.9rem 0;margin-right:0}
+  .fig:last-child{border-bottom:none}
+}
+
+/* ---------- sections ---------- */
+section{padding:3rem 0 0}
+.shead{
+  display:flex;align-items:baseline;gap:1rem;
+  border-bottom:2px solid var(--hard);padding-bottom:.6rem;margin-bottom:1.9rem;
+}
+.snum{font-family:var(--f-sans);font-size:.72rem;font-weight:600;letter-spacing:.1em;color:var(--red)}
+.stitle{font-family:var(--f-sans);font-size:.72rem;font-weight:500;letter-spacing:.17em;text-transform:uppercase;color:var(--sub)}
+h2{
+  font-family:var(--f-sans);font-weight:600;
+  font-size:clamp(1.4rem,2.8vw,1.85rem);line-height:1.16;
+  letter-spacing:-.02em;text-wrap:balance;max-width:26ch;margin:0 0 1.1rem;
+}
+h3{font-family:var(--f-sans);font-weight:600;font-size:.95rem;margin:1.9rem 0 .85rem;letter-spacing:-.005em}
+p{max-width:64ch;margin:0 0 1.05rem}
+.small{font-size:.87rem;color:var(--sub);max-width:70ch}
+strong{font-weight:600}
+a{color:var(--red);text-decoration-thickness:1px;text-underline-offset:2px}
+a:focus-visible{outline:2px solid var(--red);outline-offset:3px}
+.body{display:grid;grid-template-columns:minmax(0,1fr);gap:0}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:2.25rem}
+
+/* ---------- verdict bar ---------- */
+.verdict{
+  display:flex;align-items:stretch;gap:0;margin:0 0 1.35rem;
+  border:1px solid var(--red);background:var(--red-well);
+}
+.verdict .bar{background:var(--red);width:8px;flex:none}
+.verdict .txt{
+  padding:.7rem 1rem;font-family:var(--f-sans);font-size:.8rem;font-weight:600;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--red);
+}
+
+/* ---------- raw output ---------- */
+.raw{border:1px solid var(--hair);background:var(--well);margin:0 0 1.35rem}
+.raw .lbl{
+  font-family:var(--f-sans);font-size:.63rem;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--faint);padding:.45rem .85rem;border-bottom:1px solid var(--hair);
+  display:flex;justify-content:space-between;gap:1rem;
+}
+.raw pre{
+  margin:0;padding:.9rem .85rem;overflow-x:auto;
+  font-family:var(--f-term);font-size:.775rem;line-height:1.62;color:var(--sub);
+  white-space:pre;
+}
+.raw pre b{color:var(--ink);font-weight:600}
+.raw pre i{color:var(--red);font-style:normal;font-weight:600}
+
+/* ---------- tables ---------- */
+.tw{overflow-x:auto;margin:0 0 1.35rem;border-top:2px solid var(--hard);border-bottom:1px solid var(--hair)}
+table{border-collapse:collapse;width:100%;font-size:.9rem;min-width:470px}
+th,td{padding:.62rem .8rem;text-align:right;border-bottom:1px solid var(--soft)}
+th:first-child,td:first-child{text-align:left;padding-left:0}
+th:last-child,td:last-child{padding-right:0}
+thead th{
+  font-family:var(--f-sans);font-size:.63rem;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--faint);font-weight:500;border-bottom:1px solid var(--hair);white-space:nowrap;
+}
+td{font-variant-numeric:tabular-nums;font-family:var(--f-sans);font-size:.86rem}
+td:first-child{font-family:var(--f-sans);font-size:.9rem}
+tbody tr:last-child td{border-bottom:none}
+tr.total td{border-top:1px solid var(--hard);font-weight:600}
+.hl{color:var(--red);font-weight:600}
+
+/* ---------- refusals ---------- */
+.refs{border-top:1px solid var(--hair)}
+.ref{display:grid;grid-template-columns:2.4rem minmax(0,1fr);gap:.5rem;padding:.95rem 0;border-bottom:1px solid var(--soft)}
+.ref .n{font-family:var(--f-sans);font-size:.72rem;color:var(--red);font-weight:600;padding-top:.15rem}
+.ref p{margin:0;font-size:.93rem;max-width:62ch}
+
+/* ---------- modes + ledger ---------- */
+.modes{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0;border-top:2px solid var(--hard)}
+.mode{padding:1.1rem 1.15rem 1.1rem 0;margin-right:1.15rem;border-right:1px solid var(--hair);display:flex;flex-direction:column;gap:.55rem}
+.mode:last-child{border-right:none;margin-right:0;padding-right:0}
+.mode .t{font-family:var(--f-sans);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--red);font-weight:600}
+.mode p{font-size:.875rem;margin:0;color:var(--sub);max-width:none}
+.mode .c{font-family:var(--f-sans);font-size:.7rem;color:var(--faint);border-top:1px solid var(--soft);padding-top:.55rem;margin-top:auto;letter-spacing:.03em}
+@media (max-width:700px){
+  .mode{border-right:none;border-bottom:1px solid var(--hair);margin-right:0;padding-right:0}
+  .mode:last-child{border-bottom:none}
+}
+.ident{border-top:1px solid var(--hair);margin-bottom:1.35rem}
+.ident div{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.75rem;padding:.62rem 0;border-bottom:1px solid var(--soft)}
+.ident code{font-family:var(--f-term);font-size:.82rem;color:var(--ink)}
+.ident span{font-family:var(--f-sans);font-size:.68rem;color:var(--faint);letter-spacing:.08em;text-transform:uppercase}
+.tags{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:1.05rem}
+.tag{font-family:var(--f-sans);font-size:.71rem;border:1px solid var(--hair);padding:.26rem .5rem;color:var(--sub)}
+
+.note{border-left:3px solid var(--red);padding:.1rem 0 .1rem 1rem;margin:0 0 1.35rem}
+.note p{margin:0;color:var(--sub);font-size:.91rem;max-width:62ch}
+
+ul.plain{margin:0 0 1.05rem;padding-left:1.1rem;display:flex;flex-direction:column;gap:.55rem}
+ul.plain li{font-size:.93rem;max-width:64ch}
+ul.plain li::marker{color:var(--red)}
+
+footer{
+  border-top:3px solid var(--hard);margin-top:3.5rem;padding-top:1.1rem;
+  display:flex;flex-wrap:wrap;gap:1.25rem;justify-content:space-between;
+  font-family:var(--f-sans);font-size:.72rem;color:var(--faint);letter-spacing:.06em;text-transform:uppercase;
+}
+
+/* ---------- sélecteur de langue ---------- */
+#page[data-lang="fr"] .lang-en{display:none}
+#page[data-lang="en"] .lang-fr{display:none}
+.langbar{
+  display:flex;justify-content:flex-end;gap:0;
+  padding:.9rem 0 0;
+}
+.langbar button{
+  font-family:var(--f-sans);font-size:.68rem;letter-spacing:.13em;text-transform:uppercase;
+  background:none;color:var(--faint);border:1px solid var(--hair);
+  padding:.32rem .7rem;cursor:pointer;margin-left:-1px;
+}
+.langbar button:first-child{margin-left:0}
+.langbar button[aria-pressed="true"]{
+  color:var(--red);border-color:var(--red);position:relative;z-index:1;font-weight:600;
+}
+.langbar button:hover{color:var(--ink)}
+.langbar button:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+</style>
+
+<style>
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body,h1,h2,h3,p,ul,figure{margin:0}
+ul{padding:0}
+img{max-width:100%;display:block}
+button{font:inherit}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="page" data-lang="fr">
+  <div class="wrap">
+    <div class="langbar">
+      <button type="button" data-set="fr" aria-pressed="true">Français</button>
+      <button type="button" data-set="en" aria-pressed="false">English</button>
+    </div>
+  </div>
+
+  <div class="wrap lang-fr">
+  <header class="mast">
+    <div class="mast-top">
+      <div>Arnaud Barbier · note de recherche</div>
+      <div>Moteur de backtest multi-actifs · 2026</div>
+    </div>
+
+    <h1>L'optimiseur n'apporte rien que je puisse mesurer.</h1>
+
+    <p class="lede">
+      J'ai construit un moteur de backtest multi-actifs, puis une couche de validation dont
+      le seul travail est de rejeter les résultats du moteur. Voici ce qu'elle a renvoyé
+      quand je l'ai pointée sur la stratégie d'allocation qui tourne dessus.
+    </p>
+
+
+    <div class="subject">
+      <div class="lbl">Ce qui a été testé</div>
+      <p>
+        Une optimisation de portefeuille glissante, long-only, plafonnée à 35 % par nom. La
+        construction est celle de Markowitz, à une substitution près : la mesure de risque
+        n'est pas la variance mais la durée passée sous le plus haut, ce qui la situe du côté
+        post-moderne de la théorie du portefeuille. Réestimée sur 100 barres, rebalancée
+        toutes les 50.
+      </p>
+      <p>
+        Par-dessus, la politique testée : 30 % de réserve de trésorerie, 2 % de frais de
+        gestion provisionnés à l'année et payés au trimestre, 5 % de commission de
+        surperformance avec high-water mark, coûts d'exécution au comptant.
+      </p>
+      <p>
+        La stratégie n'est pas de mon invention : c'est une construction de manuel, retenue
+        comme sujet d'essai parce qu'elle est connue et reproductible. Le sujet de cette page
+        n'est pas la stratégie, mais l'instrument qui la juge.
+      </p>
+    </div>
+
+    <div class="tickers">
+      <div>S&amp;P 500</div><div>DAX · EUR</div><div>Brent</div><div>Or</div><div>GBP/USD</div>
+      <div>2013–2022</div><div>2 298 barres</div><div>46 décisions</div>
+    </div>
+
+    <div class="figs">
+      <div class="fig"><div class="k">Stratégie vs 1/N</div><div class="v neg">−1,86 pt</div><div class="n">annuel, net de frais et de coûts</div></div>
+      <div class="fig"><div class="k">Part de l'optimiseur</div><div class="v">−0,84 pt</div><div class="n">t = −0,63 · non détectable</div></div>
+      <div class="fig"><div class="k">Résolvable à N = 46</div><div class="v">p ≈ 0,02</div><div class="n">rien de plus fin n'est tranchable</div></div>
+      <div class="fig"><div class="k">Hors échantillon utilisé</div><div class="v">0 %</div><div class="n">30 % de l'historique encore scellé</div></div>
+    </div>
+
+    <p class="units">
+      <b>Unités.</b> Tout écart sur cette page est exprimé en <b>pt, points de pourcentage
+      de rendement annualisé</b> : la différence arithmétique entre deux runs du même moteur
+      sur les mêmes barres, et non un pourcentage d'une base. 1,94 % − 3,80 % = −1,86 pt.
+      Comme ce sont des différences de taux, elles s'additionnent : −0,84 pt et −1,02 pt
+      somment au total de −1,86 pt.
+    </p>
+  </header>
+
+  <section>
+    <div class="shead"><span class="snum">01</span><span class="stitle">De quoi il s'agit</span></div>
+    <div class="two">
+      <div>
+        <h2>Deux moitiés qui ne valent quelque chose qu'ensemble</h2>
+        <p>
+          <strong>Un noyau comptable.</strong> Un kernel multi-actifs compilé, posé sur un
+          registre qui boucle : paliers de trésorerie, emprunt avec carry overnight,
+          plusieurs devises, frais provisionnés sur une horloge et payés sur une autre,
+          dividendes. Son travail est de rendre un chiffre <em>réel</em>, c'est-à-dire garantir que le
+          rendement mesuré est celui qu'un compte aurait effectivement gagné, après
+          financement, frais et change.
+        </p>
+        <p>
+          <strong>Une couche de validation.</strong> Baselines, hypothèses nulles,
+          comptabilité de la taille d'échantillon. Son travail est de dire quand ce chiffre
+          <em>ne veut rien dire</em>.
+        </p>
+      </div>
+      <div>
+        <div class="note">
+          <p>
+            La contrainte de conception est le coût de la seconde moitié. Réfuter un résultat
+            proprement prend normalement plus de temps que de le produire. C'est pourquoi l'étape est
+            le plus souvent omise, et pourquoi elle demeure une intention plutôt qu'une pratique. Ici un
+            run s'enregistre lui-même, et chaque réfutation est un seul appel sur cet
+            enregistrement.
+          </p>
+        </div>
+        <p class="small">
+          Le verdict ci-dessous n'est pas le produit d'une vertu. Il est le produit d'une
+          réfutation devenue la chose la moins coûteuse à faire. Le panier est délibérément
+          cross-actifs et cross-devises (le DAX est coté en euro face à un book en dollar),
+          de sorte que la couche de change est porteuse dans ce run, et non décorative.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="shead"><span class="snum">02</span><span class="stitle">Le résultat</span></div>
+    <h2>Contre l'équipondération, net de frais, sur neuf ans</h2>
+    <p class="small">
+      Cinq actifs, barres journalières depuis mai 2013, 46 décisions de rebalancement prises
+      toutes les 50 barres sur une fenêtre d'estimation de 100 barres. Les derniers 30 % de
+      l'historique sont mis de côté et n'ont pas été regardés.
+    </p>
+
+    <div class="tw">
+      <table>
+        <thead><tr><th>Annualisé</th><th>Stratégie</th><th>1/N absolu</th><th>1/N apparié</th><th>Écart</th></tr></thead>
+        <tbody>
+          <tr><td>Rendement (CAGR)</td><td>1,94 %</td><td>3,80 %</td><td>2,78 %</td><td class="hl">−1,86 pt</td></tr>
+          <tr><td>Volatilité</td><td>8,14 %</td><td>12,26 %</td><td>9,32 %</td><td>−4,12 pt</td></tr>
+          <tr><td>Drawdown maximal</td><td>−24,76 %</td><td>−32,28 %</td><td>−25,03 %</td><td>+7,52 pt</td></tr>
+          <tr class="total"><td>Équivalent certain, γ = 3</td><td>1,26 %</td><td>2,23 %</td><td>1,88 %</td><td class="hl">−0,96 pt</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="verdict"><div class="bar"></div><div class="txt">Verdict : n'apporte rien</div></div>
+
+    <div class="raw">
+      <div class="lbl"><span>Sortie brute · validation_baseline</span><span>non retouchée</span></div>
+<pre>absolute    : stripped reserve_cash_pct, fixed_cash_reserve · keeps execution
+              costs, management fee, performance fee, currencies
+matched     : every piece of machinery kept, only the weighting rule swapped
+carrier     : portfolio_equity(nav-borrowed) · basis D
+
+<i>VERDICT   ADDS_NOTHING</i> — certainty equivalent lower by -0.96%/y at γ=3
+          — equal_weight absolute does better for a risk-averse investor
+<b>no p-value: the allocation baseline is deterministic. This is a gap, not a test.</b></pre>
+    </div>
+
+    <div class="two">
+      <div>
+        <h3>Pourquoi c'est la dernière ligne qui tranche</h3>
+        <p class="small">
+          Un équivalent certain est le rendement garanti qu'un investisseur accepterait à la
+          place du rendement risqué. L'équipondération est le portefeuille le plus volatil :
+          elle paie donc la pénalité de risque la plus lourde,
+          <strong>1,57 point contre 0,68 pour la stratégie</strong>, et elle l'emporte
+          néanmoins, 2,23 % contre 1,26 %. La stratégie perd après que la comparaison a été
+          penchée en sa faveur.
+        </p>
+      </div>
+      <div>
+        <h3>Les deux baselines sont rejouées, pas calculées</h3>
+        <p class="small">
+          Elles traversent la même machinerie comptable que la stratégie et paient les mêmes
+          2 % de frais de gestion, la même commission de surperformance de 5 % avec
+          high-water mark, les mêmes spread et commission, dans les mêmes devises. Seule la
+          règle de pondération change. Comparer une stratégie nette de frais à une baseline
+          brute est la façon la plus courante de fabriquer un edge qui n'existe pas. Ici
+          c'est structurellement impossible.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="shead"><span class="snum">03</span><span class="stitle">Où passe l'écart</span></div>
+    <h2>La partie qui contient les mathématiques est celle qui bouge le moins</h2>
+    <p>
+      Garder le panier que la stratégie a choisi et remplacer ses poids par des poids égaux à
+      l'intérieur de ce panier détruit la sortie de l'optimiseur et rien d'autre : mêmes
+      dates, mêmes noms, même trésorerie, mêmes frais. Ce qui disparaît est exactement ce que
+      l'optimiseur prétend apporter.
+    </p>
+
+    <div class="tw">
+      <table>
+        <thead><tr><th>Composante</th><th>Effet</th><th>t</th><th>Statut</th></tr></thead>
+        <tbody>
+          <tr><td>Pondération, l'optimiseur lui-même</td><td>−0,84 pt</td><td>−0,63</td><td>non détectable</td></tr>
+          <tr><td>Panier et politique de trésorerie</td><td>−1,02 pt</td><td>−1,37</td><td>≈ 99 décisions nécessaires</td></tr>
+          <tr class="total"><td>Total contre 1/N pleinement investi</td><td class="hl">−1,86 pt</td><td>·</td><td>·</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="raw">
+      <div class="lbl"><span>Sortie brute · validation_null_sizing</span><span>non retouchée</span></div>
+<pre><b>N_eff = 46 decisions -> nothing finer than p ≈ 0.02 is resolvable here</b>
+
+<i>VERDICT   SIZING: NO DETECTABLE EFFECT</i> — -0.84 pt on 46 decisions (t = -0.63)
+          — inside sampling noise. Read it as 'no detectable effect', not as
+          a measured gain.
+          SELECTION is not detectable either: -1.02 pt, t = -1.37 — it would
+          take about 99 decisions to settle at this effect size.</pre>
+    </div>
+
+    <p>
+      Aucune des deux composantes n'est distinguable de zéro. La lecture honnête n'est ni
+      « l'optimiseur n'apporte rien », ni « la politique de trésorerie coûte un point » : elle
+      est que 46 décisions ne permettent pas de résoudre des effets de cette taille, et que la
+      couche le dit au lieu d'imprimer les estimations ponctuelles comme des conclusions.
+    </p>
+    <p>
+      Lire les effets en absolu, pas en relatif : −0,84 pt signifie que le rendement
+      annualisé est inférieur de 0,84 point de taux, pas de 0,84 %.
+    </p>
+    <p>
+      Ce qui subsiste, c'est un ordre. L'optimiseur, la partie qui porte les mathématiques,
+      celle qui justifie toute la construction, déplace le résultat de 0,84 point avec un t
+      de −0,63. La plomberie en dessous, une règle de réserve sans aucune théorie derrière,
+      le déplace davantage. <strong>Cet ordre est le résultat.</strong>
+    </p>
+
+    <div class="note">
+      <p>
+        L'outil imprime le second terme sous le nom de « selection ». Il regroupe en réalité
+        deux choses : quels noms ont été détenus, et les 30 % gardés en réserve, parce que
+        c'est la baseline absolue qui retire les réserves. Avec cinq actifs et un cap à 35 %,
+        le panier bouge peu : l'essentiel de ces −1,02 pt est la politique de trésorerie, pas
+        le choix des noms.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="shead"><span class="snum">04</span><span class="stitle">Deux autres tests</span></div>
+    <div class="two">
+      <div>
+        <h2>La trésorerie arrive-t-elle quand elle vaut le plus cher ?</h2>
+        <p class="small">
+          La stratégie détient du cash et le redéploie. Réduire l'exposition et s'assurer
+          contre les mauvais états du monde se ressemblent dans une série de rendements : on
+          repondère donc les rendements par un facteur d'escompte stochastique, de sorte que
+          les états où le marché a chuté comptent davantage, γ réglant l'intensité.
+        </p>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Pondération de chaque déploiement</th><th>Rendement moyen</th></tr></thead>
+            <tbody>
+              <tr><td>Non pondéré</td><td>0,0089 %</td></tr>
+              <tr><td>Escompté, γ = 1</td><td>0,0065 %</td></tr>
+              <tr><td>Escompté, γ = 3</td><td class="hl">0,0014 %</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="verdict"><div class="bar"></div><div class="txt">Verdict : partiel</div></div>
+        <p class="small">
+          Le rendement pondéré <strong>baisse</strong> à mesure que les mauvais états comptent
+          davantage. La trésorerie ne se concentre pas là où elle aurait de la valeur. C'est
+          du dérisquage, pas de l'assurance. C'est une distinction qu'aucune comparaison de
+          rendements ne peut faire. Sur 26 drawdowns de marché au-delà de −10 %, le cash a été
+          déployé dans 5.
+        </p>
+      </div>
+
+      <div>
+        <h2>Ce profil de risque valait-il d'être payé ?</h2>
+        <p class="small">
+          La stratégie tourne à 8,14 % de volatilité contre 12,26 % pour le marché. Comparer
+          les rendements bruts n'a pas de sens : elle prend moins de risque, elle doit donc
+          rapporter moins. La question est de savoir si un investisseur avait besoin du modèle
+          pour y arriver. Détenir 66,4 % du marché et 33,6 % en cash reproduit exactement
+          cette volatilité, avec deux instruments et aucune estimation.
+        </p>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Taux sans risque supposé</th><th>Stratégie − mélange</th></tr></thead>
+            <tbody>
+              <tr><td>0,0 %</td><td class="hl">−0,74 pt</td></tr>
+              <tr><td>2,0 %</td><td class="hl">−1,42 pt</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="verdict"><div class="bar"></div><div class="txt">Verdict : dominé</div></div>
+        <div class="raw">
+          <div class="lbl"><span>Sortie brute · validation_null_leverage</span><span>non retouchée</span></div>
+<pre><i>VERDICT   DOMINATED</i> — below the capital market
+line at every assumed risk-free rate
+(-1.42 to -0.74 pt). The same risk was
+available with more return by simply
+holding less of the benchmark
+-- no model required.</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="note">
+      <p>
+        Une correction joue ici contre la stratégie, et elle a néanmoins été appliquée. Un
+        mélange dé-levé subit moins de volatility drag : son rendement composé se situe donc
+        au-dessus de la droite reliant le cash au marché : la frontière atteignable bombe vers
+        le haut d'environ 0,17 point à ce poids. Juger la stratégie sur la droite l'aurait
+        flattée d'autant. Le taux est balayé plutôt que supposé, et sur la plage testée le
+        signe ne s'inverse jamais.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="shead"><span class="snum">05</span><span class="stitle">Refus</span></div>
+    <h2>Ce que l'outil refuse de faire</h2>
+    <p>L'essentiel du travail d'ingénierie porte sur les cas où la sortie correcte est une erreur, pas un chiffre.</p>
+    <div class="refs">
+      <div class="ref"><div class="n">01</div><p><strong>Il refuse de comparer un in-sample à un out-of-sample.</strong> L'appel lève une erreur au lieu de renvoyer une différence flatteuse.</p></div>
+      <div class="ref"><div class="n">02</div><p><strong>Il refuse de dimensionner sur des données absentes.</strong> Une fonction de décision qui ne reçoit aucun rendement lève, au lieu de dimensionner silencieusement sur des zéros.</p></div>
+      <div class="ref"><div class="n">03</div><p><strong>Il refuse d'attacher une p-value à une baseline déterministe.</strong> L'équipondération est un objet unique, pas une distribution. Le rapport parle d'un écart, pas d'un test.</p></div>
+      <div class="ref"><div class="n">04</div><p><strong>Il refuse de compter les barres comme des observations.</strong> 2 298 barres ne sont pas la taille d'échantillon ; 46 décisions le sont. Les différences sont sommées par période de rebalancement avant tout test.</p></div>
+      <div class="ref"><div class="n">05</div><p><strong>Il refuse de vendre de la puissance statistique contre une grille plus fine.</strong> À historique constant, doubler le nombre de blocs laisse le t inchangé. Un test verrouille ce comportement pour qu'il ne soit pas jouable.</p></div>
+      <div class="ref"><div class="n">06</div><p><strong>Il refuse de cacher une hypothèse dans une estimation ponctuelle.</strong> Quand une conclusion dépend d'une entrée, la sortie est le seuil auquel la conclusion bascule.</p></div>
+      <div class="ref"><div class="n">07</div><p><strong>Il refuse de laisser mesurer la mauvaise série.</strong> La série qui porte la performance dépend du mode d'exécution. Lire la mauvaise donne un résultat faux sans en avoir l'air : un cas dans ce projet annonçait un drawdown de −11,1 % là où la bonne série en donnait −5,2 %.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="shead"><span class="snum">06</span><span class="stitle">Le registre</span></div>
+    <div class="two">
+      <div>
+        <h2>Les poids ne sont pas l'unité de ce qu'un compte a réellement gagné</h2>
+        <p class="small">
+          Les poids déterminent le rendement pondéré. Tout ce qui sépare celui-ci de l'argent
+          présent sur le compte (frais de gestion et de surperformance sur des horloges
+          distinctes, coûts d'exécution qui dépendent de la rotation et non de la position,
+          financement dont le carry dépend de la durée d'ouverture d'un emprunt, conversion de
+          devises, dérive entre deux rebalancements) vit en dehors de l'espace des poids. Le
+          moteur existe pour calculer cette différence.
+        </p>
+        <p class="small">
+          C'est aussi ce qui rend les tests ci-dessus légitimes. Le null de sizing perturbe le
+          canal des poids tout en gelant tout le reste. Ce gel est ce qui rend les 0,84 point
+          imputables à l'optimiseur plutôt qu'à la charge de frais.
+        </p>
+      </div>
+      <div>
+        <h3>Des identités qui doivent boucler</h3>
+        <div class="ident">
+          <div><code>NAV_gross = NAV_equity + borrowed</code><span>chaque barre</span></div>
+          <div><code>Σ flux de trésorerie = 0</code><span>chaque barre</span></div>
+          <div><code>frais provisionnés = Σ prélèvements</code><span>période</span></div>
+          <div><code>pouvoir d'achat ≡ facteur d'escompte, γ=1</code><span>strict</span></div>
+        </div>
+        <h3>Ce que le registre modélise</h3>
+        <div class="tags">
+          <span class="tag">réserves fixe &amp; dynamique</span><span class="tag">coussin tappable</span>
+          <span class="tag">vault de réserve profonde</span><span class="tag">tranches d'emprunt persistantes</span>
+          <span class="tag">carry overnight</span><span class="tag">triangulation de devises</span>
+          <span class="tag">provision ≠ prélèvement</span><span class="tag">high-water mark</span>
+          <span class="tag">dividendes</span><span class="tag">spread · commission · slippage</span>
+          <span class="tag">watchers intra-période</span>
+        </div>
+        <p class="small">C'est la partie qui n'apparaît jamais dans une courbe de performance et toujours dans une conversation de due diligence.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="shead"><span class="snum">07</span><span class="stitle">Trois modes</span></div>
+    <h2>Un noyau comptable, trois questions</h2>
+    <p>
+      Les modes partagent le registre mais pas la question à laquelle ils répondent, ni la
+      série qui porte leur performance. Se tromper de série produit des chiffres faux sans en
+      avoir l'air : c'est pourquoi le mode la détermine, et non l'appelant.
+    </p>
+    <div class="modes">
+      <div class="mode">
+        <div class="t">Algorithmique</div>
+        <p>Signaux, setups, routage par régime, entrées et sorties sous une exécution réaliste à la barre. Une règle a-t-elle un edge ?</p>
+        <p>Une position ouverte porte son P&amp;L latent sous forme de drift weight ; c'est la clôture du trade qui le réalise dans le registre, d'où une performance lue à la clôture : prix d'entrée contre prix de sortie, à l'échelle de l'exposition.</p>
+        <div class="c">porteur : trades clos</div>
+      </div>
+      <div class="mode">
+        <div class="t">Allocation</div>
+        <p>Poids cibles, calendriers de rebalancement, paliers de trésorerie, emprunt et frais. Une règle de pondération bat-elle la détention équipondérée ?</p>
+        <div class="c">porteur : NAV nette de l'emprunt</div>
+      </div>
+      <div class="mode">
+        <div class="t">Investissement</div>
+        <p>Apports et retraits, high-water marks, gates de drawdown, restauration du capital. Qu'a réellement vécu un compte ?</p>
+        <div class="c">porteur : rendement pondéré par le temps</div>
+      </div>
+    </div>
+    <p class="small" style="margin-top:1.3rem">
+      Le mode investissement rend compte sur une base pondérée par le temps parce que c'est ce
+      qu'exigent les standards de reporting : elle neutralise les apports et les retraits, sur
+      lesquels le gérant n'a pas la main. Ce n'est pas une préférence, c'est la seule mesure
+      défendable dès qu'il y a des flux.
+    </p>
+  </section>
+
+  <section>
+    <div class="shead"><span class="snum">08</span><span class="stitle">Limites</span></div>
+    <h2>Écrites délibérément, parce que les limites énoncées sont le propos</h2>
+    <ul class="plain">
+      <li><strong>46 décisions, c'est la taille d'échantillon.</strong> Des effets inférieurs à environ deux points de rendement annuel ne sont établissables ici par aucune méthode, et le rapport le dit au lieu de les rapporter.</li>
+      <li><strong>Un seul régime.</strong> 2013–2022 est un environnement macro unique. Rien ici ne se généralise à des conditions absentes de l'échantillon.</li>
+      <li><strong>Une seule configuration.</strong> Cinq actifs, un rebalancement à 50 barres, une fenêtre de 100. C'est un énoncé sur cette configuration, pas sur l'optimisation de portefeuille en général.</li>
+      <li><strong>La fenêtre réservée n'a pas été utilisée.</strong> La rapporter maintenant en ferait un second in-sample.</li>
+      <li><strong>Les coûts sont modélisés, pas observés.</strong> Spread, commission et carry sont des paramètres ; aucune prétention qu'ils correspondent à un courtier particulier.</li>
+    </ul>
+
+    <h3>Ce qui est publié, et ce qui ne l'est pas</h3>
+    <p class="small">
+      <strong>Publié.</strong> Le dépôt public est un instantané du moteur algorithmique tel
+      qu'il était en avril 2026 : assez pour définir un signal, le faire tourner sous un modèle
+      d'exécution réaliste, et inspecter les trades produits. C'est un sous-ensemble
+      fonctionnel, pas une démo réduite.
+    </p>
+    <p class="small">
+      <strong>Non publié.</strong> Le moteur d'allocation et d'investissement qui a produit
+      cette note est privé : le registre, la machinerie de trésorerie et d'emprunt, la
+      provision des frais, la couche de devises, et la couche de validation elle-même. Il est
+      couvert par 401 tests. Toutes les mesures de cette page en proviennent, et chaque test
+      décrit ci-dessus est spécifié assez précisément pour être réimplémenté sur n'importe
+      quelle série de rendements.
+    </p>
+
+    <div class="note">
+      <p>
+        La stratégie testée est une construction de manuel (l'optimisation de Markowitz dont la
+        mesure de risque est remplacée par la durée sous le plus haut), retenue parce
+        qu'elle a une réponse connue, pas parce qu'elle est de moi. Le résultat appartient à
+        une famille documentée : DeMiguel, Garlappi et Uppal (2009) montrent que
+        l'équipondération bat la moyenne-variance hors échantillon sur la majorité des jeux de
+        données qu'ils testent, parce que l'erreur d'estimation coûte plus cher que
+        l'optimisation ne rapporte. Ce n'est pas une réplication de leur résultat, mais c'est
+        le même mécanisme : une règle ajustée sur une fenêtre, appliquée à la suivante, qui
+        perd contre une règle qui n'estime rien.
+      </p>
+    </div>
+  </section>
+
+  <footer>
+    <div>Arnaud Barbier · moteur, couche de validation, et cette note</div>
+    <div><a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine">Code source · moteur algorithmique, instantané avril 2026 →</a></div>
+  </footer>
+
+  </div>
+
+  <div class="wrap lang-en">
+
+
+  <header class="mast">
+    <div class="mast-top">
+      <div>Arnaud Barbier · research note</div>
+      <div>Multi-asset backtest engine · 2026</div>
+    </div>
+
+    <h1>The optimiser adds nothing I can measure.</h1>
+
+    <p class="lede">
+      I built a multi-asset backtest engine, then built a validation layer whose job is to
+      reject the engine's own output. This is what came back when I pointed it at the
+      allocation strategy running on top of it.
+    </p>
+
+
+    <div class="subject">
+      <div class="lbl">What was tested</div>
+      <p>
+        A rolling portfolio optimisation, long-only, capped at 35 % per name. The construction
+        is Markowitz's, with one substitution: the risk measure is not variance but the
+        longest stretch spent below the previous peak, which places it on the post-modern side
+        of portfolio theory. Re-estimated over 100 bars, rebalanced every 50.
+      </p>
+      <p>
+        On top of it, the policy under test: a 30 % cash reserve, a 2 % management fee accrued
+        yearly and paid quarterly, a 5 % performance fee with a high-water mark, and spot
+        execution costs.
+      </p>
+      <p>
+        The strategy is not my invention. It is a textbook construction, used as a test
+        subject because it is well known and reproducible. The subject of this page is not the
+        strategy, but the instrument that judges it.
+      </p>
+    </div>
+
+    <div class="tickers">
+      <div>S&amp;P 500</div><div>DAX · EUR</div><div>Brent crude</div><div>Gold</div><div>GBP/USD</div>
+      <div>2013–2022</div><div>2,298 bars</div><div>46 decisions</div>
+    </div>
+
+    <div class="figs">
+      <div class="fig"><div class="k">Strategy vs 1/N</div><div class="v neg">−1.86 pt</div><div class="n">annual, after fees and costs</div></div>
+      <div class="fig"><div class="k">Optimiser's own share</div><div class="v">−0.84 pt</div><div class="n">t = −0.63 · not detectable</div></div>
+      <div class="fig"><div class="k">Resolvable at N = 46</div><div class="v">p ≈ 0.02</div><div class="n">nothing finer can be settled</div></div>
+      <div class="fig"><div class="k">Out-of-sample used</div><div class="v">0 %</div><div class="n">30 % of history still sealed</div></div>
+    </div>
+
+    <p class="units">
+      <b>Units.</b> Every gap on this page is stated in <b>pt, percentage points of
+      annualised return</b>: the arithmetic difference between two runs of the same engine
+      over the same bars, not a percentage of a base. 1.94 % − 3.80 % = −1.86 pt. Because the
+      components are differences of rates, they add: −0.84 pt and −1.02 pt sum to the −1.86 pt
+      total.
+    </p>
+  </header>
+
+  <!-- 01 -->
+  <section>
+    <div class="shead"><span class="snum">01</span><span class="stitle">What this is</span></div>
+    <div class="two">
+      <div>
+        <h2>Two halves that are only worth anything together</h2>
+        <p>
+          <strong>An accounting core.</strong> A compiled multi-asset kernel over a ledger that
+          closes: cash tiers, borrowing with overnight carry, several currencies, fees that
+          accrue on one clock and are paid on another, dividends. Its job is to make a number
+          real, to ensure the return being measured is one an account could actually have
+          earned, after financing, fees and currency.
+        </p>
+        <p>
+          <strong>A validation layer.</strong> Baselines, null hypotheses, sample-size
+          accounting. Its job is to say when that number means nothing.
+        </p>
+      </div>
+      <div>
+        <div class="note">
+          <p>
+            The design constraint is the cost of the second half. Refuting a result properly
+            normally takes longer than producing it, which is why it gets skipped and stays an
+            intention rather than a practice. Here a run records itself and each refutation is
+            a single call against that record.
+          </p>
+        </div>
+        <p class="small">
+          The verdict below is not the product of virtue. It is the product of refutation
+          being the cheapest thing to do. The basket is deliberately cross-asset and
+          cross-currency (the DAX is quoted in euro against a dollar book), so the currency
+          layer is load-bearing in this run rather than decorative.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 -->
+  <section>
+    <div class="shead"><span class="snum">02</span><span class="stitle">The result</span></div>
+    <h2>Against equal weighting, after fees, over nine years</h2>
+    <p class="small">
+      Five assets, daily bars from May 2013, 46 rebalance decisions taken every 50 bars on a
+      100-bar estimation window. The last 30 % of history is held out and has not been looked at.
+    </p>
+
+    <div class="tw">
+      <table>
+        <thead><tr><th>Annualised</th><th>Strategy</th><th>1/N absolute</th><th>1/N matched</th><th>Gap</th></tr></thead>
+        <tbody>
+          <tr><td>Return (CAGR)</td><td>1.94 %</td><td>3.80 %</td><td>2.78 %</td><td class="hl">−1.86 pt</td></tr>
+          <tr><td>Volatility</td><td>8.14 %</td><td>12.26 %</td><td>9.32 %</td><td>−4.12 pt</td></tr>
+          <tr><td>Maximum drawdown</td><td>−24.76 %</td><td>−32.28 %</td><td>−25.03 %</td><td>+7.52 pt</td></tr>
+          <tr class="total"><td>Certainty equivalent, γ = 3</td><td>1.26 %</td><td>2.23 %</td><td>1.88 %</td><td class="hl">−0.96 pt</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="verdict"><div class="bar"></div><div class="txt">Verdict : adds nothing</div></div>
+
+    <div class="raw">
+      <div class="lbl"><span>Raw output · validation_baseline</span><span>unedited</span></div>
+<pre>absolute    : stripped reserve_cash_pct, fixed_cash_reserve · keeps execution
+              costs, management fee, performance fee, currencies
+matched     : every piece of machinery kept, only the weighting rule swapped
+carrier     : portfolio_equity(nav-borrowed) · basis D
+
+<i>VERDICT   ADDS_NOTHING</i> — certainty equivalent lower by -0.96%/y at γ=3
+          — equal_weight absolute does better for a risk-averse investor
+<b>no p-value: the allocation baseline is deterministic. This is a gap, not a test.</b></pre>
+    </div>
+
+    <div class="two">
+      <div>
+        <h3>Why the last row settles it</h3>
+        <p class="small">
+          A certainty equivalent is the guaranteed return an investor would accept instead of
+          the risky one. Equal weighting is the more volatile portfolio, so it is charged the
+          heavier penalty for its risk, <strong>1.57 points against the strategy's 0.68</strong>,
+          and it still comes out ahead, 2.23 % against 1.26 %. The strategy loses after the
+          comparison has been tilted in its favour.
+        </p>
+      </div>
+      <div>
+        <h3>Both baselines are re-run, not computed</h3>
+        <p class="small">
+          They pass through the same accounting machinery as the strategy and pay the same 2 %
+          management fee, the same 5 % performance fee with high-water mark, the same spread
+          and commission, in the same currencies. Only the weighting rule is swapped.
+          Comparing a strategy net of fees against a baseline gross of them is the most common
+          way to manufacture an edge that does not exist. Here it is structurally unavailable.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 -->
+  <section>
+    <div class="shead"><span class="snum">03</span><span class="stitle">Where it goes</span></div>
+    <h2>The part with the mathematics in it moves the result least</h2>
+    <p>
+      Holding the basket the strategy chose and replacing its weights with equal weights
+      inside that basket destroys the optimiser's output and nothing else: same dates, same
+      names, same cash, same fees. What disappears is exactly what the optimiser claims to add.
+    </p>
+
+    <div class="tw">
+      <table>
+        <thead><tr><th>Component</th><th>Effect</th><th>t</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>Weighting, the optimiser itself</td><td>−0.84 pt</td><td>−0.63</td><td>not detectable</td></tr>
+          <tr><td>Basket and cash policy, everything else</td><td>−1.02 pt</td><td>−1.37</td><td>needs ≈ 99 decisions</td></tr>
+          <tr class="total"><td>Total vs 1/N fully invested</td><td class="hl">−1.86 pt</td><td>·</td><td>·</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="raw">
+      <div class="lbl"><span>Raw output · validation_null_sizing</span><span>unedited</span></div>
+<pre><b>N_eff = 46 decisions -> nothing finer than p ≈ 0.02 is resolvable here</b>
+
+<i>VERDICT   SIZING: NO DETECTABLE EFFECT</i> — -0.84 pt on 46 decisions (t = -0.63)
+          — inside sampling noise. Read it as 'no detectable effect', not as
+          a measured gain.
+          SELECTION is not detectable either: -1.02 pt, t = -1.37 — it would
+          take about 99 decisions to settle at this effect size.</pre>
+    </div>
+
+    <p>
+      Neither component is distinguishable from zero. The honest reading is not "the optimiser
+      adds nothing" and not "the cash policy costs a point". It is that 46 decisions cannot
+      resolve effects of this size, and the layer reports that instead of printing the point
+      estimates as findings.
+    </p>
+    <p>
+      Read the effects as absolute, not relative: −0.84 pt means the annualised return is
+      0.84 points of rate lower, not 0.84 % lower.
+    </p>
+    <p>
+      What survives is an ordering. The optimiser, the part that carries the mathematics, the
+      part that justifies the whole construction, moves the outcome by 0.84 points at a t of
+      −0.63. The plumbing beneath it, a cash reserve rule with no theory behind it at all,
+      moves it by more. <strong>That ordering is the finding.</strong>
+    </p>
+
+    <div class="note">
+      <p>
+        The tool prints the second term as "selection". It in fact bundles two things: which
+        names were held, and the 30 % kept in reserve, because the absolute baseline is the
+        one that strips the reserves. With five assets and a 35 % cap the basket rarely
+        changes, so most of that −1.02 pt is the cash policy, not the choice of names.
+      </p>
+    </div>
+  </section>
+
+  <!-- 04 -->
+  <section>
+    <div class="shead"><span class="snum">04</span><span class="stitle">Two more tests</span></div>
+    <div class="two">
+      <div>
+        <h2>Does the cash arrive when it is worth the most?</h2>
+        <p class="small">
+          The strategy holds cash and redeploys it. Reducing exposure and insuring against bad
+          outcomes look identical in a return series, so returns are re-weighted by a
+          stochastic discount factor: states of the world where the market fell are made to
+          count for more, and γ sets how much more.
+        </p>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Weighting of each deployment</th><th>Mean return</th></tr></thead>
+            <tbody>
+              <tr><td>Unweighted</td><td>0.0089 %</td></tr>
+              <tr><td>Discounted, γ = 1</td><td>0.0065 %</td></tr>
+              <tr><td>Discounted, γ = 3</td><td class="hl">0.0014 %</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="verdict"><div class="bar"></div><div class="txt">Verdict : partial</div></div>
+        <p class="small">
+          The weighted return <strong>falls</strong> as bad states are made to count for more.
+          The cash does not concentrate where it would be valuable. This is de-risking, not
+          insurance. It is a distinction no return comparison can make. Of 26 market drawdowns
+          beyond −10 %, cash was deployed into 5.
+        </p>
+      </div>
+
+      <div>
+        <h2>Was that risk profile worth paying for?</h2>
+        <p class="small">
+          The strategy runs at 8.14 % volatility against the market's 12.26 %. Comparing raw
+          returns is meaningless: it takes less risk, so it should return less. The question
+          is whether an investor needed the model to get there. Holding 66.4 % of the market
+          and 33.6 % in cash reproduces that volatility exactly, with two instruments and no
+          estimation.
+        </p>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Assumed risk-free rate</th><th>Strategy − blend</th></tr></thead>
+            <tbody>
+              <tr><td>0.0 %</td><td class="hl">−0.74 pt</td></tr>
+              <tr><td>2.0 %</td><td class="hl">−1.42 pt</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="verdict"><div class="bar"></div><div class="txt">Verdict : dominated</div></div>
+        <div class="raw">
+          <div class="lbl"><span>Raw output · validation_null_leverage</span><span>unedited</span></div>
+<pre><i>VERDICT   DOMINATED</i> — below the capital market
+line at every assumed risk-free rate
+(-1.42 to -0.74 pt). The same risk was
+available with more return by simply
+holding less of the benchmark
+-- no model required.</pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="note">
+      <p>
+        One correction here works against the strategy and was applied anyway. A de-levered
+        blend suffers less volatility drag, so its compounded return sits above the straight
+        line between cash and the market: the reachable frontier bows upward by about 0.17
+        points at this weight. Judging the strategy against the straight line would have
+        flattered it by that much. The rate is swept rather than assumed, and across the
+        tested range the sign never turns.
+      </p>
+    </div>
+  </section>
+
+  <!-- 05 -->
+  <section>
+    <div class="shead"><span class="snum">05</span><span class="stitle">Refusals</span></div>
+    <h2>What the tool will not do</h2>
+    <p>Most of the engineering went into the cases where the correct output is an error rather than a number.</p>
+    <div class="refs">
+      <div class="ref"><div class="n">01</div><p><strong>It will not compare in-sample to out-of-sample.</strong> The call raises rather than returning a flattering difference.</p></div>
+      <div class="ref"><div class="n">02</div><p><strong>It will not size on absent data.</strong> A decision function that receives no returns raises instead of quietly sizing on zeros.</p></div>
+      <div class="ref"><div class="n">03</div><p><strong>It will not attach a p-value to a deterministic baseline.</strong> Equal weighting is a single object, not a distribution. The report calls it a gap, not a test.</p></div>
+      <div class="ref"><div class="n">04</div><p><strong>It will not count bars as observations.</strong> 2,298 bars is not the sample size; 46 decisions is. Differences are summed per rebalance period before anything is tested.</p></div>
+      <div class="ref"><div class="n">05</div><p><strong>It will not sell statistical power for a finer grid.</strong> At constant history, doubling the number of blocks leaves t unchanged. A test pins this so the behaviour cannot be gamed.</p></div>
+      <div class="ref"><div class="n">06</div><p><strong>It will not hide an assumption inside a point estimate.</strong> Where a conclusion depends on an input, the output is the threshold at which the conclusion flips.</p></div>
+      <div class="ref"><div class="n">07</div><p><strong>It will not let the wrong series be measured.</strong> Which series carries performance depends on the execution mode. Reading the wrong one is silently wrong: a case in this project reported a −11.1 % drawdown where the correct series gave −5.2 %.</p></div>
+    </div>
+  </section>
+
+  <!-- 06 -->
+  <section>
+    <div class="shead"><span class="snum">06</span><span class="stitle">The ledger</span></div>
+    <div class="two">
+      <div>
+        <h2>Weights are not the unit of what an account actually earned</h2>
+        <p class="small">
+          Weights determine the weighted return. Everything between that and the money in the
+          account (management and performance fees on separate clocks, execution costs that
+          depend on turnover rather than position, financing whose carry depends on how long a
+          borrow has been open, currency translation, drift between rebalance dates) lives
+          outside the space of weights. The engine exists to compute that difference.
+        </p>
+        <p class="small">
+          It is also what makes the tests above legitimate. The sizing null perturbs the weight
+          channel while freezing everything else. That freeze is what makes 0.84 points
+          attributable to the optimiser rather than to the fee load.
+        </p>
+      </div>
+      <div>
+        <h3>Identities that must close</h3>
+        <div class="ident">
+          <div><code>NAV_gross = NAV_equity + borrowed</code><span>every bar</span></div>
+          <div><code>Σ cash flows = 0</code><span>every bar</span></div>
+          <div><code>fee accrued = Σ payouts</code><span>period</span></div>
+          <div><code>purchasing power ≡ discount factor, γ=1</code><span>strict</span></div>
+        </div>
+        <h3>What the ledger models</h3>
+        <div class="tags">
+          <span class="tag">fixed &amp; dynamic reserves</span><span class="tag">tappable cushion</span>
+          <span class="tag">deep reserve vault</span><span class="tag">persistent borrow tranches</span>
+          <span class="tag">overnight carry</span><span class="tag">currency triangulation</span>
+          <span class="tag">accrual ≠ payout</span><span class="tag">high-water mark</span>
+          <span class="tag">dividends</span><span class="tag">spread · commission · slippage</span>
+          <span class="tag">intra-period watchers</span>
+        </div>
+        <p class="small">This is the part that never appears in a performance chart and always appears in a due-diligence conversation.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 07 -->
+  <section>
+    <div class="shead"><span class="snum">07</span><span class="stitle">Three modes</span></div>
+    <h2>One accounting core, three questions</h2>
+    <p>
+      The modes share the ledger but not the question they answer, and not the series that
+      carries their performance. Getting that series wrong produces numbers that are wrong
+      without looking wrong, which is why the mode resolves it rather than the caller.
+    </p>
+    <div class="modes">
+      <div class="mode">
+        <div class="t">Algorithmic</div>
+        <p>Signals, setups, regime routing, entries and exits under realistic bar-level execution. Does a rule have an edge?</p>
+        <p>An open position holds its unrealised P&amp;L as a drift weight; the trade's close is what realises it into the ledger, which is why performance is read at close: entry against exit, scaled by exposure.</p>
+        <div class="c">carrier : closed trades</div>
+      </div>
+      <div class="mode">
+        <div class="t">Allocation</div>
+        <p>Target weights, rebalance calendars, cash tiers, borrowing and fees. Does a weighting rule beat holding everything equally?</p>
+        <div class="c">carrier : NAV net of borrowing</div>
+      </div>
+      <div class="mode">
+        <div class="t">Investment</div>
+        <p>Contributions and withdrawals, high-water marks, drawdown gates, capital restoration. What did a real account experience?</p>
+        <div class="c">carrier : time-weighted return</div>
+      </div>
+    </div>
+    <p class="small" style="margin-top:1.3rem">
+      Investment mode reports on a time-weighted basis because that is what industry reporting
+      standards require: it neutralises contributions and withdrawals, which the manager does
+      not control. Not a preference. It is the only defensible measure once there are flows.
+    </p>
+  </section>
+
+  <!-- 08 -->
+  <section>
+    <div class="shead"><span class="snum">08</span><span class="stitle">Limits</span></div>
+    <h2>Written deliberately, because stated limits are the point</h2>
+    <ul class="plain">
+      <li><strong>46 decisions is the sample size.</strong> Effects smaller than roughly two points of annual return are not establishable here by any method, and the report says so rather than reporting them.</li>
+      <li><strong>One regime.</strong> 2013–2022 is a single macro environment. Nothing here generalises to conditions the sample does not contain.</li>
+      <li><strong>One configuration.</strong> Five assets, a 50-bar rebalance, a 100-bar window. A statement about this configuration, not about portfolio optimisation in general.</li>
+      <li><strong>The held-out window has not been used.</strong> Reporting it now would turn it into a second in-sample.</li>
+      <li><strong>Costs are modelled, not observed.</strong> Spread, commission and carry are parameters; no claim is made that they match any particular broker.</li>
+    </ul>
+
+    <h3>What is published, and what is not</h3>
+    <p class="small">
+      <strong>Published.</strong> The public repository is a snapshot of the algorithmic
+      engine as it stood in April 2026: enough to define a signal, run it under a realistic
+      execution model, and inspect the resulting trades. It is a working subset, not a
+      reduced demo.
+    </p>
+    <p class="small">
+      <strong>Not published.</strong> The allocation and investment engine that produced this
+      note is private: the ledger, the cash and borrowing machinery, the fee accrual, the
+      currency layer, and the validation layer itself. It is covered by 401 tests. Every
+      measurement on this page comes from it, and every test above is specified precisely
+      enough to be reimplemented against any return series.
+    </p>
+    <div class="note">
+      <p>
+        The strategy under test is a textbook construction (Markowitz's optimisation with its risk
+        measure replaced by drawdown duration), chosen because it has a
+        known answer, not because it is mine. The finding sits in a known family: DeMiguel,
+        Garlappi and Uppal (2009) showed that equal weighting beats mean-variance out of
+        sample across most datasets they tested, because estimation error costs more than
+        optimisation recovers. This is not a replication of their result, but it is the same
+        mechanism: a rule fitted to one window, applied to the next, losing to a rule that
+        estimates nothing.
+      </p>
+    </div>
+  </section>
+
+  <footer>
+    <div>Arnaud Barbier · engine, validation layer, and this note</div>
+    <div><a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine">Source · algorithmic engine, April 2026 snapshot →</a></div>
+  </footer>
+
+
+  </div>
+</div>
+
+<script>
+(function () {
+  var page = document.getElementById('page');
+  var btns = document.querySelectorAll('.langbar button');
+  btns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      var lang = b.dataset.set;
+      page.setAttribute('data-lang', lang);
+      btns.forEach(function (o) {
+        o.setAttribute('aria-pressed', o.dataset.set === lang ? 'true' : 'false');
+      });
+      window.scrollTo(0, 0);
+    });
+  });
+})();
+</script>
+</body>
+</html>
