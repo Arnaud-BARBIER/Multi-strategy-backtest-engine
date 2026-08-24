@@ -64,9 +64,9 @@ body{
 }
 h1{
   font-family:var(--f-sans);font-weight:700;
-  font-size:clamp(2.15rem,5.6vw,3.5rem);line-height:1.02;
+  font-size:clamp(1.95rem,4.6vw,2.95rem);line-height:1.06;
   letter-spacing:-.03em;text-wrap:balance;
-  margin:2.25rem 0 0;max-width:17ch;
+  margin:2.25rem 0 0;max-width:24ch;
 }
 .lede{font-size:1.06rem;color:var(--sub);max-width:60ch;margin:1.35rem 0 2.25rem;}
 .tickers{
@@ -256,12 +256,12 @@ button{font:inherit}
       <div>Moteur de backtest multi-actifs · 2026</div>
     </div>
 
-    <h1>L'optimiseur n'apporte rien que je puisse mesurer.</h1>
+    <h1>J'ai construit un moteur de backtest, puis la couche chargée de rejeter ses résultats.</h1>
 
     <p class="lede">
-      J'ai construit un moteur de backtest multi-actifs, puis une couche de validation dont
-      le seul travail est de rejeter les résultats du moteur. Voici ce qu'elle a renvoyé
-      quand je l'ai pointée sur la stratégie d'allocation qui tourne dessus.
+      Cette note rapporte ce que la couche de validation a renvoyé lorsque je l'ai pointée sur
+      la stratégie d'allocation qui tourne sur le moteur. Trois tests, trois verdicts, et
+      l'énoncé de ce qu'ils ne permettent pas de conclure.
     </p>
 
 
@@ -557,7 +557,55 @@ holding less of the benchmark
   </section>
 
   <section>
-    <div class="shead"><span class="snum">06</span><span class="stitle">Le registre</span></div>
+    <div class="shead"><span class="snum">06</span><span class="stitle">Reproductibilité</span></div>
+    <h2>Rejouer un chiffre six mois plus tard, à l'identique</h2>
+    <div class="two">
+      <div>
+        <p class="small">
+          <strong>Un run s'enregistre lui-même à la première ligne de son exécution</strong>,
+          jamais en cours de route. La raison vient d'un bug : l'appel compile la spec
+          d'allocation en une forme interne qui perd la devise, puis convertit le pack
+          d'intentions en carnet d'ordres. Un enregistrement pris après ces étapes rejoue une
+          configuration différente, et rien ne signale l'écart.
+        </p>
+        <p class="small">
+          Sur cet enregistrement, la primitive est le <strong>rejeu</strong> : relancer la
+          même chose avec exactement une chose changée. Douze des trente-quatre tests du
+          catalogue ne sont que cette opération, assortie d'une recette de substitution et
+          d'une comparaison. C'est aussi ce qui rend une réfutation aussi peu coûteuse.
+        </p>
+        <p class="small">
+          <strong>La fenêtre hors échantillon est un clone, pas une continuation.</strong> Un
+          run hors échantillon qui hériterait de l'état de clôture in-sample, high-water mark,
+          coussin accumulé, réserves restaurées, ferait franchir la frontière à de
+          l'information. Le clone repart propre. Il démarre à <code>début_oos − warmup</code>
+          et le préfixe est coupé au retour : la fenêtre d'estimation reçoit ses données, et
+          ce sont des données passées.
+        </p>
+      </div>
+      <div>
+        <h3>Ce qui est vérifié, et à quelle tolérance</h3>
+        <div class="ident">
+          <div><code>resume par segments = run continu</code><span>au bit près</span></div>
+          <div><code>assemblage incrémental = build complet</code><span>au bit près</span></div>
+          <div><code>identités comptables</code><span>1e-10</span></div>
+          <div><code>NAV aux barres de décision</code><span>référence figée</span></div>
+        </div>
+        <div class="note">
+          <p>
+            Ce que la couche ne peut pas garantir, et qu'aucune couche moteur ne pourrait :
+            elle ne sait pas si les poids d'un pack d'intentions ont eux-mêmes été calculés en
+            connaissant l'avenir. Ils sont construits en Python avant que le moteur ne les
+            voie. C'est une convention que l'appelant doit tenir, et la couche le dit plutôt
+            que de le masquer.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="shead"><span class="snum">07</span><span class="stitle">Le registre</span></div>
     <div class="two">
       <div>
         <h2>Les poids ne sont pas l'unité de ce qu'un compte a réellement gagné</h2>
@@ -598,7 +646,7 @@ holding less of the benchmark
   </section>
 
   <section>
-    <div class="shead"><span class="snum">07</span><span class="stitle">Trois modes</span></div>
+    <div class="shead"><span class="snum">08</span><span class="stitle">Trois modes</span></div>
     <h2>Un noyau comptable, trois questions</h2>
     <p>
       Les modes partagent le registre mais pas la question à laquelle ils répondent, ni la
@@ -632,7 +680,7 @@ holding less of the benchmark
   </section>
 
   <section>
-    <div class="shead"><span class="snum">08</span><span class="stitle">Limites</span></div>
+    <div class="shead"><span class="snum">09</span><span class="stitle">Limites</span></div>
     <h2>Écrites délibérément, parce que les limites énoncées sont le propos</h2>
     <ul class="plain">
       <li><strong>46 décisions, c'est la taille d'échantillon.</strong> Des effets inférieurs à environ deux points de rendement annuel ne sont établissables ici par aucune méthode, et le rapport le dit au lieu de les rapporter.</li>
@@ -689,12 +737,12 @@ holding less of the benchmark
       <div>Multi-asset backtest engine · 2026</div>
     </div>
 
-    <h1>The optimiser adds nothing I can measure.</h1>
+    <h1>I built a backtest engine, then the layer whose job is to reject its results.</h1>
 
     <p class="lede">
-      I built a multi-asset backtest engine, then built a validation layer whose job is to
-      reject the engine's own output. This is what came back when I pointed it at the
-      allocation strategy running on top of it.
+      This note reports what the validation layer returned when I pointed it at the allocation
+      strategy running on the engine. Three tests, three verdicts, and a statement of what
+      they do not allow anyone to conclude.
     </p>
 
 
@@ -986,7 +1034,54 @@ holding less of the benchmark
 
   <!-- 06 -->
   <section>
-    <div class="shead"><span class="snum">06</span><span class="stitle">The ledger</span></div>
+    <div class="shead"><span class="snum">06</span><span class="stitle">Reproducibility</span></div>
+    <h2>Replaying a number six months later, identically</h2>
+    <div class="two">
+      <div>
+        <p class="small">
+          <strong>A run records itself on the first line of its execution</strong>, never
+          mid-body. The reason came from a bug: the call compiles the allocation spec into an
+          internal form that drops the currency, then converts the intent pack into an order
+          book. A record taken after those steps replays a different configuration, and
+          nothing signals the drift.
+        </p>
+        <p class="small">
+          On that record, the primitive is <strong>replay</strong>: run the same thing again
+          with exactly one thing changed. Twelve of the catalogue's thirty-four tests are that
+          single operation, plus a substitution recipe and a comparison. It is also what makes
+          a refutation cheap.
+        </p>
+        <p class="small">
+          <strong>The out-of-sample window is a clone, not a continuation.</strong> An
+          out-of-sample run inheriting the in-sample closing state, high-water mark,
+          accumulated cushion, restored reserves, would carry information across the boundary.
+          The clone starts clean. It begins at <code>oos_start − warmup</code> and the prefix
+          is trimmed on the way back: the estimation window gets its data, and that data is
+          past data.
+        </p>
+      </div>
+      <div>
+        <h3>What is checked, and to what tolerance</h3>
+        <div class="ident">
+          <div><code>segmented resume = continuous run</code><span>bit-identical</span></div>
+          <div><code>incremental splice = full build</code><span>bit-identical</span></div>
+          <div><code>accounting identities</code><span>1e-10</span></div>
+          <div><code>NAV at decision bars</code><span>frozen reference</span></div>
+        </div>
+        <div class="note">
+          <p>
+            What the layer cannot guarantee, and no engine layer could: it cannot tell whether
+            the weights inside an intent pack were themselves computed with knowledge of the
+            future. They are built in Python before the engine ever sees them. That is a
+            convention the caller must honour, and the layer says so rather than hiding it.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="shead"><span class="snum">07</span><span class="stitle">The ledger</span></div>
     <div class="two">
       <div>
         <h2>Weights are not the unit of what an account actually earned</h2>
@@ -1027,7 +1122,7 @@ holding less of the benchmark
 
   <!-- 07 -->
   <section>
-    <div class="shead"><span class="snum">07</span><span class="stitle">Three modes</span></div>
+    <div class="shead"><span class="snum">08</span><span class="stitle">Three modes</span></div>
     <h2>One accounting core, three questions</h2>
     <p>
       The modes share the ledger but not the question they answer, and not the series that
@@ -1061,7 +1156,7 @@ holding less of the benchmark
 
   <!-- 08 -->
   <section>
-    <div class="shead"><span class="snum">08</span><span class="stitle">Limits</span></div>
+    <div class="shead"><span class="snum">09</span><span class="stitle">Limits</span></div>
     <h2>Written deliberately, because stated limits are the point</h2>
     <ul class="plain">
       <li><strong>46 decisions is the sample size.</strong> Effects smaller than roughly two points of annual return are not establishable here by any method, and the report says so rather than reporting them.</li>
