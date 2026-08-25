@@ -398,10 +398,16 @@ carrier     : portfolio_equity(nav-borrowed) · basis D
         <p class="small">
           Elles traversent la même machinerie comptable que la stratégie et paient les mêmes
           2 % de frais de gestion, la même commission de surperformance de 5 % avec
-          high-water mark, les mêmes spread et commission, dans les mêmes devises. Seule la
-          règle de pondération change. Comparer une stratégie nette de frais à une baseline
-          brute est la façon la plus courante de fabriquer un edge qui n'existe pas. Ici
-          c'est structurellement impossible.
+          high-water mark, dans les mêmes devises. Seule la règle de pondération change.
+          Comparer une stratégie nette de frais à une baseline brute est la façon la plus
+          courante de fabriquer un edge qui n'existe pas. Ici c'est structurellement
+          impossible.
+        </p>
+        <p class="small">
+          Les coûts d'exécution sont déclarés dans le run mais <strong>ne mordent pas</strong> :
+          en mode allocation ils passent par un chemin fondé sur les lots, et le slippage
+          mesuré est nul. Les annoncer comme prélevés surestimerait la sévérité du test, des
+          deux côtés de la comparaison.
         </p>
       </div>
     </div>
@@ -874,10 +880,16 @@ carrier     : portfolio_equity(nav-borrowed) · basis D
         <h3>Both baselines are re-run, not computed</h3>
         <p class="small">
           They pass through the same accounting machinery as the strategy and pay the same 2 %
-          management fee, the same 5 % performance fee with high-water mark, the same spread
-          and commission, in the same currencies. Only the weighting rule is swapped.
-          Comparing a strategy net of fees against a baseline gross of them is the most common
-          way to manufacture an edge that does not exist. Here it is structurally unavailable.
+          management fee, the same 5 % performance fee with high-water mark, in the same
+          currencies. Only the weighting rule is swapped. Comparing a strategy net of fees
+          against a baseline gross of them is the most common way to manufacture an edge that
+          does not exist. Here it is structurally unavailable.
+        </p>
+        <p class="small">
+          Execution costs are declared in the run but <strong>do not bind</strong>: in
+          allocation mode they route through a lot-based path, and the measured slippage is
+          zero. Reporting them as charged would overstate the severity of the test, on both
+          sides of the comparison.
         </p>
       </div>
     </div>
