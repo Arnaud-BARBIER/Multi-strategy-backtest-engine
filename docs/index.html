@@ -322,6 +322,21 @@ button{font:inherit}
       </p>
     </div>
 
+    <div class="plot">
+      <div class="lbl"><span>Graphique · plot_results_alloc</span><span>non retouché</span></div>
+      <img src="img/v0-run-tested.png" alt="Courbe d'equity du run testé" loading="lazy">
+      <div class="cap">
+        <b>Le run soumis aux tests, avec sa mécanique apparente.</b> Les losanges violets sont
+        les 46 décisions de rebalancement, régulièrement espacées parce que la règle est
+        calendaire : toutes les 50 barres, sans condition. Les traits verticaux marquent chacune
+        d'elles. La bande entre la NAV et la valeur investie est la trésorerie, et elle est
+        décomposée : la réserve fixe, la réserve dynamique qui suit l'equity, et le cash gagné.
+        C'est cette décomposition qui rend le test de baseline possible, puisque
+        <code>absolute</code> consiste précisément à retirer ces deux réserves. Le panneau du bas
+        est le drawdown, plancher à −24,76 % sur 898 barres.
+      </div>
+    </div>
+
     <div class="tickers">
       <div>S&amp;P 500</div><div>DAX · EUR</div><div>Brent</div><div>Or</div><div>GBP/USD</div>
       <div>2013–2022</div><div>2 298 barres</div><div>46 décisions</div>
@@ -842,6 +857,20 @@ holding less of the benchmark
         subject because it is well known and reproducible. The subject of this page is not the
         strategy, but the instrument that judges it.
       </p>
+    </div>
+
+    <div class="plot">
+      <div class="lbl"><span>Chart · plot_results_alloc</span><span>unedited</span></div>
+      <img src="img/v0-run-tested.png" alt="Equity curve of the run under test" loading="lazy">
+      <div class="cap">
+        <b>The run put to the tests, with its machinery visible.</b> The purple diamonds are the
+        46 rebalance decisions, evenly spaced because the rule is calendar-driven: every 50 bars,
+        unconditionally. The vertical lines mark each one. The band between NAV and invested
+        value is cash, and it is broken out: the fixed reserve, the dynamic reserve tracking
+        equity, and earned cash. That breakdown is what makes the baseline test possible, since
+        <code>absolute</code> is precisely the run with those two reserves stripped. The lower
+        panel is drawdown, bottoming at −24.76 % over 898 bars.
+      </div>
     </div>
 
     <div class="tickers">
