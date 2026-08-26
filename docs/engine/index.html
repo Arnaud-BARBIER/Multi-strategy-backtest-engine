@@ -416,8 +416,11 @@ button{font:inherit}
     <figure>
       <img src="../img/02-stateful-driver.png" alt="StatefulSpec avec son ResumeWatchSpec" loading="lazy">
       <figcaption>
-        <b>La décision reste du Python lisible ; seul le scanner est compilé.</b> On ne paie
-        le prix de la compilation que là où il y a des millions de barres à parcourir.
+        <b>La décision reste du Python lisible ; seul le scanner est compilé.</b> Le partage
+        suit la fréquence d'appel, pas une intuition sur la taille des données : le scanner est
+        évalué à chaque barre, la fonction de décision 46 fois sur ce run. On compile ce qui
+        tourne des milliers de fois, on garde lisible ce qui tourne des dizaines de fois. Le
+        rapport est de cinquante à un ici, et il ne fait que croître avec l'historique.
       </figcaption>
     </figure>
     <figure>
@@ -479,8 +482,11 @@ button{font:inherit}
         <b>Le troisième panneau est celui qui compte.</b> Il trace
         <code>nav − (invested + cash + pending)</code> et
         <code>gross − (equity + borrowed)</code>, qui doivent rester plats à zéro. Le maximum
-        atteint est <b>4,44 e−16</b>, l'epsilon machine en double précision, sur 2 300 barres
-        avec emprunt, change, frais et watchers actifs. Ce panneau n'est jamais rééchantillonné
+        atteint est <b>4,44 e−16</b>. Sur un portefeuille de 100 000 €, cela fait un écart de
+        <b>quatre milliardièmes de centime</b> entre ce que le portefeuille possède et ce qu'il
+        doit. C'est le plus petit écart qu'un ordinateur sache encore représenter à cette
+        échelle : en dessous il n'y a plus de nombre, il y a zéro. Et c'est tenu sur 2 300
+        barres, avec emprunt, change, frais et watchers actifs. Ce panneau n'est jamais rééchantillonné
         pour l'affichage : un pic d'une seule barre est exactement ce qu'il existe pour
         attraper.
       </figcaption>
@@ -505,17 +511,8 @@ button{font:inherit}
   </section>
 
   <section>
-    <div class="shead"><span class="snum">06</span><span class="stitle">Peut-on croire ces chiffres</span></div>
-    <h2>Réfuter coûte trois lignes, et c'est pour ça que ça se fait</h2>
-    <div class="note">
-      <p>
-        <b>Deux runs distincts, et il ne faut pas les confondre.</b> Tout ce qui précède vient
-        du run avec emprunt et watcher : 30 décisions, drawdown maximal de 40,95 %. Les trois
-        appels de réfutation qui suivent ont été passés sur un autre run, la même stratégie
-        sans emprunt ni watcher : 46 décisions, drawdown maximal de 24,76 %. C'est ce
-        second run que documente la note de validation.
-      </p>
-    </div>
+    <div class="shead"><span class="snum">06</span><span class="stitle">Le verdict de ce run</span></div>
+    <h2>Une statistique favorable, et le test économique qui la contredit</h2>
     <figure>
       <img src="../img/11-performance-carrier.png" alt="Rapport de porteur de performance, verdict BELOW_RISK_FREE" loading="lazy">
       <figcaption>
@@ -528,11 +525,29 @@ button{font:inherit}
         un résultat faux sans en avoir l'air.
       </figcaption>
     </figure>
+  </section>
+
+  <section>
+    <div class="shead"><span class="snum">07</span><span class="stitle">La couche de validation</span></div>
+    <h2>Les baselines ne sont pas calculées à côté, elles sont rejouées dans le moteur</h2>
     <p>
-      Les trois appels qui suivent portent sur le run sans emprunt ni watcher. La machinerie
-      comptable y est la même ; ce qui change, c'est qu'il n'y a plus de levier ni
-      d'interruption entre la règle de pondération et le résultat.
+      C'est la partie qui justifie tout ce qui précède. Une baseline construite dans un tableur
+      ne paie ni frais ni devises : la comparer à une stratégie qui les paie fabrique un écart
+      qui n'existe pas. Ici la baseline traverse le même kernel, le même registre de trésorerie
+      et le même porteur de performance. Seule la règle de pondération change, et l'écart mesuré
+      est donc bien celui de la règle.
     </p>
+    <div class="note">
+      <p>
+        <b>Deux runs distincts, et il ne faut pas les confondre.</b> Les sections 01 à 06
+        viennent du run avec emprunt et watcher : 30 décisions, drawdown maximal de 40,95 %.
+        Les trois appels ci-dessous ont été passés sur un autre run, la même stratégie sans
+        emprunt ni watcher : 46 décisions, drawdown maximal de 24,76 %. La machinerie comptable
+        y est identique ; ce qui change, c'est qu'il n'y a plus de levier ni d'interruption
+        entre la règle de pondération et le résultat. C'est ce second run que documente la note
+        de validation.
+      </p>
+    </div>
     <figure>
       <img src="../img/v0-run-tested.png" alt="Courbe d'equity du run sans emprunt ni watcher" loading="lazy">
       <figcaption>
@@ -587,7 +602,7 @@ button{font:inherit}
   </section>
 
   <section>
-    <div class="shead"><span class="snum">07</span><span class="stitle">Périmètre</span></div>
+    <div class="shead"><span class="snum">08</span><span class="stitle">Périmètre</span></div>
     <h2>Ce qui est publié, et ce qui ne l'est pas</h2>
     <p class="small">
       <strong>Publié.</strong> Le dépôt public est un instantané du moteur algorithmique tel
@@ -718,8 +733,11 @@ button{font:inherit}
     <figure>
       <img src="../img/02-stateful-driver.png" alt="StatefulSpec with its ResumeWatchSpec" loading="lazy">
       <figcaption>
-        <b>The decision stays readable Python; only the scanner is compiled.</b> You pay the
-        compilation price only where there are millions of bars to walk.
+        <b>The decision stays readable Python; only the scanner is compiled.</b> The split
+        follows call frequency, not a guess about data size: the scanner is evaluated on every
+        bar, the decision function 46 times in this run. Compile what runs thousands of times,
+        keep readable what runs dozens of times. The ratio is fifty to one here, and it only
+        grows with the history.
       </figcaption>
     </figure>
     <figure>
@@ -778,8 +796,11 @@ button{font:inherit}
         <b>The third panel is the one that matters.</b> It plots
         <code>nav − (invested + cash + pending)</code> and
         <code>gross − (equity + borrowed)</code>, both of which must sit flat on zero. The
-        worst value reached is <b>4.44 e−16</b>, double-precision machine epsilon, over 2,300
-        bars with borrowing, currency conversion, fees and watchers active. This panel is never
+        worst value reached is <b>4.44 e−16</b>. On a 100,000 € portfolio that is a gap of
+        <b>four billionths of a cent</b> between what the portfolio owns and what it owes. It is
+        the smallest gap a computer can still represent at this scale: below it there is no
+        number left, there is zero. And it holds over 2,300 bars, with borrowing, currency
+        conversion, fees and watchers active. This panel is never
         resampled for display: a spike lasting one bar is exactly what it exists to catch.
       </figcaption>
     </figure>
@@ -802,17 +823,8 @@ button{font:inherit}
   </section>
 
   <section>
-    <div class="shead"><span class="snum">06</span><span class="stitle">Can you believe these numbers</span></div>
-    <h2>Refuting costs three lines, which is why it happens</h2>
-    <div class="note">
-      <p>
-        <b>Two separate runs, and they must not be conflated.</b> Everything above comes from
-        the run with borrowing and a watcher: 30 decisions, 40.95 % maximum drawdown. The three
-        refutation calls below were made against a different run, the same strategy without
-        borrowing and without a watcher: 46 decisions, 24.76 % maximum drawdown. That second
-        run is the one the validation note documents.
-      </p>
-    </div>
+    <div class="shead"><span class="snum">06</span><span class="stitle">This run's verdict</span></div>
+    <h2>A favourable statistic, and the economic test that overrules it</h2>
     <figure>
       <img src="../img/11-performance-carrier.png" alt="Performance carrier report, BELOW_RISK_FREE verdict" loading="lazy">
       <figcaption>
@@ -825,11 +837,28 @@ button{font:inherit}
         wrong without looking wrong.
       </figcaption>
     </figure>
+  </section>
+
+  <section>
+    <div class="shead"><span class="snum">07</span><span class="stitle">The validation layer</span></div>
+    <h2>The baselines are not computed alongside, they are replayed through the engine</h2>
     <p>
-      The three calls that follow are against the run without borrowing and without a watcher.
-      The accounting machinery is the same there; what changes is that no leverage and no
-      interruption sit between the weighting rule and the result.
+      This is the part that justifies everything above it. A baseline built in a spreadsheet
+      pays neither fees nor currencies: comparing it to a strategy that does manufactures an
+      edge that is not there. Here the baseline goes through the same kernel, the same cash
+      ledger and the same performance carrier. Only the weighting rule changes, so the gap
+      measured is the gap of the rule.
     </p>
+    <div class="note">
+      <p>
+        <b>Two separate runs, and they must not be conflated.</b> Sections 01 to 06 come from
+        the run with borrowing and a watcher: 30 decisions, 40.95 % maximum drawdown. The three
+        calls below were made against a different run, the same strategy without borrowing and
+        without a watcher: 46 decisions, 24.76 % maximum drawdown. The accounting machinery is
+        identical there; what changes is that no leverage and no interruption sit between the
+        weighting rule and the result. That second run is the one the validation note documents.
+      </p>
+    </div>
     <figure>
       <img src="../img/v0-run-tested.png" alt="Equity curve of the run without borrowing or watcher" loading="lazy">
       <figcaption>
@@ -883,7 +912,7 @@ button{font:inherit}
   </section>
 
   <section>
-    <div class="shead"><span class="snum">07</span><span class="stitle">Scope</span></div>
+    <div class="shead"><span class="snum">08</span><span class="stitle">Scope</span></div>
     <h2>What is published, and what is not</h2>
     <p class="small">
       <strong>Published.</strong> The public repository is a snapshot of the algorithmic engine
