@@ -1,0 +1,735 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Allocation Engine · Arnaud Barbier</title>
+<meta name="description" content="Le code réel d'un moteur d'allocation multi-actifs et les sorties qu'il produit : registre d'emprunt, identités comptables, watcher compilé, coûts avec et sans.">
+<meta name="author" content="Arnaud Barbier">
+<link rel="canonical" href="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/engine/">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/engine/">
+<meta property="og:title" content="Allocation Engine · Arnaud Barbier">
+<meta property="og:description" content="Le code réel d'un moteur d'allocation multi-actifs et les sorties qu'il produit : registre d'emprunt, identités comptables, watcher compilé, coûts avec et sans.">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:locale:alternate" content="en_GB">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Allocation Engine · Arnaud Barbier">
+<meta name="twitter:description" content="Le code réel d'un moteur d'allocation multi-actifs et les sorties qu'il produit : registre d'emprunt, identités comptables, watcher compilé, coûts avec et sans.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>%E2%9A%99%EF%B8%8F</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap">
+
+<style>
+:root{
+  --bg:#FFFFFF; --panel:#FFFFFF; --well:#F5F6F7;
+  --hair:#C9CCD1; --hard:#101215; --soft:#E3E5E8;
+  --ink:#101215; --sub:#54585F; --faint:#868B93;
+  --red:#C8102E; --red-well:#FBF0F1;
+  --f-sans:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --f-term:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0e1117; --panel:#161b22; --well:#12171f;
+    --hair:#21262d; --hard:#3d444d; --soft:#1b2028;
+    --ink:#e6edf3; --sub:#8b949e; --faint:#6e7681;
+    --red:#F0625F; --red-well:#1F1517;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0e1117; --panel:#161b22; --well:#12171f;
+  --hair:#21262d; --hard:#3d444d; --soft:#1b2028;
+  --ink:#e6edf3; --sub:#8b949e; --faint:#6e7681;
+  --red:#F0625F; --red-well:#1F1517;
+}
+
+*{box-sizing:border-box}
+body{
+  background:var(--bg);color:var(--ink);
+  font-family:var(--f-sans);font-size:16px;line-height:1.58;
+  margin:0;padding:0 1.5rem 5rem;-webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1080px;margin:0 auto}
+
+/* ---------- masthead ---------- */
+.mast{padding:2.25rem 0 0;border-bottom:3px solid var(--hard)}
+.mast-top{
+  display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem;
+  font-family:var(--f-sans);font-size:.7rem;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--sub);
+  padding-bottom:.7rem;border-bottom:1px solid var(--hair);
+}
+h1{
+  font-family:var(--f-sans);font-weight:700;
+  font-size:clamp(1.95rem,4.6vw,2.95rem);line-height:1.06;
+  letter-spacing:-.03em;text-wrap:balance;
+  margin:2.25rem 0 0;max-width:24ch;
+}
+.lede{font-size:1.06rem;color:var(--sub);max-width:60ch;margin:1.35rem 0 2.25rem;}
+.tickers{
+  display:flex;flex-wrap:wrap;gap:0;margin:0 0 2.25rem;
+  border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);
+}
+.tickers div{
+  font-family:var(--f-sans);font-size:.74rem;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--sub);
+  padding:.6rem 1.05rem .6rem 0;margin-right:1.05rem;
+  border-right:1px solid var(--hair);
+}
+.tickers div:last-child{border-right:none;margin-right:0}
+
+/* ---------- headline figures ---------- */
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:0;margin-bottom:2.5rem}
+.fig{padding:0 1.25rem 0 0;margin-right:1.25rem;border-right:1px solid var(--hair)}
+.fig:last-child{border-right:none;margin-right:0;padding-right:0}
+.fig .k{font-family:var(--f-sans);font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+.fig .v{font-family:var(--f-sans);font-size:2rem;font-weight:600;letter-spacing:-.03em;margin-top:.45rem;font-variant-numeric:tabular-nums;line-height:1}
+.fig .n{font-size:.8rem;color:var(--sub);margin-top:.45rem;line-height:1.4}
+.neg{color:var(--red)}
+.subject{
+  border:1px solid var(--hard);padding:1.15rem 1.25rem;margin:0 0 2.25rem;max-width:74ch;
+}
+.subject .lbl{
+  font-size:.65rem;letter-spacing:.16em;text-transform:uppercase;color:var(--red);
+  font-weight:600;margin-bottom:.7rem;
+}
+.subject p{font-size:.92rem;margin:0 0 .8rem;max-width:none}
+.subject p:last-child{margin-bottom:0;color:var(--sub)}
+
+.units{
+  font-family:var(--f-sans);font-variant-numeric:tabular-nums;font-size:.71rem;line-height:1.65;color:var(--faint);
+  border-top:1px solid var(--hair);padding:.7rem 0 0;margin:0 0 2.5rem;max-width:78ch;
+}
+.units b{color:var(--sub);font-weight:600}
+@media (max-width:640px){
+  .fig{border-right:none;border-bottom:1px solid var(--hair);padding:.9rem 0;margin-right:0}
+  .fig:last-child{border-bottom:none}
+}
+
+/* ---------- sections ---------- */
+section{padding:3rem 0 0}
+.shead{
+  display:flex;align-items:baseline;gap:1rem;
+  border-bottom:2px solid var(--hard);padding-bottom:.6rem;margin-bottom:1.9rem;
+}
+.snum{font-family:var(--f-sans);font-size:.72rem;font-weight:600;letter-spacing:.1em;color:var(--red)}
+.stitle{font-family:var(--f-sans);font-size:.72rem;font-weight:500;letter-spacing:.17em;text-transform:uppercase;color:var(--sub)}
+h2{
+  font-family:var(--f-sans);font-weight:600;
+  font-size:clamp(1.4rem,2.8vw,1.85rem);line-height:1.16;
+  letter-spacing:-.02em;text-wrap:balance;max-width:26ch;margin:0 0 1.1rem;
+}
+h3{font-family:var(--f-sans);font-weight:600;font-size:.95rem;margin:1.9rem 0 .85rem;letter-spacing:-.005em}
+p{max-width:64ch;margin:0 0 1.05rem}
+.small{font-size:.87rem;color:var(--sub);max-width:70ch}
+strong{font-weight:600}
+a{color:var(--red);text-decoration-thickness:1px;text-underline-offset:2px}
+a:focus-visible{outline:2px solid var(--red);outline-offset:3px}
+.body{display:grid;grid-template-columns:minmax(0,1fr);gap:0}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:2.25rem}
+
+/* ---------- verdict bar ---------- */
+.verdict{
+  display:flex;align-items:stretch;gap:0;margin:0 0 1.35rem;
+  border:1px solid var(--red);background:var(--red-well);
+}
+.verdict .bar{background:var(--red);width:8px;flex:none}
+.verdict .txt{
+  padding:.7rem 1rem;font-family:var(--f-sans);font-size:.8rem;font-weight:600;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--red);
+}
+
+/* ---------- raw output ---------- */
+.raw{border:1px solid var(--hair);background:var(--well);margin:0 0 1.35rem}
+.raw .lbl{
+  font-family:var(--f-sans);font-size:.63rem;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--faint);padding:.45rem .85rem;border-bottom:1px solid var(--hair);
+  display:flex;justify-content:space-between;gap:1rem;
+}
+.raw pre{
+  margin:0;padding:.9rem .85rem;overflow-x:auto;
+  font-family:var(--f-term);font-size:.775rem;line-height:1.62;color:var(--sub);
+  white-space:pre;
+}
+.raw pre b{color:var(--ink);font-weight:600}
+.raw pre i{color:var(--red);font-style:normal;font-weight:600}
+
+/* ---------- tables ---------- */
+.tw{overflow-x:auto;margin:0 0 1.35rem;border-top:2px solid var(--hard);border-bottom:1px solid var(--hair)}
+table{border-collapse:collapse;width:100%;font-size:.9rem;min-width:470px}
+th,td{padding:.62rem .8rem;text-align:right;border-bottom:1px solid var(--soft)}
+th:first-child,td:first-child{text-align:left;padding-left:0}
+th:last-child,td:last-child{padding-right:0}
+thead th{
+  font-family:var(--f-sans);font-size:.63rem;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--faint);font-weight:500;border-bottom:1px solid var(--hair);white-space:nowrap;
+}
+td{font-variant-numeric:tabular-nums;font-family:var(--f-sans);font-size:.86rem}
+td:first-child{font-family:var(--f-sans);font-size:.9rem}
+tbody tr:last-child td{border-bottom:none}
+tr.total td{border-top:1px solid var(--hard);font-weight:600}
+.hl{color:var(--red);font-weight:600}
+
+/* ---------- refusals ---------- */
+.refs{border-top:1px solid var(--hair)}
+.ref{display:grid;grid-template-columns:2.4rem minmax(0,1fr);gap:.5rem;padding:.95rem 0;border-bottom:1px solid var(--soft)}
+.ref .n{font-family:var(--f-sans);font-size:.72rem;color:var(--red);font-weight:600;padding-top:.15rem}
+.ref p{margin:0;font-size:.93rem;max-width:62ch}
+
+/* ---------- modes + ledger ---------- */
+.modes{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0;border-top:2px solid var(--hard)}
+.mode{padding:1.1rem 1.15rem 1.1rem 0;margin-right:1.15rem;border-right:1px solid var(--hair);display:flex;flex-direction:column;gap:.55rem}
+.mode:last-child{border-right:none;margin-right:0;padding-right:0}
+.mode .t{font-family:var(--f-sans);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--red);font-weight:600}
+.mode p{font-size:.875rem;margin:0;color:var(--sub);max-width:none}
+.mode .c{font-family:var(--f-sans);font-size:.7rem;color:var(--faint);border-top:1px solid var(--soft);padding-top:.55rem;margin-top:auto;letter-spacing:.03em}
+@media (max-width:700px){
+  .mode{border-right:none;border-bottom:1px solid var(--hair);margin-right:0;padding-right:0}
+  .mode:last-child{border-bottom:none}
+}
+.ident{border-top:1px solid var(--hair);margin-bottom:1.35rem}
+.ident div{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.75rem;padding:.62rem 0;border-bottom:1px solid var(--soft)}
+.ident code{font-family:var(--f-term);font-size:.82rem;color:var(--ink)}
+.ident span{font-family:var(--f-sans);font-size:.68rem;color:var(--faint);letter-spacing:.08em;text-transform:uppercase}
+.tags{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:1.05rem}
+.tag{font-family:var(--f-sans);font-size:.71rem;border:1px solid var(--hair);padding:.26rem .5rem;color:var(--sub)}
+
+.note{border-left:3px solid var(--red);padding:.1rem 0 .1rem 1rem;margin:0 0 1.35rem}
+.note p{margin:0;color:var(--sub);font-size:.91rem;max-width:62ch}
+
+ul.plain{margin:0 0 1.05rem;padding-left:1.1rem;display:flex;flex-direction:column;gap:.55rem}
+ul.plain li{font-size:.93rem;max-width:64ch}
+ul.plain li::marker{color:var(--red)}
+
+footer{
+  border-top:3px solid var(--hard);margin-top:3.5rem;padding-top:1.1rem;
+  display:flex;flex-wrap:wrap;gap:1.25rem;justify-content:space-between;
+  font-family:var(--f-sans);font-size:.72rem;color:var(--faint);letter-spacing:.06em;text-transform:uppercase;
+}
+
+/* ---------- sélecteur de langue ---------- */
+#page[data-lang="fr"] .lang-en{display:none}
+#page[data-lang="en"] .lang-fr{display:none}
+.langbar{
+  display:flex;justify-content:flex-end;gap:0;
+  padding:.9rem 0 0;
+}
+.langbar button{
+  font-family:var(--f-sans);font-size:.68rem;letter-spacing:.13em;text-transform:uppercase;
+  background:none;color:var(--faint);border:1px solid var(--hair);
+  padding:.32rem .7rem;cursor:pointer;margin-left:-1px;
+}
+.langbar button:first-child{margin-left:0}
+.langbar button[aria-pressed="true"]{
+  color:var(--red);border-color:var(--red);position:relative;z-index:1;font-weight:600;
+}
+.langbar button:hover{color:var(--ink)}
+.langbar button:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+</style>
+<style>
+figure{margin:0 0 1.6rem}
+figure img{
+  width:100%;height:auto;display:block;
+  border:1px solid var(--hair);background:var(--well);
+  /* une image absente affiche son alt dans un cadre lisible, pas une icone cassee */
+  min-height:120px;padding:1.4rem;color:var(--faint);
+  font-size:.82rem;line-height:1.6;font-style:italic;
+}
+figure img[src]:not([src=""]){padding:0;min-height:0}
+figcaption{
+  font-size:.8rem;color:var(--sub);margin-top:.6rem;line-height:1.5;max-width:70ch;
+}
+figcaption b{color:var(--ink);font-weight:600}
+.metric-row{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:0;
+  border-top:2px solid var(--hard);border-bottom:1px solid var(--hair);margin:0 0 1.6rem;
+}
+.metric{padding:.9rem 1.2rem .9rem 0;margin-right:1.2rem;border-right:1px solid var(--hair)}
+.metric:last-child{border-right:none;margin-right:0}
+.metric .k{font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+.metric .v{font-size:1.5rem;font-weight:600;letter-spacing:-.02em;margin-top:.35rem;
+           font-variant-numeric:tabular-nums;line-height:1}
+.metric .n{font-size:.78rem;color:var(--sub);margin-top:.3rem}
+.crosslink{
+  border:1px solid var(--red);background:var(--red-well);padding:1.15rem 1.25rem;margin:0 0 1.6rem;
+}
+.crosslink p{margin:0 0 .6rem;font-size:.95rem;max-width:66ch}
+.crosslink a{font-weight:600}
+</style>
+
+
+<style>
+#page[data-lang="fr"] .lang-en{display:none}
+#page[data-lang="en"] .lang-fr{display:none}
+.langbar{display:flex;justify-content:flex-end;gap:0;padding:.9rem 0 0}
+.langbar button{
+  font-family:var(--f-sans);font-size:.68rem;letter-spacing:.13em;text-transform:uppercase;
+  background:none;color:var(--faint);border:1px solid var(--hair);
+  padding:.32rem .7rem;cursor:pointer;margin-left:-1px;
+}
+.langbar button:first-child{margin-left:0}
+.langbar button[aria-pressed="true"]{color:var(--red);border-color:var(--red);position:relative;z-index:1;font-weight:600}
+.langbar button:hover{color:var(--ink)}
+.langbar button:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+</style>
+
+<style>
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body,h1,h2,h3,p,ul,figure{margin:0}
+ul{padding:0}
+img{max-width:100%;display:block}
+button{font:inherit}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="page" data-lang="fr">
+  <div class="wrap">
+    <div class="langbar">
+      <button type="button" data-set="fr" aria-pressed="true">Français</button>
+      <button type="button" data-set="en" aria-pressed="false">English</button>
+    </div>
+  </div>
+
+  <div class="wrap lang-fr">
+  <header class="mast">
+    <div class="mast-top">
+      <div>Arnaud Barbier · le moteur</div>
+      <div>Allocation multi-actifs · 2026</div>
+    </div>
+
+    <h1>Une comptabilité de niveau institutionnel se déclare en quarante lignes.</h1>
+
+    <p class="lede">
+      Cette page ne montre pas ce que l'outil sait faire. Elle montre ce qu'il en coûte de
+      s'en servir : le code réel qu'on écrit, et la sortie réelle qu'on obtient. Le résultat
+      de la stratégie testée est ailleurs, et il est défavorable.
+    </p>
+
+    <div class="metric-row">
+      <div class="metric">
+        <div class="k">Identité comptable</div>
+        <div class="v">4,44 e−16</div>
+        <div class="n">résidu maximal, 2 300 barres</div>
+      </div>
+      <div class="metric">
+        <div class="k">Durée du run</div>
+        <div class="v">3,2 s</div>
+        <div class="n">9 ans, kernel en cache</div>
+      </div>
+      <div class="metric">
+        <div class="k">Tranches d'emprunt</div>
+        <div class="v">11</div>
+        <div class="n">tracées à l'unité</div>
+      </div>
+      <div class="metric">
+        <div class="k">Réfuter le résultat</div>
+        <div class="v">3 lignes</div>
+        <div class="n">trois appels, trois verdicts</div>
+      </div>
+    </div>
+  </header>
+
+  <section>
+    <div class="shead"><span class="snum">01</span><span class="stitle">Déclarer un portefeuille</span></div>
+    <h2>Tout ce qui suit est écrit une fois, et le moteur s'occupe du reste</h2>
+    <p>
+      Réserve fixe et dynamique, emprunt indexé sur un taux de marché réel, frais provisionnés
+      sur une horloge et payés sur une autre, commission de surperformance avec high-water
+      mark, quatre devises pour un book en dollar. Une seule déclaration.
+    </p>
+    <figure>
+      <img src="../img/01-alloc-spec.png" alt="Bloc AllocationSpec complet" loading="lazy">
+      <figcaption>
+        <b>Deux horloges pour un même frais.</b> <code>charge_frequency="year"</code> est le
+        rythme auquel la commission se provisionne, <code>payout_frequency="quarter"</code>
+        celui auquel elle quitte le compte. Les confondre est la façon habituelle dont un
+        backtest sous-estime son propre coût.
+      </figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <div class="shead"><span class="snum">02</span><span class="stitle">Décider, et être interrompu</span></div>
+    <h2>Un calendrier, et ce qui a le droit de l'interrompre</h2>
+    <p>
+      La stratégie décide toutes les cinquante barres. Un scanner compilé surveille le
+      portefeuille chaque semaine et peut déclencher deux actions de nature différente selon
+      l'événement rencontré.
+    </p>
+    <figure>
+      <img src="../img/02-stateful-driver.png" alt="StatefulSpec avec son ResumeWatchSpec" loading="lazy">
+      <figcaption>
+        <b>La décision reste du Python lisible ; seul le scanner est compilé.</b> On ne paie
+        le prix de la compilation que là où il y a des millions de barres à parcourir.
+      </figcaption>
+    </figure>
+    <figure>
+      <img src="../img/04-watch-scanner.png" alt="Le scanner njit, huit lignes" loading="lazy">
+      <figcaption>
+        Le scanner tourne dans numba : il ne peut renvoyer que des entiers. Huit lignes.
+      </figcaption>
+    </figure>
+    <figure>
+      <img src="../img/03-event-bindings.png" alt="Les trois dictionnaires de binding" loading="lazy">
+      <figcaption>
+        <b>Trois tables traduisent ces entiers en Python.</b> L'une dit quelle action
+        exécuter, l'autre pourquoi elle s'est déclenchée. Les deux sont séparées parce qu'elles
+        sont indépendantes : deux raisons peuvent appeler la même action, et chacune garde son
+        propre compteur de silence.
+      </figcaption>
+    </figure>
+    <figure>
+      <img src="../img/05-watch-events.png" alt="Journal des événements du watcher" loading="lazy">
+      <figcaption>
+        <b>Le paiement de tout ce qui précède.</b> Les deux fonctions de décision alternent,
+        les deux modes de déclenchement se distinguent, les libellés de raison sont ceux
+        déclarés. La colonne <code>status</code> montre trois <code>cooldown</code>
+        consécutifs suivis d'un <code>fired</code> : le silence par raison s'applique
+        vraiment. Et <code>decision_bar</code> vaut toujours <code>event_bar + 1</code>.
+      </figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <div class="shead"><span class="snum">03</span><span class="stitle">Ce qui empêche de tricher</span></div>
+    <h2>Les garanties qui rendent l'interruption honnête</h2>
+    <div class="refs">
+      <div class="ref"><div class="n">01</div><p><strong>On n'agit jamais sur la barre qui a déclenché.</strong> <code>decision_delay_bars=1</code> : sa clôture n'est pas connaissable au moment du signal. Vérifiable ligne par ligne dans le journal ci-dessus.</p></div>
+      <div class="ref"><div class="n">02</div><p><strong>Le rembobinage est explicite.</strong> <code>allow_rewind</code> est un choix déclaré, jamais un comportement implicite.</p></div>
+      <div class="ref"><div class="n">03</div><p><strong>Le silence est compté par raison.</strong> Un drawdown qui se déclenche ne consomme pas le cooldown d'une durée sous l'eau.</p></div>
+      <div class="ref"><div class="n">04</div><p><strong>Le budget d'actions est appliqué dans le scanner compilé.</strong> <code>max_fires_per_period=1</code> : un budget épuisé ne coûte même pas de temps de calcul, et le levier ne peut pas s'emballer.</p></div>
+      <div class="ref"><div class="n">05</div><p><strong>Le nombre d'événements par découpe est plafonné.</strong> <code>max_watch_events_per_cut=10</code>.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="shead"><span class="snum">04</span><span class="stitle">Le registre</span></div>
+    <h2>Chaque euro emprunté est attribuable à sa barre</h2>
+    <p>
+      La politique principale ne tire rien automatiquement. Les onze tranches de ce run ont
+      toutes été ouvertes par un événement du watcher, et chacune porte son ticket.
+    </p>
+    <figure>
+      <img src="../img/06-borrow-ledger.png" alt="Ledger d'emprunt, onze tranches" loading="lazy">
+      <figcaption>
+        <b>Le ticket de caisse.</b> Barre de tirage, principal, encours, barre de
+        remboursement, intérêts courus et payés, identifiant de politique. Neuf tranches se
+        sont refermées seules à leur maturité, deux sont encore ouvertes en fin de période.
+      </figcaption>
+    </figure>
+    <figure>
+      <img src="../img/07-borrow-timeline.png" alt="Chronologie des tranches d'emprunt" loading="lazy">
+      <figcaption>
+        La même information dans le temps. Toutes les tranches portent
+        <code>policy_id 2</code> : le moteur déduplique les politiques par contenu, donc une
+        politique réutilisée reste un seul identifiant.
+      </figcaption>
+    </figure>
+    <figure>
+      <img src="../img/08-accounting-audit.png" alt="Bilan comptable, quatre panneaux" loading="lazy">
+      <figcaption>
+        <b>Le troisième panneau est celui qui compte.</b> Il trace
+        <code>nav − (invested + cash + pending)</code> et
+        <code>gross − (equity + borrowed)</code>, qui doivent rester plats à zéro. Le maximum
+        atteint est <b>4,44 e−16</b>, l'epsilon machine en double précision, sur 2 300 barres
+        avec emprunt, change, frais et watchers actifs. Ce panneau n'est jamais rééchantillonné
+        pour l'affichage : un pic d'une seule barre est exactement ce qu'il existe pour
+        attraper.
+      </figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <div class="shead"><span class="snum">05</span><span class="stitle">Ce que les coûts prennent</span></div>
+    <h2>Le même portefeuille, avec et sans chaque couche</h2>
+    <figure>
+      <img src="../img/09-cost-layers.png" alt="Courbes avec et sans les coûts" loading="lazy">
+      <figcaption>
+        Les courbes sont reconstruites en rajoutant la fraction de coût de chaque barre au
+        rendement et en recomposant. Contrôle : la commission de gestion ressort à 1,88 pt/an
+        contre 2 %/an déclarés dans la spec, l'écart venant de ce qu'elle porte sur l'equity
+        nette. <b>Ce run ne revendique aucune performance</b> ; il existe pour montrer que le
+        registre boucle.
+      </figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <div class="shead"><span class="snum">06</span><span class="stitle">Peut-on croire ces chiffres</span></div>
+    <h2>Réfuter coûte trois lignes, et c'est pour ça que ça se fait</h2>
+    <figure>
+      <img src="../img/10-validation-calls.png" alt="Trois appels de validation et leurs verdicts" loading="lazy">
+      <figcaption>
+        Une baseline rejouée dans le moteur, un null de sizing, une frontière atteignable.
+        Trois appels sur l'enregistrement du run.
+      </figcaption>
+    </figure>
+    <div class="crosslink">
+      <p>
+        Les verdicts de ces trois tests, sur la stratégie d'allocation testée ici, sont
+        défavorables et publiés en détail.
+      </p>
+      <p><a href="../">Lire la note de validation →</a></p>
+    </div>
+  </section>
+
+  <section>
+    <div class="shead"><span class="snum">07</span><span class="stitle">Périmètre</span></div>
+    <h2>Ce qui est publié, et ce qui ne l'est pas</h2>
+    <p class="small">
+      <strong>Publié.</strong> Le dépôt public est un instantané du moteur algorithmique tel
+      qu'il était en avril 2026 : de quoi définir un signal, le faire tourner sous un modèle
+      d'exécution réaliste, et inspecter les trades produits.
+    </p>
+    <p class="small">
+      <strong>Non publié.</strong> Le moteur d'allocation et d'investissement qui a produit
+      cette page est privé : le registre, la machinerie de trésorerie et d'emprunt, la
+      provision des frais, la couche de devises, et la couche de validation. Il est couvert
+      par 401 tests.
+    </p>
+    <div class="note">
+      <p>
+        Une limite mesurée sur ce run : les coûts d'exécution sont déclarés mais ne mordent
+        pas. En mode allocation ils passent par un chemin fondé sur les lots, et le slippage
+        mesuré est nul. Le dire vaut mieux que de laisser croire à une sévérité qui n'a pas
+        été exercée.
+      </p>
+    </div>
+  </section>
+
+  <footer>
+    <div>Arnaud Barbier · moteur, couche de validation, et cette page</div>
+    <div><a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine">Code source →</a></div>
+  </footer>
+
+  </div>
+
+  <div class="wrap lang-en">
+  <header class="mast">
+    <div class="mast-top">
+      <div>Arnaud Barbier · the engine</div>
+      <div>Multi-asset allocation · 2026</div>
+    </div>
+
+    <h1>Institutional-grade accounting is declared in forty lines.</h1>
+
+    <p class="lede">
+      This page does not show what the tool can do. It shows what it costs to use: the real
+      code you write, and the real output you get back. The result of the strategy under test
+      lives elsewhere, and it is unfavourable.
+    </p>
+
+    <div class="metric-row">
+      <div class="metric">
+        <div class="k">Accounting identity</div>
+        <div class="v">4.44 e−16</div>
+        <div class="n">worst residual, 2,300 bars</div>
+      </div>
+      <div class="metric">
+        <div class="k">Run time</div>
+        <div class="v">3.2 s</div>
+        <div class="n">9 years, warm kernel</div>
+      </div>
+      <div class="metric">
+        <div class="k">Borrow tranches</div>
+        <div class="v">11</div>
+        <div class="n">traced one by one</div>
+      </div>
+      <div class="metric">
+        <div class="k">Refuting the result</div>
+        <div class="v">3 lines</div>
+        <div class="n">three calls, three verdicts</div>
+      </div>
+    </div>
+  </header>
+
+  <section>
+    <div class="shead"><span class="snum">01</span><span class="stitle">Declaring a portfolio</span></div>
+    <h2>All of this is written once, and the engine handles the rest</h2>
+    <p>
+      A fixed and a dynamic cash reserve, borrowing indexed on a real market rate, fees that
+      accrue on one clock and are paid on another, a performance fee with a high-water mark,
+      four currencies for a dollar book. One declaration.
+    </p>
+    <figure>
+      <img src="../img/01-alloc-spec.png" alt="Full AllocationSpec block" loading="lazy">
+      <figcaption>
+        <b>Two clocks for one fee.</b> <code>charge_frequency="year"</code> is the rhythm at
+        which the fee accrues, <code>payout_frequency="quarter"</code> the one at which it
+        leaves the account. Conflating them is the usual way a backtest under-reports its own
+        cost.
+      </figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <div class="shead"><span class="snum">02</span><span class="stitle">Deciding, and being interrupted</span></div>
+    <h2>A schedule, and what is allowed to interrupt it</h2>
+    <p>
+      The strategy decides every fifty bars. A compiled scanner watches the portfolio weekly
+      and can trigger two actions of different natures depending on the event it meets.
+    </p>
+    <figure>
+      <img src="../img/02-stateful-driver.png" alt="StatefulSpec with its ResumeWatchSpec" loading="lazy">
+      <figcaption>
+        <b>The decision stays readable Python; only the scanner is compiled.</b> You pay the
+        compilation price only where there are millions of bars to walk.
+      </figcaption>
+    </figure>
+    <figure>
+      <img src="../img/04-watch-scanner.png" alt="The njit scanner, eight lines" loading="lazy">
+      <figcaption>
+        The scanner runs inside numba: it can only return integers. Eight lines.
+      </figcaption>
+    </figure>
+    <figure>
+      <img src="../img/03-event-bindings.png" alt="The three binding tables" loading="lazy">
+      <figcaption>
+        <b>Three tables translate those integers back into Python.</b> One says which action
+        to run, the other says why it fired. They are separate because they are independent:
+        two reasons can call the same action, and each keeps its own silence counter.
+      </figcaption>
+    </figure>
+    <figure>
+      <img src="../img/05-watch-events.png" alt="Watcher event log" loading="lazy">
+      <figcaption>
+        <b>This is what pays for everything above.</b> The two decision functions alternate,
+        the two fire modes are distinct, the reason labels are the declared ones. The
+        <code>status</code> column shows three consecutive <code>cooldown</code> rows followed
+        by a <code>fired</code>: per-reason silence really applies. And
+        <code>decision_bar</code> is always <code>event_bar + 1</code>.
+      </figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <div class="shead"><span class="snum">03</span><span class="stitle">What stops this from cheating</span></div>
+    <h2>The guarantees that keep the interruption honest</h2>
+    <div class="refs">
+      <div class="ref"><div class="n">01</div><p><strong>It never acts on the bar that fired.</strong> <code>decision_delay_bars=1</code>: that bar's close is not knowable at signal time. Verifiable row by row in the log above.</p></div>
+      <div class="ref"><div class="n">02</div><p><strong>Rewind is explicit.</strong> <code>allow_rewind</code> is a declared choice, never an implicit behaviour.</p></div>
+      <div class="ref"><div class="n">03</div><p><strong>Silence is counted per reason.</strong> A drawdown that fires does not consume the cooldown of an underwater-duration event.</p></div>
+      <div class="ref"><div class="n">04</div><p><strong>The action budget is enforced inside the compiled scanner.</strong> <code>max_fires_per_period=1</code>: an exhausted budget does not even cost compute, and leverage cannot run away.</p></div>
+      <div class="ref"><div class="n">05</div><p><strong>Events per cut are capped.</strong> <code>max_watch_events_per_cut=10</code>.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="shead"><span class="snum">04</span><span class="stitle">The ledger</span></div>
+    <h2>Every borrowed euro is attributable to its bar</h2>
+    <p>
+      The main policy draws nothing automatically. All eleven tranches in this run were opened
+      by a watcher event, and each carries its own ticket.
+    </p>
+    <figure>
+      <img src="../img/06-borrow-ledger.png" alt="Borrow ledger, eleven tranches" loading="lazy">
+      <figcaption>
+        <b>The receipt.</b> Draw bar, principal, outstanding, repayment bar, interest accrued
+        and paid, policy id. Nine tranches closed themselves at maturity, two are still open at
+        the end of the period.
+      </figcaption>
+    </figure>
+    <figure>
+      <img src="../img/07-borrow-timeline.png" alt="Borrow tranche timeline" loading="lazy">
+      <figcaption>
+        The same information over time. Every tranche carries <code>policy_id 2</code>: the
+        engine dedupes policies by content, so a reused policy stays a single id.
+      </figcaption>
+    </figure>
+    <figure>
+      <img src="../img/08-accounting-audit.png" alt="Balance sheet audit, four panels" loading="lazy">
+      <figcaption>
+        <b>The third panel is the one that matters.</b> It plots
+        <code>nav − (invested + cash + pending)</code> and
+        <code>gross − (equity + borrowed)</code>, both of which must sit flat on zero. The
+        worst value reached is <b>4.44 e−16</b>, double-precision machine epsilon, over 2,300
+        bars with borrowing, currency conversion, fees and watchers active. This panel is never
+        resampled for display: a spike lasting one bar is exactly what it exists to catch.
+      </figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <div class="shead"><span class="snum">05</span><span class="stitle">What the costs took</span></div>
+    <h2>The same portfolio, with and without each layer</h2>
+    <figure>
+      <img src="../img/09-cost-layers.png" alt="Equity curves with and without costs" loading="lazy">
+      <figcaption>
+        The curves are rebuilt by adding each bar's cost fraction back to the return and
+        recompounding. Control: the management fee comes out at 1.88 pt/year against 2 %/year
+        declared in the spec, the gap coming from it being charged on net equity. <b>This run
+        claims no performance</b>; it exists to show the ledger closes.
+      </figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <div class="shead"><span class="snum">06</span><span class="stitle">Can you believe these numbers</span></div>
+    <h2>Refuting costs three lines, which is why it happens</h2>
+    <figure>
+      <img src="../img/10-validation-calls.png" alt="Three validation calls and their verdicts" loading="lazy">
+      <figcaption>
+        A baseline replayed through the engine, a sizing null, a reachable frontier. Three
+        calls against the run's own record.
+      </figcaption>
+    </figure>
+    <div class="crosslink">
+      <p>
+        The verdicts of those three tests, on the allocation strategy shown here, are
+        unfavourable and published in full.
+      </p>
+      <p><a href="../">Read the validation note →</a></p>
+    </div>
+  </section>
+
+  <section>
+    <div class="shead"><span class="snum">07</span><span class="stitle">Scope</span></div>
+    <h2>What is published, and what is not</h2>
+    <p class="small">
+      <strong>Published.</strong> The public repository is a snapshot of the algorithmic engine
+      as it stood in April 2026: enough to define a signal, run it under a realistic execution
+      model, and inspect the resulting trades.
+    </p>
+    <p class="small">
+      <strong>Not published.</strong> The allocation and investment engine behind this page is
+      private: the ledger, the cash and borrowing machinery, fee accrual, the currency layer,
+      and the validation layer. It is covered by 401 tests.
+    </p>
+    <div class="note">
+      <p>
+        One limit measured on this run: execution costs are declared but do not bind. In
+        allocation mode they route through a lot-based path, and the measured slippage is zero.
+        Saying so is better than implying a severity that was never exercised.
+      </p>
+    </div>
+  </section>
+
+  <footer>
+    <div>Arnaud Barbier · engine, validation layer, and this page</div>
+    <div><a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine">Source →</a></div>
+  </footer>
+
+  </div>
+</div>
+<script>
+(function () {
+  var page = document.getElementById('page');
+  var btns = document.querySelectorAll('.langbar button');
+  btns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      var lang = b.dataset.set;
+      page.setAttribute('data-lang', lang);
+      btns.forEach(function (o) {
+        o.setAttribute('aria-pressed', o.dataset.set === lang ? 'true' : 'false');
+      });
+      window.scrollTo(0, 0);
+    });
+  });
+})();
+</script>
+</body>
+</html>
