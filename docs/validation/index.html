@@ -452,7 +452,7 @@ carrier     : portfolio_equity(nav-borrowed) · basis D
     <div class="plot">
       <div class="lbl"><span>Graphique · validation_baseline</span><span>non retouché</span></div>
       <img src="../img/v1-baseline-nav.png" alt="Graphique · validation_baseline" loading="lazy">
-      <div class="cap"><b>La stratégie perd moins dans chaque creux, et ne reprend pas ce qu'elle n'a pas perdu.</b> Le panneau du bas montre le drawdown : la courbe verte est au-dessus des deux autres partout, c'est le −24,76 % contre −32,28 %. Le panneau du haut montre ce que ça coûte : jusqu'en 2020 les trois courbes se tiennent, puis la reprise post-crise écarte les baselines et la stratégie ne suit pas. L'écart de −1,86 pt se forme presque entièrement là.</div>
+      <div class="cap"><b>La stratégie perd moins dans chaque creux, et ne reprend pas ce qu'elle n'a pas perdu.</b> Le panneau du bas montre le drawdown : la courbe verte est au-dessus des deux autres partout, c'est le −24,76 % contre −32,28 %. Le panneau du haut montre ce que cela coûte : jusqu'en 2020 les trois courbes se tiennent, puis la reprise post-crise écarte les baselines et la stratégie ne suit pas. L'écart de −1,86 pt se forme presque entièrement là.</div>
     </div>
 
     <div class="two">
@@ -567,8 +567,8 @@ carrier     : portfolio_equity(nav-borrowed) · basis D
         <h2>La trésorerie arrive-t-elle quand elle vaut le plus cher ?</h2>
         <p class="small">
           La stratégie détient du cash et le redéploie. Réduire l'exposition et s'assurer
-          contre les mauvais états du monde se ressemblent dans une série de rendements : on
-          repondère donc les rendements par un facteur d'escompte stochastique, de sorte que
+          contre les mauvais états du monde se ressemblent dans une série de rendements. Les
+          rendements sont donc repondérés par un facteur d'escompte stochastique, de sorte que
           les états où le marché a chuté comptent davantage, γ réglant l'intensité.
         </p>
         <div class="tw">
@@ -631,7 +631,7 @@ holding less of the benchmark
     <div class="plot">
       <div class="lbl"><span>Graphique · validation_null_leverage</span><span>non retouché</span></div>
       <img src="../img/v5-capital-market-line.png" alt="Graphique · validation_null_leverage" loading="lazy">
-      <div class="cap"><b>L'étoile verte est la stratégie ; les quatre droites sont ce qu'on obtient sans modèle.</b> Chaque droite relie le cash au benchmark pour un taux sans risque supposé. L'étoile est en dessous des quatre, à 8,1 % de volatilité pour 1,94 % de rendement, là où un simple mélange donnait entre 2,68 % et 3,36 %. La distance verticale est l'écart du tableau.</div>
+      <div class="cap"><b>L'étoile verte est la stratégie ; les quatre droites sont ce qu'un simple mélange rapporte, sans modèle.</b> Chaque droite relie le cash au benchmark pour un taux sans risque supposé. L'étoile est en dessous des quatre, à 8,1 % de volatilité pour 1,94 % de rendement, là où un simple mélange donnait entre 2,68 % et 3,36 %. La distance verticale est l'écart du tableau.</div>
     </div>
 
     <div class="note">
