@@ -227,11 +227,25 @@ footer{
 }
 .langbar button:hover{color:var(--ink)}
 .langbar button:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+.topbar{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.pagenav{display:flex;gap:0;padding:.9rem 0 0}
+.pagenav>a,.pagenav>span{
+  font-family:var(--f-sans);font-size:.68rem;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--faint);border:1px solid var(--hair);text-decoration:none;
+  padding:.32rem .7rem;margin-left:-1px;white-space:nowrap;
+}
+.pagenav>:first-child{margin-left:0}
+.pagenav [aria-current="page"]{
+  color:var(--ink);border-color:var(--hard);font-weight:600;position:relative;z-index:1;
+}
+.pagenav>a:hover{color:var(--red);border-color:var(--red);position:relative;z-index:2}
+.pagenav>a:focus-visible{outline:2px solid var(--red);outline-offset:2px}
 </style>
 <style>
-figure{margin:0 0 1.6rem}
+figure{margin:0 0 1.6rem;max-width:965px}
 figure img{
-  width:100%;height:auto;display:block;
+  /* les captures font 955-965 px : les afficher au-dela flouterait le texte */
+  width:auto;max-width:100%;height:auto;display:block;
   border:1px solid var(--hair);background:var(--well);
   /* une image absente affiche son alt dans un cadre lisible, pas une icone cassee */
   min-height:120px;padding:1.4rem;color:var(--faint);
@@ -287,7 +301,11 @@ button{font:inherit}
 </head>
 <body>
 <div id="page" data-lang="fr">
-  <div class="wrap">
+  <div class="wrap topbar">
+    <nav class="pagenav" aria-label="Pages">
+      <a href="../"><span class="lang-fr">Note de validation</span><span class="lang-en">Validation note</span></a>
+      <span aria-current="page"><span class="lang-fr">Le moteur</span><span class="lang-en">The engine</span></span>
+    </nav>
     <div class="langbar">
       <button type="button" data-set="fr" aria-pressed="true">Français</button>
       <button type="button" data-set="en" aria-pressed="false">English</button>
@@ -357,6 +375,18 @@ button{font:inherit}
         <code>ValidationSpec.simple_oos(ratio_oos=0.30)</code> met les 30 % de fin hors
         d'atteinte pour tout ce qui suit. Le taux d'emprunt est une vraie série SOFR, et les
         jambes non-dollar passent par des taux croisés.
+      </figcaption>
+    </figure>
+    <figure>
+      <img src="../img/16-overnight-rate.png" alt="Courbe du taux overnight utilisé par le kernel" loading="lazy">
+      <figcaption>
+        <b>Le taux que paie l'emprunt, tel que le kernel le lit.</b> SOFR là où il existe,
+        DFF avant, raccordés en une seule série. Le coût de financement suit donc le cycle
+        réel : quasi nul jusqu'en 2016, remontée jusqu'en 2019, effondrement en 2020, puis
+        5,3 % en 2024. Un modèle à taux fixe aurait effacé cette histoire.
+        <b>Cette courbe court jusqu'en 2026, les résultats s'arrêtent en 2022</b> : la donnée
+        d'entrée existe sur toute la période, la fenêtre de mesure non. C'est le sceau, rendu
+        visible.
       </figcaption>
     </figure>
   </section>
@@ -613,6 +643,17 @@ button{font:inherit}
         <code>ValidationSpec.simple_oos(ratio_oos=0.30)</code> puts the last 30 % out of reach
         for everything that follows. The borrow rate is a real SOFR series, and the non-dollar
         legs go through cross rates.
+      </figcaption>
+    </figure>
+    <figure>
+      <img src="../img/16-overnight-rate.png" alt="Overnight rate curve used by the kernel" loading="lazy">
+      <figcaption>
+        <b>The rate the borrowing actually pays, as the kernel reads it.</b> SOFR where it
+        exists, DFF before that, joined into a single series. Financing cost therefore follows
+        the real cycle: near zero until 2016, climbing through 2019, collapsing in 2020, then
+        5.3 % in 2024. A fixed-rate model would have erased that history.
+        <b>This curve runs to 2026, the results stop in 2022</b>: the input exists over the
+        whole period, the measurement window does not. That is the seal, made visible.
       </figcaption>
     </figure>
   </section>

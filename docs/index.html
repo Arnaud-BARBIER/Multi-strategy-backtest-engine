@@ -228,6 +228,19 @@ footer{
 }
 .langbar button:hover{color:var(--ink)}
 .langbar button:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+.topbar{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.pagenav{display:flex;gap:0;padding:.9rem 0 0}
+.pagenav>a,.pagenav>span{
+  font-family:var(--f-sans);font-size:.68rem;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--faint);border:1px solid var(--hair);text-decoration:none;
+  padding:.32rem .7rem;margin-left:-1px;white-space:nowrap;
+}
+.pagenav>:first-child{margin-left:0}
+.pagenav [aria-current="page"]{
+  color:var(--ink);border-color:var(--hard);font-weight:600;position:relative;z-index:1;
+}
+.pagenav>a:hover{color:var(--red);border-color:var(--red);position:relative;z-index:2}
+.pagenav>a:focus-visible{outline:2px solid var(--red);outline-offset:2px}
 </style>
 
 <style>
@@ -242,7 +255,11 @@ button{font:inherit}
 </head>
 <body>
 <div id="page" data-lang="fr">
-  <div class="wrap">
+  <div class="wrap topbar">
+    <nav class="pagenav" aria-label="Pages">
+      <span aria-current="page"><span class="lang-fr">Note de validation</span><span class="lang-en">Validation note</span></span>
+      <a href="engine/"><span class="lang-fr">Le moteur</span><span class="lang-en">The engine</span></a>
+    </nav>
     <div class="langbar">
       <button type="button" data-set="fr" aria-pressed="true">Français</button>
       <button type="button" data-set="en" aria-pressed="false">English</button>

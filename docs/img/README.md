@@ -1,7 +1,12 @@
 # Captures utilisées par docs/engine/index.html
 
-Composées depuis `~/Desktop/Moteur` et `~/Desktop/Validation`, normalisées à 955 px
-de large. Les captures d'un même bloc ont été empilées verticalement.
+Composées depuis `~/Desktop/SS4html/Moteur` et `~/Desktop/SS4html/Validation`. Les
+captures d'un même bloc sont empilées verticalement.
+
+**Aucune image n'est rééchantillonnée.** Quand un empilement mélange du 955 et du 965,
+la plus étroite est complétée par du fond, jamais redimensionnée : un redimensionnement
+de 1 % suffit à rendre du texte de code flou. La page les affiche à `width:auto`,
+plafonné à 965 px, donc jamais agrandies non plus.
 
 | Fichier | Contenu | Source |
 |---|---|---|
@@ -16,7 +21,8 @@ de large. Les captures d'un même bloc ont été empilées verticalement.
 | `11-performance-carrier.png` | Run + résumé alloc, verdict `BELOW_RISK_FREE` | `Run function + alloc_audit` + `...2` |
 | `12-engine-run.png` | `NJITEngine` avec `simple_oos(0.30)` | `engine_run_OOS` |
 | `13-null-sizing.png` | Null de sizing, attribution, N_eff | `Null_Sizing1/2/_3` |
-| `14-null-leverage.png` | Null de levier, frontière atteignable | `validation_null_levreage` |
+| `14-null-leverage.png` | Null de levier, frontière atteignable | `validation_null_levreage` (1337 px natifs) |
+| `16-overnight-rate.png` | Courbe SOFR/DFF lue par le kernel | `courbe_des_taux` |
 
 ## Encore à capturer
 
@@ -33,6 +39,18 @@ figure dans la section 02 et une dans la section 04.
 
 `15-alloc-equity.png`, la courbe d'equity du run sans emprunt. Disponible si la note de
 validation passe un jour en illustré.
+
+## Qualité des captures
+
+Les sources sont en 72 dpi, soit 1 pixel physique par pixel logique. Sur un écran
+retina le navigateur doit donc les doubler, et c'est de là que vient le flou. Deux
+façons de gagner de la netteté, par ordre d'efficacité :
+
+1. **Pour les figures Plotly**, ne pas capturer du tout :
+   `pip install kaleido` puis `fig.write_image("nom.png", width=1400, scale=2)`.
+   Rendu vectoriel, 2800 px réels, net partout.
+2. **Pour le code et les tableaux**, zoomer le notebook à 150 % (`Cmd +` deux ou trois
+   fois) avant de capturer. Même contenu, une fois et demie plus de pixels.
 
 Capture avec `Cmd+Shift+4` (pas `Cmd+Ctrl+Shift+4`, qui ne fait que copier dans le
 presse-papiers sans écrire de fichier).
