@@ -325,7 +325,8 @@ button{font:inherit}
       Cette page ne montre pas ce que l'outil sait faire. Elle montre ce qu'il en coûte de
       s'en servir : le code réel qu'on écrit, et la sortie réelle qu'on obtient. La stratégie
       qui tourne ici est un support, pas un objet d'étude : c'est une version plus simple du
-      même portefeuille, sans emprunt ni watcher, qui a été passée à la couche de validation,
+      même portefeuille, sans emprunt, sans watcher et sans spec de devises, qui a été passée
+      à la couche de validation,
       et son verdict est publié quel qu'il soit.
     </p>
 
@@ -338,7 +339,7 @@ button{font:inherit}
       <div class="metric">
         <div class="k">Durée du run</div>
         <div class="v">3,2 s</div>
-        <div class="n">9 ans, kernel en cache</div>
+        <div class="n">2 298 barres, 46 retours en Python</div>
       </div>
       <div class="metric">
         <div class="k">Tranches d'emprunt</div>
@@ -414,6 +415,18 @@ button{font:inherit}
       portefeuille chaque semaine et peut déclencher deux actions de nature différente selon
       l'événement rencontré.
     </p>
+    <div class="note">
+      <p>
+        <b>Ce run n'est pas un balayage compilé d'un seul tenant, et c'est pour ça qu'il prend
+        3,2 secondes.</b> Le kernel s'arrête à chaque décision, rend la main à Python, puis
+        reprend. C'est ce que veut dire <code>mode="resume"</code> : l'état du portefeuille
+        traverse la frontière au lieu d'être recalculé depuis le début. Positions, trésorerie
+        par palier, frais provisionnés, tranches d'emprunt et high-water mark reviennent tels
+        quels de l'autre côté. Les 3,2 secondes sont donc le prix de 46 allers-retours avec un
+        registre qui survit, pas celui du calcul numérique. La version rapide consisterait à
+        garder la décision dans le kernel ; elle coûterait d'écrire chaque stratégie en numba.
+      </p>
+    </div>
     <figure>
       <img src="../img/02-stateful-driver.png" alt="StatefulSpec avec son ResumeWatchSpec" loading="lazy">
       <figcaption>
@@ -478,7 +491,7 @@ button{font:inherit}
       </figcaption>
     </figure>
     <figure>
-      <img src="../img/08-accounting-audit.png" alt="Bilan comptable, quatre panneaux" loading="lazy">
+      <img src="../img/08-accounting-audit.png" alt="Bilan comptable, trois panneaux" loading="lazy">
       <figcaption>
         <b>Le troisième panneau est celui qui compte.</b> Il trace
         <code>nav − (invested + cash + pending)</code> et
@@ -549,9 +562,10 @@ button{font:inherit}
         <b>Deux runs distincts, et il ne faut pas les confondre.</b> Les sections 01 à 06
         viennent du run avec emprunt et watcher : 30 décisions, drawdown maximal de 40,95 %.
         Les trois appels ci-dessous ont été passés sur un autre run, la même stratégie sans
-        emprunt ni watcher : 46 décisions, drawdown maximal de 24,76 %. La machinerie comptable
-        y est identique ; ce qui change, c'est qu'il n'y a plus de levier ni d'interruption
-        entre la règle de pondération et le résultat. C'est ce second run que documente la note
+        emprunt, sans watcher et sans spec de devises : 46 décisions, drawdown maximal de
+        24,76 %. Le registre de trésorerie et le porteur de performance y sont les mêmes ; ce
+        qui change, c'est qu'il n'y a plus de levier, d'interruption ni de conversion entre la
+        règle de pondération et le résultat. C'est ce second run que documente la note
         de validation.
       </p>
     </div>
@@ -651,8 +665,9 @@ button{font:inherit}
     <p class="lede">
       This page does not show what the tool can do. It shows what it costs to use: the real
       code you write, and the real output you get back. The strategy running here is a
-      vehicle, not a subject: a simpler version of the same portfolio, without borrowing and
-      without a watcher, is the one that went through the validation layer, and its verdict is
+      vehicle, not a subject: a simpler version of the same portfolio, with no borrowing, no
+      watcher and no currency spec, is the one that went through the validation layer, and its
+      verdict is
       published whatever it says.
     </p>
 
@@ -665,7 +680,7 @@ button{font:inherit}
       <div class="metric">
         <div class="k">Run time</div>
         <div class="v">3.2 s</div>
-        <div class="n">9 years, warm kernel</div>
+        <div class="n">2,298 bars, 46 returns to Python</div>
       </div>
       <div class="metric">
         <div class="k">Borrow tranches</div>
@@ -738,6 +753,18 @@ button{font:inherit}
       The strategy decides every fifty bars. A compiled scanner watches the portfolio weekly
       and can trigger two actions of different natures depending on the event it meets.
     </p>
+    <div class="note">
+      <p>
+        <b>This run is not one compiled sweep, which is why it takes 3.2 seconds.</b> The kernel
+        stops at every decision, hands control back to Python, then picks up again. That is what
+        <code>mode="resume"</code> means: portfolio state crosses the boundary instead of being
+        recomputed from the start. Positions, cash by tier, accrued fees, borrow tranches and the
+        high-water mark all come back untouched on the other side. So the 3.2 seconds are the
+        price of 46 round trips with a surviving ledger, not the price of the arithmetic. The
+        fast version would keep the decision inside the kernel; it would cost writing every
+        strategy in numba.
+      </p>
+    </div>
     <figure>
       <img src="../img/02-stateful-driver.png" alt="StatefulSpec with its ResumeWatchSpec" loading="lazy">
       <figcaption>
@@ -799,7 +826,7 @@ button{font:inherit}
       </figcaption>
     </figure>
     <figure>
-      <img src="../img/08-accounting-audit.png" alt="Balance sheet audit, four panels" loading="lazy">
+      <img src="../img/08-accounting-audit.png" alt="Balance sheet audit, three panels" loading="lazy">
       <figcaption>
         <b>The third panel is the one that matters.</b> It plots
         <code>nav − (invested + cash + pending)</code> and
@@ -867,10 +894,10 @@ button{font:inherit}
       <p>
         <b>Two separate runs, and they must not be conflated.</b> Sections 01 to 06 come from
         the run with borrowing and a watcher: 30 decisions, 40.95 % maximum drawdown. The three
-        calls below were made against a different run, the same strategy without borrowing and
-        without a watcher: 46 decisions, 24.76 % maximum drawdown. The accounting machinery is
-        identical there; what changes is that no leverage and no interruption sit between the
-        weighting rule and the result. That second run is the one the validation note documents.
+        calls below were made against a different run, the same strategy with no borrowing, no
+        watcher and no currency spec: 46 decisions, 24.76 % maximum drawdown. The cash ledger
+        and the performance carrier are the same there; what changes is that no leverage, no
+        interruption and no translation sit between the weighting rule and the result. That second run is the one the validation note documents.
       </p>
     </div>
     <figure>

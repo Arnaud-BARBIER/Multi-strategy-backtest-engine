@@ -331,8 +331,12 @@ button{font:inherit}
         calendaire : toutes les 50 barres, sans condition. <b>Les traits verticaux ne sont pas
         des repères ajoutés au dessin : ce sont les rebalancements eux-mêmes.</b> La politique
         aplatit le portefeuille avant de réallouer, donc la valeur investie repasse entièrement
-        par le cash gagné puis est redistribuée sur les nouveaux poids dans la même barre. Le
-        trait est ce passage. La bande entre la NAV et la valeur investie est la trésorerie, et
+        par la trésorerie puis est redistribuée sur les nouveaux poids dans la même barre. Le
+        trait est ce passage. Elle revient dans la trésorerie générale, pas dans le cash gagné :
+        la politique est en mode <b>géométrique</b>, où les poids s'appliquent au NAV courant,
+        donc les gains font partie de la base redéployée. Le compartiment de cash gagné est la
+        mécanique du mode arithmétique, où les poids s'appliquent au capital initial et où le
+        surplus doit bien aller quelque part. La bande entre la NAV et la valeur investie est la trésorerie, et
         elle est décomposée : la réserve fixe, la réserve dynamique qui suit l'equity, et le
         cash gagné.
         C'est cette décomposition qui rend le test de baseline possible, puisque
@@ -879,8 +883,12 @@ holding less of the benchmark
         46 rebalance decisions, evenly spaced because the rule is calendar-driven: every 50 bars,
         unconditionally. <b>The vertical lines are not markers drawn on top: they are the
         rebalances themselves.</b> The policy flattens the portfolio before reallocating, so
-        invested value passes entirely through earned cash and is redistributed across the new
-        weights within the same bar. The line is that passage. The band between NAV and invested
+        invested value passes entirely through cash and is redistributed across the new weights
+        within the same bar. The line is that passage. It returns to general cash, not to earned
+        cash: the policy runs in <b>geometric</b> mode, where weights apply to current NAV, so
+        gains are part of the base being redeployed. The earned-cash tier is the arithmetic
+        mode's mechanic, where weights apply to initial capital and the surplus has to go
+        somewhere. The band between NAV and invested
         value is cash, and it is broken out: the fixed reserve, the dynamic reserve tracking
         equity, and earned cash. That breakdown is what makes the baseline test possible, since
         <code>absolute</code> is precisely the run with those two reserves stripped. The lower
