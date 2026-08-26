@@ -393,3 +393,12 @@ GitHub; clone it to read it comfortably.
 
 The allocation notebook that produced the results at the top of this page runs against the
 private engine and is not published here.
+
+---
+
+## Contact
+
+Arnaud Barbier — [arnaud.barbier@grenoble-em.com](mailto:arnaud.barbier@grenoble-em.com)
+
+A live walkthrough of the engine, including the private allocation and validation layers,
+is available on request.

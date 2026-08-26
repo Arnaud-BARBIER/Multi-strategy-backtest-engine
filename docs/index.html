@@ -148,6 +148,13 @@ h1{
   font-size:.82rem;color:var(--faint);max-width:66ch;
 }
 .foot b{color:var(--sub);font-weight:600}
+.contact{
+  border-top:1px solid var(--hair);margin-top:1.35rem;padding-top:1.1rem;
+  display:flex;flex-wrap:wrap;gap:.5rem 1.6rem;align-items:baseline;
+}
+.contact .k{font-size:.63rem;letter-spacing:.15em;text-transform:uppercase;color:var(--faint)}
+.contact a{font-size:.93rem;font-weight:600;text-decoration:none;border-bottom:1px solid var(--red)}
+.contact a:hover{color:var(--ink);border-bottom-color:var(--ink)}
 
 /* l'arbre porte les modes au-dessus de 760 px, les colonnes prennent le relais en dessous */
 @media (min-width:761px){.modes{display:none}}
@@ -332,6 +339,11 @@ h1{
       stratégie testée est une construction de manuel, retenue parce qu'elle est connue et
       reproductible. Le sujet est l'instrument qui la juge.
     </p>
+    <div class="contact">
+      <span class="k">Contact</span>
+      <a href="mailto:arnaud.barbier@grenoble-em.com">arnaud.barbier@grenoble-em.com</a>
+      <span class="k">Une démonstration en direct du moteur est possible sur demande</span>
+    </div>
   </div>
 
   <div class="wrap lang-en">
@@ -501,6 +513,11 @@ h1{
       is a textbook construction, chosen because it is well known and reproducible. The subject
       is the instrument that judges it.
     </p>
+    <div class="contact">
+      <span class="k">Contact</span>
+      <a href="mailto:arnaud.barbier@grenoble-em.com">arnaud.barbier@grenoble-em.com</a>
+      <span class="k">A live walkthrough of the engine is available on request</span>
+    </div>
   </div>
 </div>
 <script>
