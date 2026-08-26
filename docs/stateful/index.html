@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Replay, resume, watcher · Arnaud Barbier</title>
+<meta name="description" content="Comment un kernel compilé prend des décisions qui dépendent de son propre passé : replay, resume, et watcher intra-période.">
+<meta name="author" content="Arnaud Barbier">
+<link rel="canonical" href="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/stateful/">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/stateful/">
+<meta property="og:title" content="Replay, resume, watcher · Arnaud Barbier">
+<meta property="og:description" content="Comment un kernel compilé prend des décisions qui dépendent de son propre passé.">
+<meta property="og:locale" content="fr_FR">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>%E2%9A%99%EF%B8%8F</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --bg:#FFFFFF; --panel:#FFFFFF; --well:#F5F6F7;
+  --hair:#C9CCD1; --hard:#101215; --soft:#E3E5E8;
+  --ink:#101215; --sub:#54585F; --faint:#868B93;
+  --red:#C8102E; --red-well:#FBF0F1;
+  --f-sans:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --f-term:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0e1117; --panel:#161b22; --well:#12171f;
+    --hair:#21262d; --hard:#3d444d; --soft:#1b2028;
+    --ink:#e6edf3; --sub:#8b949e; --faint:#6e7681;
+    --red:#F0625F; --red-well:#1F1517;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0e1117; --panel:#161b22; --well:#12171f;
+  --hair:#21262d; --hard:#3d444d; --soft:#1b2028;
+  --ink:#e6edf3; --sub:#8b949e; --faint:#6e7681;
+  --red:#F0625F; --red-well:#1F1517;
+}
+
+*{box-sizing:border-box}
+body{
+  background:var(--bg);color:var(--ink);
+  font-family:var(--f-sans);font-size:16px;line-height:1.6;
+  margin:0;padding:0 1.5rem 5rem;-webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1000px;margin:0 auto}
+
+.mast{padding:2.25rem 0 0;border-bottom:3px solid var(--hard)}
+.mast-top{
+  display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem;
+  font-size:.7rem;letter-spacing:.13em;text-transform:uppercase;color:var(--sub);
+  padding-bottom:.7rem;border-bottom:1px solid var(--hair);
+}
+h1{
+  font-weight:700;font-size:clamp(1.95rem,4.6vw,2.9rem);line-height:1.06;
+  letter-spacing:-.03em;text-wrap:balance;margin:2.1rem 0 0;max-width:22ch;
+}
+.lede{font-size:1.06rem;color:var(--sub);max-width:62ch;margin:1.3rem 0 2.1rem}
+.tickers{display:flex;flex-wrap:wrap;gap:0;margin:0 0 2rem;
+  border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)}
+.tickers div{
+  font-size:.72rem;letter-spacing:.09em;text-transform:uppercase;color:var(--sub);
+  padding:.6rem 1.05rem .6rem 0;margin-right:1.05rem;border-right:1px solid var(--hair);
+}
+.tickers div:last-child{border-right:0;margin-right:0}
+
+section{padding:2.9rem 0 0;border-bottom:1px solid var(--hair)}
+section:last-of-type{border-bottom:0}
+.eyebrow{
+  font-family:var(--f-term);font-size:.7rem;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--red);margin:0 0 .55rem;
+}
+h2{font-weight:600;font-size:clamp(1.3rem,2.6vw,1.72rem);line-height:1.16;
+  letter-spacing:-.02em;text-wrap:balance;margin:0 0 1.05rem;max-width:32ch}
+h3{font-weight:600;font-size:1rem;letter-spacing:-.005em;margin:1.9rem 0 .5rem}
+p{max-width:66ch;margin:0 0 1.05rem}
+.sub{color:var(--sub)}
+ul{max-width:66ch;margin:0 0 1.05rem;padding-left:1.15rem}
+li{margin:0 0 .45rem}
+b{font-weight:600}
+code{font-family:var(--f-term);font-size:.85em;background:var(--well);
+  border:1px solid var(--soft);border-radius:2px;padding:.06em .32em}
+
+figure{margin:1.7rem 0 2.3rem;padding:0}
+.figbox{border:1px solid var(--hair);background:var(--panel);padding:1.15rem .9rem .5rem;overflow-x:auto}
+figure svg{display:block;width:100%;min-width:640px;max-width:100%;height:auto;color:var(--ink)}
+figcaption{font-size:.82rem;color:var(--sub);max-width:70ch;margin:.75rem 0 0;line-height:1.5}
+
+.note{border-left:3px solid var(--red);background:var(--red-well);
+  padding:1rem 1.15rem;margin:1.7rem 0;max-width:70ch}
+.note p{margin:0;max-width:none;font-size:.95rem}
+.note p + p{margin-top:.7rem}
+
+.tablewrap{overflow-x:auto;margin:1.7rem 0 2rem;border-top:2px solid var(--hard);border-bottom:2px solid var(--hard)}
+table{border-collapse:collapse;width:100%;min-width:660px;font-size:.88rem}
+th,td{text-align:left;vertical-align:top;padding:.72rem .9rem .72rem 0;border-bottom:1px solid var(--hair)}
+th{font-size:.7rem;letter-spacing:.11em;text-transform:uppercase;color:var(--sub);font-weight:500;padding-top:.85rem}
+tbody tr:last-child td{border-bottom:0}
+td:first-child{font-weight:600;white-space:nowrap;padding-right:1.4rem}
+
+.foot{padding-top:2.4rem;font-size:.82rem;color:var(--faint);max-width:66ch}
+
+.topbar{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;flex-wrap:wrap;
+        max-width:1000px;margin:0 auto}
+.pagenav{display:flex;gap:0;padding:.9rem 0 0;flex-wrap:wrap}
+.pagenav>a,.pagenav>span{
+  font-family:var(--f-sans);font-size:.68rem;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--faint);border:1px solid var(--hair);text-decoration:none;
+  padding:.32rem .7rem;margin-left:-1px;white-space:nowrap;
+}
+.pagenav>:first-child{margin-left:0}
+.pagenav [aria-current="page"]{color:var(--ink);border-color:var(--hard);position:relative;z-index:1;font-weight:600}
+.pagenav>a:hover{color:var(--red);border-color:var(--red);position:relative;z-index:2}
+.pagenav>a:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <nav class="pagenav" aria-label="Pages">
+    <a href="../">Accueil</a>
+    <a href="../validation/">Note de validation</a>
+    <a href="../engine/">Le moteur</a>
+    <span aria-current="page">Replay &amp; resume</span>
+  </nav>
+</div>
+
+<div class="wrap">
+
+<header class="mast">
+  <div class="mast-top">
+    <span>Moteur de backtest multi-stratégies</span>
+    <span>Note technique</span>
+  </div>
+  <h1>Rendre un kernel compilé capable de décisions stateful</h1>
+  <p class="lede">
+    Un kernel Numba ne peut pas s'arrêter à chaque barre pour demander l'avis d'une fonction
+    Python. Trois mécanismes contournent cette contrainte sans renoncer à la vitesse : le
+    replay, le resume, et le watcher qui relie les deux.
+  </p>
+  <div class="tickers">
+    <div>Replay : rétrospectif</div>
+    <div>Resume : causal</div>
+    <div>Watcher : détection compilée</div>
+    <div>Zéro appel Python par barre</div>
+    <div>Signaux décalés d'une barre</div>
+  </div>
+</header>
+
+<section>
+  <p class="eyebrow">Le problème</p>
+  <h2>L'information dont la décision a besoin n'existe qu'après le run</h2>
+  <p>
+    Exemple concret. Une règle de sortie veut réduire une position quand le P&amp;L latent du
+    trade dépasse deux fois le risque initial, et veut aussi savoir combien de stops ont été
+    touchés depuis l'ouverture de la journée. Ces deux quantités ne sont pas dans les données
+    de marché. Elles n'existent qu'une fois le portefeuille simulé.
+  </p>
+  <p>
+    Dans un moteur écrit en Python, on injecte un callback appelé à chaque barre. Le coût est
+    prohibitif : la boucle quitte le code machine des millions de fois, et la simulation
+    devient plus lente que la recherche qu'elle est censée servir. Dans un kernel compilé,
+    ce callback n'existe tout simplement pas. Il fallait donc obtenir la même information
+    autrement.
+  </p>
+</section>
+
+<section>
+  <p class="eyebrow">Mode 1</p>
+  <h2>Replay : le run précédent devient une donnée d'entrée</h2>
+  <p>
+    Le run 1 s'exécute à pleine vitesse et publie son état complet : le P&amp;L latent barre par
+    barre, l'historique de chaque trade, les événements d'ordres, les expositions. Une fonction
+    Python lit cet état et renvoie un patch. Le run 2 repart de la première barre avec ce patch
+    déjà en mémoire. Le kernel n'a jamais appelé Python pendant la boucle.
+  </p>
+
+  <figure>
+    <div class="figbox">
+      <svg viewBox="0 0 960 278" role="img" aria-label="Boucle du mode replay : le run 1 publie son état, une fonction Python le lit et renvoie un patch, le run 2 repart à pleine vitesse avec ce patch, et son propre état peut alimenter l'itération suivante.">
+        <defs>
+          <marker id="a1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <polygon points="0,0 10,5 0,10" fill="currentColor"/>
+          </marker>
+          <marker id="a1r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <polygon points="0,0 10,5 0,10" fill="#C8102E"/>
+          </marker>
+        </defs>
+
+        <text x="20" y="26" font-size="11" fill="currentColor" opacity=".62">Le kernel ne quitte jamais le code compilé pendant un run.</text>
+
+        <rect x="20" y="60" width="176" height="78" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="108" y="86" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor">RUN 1</text>
+        <text x="108" y="105" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".68">kernel Numba</text>
+        <text x="108" y="121" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".68">aucun appel Python</text>
+
+        <rect x="264" y="60" width="176" height="78" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="352" y="86" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor">ÉTAT DU RUN</text>
+        <text x="352" y="105" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".68">P&amp;L latent, trades,</text>
+        <text x="352" y="121" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".68">événements, expositions</text>
+
+        <rect x="508" y="60" width="176" height="78" fill="none" stroke="#C8102E" stroke-width="2"/>
+        <text x="596" y="86" text-anchor="middle" font-size="13" font-weight="600" fill="#C8102E">FONCTION PYTHON</text>
+        <text x="596" y="105" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".68">lit l'état,</text>
+        <text x="596" y="121" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".68">renvoie un patch</text>
+
+        <rect x="752" y="60" width="176" height="78" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="840" y="86" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor">RUN 2</text>
+        <text x="840" y="105" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".68">kernel Numba</text>
+        <text x="840" y="121" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".68">patch déjà en mémoire</text>
+
+        <line x1="200" y1="99" x2="256" y2="99" stroke="currentColor" stroke-width="1.4" marker-end="url(#a1)"/>
+        <text x="228" y="88" text-anchor="middle" font-size="10" fill="currentColor" opacity=".62">publie</text>
+        <line x1="444" y1="99" x2="500" y2="99" stroke="currentColor" stroke-width="1.4" marker-end="url(#a1)"/>
+        <text x="472" y="88" text-anchor="middle" font-size="10" fill="currentColor" opacity=".62">lit</text>
+        <line x1="688" y1="99" x2="744" y2="99" stroke="currentColor" stroke-width="1.4" marker-end="url(#a1)"/>
+        <text x="716" y="88" text-anchor="middle" font-size="10" fill="currentColor" opacity=".62">réinjecte</text>
+
+        <path d="M840 142 V 206 H 352 V 146" fill="none" stroke="#C8102E" stroke-width="1.4" stroke-dasharray="5 4" marker-end="url(#a1r)"/>
+        <text x="596" y="232" text-anchor="middle" font-size="11" fill="#C8102E">itération suivante : le patch est écrit en connaissant tout le run précédent</text>
+        <text x="596" y="252" text-anchor="middle" font-size="11" fill="currentColor" opacity=".62">y compris son futur</text>
+      </svg>
+    </div>
+    <figcaption>
+      Mode replay. Chaque tour lit l'état complet du tour précédent, ce qui rend la boucle
+      puissante en recherche et rétrospective par construction.
+    </figcaption>
+  </figure>
+
+  <h3>Ce que le patch peut contenir</h3>
+  <ul>
+    <li><b>Portée globale.</b> Des séries alignées sur les barres, indépendantes du P&amp;L latent
+      d'un trade en particulier : un filtre de régime, un plafond d'exposition, une mise à plat forcée.</li>
+    <li><b>Portée locale.</b> Des actions rattachées à un trade précis :
+      <code>SET_TP</code>, <code>SET_SL</code>, <code>MOVE_SL_TO_BE</code>,
+      <code>PARTIAL_EXIT</code>, <code>ADD_WEIGHT</code>, <code>FORCE_EXIT</code>.
+      C'est là que se développent les stratégies de sortie adaptatives, celles qui dépendent
+      de la trajectoire du trade et non du signal d'entrée.</li>
+  </ul>
+  <p>
+    Le patch est compilé en tableaux avant le run 2, et le run 2 publie à son tour son état,
+    qui peut alimenter un replay 2, puis un replay 3.
+  </p>
+
+  <div class="note">
+    <p><b>Le prix à payer est explicite.</b> Le patch est construit en connaissant l'intégralité du
+      run précédent, donc son futur. Chaque itération est un ajustement rétrospectif, et
+      l'empilement des itérations est une machine à surapprentissage.</p>
+    <p>La discipline associée est simple : le replay est un atelier, pas un résultat. Une règle
+      trouvée en replay doit ensuite être rejouée en causal, sans connaissance du futur, avant
+      d'être considérée comme une stratégie.</p>
+    <p><b>Ce que le moteur garantit, et ce qu'il ne garantit pas.</b> Tout signal construit sur
+      l'OHLCV porte un délai par défaut d'une barre, et le moteur refuse toute configuration qui
+      descendrait en dessous : <code>entry_delay</code> vaut 1, et une valeur nulle est rejetée
+      à la construction comme un biais de look-ahead. Les actions de replay et les décisions de
+      watcher portent le même délai d'une barre par défaut. En revanche, le moteur ne peut pas
+      savoir ce que la fonction de replay ira chercher dans l'état qu'on lui remet. C'est à
+      l'utilisateur de ne pas y puiser du futur. La fuite de données ne vient pas de la
+      mécanique du moteur, elle vient de ce qu'on écrit dans la fonction.</p>
+  </div>
+</section>
+
+<section>
+  <p class="eyebrow">Mode 2</p>
+  <h2>Resume : le run s'arrête vraiment, et l'état traverse la frontière</h2>
+  <p>
+    Pour une politique d'action continue, le rétrospectif ne suffit pas. Il faut décider dans
+    le run, avec la seule information disponible à cet instant. Le mode resume arrête
+    réellement l'exécution. À chaque frontière déclarée, le kernel rend la main, une fonction
+    utilisateur est appelée, puis le kernel reprend avec l'état du portefeuille intact.
+  </p>
+
+  <figure>
+    <div class="figbox">
+      <svg viewBox="0 0 960 268" role="img" aria-label="Mode resume : le kernel s'exécute par segments, s'arrête à chaque frontière déclarée pour appeler une fonction utilisateur qui fixe les poids ou le risque, puis reprend avec l'état du portefeuille conservé.">
+        <defs>
+          <marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <polygon points="0,0 10,5 0,10" fill="currentColor"/>
+          </marker>
+        </defs>
+
+        <text x="20" y="26" font-size="11" fill="currentColor" opacity=".62">Frontières déclarées : calendrier, tous les N barres, clôture de trade, tous les N trades, colonne d'événements.</text>
+
+        <rect x="195" y="52" width="150" height="58" fill="none" stroke="#C8102E" stroke-width="2"/>
+        <text x="270" y="74" text-anchor="middle" font-size="11" font-weight="600" fill="#C8102E">FONCTION UTILISATEUR</text>
+        <text x="270" y="91" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".68">poids ou risque</text>
+        <text x="270" y="105" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".68">pour la suite</text>
+
+        <rect x="445" y="52" width="150" height="58" fill="none" stroke="#C8102E" stroke-width="2"/>
+        <text x="520" y="74" text-anchor="middle" font-size="11" font-weight="600" fill="#C8102E">FONCTION UTILISATEUR</text>
+        <text x="520" y="91" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".68">contexte causal :</text>
+        <text x="520" y="105" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".68">rien après la coupe</text>
+
+        <rect x="695" y="52" width="150" height="58" fill="none" stroke="#C8102E" stroke-width="2"/>
+        <text x="770" y="74" text-anchor="middle" font-size="11" font-weight="600" fill="#C8102E">FONCTION UTILISATEUR</text>
+        <text x="770" y="91" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".68">Python pur</text>
+        <text x="770" y="105" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".68">ou njit bridgée</text>
+
+        <rect x="40" y="155" width="210" height="38" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="145" y="179" text-anchor="middle" font-size="11.5" fill="currentColor">kernel Numba</text>
+        <rect x="290" y="155" width="210" height="38" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="395" y="179" text-anchor="middle" font-size="11.5" fill="currentColor">kernel Numba</text>
+        <rect x="540" y="155" width="210" height="38" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="645" y="179" text-anchor="middle" font-size="11.5" fill="currentColor">kernel Numba</text>
+        <rect x="790" y="155" width="130" height="38" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="855" y="179" text-anchor="middle" font-size="11.5" fill="currentColor">kernel</text>
+
+        <rect x="250" y="155" width="40" height="38" fill="#C8102E" opacity=".14"/>
+        <rect x="500" y="155" width="40" height="38" fill="#C8102E" opacity=".14"/>
+        <rect x="750" y="155" width="40" height="38" fill="#C8102E" opacity=".14"/>
+
+        <line x1="250" y1="152" x2="250" y2="116" stroke="currentColor" stroke-width="1.4" marker-end="url(#a2)"/>
+        <line x1="290" y1="116" x2="290" y2="152" stroke="currentColor" stroke-width="1.4" marker-end="url(#a2)"/>
+        <line x1="500" y1="152" x2="500" y2="116" stroke="currentColor" stroke-width="1.4" marker-end="url(#a2)"/>
+        <line x1="540" y1="116" x2="540" y2="152" stroke="currentColor" stroke-width="1.4" marker-end="url(#a2)"/>
+        <line x1="750" y1="152" x2="750" y2="116" stroke="currentColor" stroke-width="1.4" marker-end="url(#a2)"/>
+        <line x1="790" y1="116" x2="790" y2="152" stroke="currentColor" stroke-width="1.4" marker-end="url(#a2)"/>
+
+        <line x1="40" y1="224" x2="916" y2="224" stroke="currentColor" stroke-width="1.2" stroke-dasharray="5 4" marker-end="url(#a2)"/>
+        <text x="478" y="247" text-anchor="middle" font-size="11" fill="currentColor" opacity=".7">l'état du portefeuille traverse chaque frontière : cash, positions, ancre, drawdown, dette</text>
+      </svg>
+    </div>
+    <figcaption>
+      Mode resume. On paie une sortie du code compilé par frontière, pas par barre, et la
+      décision ne voit jamais rien qui se situe après la coupe.
+    </figcaption>
+  </figure>
+
+  <h3>Deux usages</h3>
+  <ul>
+    <li><b>Sizing.</b> À chaque ouverture de trade, la fonction décide du montant à risquer.
+      Elle peut s'appuyer sur les événements capturés dans un run précédent.</li>
+    <li><b>Allocation.</b> À chaque période, la fonction décide des poids et des actifs retenus
+      pour la période suivante.</li>
+  </ul>
+  <p>
+    Le coût du sizing est assumé et connu d'avance : si la décision doit être prise à chaque
+    ouverture, la fonction utilisateur sera appelée autant de fois qu'il y a de trades. Il n'y
+    a pas d'échappatoire sans renoncer à décider trade par trade. Ce qui est évitable, en
+    revanche, c'est de payer un appel par barre, et c'est précisément ce que la frontière
+    déclarée supprime.
+  </p>
+
+  <h3>Pourquoi laisser la porte ouverte à Python</h3>
+  <p>
+    La fonction de décision peut être compilée en Numba et bridgée au kernel. Elle peut aussi
+    rester en Python pur, et c'est souvent le bon choix pendant la phase de recherche : changer
+    une politique en Python coûte une seconde, alors que recompiler le kernel coûte plusieurs
+    minutes. Le compromis se choisit au cas par cas, sans changer l'architecture.
+  </p>
+</section>
+
+<section>
+  <p class="eyebrow">Mode 3</p>
+  <h2>Watcher : séparer la détection, qui est légère, de la décision, qui est lourde</h2>
+  <p>
+    Reste un cas gênant. Une politique qui veut réagir à un événement précis, mais dont la
+    réaction est coûteuse, ne peut pas se contenter d'un rendez-vous périodique : l'événement
+    tombe entre deux rendez-vous et la réaction arrive en retard. Le watcher résout cela en
+    coupant le problème en deux.
+  </p>
+  <ul>
+    <li><b>La détection</b> est une petite fonction Numba écrite par l'utilisateur, scannée barre
+      par barre à l'intérieur du kernel. Elle ne manipule que des scalaires : drawdown courant,
+      durée sous les eaux, volatilité, bêta, exposition brute et nette, concentration. Son coût
+      est négligeable.</li>
+    <li><b>La décision</b> est la fonction Python lourde. Elle n'est appelée que lorsque la
+      détection se déclenche.</li>
+  </ul>
+  <p>
+    Le principe directeur n'est pas de rendre l'appel rapide, il est d'en réduire le nombre.
+    Même compilée, une fonction appelée à chaque barre reste une fonction appelée à chaque
+    barre. Le watcher est donc convoqué à sa fréquence déclarée, et à chaque convocation il
+    examine la période écoulée depuis la précédente, puis s'arrête au premier événement qu'il
+    y trouve. Le reste de la fenêtre n'est pas perdu : le run reprend à la barre de décision et
+    la suite de la période est réexaminée ensuite. C'est le meilleur compromis que j'ai trouvé
+    entre réactivité et coût.
+  </p>
+
+  <figure>
+    <div class="figbox">
+      <svg viewBox="0 0 960 316" role="img" aria-label="Mode watcher : à chaque contrôle périodique, une fonction njit examine la fenêtre écoulée et s'arrête au premier événement qu'elle y trouve. Le moteur ramène le run à la barre de cet événement plus un délai et y appelle la fonction Python de décision. Le reste de la fenêtre est réexaminé après la reprise.">
+        <defs>
+          <marker id="a3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <polygon points="0,0 10,5 0,10" fill="currentColor"/>
+          </marker>
+          <marker id="a3r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <polygon points="0,0 10,5 0,10" fill="#C8102E"/>
+          </marker>
+        </defs>
+
+        <text x="20" y="26" font-size="11" fill="currentColor" opacity=".62">La détection est compilée et tourne à chaque barre. La décision reste en Python et n'est appelée que sur événement.</text>
+
+        <rect x="286" y="58" width="190" height="62" fill="none" stroke="#C8102E" stroke-width="2"/>
+        <text x="381" y="80" text-anchor="middle" font-size="11.5" font-weight="600" fill="#C8102E">FONCTION PYTHON</text>
+        <text x="381" y="97" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".68">décision lourde,</text>
+        <text x="381" y="112" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".68">appelée seulement ici</text>
+
+        <rect x="180" y="170" width="440" height="40" fill="#C8102E" opacity=".09"/>
+        <text x="255" y="163" text-anchor="middle" font-size="10" fill="#C8102E" opacity=".8">fenêtre examinée par ce contrôle</text>
+        <rect x="40" y="170" width="880" height="40" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="58" y="195" font-size="12" fill="currentColor">kernel Numba</text>
+        <text x="902" y="195" text-anchor="end" font-size="10.5" fill="currentColor" opacity=".68">watcher njit scanné à chaque barre</text>
+
+        <line x1="330" y1="210" x2="330" y2="262" stroke="#C8102E" stroke-width="1.4" stroke-dasharray="4 4"/>
+        <circle cx="330" cy="190" r="5.5" fill="#C8102E"/>
+        <text x="322" y="278" text-anchor="end" font-size="11" fill="#C8102E">barre t : premier événement de la fenêtre</text>
+
+        <circle cx="520" cy="190" r="4.5" fill="none" stroke="#C8102E" stroke-width="1.6"/>
+        <line x1="520" y1="210" x2="520" y2="242" stroke="#C8102E" stroke-width="1.2" stroke-dasharray="3 4" opacity=".7"/>
+        <text x="520" y="256" text-anchor="middle" font-size="10" fill="#C8102E" opacity=".8">événement suivant : réexaminé après la reprise</text>
+
+        <line x1="376" y1="150" x2="376" y2="210" stroke="currentColor" stroke-width="1.4"/>
+        <circle cx="376" cy="190" r="4" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="384" y="296" font-size="11" fill="currentColor">t + d : décision</text>
+
+        <line x1="620" y1="150" x2="620" y2="210" stroke="currentColor" stroke-width="1.4"/>
+        <circle cx="620" cy="190" r="4" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="620" y="278" text-anchor="middle" font-size="11" fill="currentColor" opacity=".78">contrôle périodique : le watcher voit l'événement passé</text>
+        <text x="640" y="296" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".55">sans watcher, la décision arriverait ici</text>
+
+        <line x1="614" y1="150" x2="380" y2="150" stroke="#C8102E" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#a3r)"/>
+        <text x="497" y="140" text-anchor="middle" font-size="11" fill="#C8102E">le run revient au moment de l'événement</text>
+        <line x1="376" y1="148" x2="376" y2="126" stroke="#C8102E" stroke-width="1.5" marker-end="url(#a3r)"/>
+      </svg>
+    </div>
+    <figcaption>
+      Mode watcher. Un contrôle examine une fenêtre entière et bute sur son premier événement.
+      La décision n'est pas prise à la barre du contrôle, mais ramenée à la barre de cet
+      événement augmentée du délai déclaré.
+    </figcaption>
+  </figure>
+
+  <p>
+    Deux régimes sont assumés et explicites. En mode causal, la décision reste à la barre du
+    contrôle, ce qui est le comportement admissible pour une stratégie. En mode recherche, la
+    décision remonte à l'événement, ce qui est rétrospectif et doit être activé volontairement.
+    Chaque décision est étiquetée dans les journaux du run selon le régime qui l'a produite.
+  </p>
+  <p>
+    Les garde-fous ne sont pas décoratifs : temporisation par motif, verrou sur signal
+    persistant pour qu'une condition de niveau ne redéclenche pas à chaque barre, plafond
+    d'événements par contrôle, budget de déclenchements sur la durée du run.
+  </p>
+</section>
+
+<section>
+  <p class="eyebrow">Récapitulatif</p>
+  <h2>Trois régimes, trois usages</h2>
+  <div class="tablewrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Mode</th>
+          <th>Quand la décision est prise</th>
+          <th>Ce qu'elle voit</th>
+          <th>Coût</th>
+          <th>Usage</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Replay</td>
+          <td>Entre deux runs complets</td>
+          <td>Tout le run précédent, futur compris</td>
+          <td>Un run supplémentaire par itération</td>
+          <td>Concevoir une règle de sortie adaptative</td>
+        </tr>
+        <tr>
+          <td>Resume</td>
+          <td>À chaque frontière déclarée, dans le run</td>
+          <td>Uniquement ce qui précède la coupe</td>
+          <td>Un appel par frontière, donc un par trade en sizing</td>
+          <td>Sizing continu, allocation période par période</td>
+        </tr>
+        <tr>
+          <td>Watcher</td>
+          <td>À la barre de l'événement, plus le délai</td>
+          <td>Des scalaires de risque, barre par barre</td>
+          <td>Un scan par contrôle, un appel lourd par événement</td>
+          <td>Réagir vite sans payer un appel Python par barre</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    Les trois se chaînent. Un replay sert à découvrir la règle et à capturer les événements
+    d'un run, un resume la rejoue en causal, et un watcher lui donne la réactivité sans lui
+    faire perdre la vitesse du kernel.
+  </p>
+  <p>
+    Dans les trois cas, le décalage d'une barre entre un signal et son exécution est le
+    comportement par défaut et ne peut pas être désactivé. Le reste de la causalité relève de
+    la personne qui écrit la fonction de décision.
+  </p>
+</section>
+
+<p class="foot">
+  Note technique extraite du moteur de backtest multi-stratégies. Les noms de spécifications
+  et d'actions cités correspondent à l'API réelle du moteur.
+</p>
+
+</div>
+</body>
+</html>
