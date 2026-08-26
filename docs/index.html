@@ -89,6 +89,17 @@ h1{
 .fig .n{font-size:.78rem;color:var(--sub);margin-top:.4rem;line-height:1.42}
 .neg{color:var(--red)}
 
+.band{border:1px solid var(--hair);margin:2.6rem 0 0;background:#0e1117}
+.band img{display:block;width:100%;height:auto}
+.band .cap{
+  font-size:.75rem;color:var(--faint);line-height:1.5;
+  padding:.6rem .8rem;border-top:1px solid var(--hair);background:var(--bg);
+}
+.card .shot{
+  margin:-1.35rem -1.4rem .35rem;border-bottom:1px solid var(--hair);
+  background:#0e1117;height:104px;overflow:hidden;
+}
+.card .shot img{display:block;width:100%;height:104px;object-fit:cover;object-position:left top}
 .lbl{
   font-size:.63rem;letter-spacing:.16em;text-transform:uppercase;color:var(--red);
   font-weight:600;margin:3.4rem 0 1.1rem;
@@ -151,7 +162,7 @@ h1{
       <div class="fig">
         <div class="k">Identité comptable</div>
         <div class="v">4,44 e−16</div>
-        <div class="n">résidu maximal, 2 300 barres</div>
+        <div class="n">résidu maximal, neuf ans de barres journalières</div>
       </div>
       <div class="fig">
         <div class="k">Hors échantillon</div>
@@ -160,9 +171,20 @@ h1{
       </div>
     </div>
 
+
+    <div class="band">
+      <img src="img/band-equity.png" alt="Sortie du moteur : NAV, paliers de trésorerie, rebalancements, drawdown" loading="lazy">
+      <div class="cap">
+        Sortie brute du moteur. La courbe verte est la NAV, les losanges violets les décisions
+        de rebalancement, les lignes basses les paliers de trésorerie, le panneau du bas le
+        drawdown.
+      </div>
+    </div>
+
     <div class="lbl">Trois entrées</div>
     <div class="cards">
       <a class="card" href="validation/">
+        <div class="shot"><img src="img/thumb-validation.png" alt="Courbes de la stratégie et des deux baselines" loading="lazy"></div>
         <div class="tag"><span>La mesure</span><span>6 min</span></div>
         <h2>Note de validation</h2>
         <p>
@@ -173,6 +195,7 @@ h1{
         <div class="go">Lire la note →</div>
       </a>
       <a class="card" href="engine/">
+        <div class="shot"><img src="img/thumb-engine.png" alt="Bloc AllocationSpec" loading="lazy"></div>
         <div class="tag"><span>L'instrument</span><span>5 min</span></div>
         <h2>Le moteur</h2>
         <p>
@@ -183,6 +206,7 @@ h1{
         <div class="go">Voir le moteur →</div>
       </a>
       <a class="card" href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine">
+        <div class="shot"><img src="img/thumb-repo.png" alt="Scanner njit" loading="lazy"></div>
         <div class="tag"><span>Le code</span><span>MIT</span></div>
         <h2>Le dépôt</h2>
         <p>
@@ -228,7 +252,7 @@ h1{
       <div class="fig">
         <div class="k">Accounting identity</div>
         <div class="v">4.44 e−16</div>
-        <div class="n">worst residual, 2,300 bars</div>
+        <div class="n">worst residual, nine years of daily bars</div>
       </div>
       <div class="fig">
         <div class="k">Out of sample</div>
@@ -237,9 +261,19 @@ h1{
       </div>
     </div>
 
+
+    <div class="band">
+      <img src="img/band-equity.png" alt="Engine output: NAV, cash tiers, rebalances, drawdown" loading="lazy">
+      <div class="cap">
+        Unedited engine output. The green line is NAV, the purple diamonds are rebalance
+        decisions, the lower lines are the cash tiers, the bottom panel is drawdown.
+      </div>
+    </div>
+
     <div class="lbl">Three ways in</div>
     <div class="cards">
       <a class="card" href="validation/">
+        <div class="shot"><img src="img/thumb-validation.png" alt="Courbes de la stratégie et des deux baselines" loading="lazy"></div>
         <div class="tag"><span>The measurement</span><span>6 min</span></div>
         <h2>Validation note</h2>
         <p>
@@ -250,6 +284,7 @@ h1{
         <div class="go">Read the note →</div>
       </a>
       <a class="card" href="engine/">
+        <div class="shot"><img src="img/thumb-engine.png" alt="Bloc AllocationSpec" loading="lazy"></div>
         <div class="tag"><span>The instrument</span><span>5 min</span></div>
         <h2>The engine</h2>
         <p>
@@ -260,6 +295,7 @@ h1{
         <div class="go">See the engine →</div>
       </a>
       <a class="card" href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine">
+        <div class="shot"><img src="img/thumb-repo.png" alt="Scanner njit" loading="lazy"></div>
         <div class="tag"><span>The code</span><span>MIT</span></div>
         <h2>The repository</h2>
         <p>
