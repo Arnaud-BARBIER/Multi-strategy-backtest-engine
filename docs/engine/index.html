@@ -493,6 +493,40 @@ button{font:inherit}
   <section>
     <div class="shead"><span class="snum">06</span><span class="stitle">Peut-on croire ces chiffres</span></div>
     <h2>Réfuter coûte trois lignes, et c'est pour ça que ça se fait</h2>
+    <div class="note">
+      <p>
+        <b>Deux runs distincts, et il ne faut pas les confondre.</b> Tout ce qui précède vient
+        du run avec emprunt et watcher : 30 décisions, drawdown maximal de 40,95 %. Les trois
+        appels de réfutation qui suivent ont été passés sur un autre run, la même stratégie
+        sans emprunt ni watcher : 46 décisions, drawdown maximal de 24,76 %. C'est ce
+        second run que documente la note de validation.
+      </p>
+    </div>
+    <figure>
+      <img src="../img/11-performance-carrier.png" alt="Rapport de porteur de performance, verdict BELOW_RISK_FREE" loading="lazy">
+      <figcaption>
+        <b>Le run montré plus haut, jugé : une statistique favorable, contredite par un test
+        économique.</b> Le PSR ressort à 100 % et la longueur de piste requise est largement
+        dépassée, ce qui passerait pour un succès. Le seuil d'aversion au risque γ* est
+        pourtant négatif, et le verdict tombe : <code>BELOW_RISK_FREE</code>, un actif sans
+        risque à 4 % fait mieux dès γ = 0. Le porteur mesuré est indiqué en tête,
+        <code>portfolio_equity(nav−borrowed)</code>, parce que lire la mauvaise série donnerait
+        un résultat faux sans en avoir l'air.
+      </figcaption>
+    </figure>
+    <p>
+      Les trois appels qui suivent portent sur le run sans emprunt ni watcher. La machinerie
+      comptable y est la même ; ce qui change, c'est qu'il n'y a plus de levier ni
+      d'interruption entre la règle de pondération et le résultat.
+    </p>
+    <figure>
+      <img src="../img/15-alloc-equity.png" alt="Courbe d'equity du run sans emprunt ni watcher" loading="lazy">
+      <figcaption>
+        <b>Le run soumis à réfutation.</b> Réserve fixe et dynamique, frais, devises, mais
+        aucune ligne d'emprunt et aucun marqueur d'action intra-période. Rebalancement toutes
+        les 50 barres, 46 décisions, +18,95 % cumulés, drawdown maximal de 24,76 %.
+      </figcaption>
+    </figure>
     <figure>
       <img src="../img/10-validation-calls.png" alt="Baseline naïve rejouée dans le moteur" loading="lazy">
       <figcaption>
@@ -529,21 +563,10 @@ button{font:inherit}
         rendement, par une division.
       </figcaption>
     </figure>
-    <figure>
-      <img src="../img/11-performance-carrier.png" alt="Rapport de porteur de performance, verdict BELOW_RISK_FREE" loading="lazy">
-      <figcaption>
-        <b>Une statistique favorable, contredite par un test économique.</b> Le PSR ressort à
-        100 % et la longueur de piste requise est largement dépassée, ce qui passerait pour un
-        succès. Le seuil d'aversion au risque γ* est pourtant négatif, et le verdict tombe :
-        <code>BELOW_RISK_FREE</code>, un actif sans risque à 4 % fait mieux dès γ = 0. Le
-        porteur mesuré est indiqué en tête, <code>portfolio_equity(nav−borrowed)</code>, parce
-        que lire la mauvaise série donnerait un résultat faux sans en avoir l'air.
-      </figcaption>
-    </figure>
     <div class="crosslink">
       <p>
-        Les verdicts de ces trois tests, sur la stratégie d'allocation testée ici, sont
-        défavorables et publiés en détail.
+        Ces trois verdicts, et l'énoncé de ce qu'ils ne permettent pas de conclure, sont
+        publiés en détail sur le run sans emprunt ni watcher.
       </p>
       <p><a href="../">Lire la note de validation →</a></p>
     </div>
@@ -754,6 +777,40 @@ button{font:inherit}
   <section>
     <div class="shead"><span class="snum">06</span><span class="stitle">Can you believe these numbers</span></div>
     <h2>Refuting costs three lines, which is why it happens</h2>
+    <div class="note">
+      <p>
+        <b>Two separate runs, and they must not be conflated.</b> Everything above comes from
+        the run with borrowing and a watcher: 30 decisions, 40.95 % maximum drawdown. The three
+        refutation calls below were made against a different run, the same strategy without
+        borrowing and without a watcher: 46 decisions, 24.76 % maximum drawdown. That second
+        run is the one the validation note documents.
+      </p>
+    </div>
+    <figure>
+      <img src="../img/11-performance-carrier.png" alt="Performance carrier report, BELOW_RISK_FREE verdict" loading="lazy">
+      <figcaption>
+        <b>The run shown above, judged: a favourable statistic, overruled by an economic
+        test.</b> The PSR comes out at 100 % and the required track length is far exceeded,
+        which would read as a pass. Yet the risk-aversion threshold γ* is negative, and the
+        verdict lands: <code>BELOW_RISK_FREE</code>, a 4 % risk-free asset does better from
+        γ = 0. The measured carrier is stated at the top,
+        <code>portfolio_equity(nav−borrowed)</code>, because reading the wrong series would be
+        wrong without looking wrong.
+      </figcaption>
+    </figure>
+    <p>
+      The three calls that follow are against the run without borrowing and without a watcher.
+      The accounting machinery is the same there; what changes is that no leverage and no
+      interruption sit between the weighting rule and the result.
+    </p>
+    <figure>
+      <img src="../img/15-alloc-equity.png" alt="Equity curve of the run without borrowing or watcher" loading="lazy">
+      <figcaption>
+        <b>The run put to refutation.</b> Fixed and dynamic reserve, fees, currencies, but no
+        borrow line and no intra-period action marker. Rebalanced every 50 bars, 46 decisions,
+        +18.95 % cumulative, 24.76 % maximum drawdown.
+      </figcaption>
+    </figure>
     <figure>
       <img src="../img/10-validation-calls.png" alt="Naive baseline replayed through the engine" loading="lazy">
       <figcaption>
@@ -789,21 +846,10 @@ button{font:inherit}
         <code>DOMINATED</code>: the same risk was available with more return, by a division.
       </figcaption>
     </figure>
-    <figure>
-      <img src="../img/11-performance-carrier.png" alt="Performance carrier report, BELOW_RISK_FREE verdict" loading="lazy">
-      <figcaption>
-        <b>A favourable statistic, overruled by an economic test.</b> The PSR comes out at
-        100 % and the required track length is far exceeded, which would read as a pass. Yet
-        the risk-aversion threshold γ* is negative, and the verdict lands:
-        <code>BELOW_RISK_FREE</code>, a 4 % risk-free asset does better from γ = 0. The
-        measured carrier is stated at the top, <code>portfolio_equity(nav−borrowed)</code>,
-        because reading the wrong series would be wrong without looking wrong.
-      </figcaption>
-    </figure>
     <div class="crosslink">
       <p>
-        The verdicts of those three tests, on the allocation strategy shown here, are
-        unfavourable and published in full.
+        Those three verdicts, and the statement of what they do not allow you to conclude, are
+        published in full against the run without borrowing and without a watcher.
       </p>
       <p><a href="../">Read the validation note →</a></p>
     </div>

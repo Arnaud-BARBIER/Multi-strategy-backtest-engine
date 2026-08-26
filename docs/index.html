@@ -294,7 +294,11 @@ button{font:inherit}
       <p>
         Par-dessus, la politique testée : 30 % de réserve de trésorerie, 2 % de frais de
         gestion provisionnés à l'année et payés au trimestre, 5 % de commission de
-        surperformance avec high-water mark, coûts d'exécution au comptant.
+        surperformance avec high-water mark, coûts d'exécution au comptant. <b>Ni emprunt ni
+        interruption intra-période sur ce run</b> : rien ne s'intercale entre la règle de
+        pondération et le résultat, ce qui est la condition pour que les tests ci-dessous
+        mesurent la règle et non autre chose. Le moteur sait faire les deux, et un second run
+        les active, mais il n'est pas le sujet de cette note.
       </p>
       <p>
         La stratégie n'est pas de mon invention : c'est une construction de manuel, retenue
@@ -782,7 +786,10 @@ holding less of the benchmark
       <p>
         On top of it, the policy under test: a 30 % cash reserve, a 2 % management fee accrued
         yearly and paid quarterly, a 5 % performance fee with a high-water mark, and spot
-        execution costs.
+        execution costs. <b>No borrowing and no intra-period interruption on this run</b>:
+        nothing sits between the weighting rule and the result, which is the condition for the
+        tests below to measure the rule rather than something else. The engine does both, and a
+        second run turns them on, but that run is not the subject of this note.
       </p>
       <p>
         The strategy is not my invention. It is a textbook construction, used as a test
