@@ -494,8 +494,8 @@ carrier     : portfolio_equity(nav-borrowed) · basis D
     </div>
     <div class="plot">
       <div class="lbl"><span>Graphique · effet de sizing cumulé</span><span>non retouché</span></div>
-      <img src="img/v3-null-sizing-nav.png" alt="Graphique · effet de sizing cumulé" loading="lazy">
-      <div class="cap"><b>Voilà à quoi ressemble un effet non détectable.</b> La courbe orange du bas est la contribution cumulée de l'optimiseur : elle monte régulièrement jusqu'à +5 %, pointe à +10 % pendant le krach de 2020, puis rend tout et finit à −8 %. L'estimation ponctuelle de −0,84 pt est le solde d'une série qui a changé de signe, ce qui est exactement ce que produit le bruit d'échantillonnage, et ce que le t de −0,63 dit autrement. Le panneau du milieu compte les positions effectives : 5 pour le run à poids plats, entre 3,3 et 5 pour la stratégie. <b>L'optimiseur ne concentre que de 0,95 position en médiane</b>, ce qui confirme qu'avec cinq actifs et un cap à 35 % il lui reste peu de marge de manœuvre.</div>
+      <img src="img/v3-sizing-effect.png" alt="Effet de sizing cumulé" loading="lazy">
+      <div class="cap"><b>Voilà à quoi ressemble un effet non détectable.</b> La contribution cumulée de l'optimiseur monte à +5 % et y reste six ans, pointe à +10,6 % pendant le krach de mars 2020, puis rend tout en quelques semaines et finit à −8 %. <b>Le −0,84 pt n'est pas un handicap constant : c'est le solde de clôture d'une série qui a changé de signe.</b> C'est exactement ce que produit le bruit d'échantillonnage, et c'est ce que le t de −0,63 dit sous une autre forme. Un backtest qui n'aurait publié que la moyenne aurait laissé croire à une dégradation régulière.</div>
     </div>
 
     <p>
@@ -520,8 +520,10 @@ carrier     : portfolio_equity(nav-borrowed) · basis D
         L'outil imprime le second terme sous le nom de « selection ». Il regroupe en réalité
         deux choses : quels noms ont été détenus, et les 30 % gardés en réserve, parce que
         c'est la baseline absolue qui retire les réserves. Avec cinq actifs et un cap à 35 %,
-        le panier bouge peu : l'essentiel de ces −1,02 pt est la politique de trésorerie, pas
-        le choix des noms.
+        le panier bouge peu, et l'outil le chiffre : 4,05 positions effectives en médiane pour la
+        stratégie contre 5,00 pour le run à poids plats, soit 0,95 position de concentration
+        ajoutée par l'optimiseur. L'essentiel de ces −1,02 pt est donc la politique de
+        trésorerie, pas le choix des noms.
       </p>
     </div>
   </section>
@@ -1010,8 +1012,8 @@ carrier     : portfolio_equity(nav-borrowed) · basis D
     </div>
     <div class="plot">
       <div class="lbl"><span>Chart · cumulative sizing effect</span><span>unedited</span></div>
-      <img src="img/v3-null-sizing-nav.png" alt="Chart · cumulative sizing effect" loading="lazy">
-      <div class="cap"><b>This is what an undetectable effect looks like.</b> The orange line at the bottom is the optimiser's cumulative contribution: it climbs steadily to +5 %, peaks at +10 % through the 2020 crash, then gives it all back and ends at −8 %. The −0.84 pt point estimate is the closing balance of a series that changed sign, which is exactly what sampling noise produces, and what the t of −0.63 says in another way. The middle panel counts effective positions: 5 for the flat-weight run, between 3.3 and 5 for the strategy. <b>The optimiser concentrates by a median of 0.95 positions</b>, which confirms that with five assets and a 35 % cap it has little room to work with.</div>
+      <img src="img/v3-sizing-effect.png" alt="Cumulative sizing effect" loading="lazy">
+      <div class="cap"><b>This is what an undetectable effect looks like.</b> The optimiser's cumulative contribution climbs to +5 % and stays there for six years, peaks at +10.6 % through the March 2020 crash, then gives it all back within weeks and ends at −8 %. <b>The −0.84 pt is not a steady handicap: it is the closing balance of a series that changed sign.</b> That is exactly what sampling noise produces, and it is what the t of −0.63 says in another form. A backtest reporting only the average would have suggested a steady decline.</div>
     </div>
 
     <p>
@@ -1036,7 +1038,10 @@ carrier     : portfolio_equity(nav-borrowed) · basis D
         The tool prints the second term as "selection". It in fact bundles two things: which
         names were held, and the 30 % kept in reserve, because the absolute baseline is the
         one that strips the reserves. With five assets and a 35 % cap the basket rarely
-        changes, so most of that −1.02 pt is the cash policy, not the choice of names.
+        changes, and the tool prices it: 4.05 effective positions in median for the strategy
+        against 5.00 for the flat-weight run, so the optimiser adds 0.95 positions of
+        concentration. Most of that −1.02 pt is therefore the cash policy, not the choice of
+        names.
       </p>
     </div>
   </section>
