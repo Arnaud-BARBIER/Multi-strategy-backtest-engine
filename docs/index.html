@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Arnaud Barbier · Moteur de backtest multi-actifs</title>
-<meta name="description" content="Un moteur de backtest multi-actifs : noyau comptable compilé, registre qui boucle, et une couche de validation.">
+<title>Arnaud Barbier · Moteur de backtest et couche de validation</title>
+<meta name="description" content="Réduire le temps entre une hypothèse d'investissement, son test et sa validation. Noyau comptable compilé en Numba, trois modes d'exécution, et la couche qui juge le résultat.">
 <meta name="author" content="Arnaud Barbier">
 <link rel="canonical" href="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/">
-<meta property="og:title" content="Arnaud Barbier · Moteur de backtest multi-actifs">
-<meta property="og:description" content="Un moteur de backtest multi-actifs : noyau comptable compilé, registre qui boucle, et une couche de validation.">
+<meta property="og:title" content="Arnaud Barbier · Moteur de backtest et couche de validation">
+<meta property="og:description" content="Réduire le temps entre une hypothèse d'investissement, son test et sa validation.">
 <meta property="og:locale" content="fr_FR">
 <meta property="og:locale:alternate" content="en_GB">
 <meta name="twitter:card" content="summary">
@@ -70,11 +70,13 @@ a{color:var(--red)}
   border-bottom:1px solid var(--hair);padding:0 0 .7rem;margin:2.2rem 0 0;
 }
 h1{
-  font-size:clamp(2rem,5.2vw,3.35rem);font-weight:700;line-height:1.03;
-  letter-spacing:-.035em;text-wrap:balance;max-width:19ch;margin:2.4rem 0 0;
+  font-size:clamp(1.85rem,4.6vw,3rem);font-weight:700;line-height:1.05;
+  letter-spacing:-.035em;text-wrap:balance;max-width:24ch;margin:2.4rem 0 0;
 }
 .lede{font-size:1.06rem;color:var(--sub);max-width:62ch;margin:1.5rem 0 0}
 .lede b{color:var(--ink);font-weight:600}
+.lede2{font-size:.95rem;color:var(--sub);max-width:64ch;margin:1.05rem 0 0}
+.lede2 b{color:var(--ink);font-weight:600}
 
 .figs{
   display:grid;grid-template-columns:repeat(auto-fit,minmax(158px,1fr));gap:0;
@@ -165,14 +167,21 @@ h1{
       <div>Backtest multi-actifs · 2026</div>
     </div>
 
-    <h1>Un moteur de backtest multi-actifs, et la couche qui éprouve ce qu'il produit.</h1>
+    <h1>Moteur de backtest multi-actifs, et couche de validation.</h1>
 
     <p class="lede">
+      L'objectif du projet : <b>réduire le temps entre une hypothèse d'investissement, son test
+      et sa validation</b>. On écrit la logique de sa stratégie, et rien d'autre : ni le
+      backtest, ni la comptabilité qu'il suppose, ni la couche chargée de dire ce que le
+      résultat vaut.
+    </p>
+
+    <p class="lede2">
       Un noyau compilé en Numba tient la comptabilité du portefeuille barre après barre :
       paliers de trésorerie, tranches d'emprunt indexées sur un taux de marché réel, plusieurs
-      devises, frais provisionnés sur une horloge et payés sur une autre. <b>Trois modes
-      d'exécution partagent ce noyau</b>, et une couche de validation les accompagne, pour
-      éprouver la robustesse de n'importe quelle stratégie qui tourne dessus.
+      devises, frais provisionnés sur une horloge et payés sur une autre. Trois modes
+      d'exécution partagent ce noyau : signaux algorithmiques, allocation de portefeuille,
+      et suivi d'un compte réel.
     </p>
 
     <div class="figs">
@@ -320,13 +329,19 @@ h1{
       <div>Multi-asset backtesting · 2026</div>
     </div>
 
-    <h1>A multi-asset backtesting engine, and the layer that tests what it produces.</h1>
+    <h1>Multi-asset backtesting engine, and validation layer.</h1>
 
     <p class="lede">
+      The point of the project: <b>cut the time between an investment hypothesis, its test and
+      its validation</b>. You write your strategy's logic and nothing else: not the backtest,
+      not the accounting it assumes, not the layer that says what the result is worth.
+    </p>
+
+    <p class="lede2">
       A Numba-compiled core keeps the portfolio's books bar after bar: cash tiers, borrow
       tranches indexed on a real market rate, several currencies, fees that accrue on one clock
-      and are paid on another. <b>Three execution modes share that core</b>, and a validation
-      layer comes with them, to test the robustness of any strategy that runs on it.
+      and are paid on another. Three execution modes share that core: algorithmic signals,
+      portfolio allocation, and tracking a real account.
     </p>
 
     <div class="figs">
