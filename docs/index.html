@@ -328,9 +328,13 @@ button{font:inherit}
       <div class="cap">
         <b>Le run soumis aux tests, avec sa mécanique apparente.</b> Les losanges violets sont
         les 46 décisions de rebalancement, régulièrement espacées parce que la règle est
-        calendaire : toutes les 50 barres, sans condition. Les traits verticaux marquent chacune
-        d'elles. La bande entre la NAV et la valeur investie est la trésorerie, et elle est
-        décomposée : la réserve fixe, la réserve dynamique qui suit l'equity, et le cash gagné.
+        calendaire : toutes les 50 barres, sans condition. <b>Les traits verticaux ne sont pas
+        des repères ajoutés au dessin : ce sont les rebalancements eux-mêmes.</b> La politique
+        aplatit le portefeuille avant de réallouer, donc la valeur investie repasse entièrement
+        par le cash gagné puis est redistribuée sur les nouveaux poids dans la même barre. Le
+        trait est ce passage. La bande entre la NAV et la valeur investie est la trésorerie, et
+        elle est décomposée : la réserve fixe, la réserve dynamique qui suit l'equity, et le
+        cash gagné.
         C'est cette décomposition qui rend le test de baseline possible, puisque
         <code>absolute</code> consiste précisément à retirer ces deux réserves. Le panneau du bas
         est le drawdown, plancher à −24,76 % sur 898 barres.
@@ -355,6 +359,14 @@ button{font:inherit}
       sur les mêmes barres, et non un pourcentage d'une base. 1,94 % − 3,80 % = −1,86 pt.
       Comme ce sont des différences de taux, elles s'additionnent : −0,84 pt et −1,02 pt
       somment au total de −1,86 pt.
+    </p>
+    <p class="units">
+      <b>Ce qu'un pt n'est pas.</b> Ce n'est pas une fraction du capital engagé, et rien n'y
+      est multiplié par un montant initial. C'est un écart de <b>vitesse</b>, et c'est la durée
+      qui le transforme en argent. Sur les neuf ans testés, ces −1,86 pt de taux annuel
+      composent en <b>21 points de capital terminal</b> : 100 000 USD deviennent près de
+      119 000 avec la stratégie, contre 140 000 avec l'équipondération. L'écart annuel paraît
+      petit, l'écart final ne l'est pas.
     </p>
   </header>
 
@@ -865,7 +877,10 @@ holding less of the benchmark
       <div class="cap">
         <b>The run put to the tests, with its machinery visible.</b> The purple diamonds are the
         46 rebalance decisions, evenly spaced because the rule is calendar-driven: every 50 bars,
-        unconditionally. The vertical lines mark each one. The band between NAV and invested
+        unconditionally. <b>The vertical lines are not markers drawn on top: they are the
+        rebalances themselves.</b> The policy flattens the portfolio before reallocating, so
+        invested value passes entirely through earned cash and is redistributed across the new
+        weights within the same bar. The line is that passage. The band between NAV and invested
         value is cash, and it is broken out: the fixed reserve, the dynamic reserve tracking
         equity, and earned cash. That breakdown is what makes the baseline test possible, since
         <code>absolute</code> is precisely the run with those two reserves stripped. The lower
@@ -891,6 +906,14 @@ holding less of the benchmark
       over the same bars, not a percentage of a base. 1.94 % − 3.80 % = −1.86 pt. Because the
       components are differences of rates, they add: −0.84 pt and −1.02 pt sum to the −1.86 pt
       total.
+    </p>
+    <p class="units">
+      <b>What a pt is not.</b> It is not a fraction of the capital committed, and nothing here
+      is multiplied by an initial amount. It is a difference in <b>speed</b>, and duration is
+      what turns it into money. Over the nine years tested, those −1.86 pt of annual rate
+      compound into <b>21 points of terminal capital</b>: 100,000 USD becomes close to 119,000
+      under the strategy, against 140,000 under equal weight. The annual gap looks small, the
+      final one does not.
     </p>
   </header>
 

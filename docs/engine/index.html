@@ -357,8 +357,21 @@ button{font:inherit}
     <p>
       Réserve fixe et dynamique, emprunt indexé sur un taux de marché réel, frais provisionnés
       sur une horloge et payés sur une autre, commission de surperformance avec high-water
-      mark, quatre devises pour un book en dollar. Une seule déclaration.
+      mark, et des réserves qui ne sont pas dans la devise du book. Une seule déclaration.
     </p>
+    <div class="note">
+      <p>
+        <b>Sur les devises, le décompte mérite d'être explicite, parce que la spec n'en montre
+        que trois.</b> Le <code>CurrencySpec</code> en déclare trois : USD pour le book et le
+        cash gagné, CHF pour la réserve fixe, EUR pour la réserve dynamique et le vault. La
+        quatrième entre par le book lui-même, dont une des cinq jambes est <code>GBP/USD</code>.
+        Les actifs portent <code>"USD"</code> dans les bindings parce que le book est exprimé en
+        devise de base ; les jambes non-dollar passent par des taux croisés. Le choix de tenir
+        les réserves hors de la devise du portefeuille est délibéré : leur valeur bouge alors
+        même quand rien n'est fait, ce qui est le cas qu'un moteur mono-devise ne peut pas
+        représenter.
+      </p>
+    </div>
     <figure>
       <img src="../img/01-alloc-spec.png" alt="Bloc AllocationSpec complet" loading="lazy">
       <figcaption>
@@ -648,8 +661,20 @@ button{font:inherit}
     <p>
       A fixed and a dynamic cash reserve, borrowing indexed on a real market rate, fees that
       accrue on one clock and are paid on another, a performance fee with a high-water mark,
-      four currencies for a dollar book. One declaration.
+      and reserves that are not held in the book's currency. One declaration.
     </p>
+    <div class="note">
+      <p>
+        <b>On currencies the count is worth stating, because the spec only shows three of
+        them.</b> The <code>CurrencySpec</code> declares three: USD for the book and earned
+        cash, CHF for the fixed reserve, EUR for the dynamic reserve and the vault. The fourth
+        arrives through the book itself, one of whose five legs is <code>GBP/USD</code>. The
+        assets carry <code>"USD"</code> in the bindings because the book is expressed in base
+        currency; the non-dollar legs go through cross rates. Holding the reserves outside the
+        portfolio's currency is deliberate: their value then moves even when nothing is done,
+        which is the case a single-currency engine cannot represent.
+      </p>
+    </div>
     <figure>
       <img src="../img/01-alloc-spec.png" alt="Full AllocationSpec block" loading="lazy">
       <figcaption>
