@@ -4,11 +4,8 @@
 
 **A backtesting engine where refuting a result costs one line, which is why it happens.**
 
-**[Read the validation note](https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/)**
- · what the validation layer returned when it was pointed at the strategy running on this
-engine, with the raw output.
-**[See the engine](https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/engine/)**
- · the real code you write and the real output you get back, in pictures.
+**[arnaud-barbier.github.io/Multi-strategy-backtest-engine](https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/)**
+ — the validation note, the engine page, and the numbers below in context.
 
 ---
 
