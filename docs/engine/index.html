@@ -350,6 +350,15 @@ button{font:inherit}
         backtest sous-estime son propre coût.
       </figcaption>
     </figure>
+    <figure>
+      <img src="../img/12-engine-run.png" alt="Appel du moteur avec la fenêtre réservée" loading="lazy">
+      <figcaption>
+        <b>La fenêtre de test est scellée au moment de la déclaration, pas après coup.</b>
+        <code>ValidationSpec.simple_oos(ratio_oos=0.30)</code> met les 30 % de fin hors
+        d'atteinte pour tout ce qui suit. Le taux d'emprunt est une vraie série SOFR, et les
+        jambes non-dollar passent par des taux croisés.
+      </figcaption>
+    </figure>
   </section>
 
   <section>
@@ -382,23 +391,19 @@ button{font:inherit}
         propre compteur de silence.
       </figcaption>
     </figure>
-    <figure>
-      <img src="../img/05-watch-events.png" alt="Journal des événements du watcher" loading="lazy">
-      <figcaption>
-        <b>Le paiement de tout ce qui précède.</b> Les deux fonctions de décision alternent,
-        les deux modes de déclenchement se distinguent, les libellés de raison sont ceux
-        déclarés. La colonne <code>status</code> montre trois <code>cooldown</code>
-        consécutifs suivis d'un <code>fired</code> : le silence par raison s'applique
-        vraiment. Et <code>decision_bar</code> vaut toujours <code>event_bar + 1</code>.
-      </figcaption>
-    </figure>
+    <p class="small">
+      Le moteur tient le journal correspondant, une ligne par événement :
+      barre de déclenchement, barre de décision, fonction appelée, raison, statut
+      <code>fired</code> ou <code>cooldown</code>. C'est là que se vérifie le décalage d'une
+      barre entre l'événement et l'action.
+    </p>
   </section>
 
   <section>
     <div class="shead"><span class="snum">03</span><span class="stitle">Ce qui empêche de tricher</span></div>
     <h2>Les garanties qui rendent l'interruption honnête</h2>
     <div class="refs">
-      <div class="ref"><div class="n">01</div><p><strong>On n'agit jamais sur la barre qui a déclenché.</strong> <code>decision_delay_bars=1</code> : sa clôture n'est pas connaissable au moment du signal. Vérifiable ligne par ligne dans le journal ci-dessus.</p></div>
+      <div class="ref"><div class="n">01</div><p><strong>On n'agit jamais sur la barre qui a déclenché.</strong> <code>decision_delay_bars=1</code> : sa clôture n'est pas connaissable au moment du signal. Le journal d'événements le montre ligne par ligne.</p></div>
       <div class="ref"><div class="n">02</div><p><strong>Le rembobinage est explicite.</strong> <code>allow_rewind</code> est un choix déclaré, jamais un comportement implicite.</p></div>
       <div class="ref"><div class="n">03</div><p><strong>Le silence est compté par raison.</strong> Un drawdown qui se déclenche ne consomme pas le cooldown d'une durée sous l'eau.</p></div>
       <div class="ref"><div class="n">04</div><p><strong>Le budget d'actions est appliqué dans le scanner compilé.</strong> <code>max_fires_per_period=1</code> : un budget épuisé ne coûte même pas de temps de calcul, et le levier ne peut pas s'emballer.</p></div>
@@ -414,17 +419,12 @@ button{font:inherit}
       toutes été ouvertes par un événement du watcher, et chacune porte son ticket.
     </p>
     <figure>
-      <img src="../img/06-borrow-ledger.png" alt="Ledger d'emprunt, onze tranches" loading="lazy">
-      <figcaption>
-        <b>Le ticket de caisse.</b> Barre de tirage, principal, encours, barre de
-        remboursement, intérêts courus et payés, identifiant de politique. Neuf tranches se
-        sont refermées seules à leur maturité, deux sont encore ouvertes en fin de période.
-      </figcaption>
-    </figure>
-    <figure>
       <img src="../img/07-borrow-timeline.png" alt="Chronologie des tranches d'emprunt" loading="lazy">
       <figcaption>
-        La même information dans le temps. Toutes les tranches portent
+        <b>Le ticket de caisse, dans le temps.</b> Chaque tranche porte sa barre de tirage,
+        son principal, son encours, sa barre de remboursement et ses intérêts courus. Neuf se
+        sont refermées seules à leur maturité, deux restent ouvertes en fin de période, et le
+        registre en compte onze pour <code>0,130121</code> d'intérêts payés. Toutes portent
         <code>policy_id 2</code> : le moteur déduplique les politiques par contenu, donc une
         politique réutilisée reste un seul identifiant.
       </figcaption>
@@ -450,10 +450,12 @@ button{font:inherit}
       <img src="../img/09-cost-layers.png" alt="Courbes avec et sans les coûts" loading="lazy">
       <figcaption>
         Les courbes sont reconstruites en rajoutant la fraction de coût de chaque barre au
-        rendement et en recomposant. Contrôle : la commission de gestion ressort à 1,88 pt/an
-        contre 2 %/an déclarés dans la spec, l'écart venant de ce qu'elle porte sur l'equity
-        nette. <b>Ce run ne revendique aucune performance</b> ; il existe pour montrer que le
-        registre boucle.
+        rendement et en recomposant. Ensemble, les deux couches ont pris <b>34,8 % de la
+        valeur terminale sur 9,12 ans</b> : +0,81 %/an nets deviennent +4,17 %/an bruts.
+        Contrôle : la commission de gestion ressort à 1,88 pt/an contre 2 %/an déclarés dans
+        la spec, l'écart venant de ce qu'elle porte sur l'equity nette. Le second panneau les
+        sépare et les cumule année par année. <b>Ce run ne revendique aucune performance</b> ;
+        il existe pour montrer que le registre boucle.
       </figcaption>
     </figure>
   </section>
@@ -462,10 +464,39 @@ button{font:inherit}
     <div class="shead"><span class="snum">06</span><span class="stitle">Peut-on croire ces chiffres</span></div>
     <h2>Réfuter coûte trois lignes, et c'est pour ça que ça se fait</h2>
     <figure>
-      <img src="../img/10-validation-calls.png" alt="Trois appels de validation et leurs verdicts" loading="lazy">
+      <img src="../img/10-validation-calls.png" alt="Baseline naïve rejouée dans le moteur" loading="lazy">
       <figcaption>
-        Une baseline rejouée dans le moteur, un null de sizing, une frontière atteignable.
-        Trois appels sur l'enregistrement du run.
+        <b>Une ligne, et la stratégie est comparée à sa propre version sans intelligence.</b>
+        La baseline équipondérée est rejouée dans le moteur, pas approximée en dehors : elle
+        paie les mêmes frais, porte les mêmes devises, suit le même porteur. Deux niveaux, et
+        c'est la distinction qui fait le travail. <code>absolute</code> retire les réserves,
+        <code>matched</code> garde toute la machinerie et ne change que la règle de
+        pondération. Verdict <code>ADDS_NOTHING</code> : l'équivalent certain est inférieur de
+        0,96 %/an à γ = 3. Le tableau <code>THRESHOLDS</code> dit ce qu'il aurait fallu pour
+        que la conclusion bascule, une réserve capturant +50,3 % en une fois, et répond que
+        c'est atteignable depuis un creux.
+      </figcaption>
+    </figure>
+    <figure>
+      <img src="../img/13-null-sizing.png" alt="Null de sizing, attribution de l'écart" loading="lazy">
+      <figcaption>
+        <b>L'écart est décomposé, puis déclaré indétectable.</b> Un run intermédiaire à poids
+        plats à l'intérieur de la sélection de la stratégie sépare ce que l'optimiseur doit à
+        son choix d'actifs de ce qu'il doit à ses poids. Sizing : −0,84 pt, t = −0,63.
+        Sélection : −1,02 pt, t = −1,37. <b>Le verdict ne dit pas « l'optimiseur ne sert à
+        rien », il dit qu'à 46 décisions on ne peut pas le savoir</b>, et chiffre ce qu'il
+        faudrait, environ 99 décisions pour trancher à cette taille d'effet. Un backtest qui
+        rapporte un écart sans rapporter sa résolution ne dit rien.
+      </figcaption>
+    </figure>
+    <figure>
+      <img src="../img/14-null-leverage.png" alt="Null de levier, frontière atteignable" loading="lazy">
+      <figcaption>
+        <b>Le test qui ne demande aucun modèle.</b> Détenir 66,4 % du benchmark et le reste en
+        liquide reproduit exactement la volatilité de la stratégie, et rapporte plus, à
+        n'importe quel taux sans risque supposé entre 0 et 2 %. L'écart va de −0,74 à −1,42 pt.
+        Verdict <code>DOMINATED</code> : le même risque était disponible avec plus de
+        rendement, par une division.
       </figcaption>
     </figure>
     <figure>
@@ -575,6 +606,15 @@ button{font:inherit}
         cost.
       </figcaption>
     </figure>
+    <figure>
+      <img src="../img/12-engine-run.png" alt="Engine call with the reserved window" loading="lazy">
+      <figcaption>
+        <b>The test window is sealed at declaration time, not afterwards.</b>
+        <code>ValidationSpec.simple_oos(ratio_oos=0.30)</code> puts the last 30 % out of reach
+        for everything that follows. The borrow rate is a real SOFR series, and the non-dollar
+        legs go through cross rates.
+      </figcaption>
+    </figure>
   </section>
 
   <section>
@@ -605,23 +645,18 @@ button{font:inherit}
         two reasons can call the same action, and each keeps its own silence counter.
       </figcaption>
     </figure>
-    <figure>
-      <img src="../img/05-watch-events.png" alt="Watcher event log" loading="lazy">
-      <figcaption>
-        <b>This is what pays for everything above.</b> The two decision functions alternate,
-        the two fire modes are distinct, the reason labels are the declared ones. The
-        <code>status</code> column shows three consecutive <code>cooldown</code> rows followed
-        by a <code>fired</code>: per-reason silence really applies. And
-        <code>decision_bar</code> is always <code>event_bar + 1</code>.
-      </figcaption>
-    </figure>
+    <p class="small">
+      The engine keeps the matching log, one row per event: fire bar, decision bar, function
+      called, reason, and a <code>fired</code> or <code>cooldown</code> status. That is where
+      the one-bar delay between event and action is checked.
+    </p>
   </section>
 
   <section>
     <div class="shead"><span class="snum">03</span><span class="stitle">What stops this from cheating</span></div>
     <h2>The guarantees that keep the interruption honest</h2>
     <div class="refs">
-      <div class="ref"><div class="n">01</div><p><strong>It never acts on the bar that fired.</strong> <code>decision_delay_bars=1</code>: that bar's close is not knowable at signal time. Verifiable row by row in the log above.</p></div>
+      <div class="ref"><div class="n">01</div><p><strong>It never acts on the bar that fired.</strong> <code>decision_delay_bars=1</code>: that bar's close is not knowable at signal time. The event log shows it row by row.</p></div>
       <div class="ref"><div class="n">02</div><p><strong>Rewind is explicit.</strong> <code>allow_rewind</code> is a declared choice, never an implicit behaviour.</p></div>
       <div class="ref"><div class="n">03</div><p><strong>Silence is counted per reason.</strong> A drawdown that fires does not consume the cooldown of an underwater-duration event.</p></div>
       <div class="ref"><div class="n">04</div><p><strong>The action budget is enforced inside the compiled scanner.</strong> <code>max_fires_per_period=1</code>: an exhausted budget does not even cost compute, and leverage cannot run away.</p></div>
@@ -637,17 +672,12 @@ button{font:inherit}
       by a watcher event, and each carries its own ticket.
     </p>
     <figure>
-      <img src="../img/06-borrow-ledger.png" alt="Borrow ledger, eleven tranches" loading="lazy">
-      <figcaption>
-        <b>The receipt.</b> Draw bar, principal, outstanding, repayment bar, interest accrued
-        and paid, policy id. Nine tranches closed themselves at maturity, two are still open at
-        the end of the period.
-      </figcaption>
-    </figure>
-    <figure>
       <img src="../img/07-borrow-timeline.png" alt="Borrow tranche timeline" loading="lazy">
       <figcaption>
-        The same information over time. Every tranche carries <code>policy_id 2</code>: the
+        <b>The receipt, over time.</b> Every tranche carries its draw bar, principal,
+        outstanding, repayment bar and accrued interest. Nine closed themselves at maturity,
+        two are still open at the end of the period, and the ledger counts eleven for
+        <code>0.130121</code> of interest paid. All of them carry <code>policy_id 2</code>: the
         engine dedupes policies by content, so a reused policy stays a single id.
       </figcaption>
     </figure>
@@ -671,9 +701,11 @@ button{font:inherit}
       <img src="../img/09-cost-layers.png" alt="Equity curves with and without costs" loading="lazy">
       <figcaption>
         The curves are rebuilt by adding each bar's cost fraction back to the return and
-        recompounding. Control: the management fee comes out at 1.88 pt/year against 2 %/year
-        declared in the spec, the gap coming from it being charged on net equity. <b>This run
-        claims no performance</b>; it exists to show the ledger closes.
+        recompounding. Together the two layers took <b>34.8 % of terminal value over 9.12
+        years</b>: +0.81 %/year net becomes +4.17 %/year gross. Control: the management fee
+        comes out at 1.88 pt/year against 2 %/year declared in the spec, the gap coming from it
+        being charged on net equity. The second panel separates them and cumulates them year by
+        year. <b>This run claims no performance</b>; it exists to show the ledger closes.
       </figcaption>
     </figure>
   </section>
@@ -682,10 +714,38 @@ button{font:inherit}
     <div class="shead"><span class="snum">06</span><span class="stitle">Can you believe these numbers</span></div>
     <h2>Refuting costs three lines, which is why it happens</h2>
     <figure>
-      <img src="../img/10-validation-calls.png" alt="Three validation calls and their verdicts" loading="lazy">
+      <img src="../img/10-validation-calls.png" alt="Naive baseline replayed through the engine" loading="lazy">
       <figcaption>
-        A baseline replayed through the engine, a sizing null, a reachable frontier. Three
-        calls against the run's own record.
+        <b>One line, and the strategy is measured against its own version without the
+        intelligence.</b> The equal-weight baseline is replayed through the engine, not
+        approximated outside it: it pays the same fees, carries the same currencies, is read on
+        the same carrier. Two levels, and the distinction is what does the work.
+        <code>absolute</code> strips the reserves, <code>matched</code> keeps every piece of
+        machinery and swaps only the weighting rule. Verdict <code>ADDS_NOTHING</code>: the
+        certainty equivalent is lower by 0.96 %/year at γ = 3. The <code>THRESHOLDS</code>
+        table states what it would have taken for the conclusion to flip, a reserve capturing
+        +50.3 % in one go, and answers that this is reachable off a trough.
+      </figcaption>
+    </figure>
+    <figure>
+      <img src="../img/13-null-sizing.png" alt="Sizing null, attribution of the gap" loading="lazy">
+      <figcaption>
+        <b>The gap is decomposed, then declared undetectable.</b> An intermediate flat-weight
+        run inside the strategy's own selection separates what the optimiser owes to its choice
+        of assets from what it owes to its weights. Sizing: −0.84 pt, t = −0.63. Selection:
+        −1.02 pt, t = −1.37. <b>The verdict does not say the optimiser is useless, it says that
+        at 46 decisions you cannot know</b>, and prices what it would take: about 99 decisions
+        to settle at this effect size. A backtest that reports a gap without reporting its
+        resolution says nothing.
+      </figcaption>
+    </figure>
+    <figure>
+      <img src="../img/14-null-leverage.png" alt="Leverage null, reachable frontier" loading="lazy">
+      <figcaption>
+        <b>The test that requires no model.</b> Holding 66.4 % of the benchmark and the rest in
+        cash reproduces the strategy's volatility exactly, and returns more, at every assumed
+        risk-free rate between 0 and 2 %. The gap runs from −0.74 to −1.42 pt. Verdict
+        <code>DOMINATED</code>: the same risk was available with more return, by a division.
       </figcaption>
     </figure>
     <figure>
