@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Arnaud Barbier · Moteur de backtest multi-actifs</title>
-<meta name="description" content="Un noyau comptable compilé, et la couche de validation qui dit quand un résultat ne veut rien dire. Elle a été pointée sur la stratégie qui tourne dessus, et le verdict est publié.">
+<meta name="description" content="Un moteur de backtest multi-actifs : noyau comptable compilé, registre qui boucle, et une couche de validation.">
 <meta name="author" content="Arnaud Barbier">
 <link rel="canonical" href="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/">
 <meta property="og:title" content="Arnaud Barbier · Moteur de backtest multi-actifs">
-<meta property="og:description" content="Un noyau comptable compilé, et la couche de validation qui dit quand un résultat ne veut rien dire.">
+<meta property="og:description" content="Un moteur de backtest multi-actifs : noyau comptable compilé, registre qui boucle, et une couche de validation.">
 <meta property="og:locale" content="fr_FR">
 <meta property="og:locale:alternate" content="en_GB">
 <meta name="twitter:card" content="summary">
@@ -134,16 +134,14 @@ h1{
     <p class="lede">
       Un noyau comptable compilé en Numba, sur un registre qui boucle : paliers de trésorerie,
       tranches d'emprunt indexées sur un taux réel, devises, frais provisionnés sur une horloge
-      et payés sur une autre. Par-dessus, une couche qui dit <b>quand le chiffre produit ne veut
-      rien dire</b>. Je l'ai pointée sur la stratégie qui tourne dessus. Le verdict est
-      défavorable, et il est publié.
+      et payés sur une autre. Le tout accompagné d'une <b>couche de validation</b>.
     </p>
 
     <div class="figs">
       <div class="fig">
-        <div class="k">Stratégie vs 1/N</div>
-        <div class="v neg">−1,86 pt</div>
-        <div class="n">annuel, net de frais</div>
+        <div class="k">Déclarer un portefeuille</div>
+        <div class="v">40 lignes</div>
+        <div class="n">réserves, emprunt, frais, devises</div>
       </div>
       <div class="fig">
         <div class="k">Coût d'une réfutation</div>
@@ -213,16 +211,14 @@ h1{
     <p class="lede">
       A Numba-compiled accounting core over a ledger that closes: cash tiers, borrow tranches
       indexed on a real market rate, currencies, fees that accrue on one clock and are paid on
-      another. On top of it, a layer that says <b>when the number produced means nothing</b>. I
-      pointed it at the strategy running on the engine. The verdict is unfavourable, and it is
-      published.
+      another. All of it shipped with a <b>validation layer</b>.
     </p>
 
     <div class="figs">
       <div class="fig">
-        <div class="k">Strategy vs 1/N</div>
-        <div class="v neg">−1.86 pt</div>
-        <div class="n">annual, after fees</div>
+        <div class="k">Declaring a portfolio</div>
+        <div class="v">40 lines</div>
+        <div class="n">reserves, borrowing, fees, currencies</div>
       </div>
       <div class="fig">
         <div class="k">Cost of a refutation</div>
