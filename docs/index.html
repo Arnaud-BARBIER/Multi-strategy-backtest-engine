@@ -157,6 +157,21 @@ a:focus-visible{outline:2px solid var(--red);outline-offset:3px}
 .raw pre b{color:var(--ink);font-weight:600}
 .raw pre i{color:var(--red);font-style:normal;font-weight:600}
 
+/* ---------- plots ---------- */
+.plot{border:1px solid var(--hair);background:var(--well);margin:0 0 1.35rem;max-width:967px}
+.plot .lbl{
+  font-family:var(--f-sans);font-size:.63rem;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--faint);padding:.45rem .85rem;border-bottom:1px solid var(--hair);
+  display:flex;justify-content:space-between;gap:1rem;
+}
+/* les captures font 965 px : jamais les agrandir, le texte deviendrait flou */
+.plot img{display:block;width:auto;max-width:100%;height:auto}
+.plot .cap{
+  font-size:.78rem;color:var(--sub);line-height:1.5;
+  padding:.72rem .85rem;border-top:1px solid var(--hair);
+}
+.plot .cap b{color:var(--ink);font-weight:600}
+
 /* ---------- tables ---------- */
 .tw{overflow-x:auto;margin:0 0 1.35rem;border-top:2px solid var(--hard);border-bottom:1px solid var(--hair)}
 table{border-collapse:collapse;width:100%;font-size:.9rem;min-width:470px}
@@ -402,6 +417,12 @@ carrier     : portfolio_equity(nav-borrowed) · basis D
 <b>no p-value: the allocation baseline is deterministic. This is a gap, not a test.</b></pre>
     </div>
 
+    <div class="plot">
+      <div class="lbl"><span>Graphique · validation_baseline</span><span>non retouché</span></div>
+      <img src="img/v1-baseline-nav.png" alt="Graphique · validation_baseline" loading="lazy">
+      <div class="cap"><b>La stratégie perd moins dans chaque creux, et ne reprend pas ce qu'elle n'a pas perdu.</b> Le panneau du bas montre le drawdown : la courbe verte est au-dessus des deux autres partout, c'est le −24,76 % contre −32,28 %. Le panneau du haut montre ce que ça coûte : jusqu'en 2020 les trois courbes se tiennent, puis la reprise post-crise écarte les baselines et la stratégie ne suit pas. L'écart de −1,86 pt se forme presque entièrement là.</div>
+    </div>
+
     <div class="two">
       <div>
         <h3>Pourquoi c'est la dernière ligne qui tranche</h3>
@@ -464,6 +485,17 @@ carrier     : portfolio_equity(nav-borrowed) · basis D
           a measured gain.
           SELECTION is not detectable either: -1.02 pt, t = -1.37 — it would
           take about 99 decisions to settle at this effect size.</pre>
+    </div>
+
+    <div class="plot">
+      <div class="lbl"><span>Graphique · validation_null_sizing</span><span>non retouché</span></div>
+      <img src="img/v2-attribution.png" alt="Graphique · validation_null_sizing" loading="lazy">
+      <div class="cap"><b>Les deux marches, dans l'ordre.</b> À gauche le CAGR, à droite l'équivalent certain. La barre grise est l'équipondération, la bleue le run à poids plats à l'intérieur de la sélection de la stratégie, la verte la stratégie. La première marche retire le panier et la trésorerie, la seconde retire l'optimiseur. Sur le rendement, celle de l'optimiseur est la plus courte. Sur l'équivalent certain à γ = 3 le classement s'inverse, parce que la volatilité plus basse de la stratégie lui rend une partie du terrain.</div>
+    </div>
+    <div class="plot">
+      <div class="lbl"><span>Graphique · effet de sizing cumulé</span><span>non retouché</span></div>
+      <img src="img/v3-null-sizing-nav.png" alt="Graphique · effet de sizing cumulé" loading="lazy">
+      <div class="cap"><b>Voilà à quoi ressemble un effet non détectable.</b> La courbe orange du bas est la contribution cumulée de l'optimiseur : elle monte régulièrement jusqu'à +5 %, pointe à +10 % pendant le krach de 2020, puis rend tout et finit à −8 %. L'estimation ponctuelle de −0,84 pt est le solde d'une série qui a changé de signe, ce qui est exactement ce que produit le bruit d'échantillonnage, et ce que le t de −0,63 dit autrement. Le panneau du milieu compte les positions effectives : 5 pour le run à poids plats, entre 3,3 et 5 pour la stratégie. <b>L'optimiseur ne concentre que de 0,95 position en médiane</b>, ce qui confirme qu'avec cinq actifs et un cap à 35 % il lui reste peu de marge de manœuvre.</div>
     </div>
 
     <p>
@@ -554,6 +586,18 @@ holding less of the benchmark
 -- no model required.</pre>
         </div>
       </div>
+    </div>
+
+    <div class="plot">
+      <div class="lbl"><span>Graphique · pouvoir d'achat de la réserve</span><span>non retouché</span></div>
+      <img src="img/v4-purchasing-power.png" alt="Graphique · pouvoir d'achat de la réserve" loading="lazy">
+      <div class="cap"><b>Le milieu du graphique est le test.</b> Les traits bleus mesurent le nombre d'unités du benchmark que la réserve pourrait acheter à chaque date : ils montent quand le marché baisse, donc l'option a de la valeur. Les points verts marquent les moments où le cash a réellement été déployé, et les cercles rouges les creux où il ne l'a pas été. Les points ne se rassemblent pas sous les pics.</div>
+    </div>
+
+    <div class="plot">
+      <div class="lbl"><span>Graphique · validation_null_leverage</span><span>non retouché</span></div>
+      <img src="img/v5-capital-market-line.png" alt="Graphique · validation_null_leverage" loading="lazy">
+      <div class="cap"><b>L'étoile verte est la stratégie ; les quatre droites sont ce qu'on obtient sans modèle.</b> Chaque droite relie le cash au benchmark pour un taux sans risque supposé. L'étoile est en dessous des quatre, à 8,1 % de volatilité pour 1,94 % de rendement, là où un simple mélange donnait entre 2,68 % et 3,36 %. La distance verticale est l'écart du tableau.</div>
     </div>
 
     <div class="note">
@@ -891,6 +935,12 @@ carrier     : portfolio_equity(nav-borrowed) · basis D
 <b>no p-value: the allocation baseline is deterministic. This is a gap, not a test.</b></pre>
     </div>
 
+    <div class="plot">
+      <div class="lbl"><span>Chart · validation_baseline</span><span>unedited</span></div>
+      <img src="img/v1-baseline-nav.png" alt="Chart · validation_baseline" loading="lazy">
+      <div class="cap"><b>The strategy loses less in every trough, and does not take back what it never lost.</b> The lower panel is drawdown: the green line sits above the other two throughout, which is the −24.76 % against −32.28 %. The upper panel shows the price of that: the three curves track each other until 2020, then the post-crisis recovery pulls the baselines away and the strategy does not follow. Almost all of the −1.86 pt gap forms there.</div>
+    </div>
+
     <div class="two">
       <div>
         <h3>Why the last row settles it</h3>
@@ -951,6 +1001,17 @@ carrier     : portfolio_equity(nav-borrowed) · basis D
           a measured gain.
           SELECTION is not detectable either: -1.02 pt, t = -1.37 — it would
           take about 99 decisions to settle at this effect size.</pre>
+    </div>
+
+    <div class="plot">
+      <div class="lbl"><span>Chart · validation_null_sizing</span><span>unedited</span></div>
+      <img src="img/v2-attribution.png" alt="Chart · validation_null_sizing" loading="lazy">
+      <div class="cap"><b>The two steps, in order.</b> CAGR on the left, certainty equivalent on the right. The grey bar is equal weight, the blue one the flat-weight run inside the strategy's own selection, the green one the strategy. The first step removes the basket and the cash policy, the second removes the optimiser. On return, the optimiser's step is the shorter of the two. On the certainty equivalent at γ = 3 the ranking flips, because the strategy's lower volatility gives it some of the ground back.</div>
+    </div>
+    <div class="plot">
+      <div class="lbl"><span>Chart · cumulative sizing effect</span><span>unedited</span></div>
+      <img src="img/v3-null-sizing-nav.png" alt="Chart · cumulative sizing effect" loading="lazy">
+      <div class="cap"><b>This is what an undetectable effect looks like.</b> The orange line at the bottom is the optimiser's cumulative contribution: it climbs steadily to +5 %, peaks at +10 % through the 2020 crash, then gives it all back and ends at −8 %. The −0.84 pt point estimate is the closing balance of a series that changed sign, which is exactly what sampling noise produces, and what the t of −0.63 says in another way. The middle panel counts effective positions: 5 for the flat-weight run, between 3.3 and 5 for the strategy. <b>The optimiser concentrates by a median of 0.95 positions</b>, which confirms that with five assets and a 35 % cap it has little room to work with.</div>
     </div>
 
     <p>
@@ -1040,6 +1101,18 @@ holding less of the benchmark
 -- no model required.</pre>
         </div>
       </div>
+    </div>
+
+    <div class="plot">
+      <div class="lbl"><span>Chart · purchasing power of the reserve</span><span>unedited</span></div>
+      <img src="img/v4-purchasing-power.png" alt="Chart · purchasing power of the reserve" loading="lazy">
+      <div class="cap"><b>The middle panel is the test.</b> The blue stems measure how many units of the benchmark the reserve could buy at each date: they rise when the market falls, so the option does carry value. The green dots mark where cash was actually deployed, the red circles the troughs where it was not. The dots do not cluster under the peaks.</div>
+    </div>
+
+    <div class="plot">
+      <div class="lbl"><span>Chart · validation_null_leverage</span><span>unedited</span></div>
+      <img src="img/v5-capital-market-line.png" alt="Chart · validation_null_leverage" loading="lazy">
+      <div class="cap"><b>The green star is the strategy; the four lines are what you get with no model at all.</b> Each line joins cash to the benchmark for one assumed risk-free rate. The star sits below all four, at 8.1 % volatility for 1.94 % return, where a plain blend returned between 2.68 % and 3.36 %. The vertical distance is the gap in the table.</div>
     </div>
 
     <div class="note">
