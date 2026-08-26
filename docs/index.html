@@ -89,6 +89,19 @@ h1{
 .fig .n{font-size:.78rem;color:var(--sub);margin-top:.4rem;line-height:1.42}
 .neg{color:var(--red)}
 
+.tree{margin:1.6rem 0 0;border:1px solid var(--hair);padding:1.3rem 1.2rem 1rem;background:var(--bg)}
+.tree svg{width:100%;height:auto;display:block;font-family:var(--f-sans)}
+.tn{fill:var(--well);stroke:var(--hard);stroke-width:1.3}
+.tn-i{fill:var(--red-well);stroke:var(--red);stroke-width:1.6}
+.tchip{fill:var(--bg);stroke:var(--hair);stroke-width:1.2;stroke-dasharray:4 3}
+.tl{fill:none;stroke:var(--hair);stroke-width:1.7}
+.tl-i{fill:none;stroke:var(--red);stroke-width:1.7}
+.t1{fill:var(--ink);font-size:17px;font-weight:600;letter-spacing:-.01em}
+.t2{fill:var(--sub);font-size:13px}
+.t3{fill:var(--red);font-size:11px;font-weight:600;letter-spacing:.08em}
+.tk{fill:var(--faint);font-size:12px;letter-spacing:.09em}
+.tcap{font-size:.83rem;color:var(--sub);line-height:1.55;margin-top:1rem;max-width:70ch}
+.tcap b{color:var(--ink);font-weight:600}
 .modes{display:grid;grid-template-columns:repeat(auto-fit,minmax(238px,1fr));gap:0;
        border-top:1px solid var(--hair);margin:2.6rem 0 0}
 .mode{padding:1rem 1.3rem 1.1rem 0;margin-right:1.3rem;border-right:1px solid var(--hair)}
@@ -133,6 +146,10 @@ h1{
   font-size:.82rem;color:var(--faint);max-width:66ch;
 }
 .foot b{color:var(--sub);font-weight:600}
+
+/* l'arbre porte les modes au-dessus de 760 px, les colonnes prennent le relais en dessous */
+@media (min-width:761px){.modes{display:none}}
+@media (max-width:760px){.tree{display:none}}
 </style>
 </head>
 <body>
@@ -148,12 +165,14 @@ h1{
       <div>Backtest multi-actifs · 2026</div>
     </div>
 
-    <h1>Un moteur de backtest, et la couche qui existe pour rejeter ses résultats.</h1>
+    <h1>Un moteur de backtest multi-actifs, et la couche qui éprouve ce qu'il produit.</h1>
 
     <p class="lede">
-      Un noyau comptable compilé en Numba, sur un registre qui boucle : paliers de trésorerie,
-      tranches d'emprunt indexées sur un taux réel, devises, frais provisionnés sur une horloge
-      et payés sur une autre. Le tout accompagné d'une <b>couche de validation</b>.
+      Un noyau compilé en Numba tient la comptabilité du portefeuille barre après barre :
+      paliers de trésorerie, tranches d'emprunt indexées sur un taux de marché réel, plusieurs
+      devises, frais provisionnés sur une horloge et payés sur une autre. <b>Trois modes
+      d'exécution partagent ce noyau</b>, et une couche de validation les accompagne, pour
+      éprouver la robustesse de n'importe quelle stratégie qui tourne dessus.
     </p>
 
     <div class="figs">
@@ -182,10 +201,51 @@ h1{
 
     <div class="lbl">Un noyau, trois questions</div>
     <p class="lede" style="margin-top:-.4rem">
-      Les modes partagent le registre, mais pas la question ni la série qui porte leur
-      performance. <b>Se tromper de série produit des chiffres faux sans en avoir l'air</b>,
-      donc c'est le mode qui la détermine, jamais l'appelant.
+      Chaque mode répond à une question différente, et mesure sa performance sur une série
+      différente. <b>Lire la série d'un autre mode donne un résultat faux qui ressemble à un
+      résultat juste</b> : mesuré ici, 11,1 % de drawdown annoncé là où la bonne série en
+      donnait 5,2. Le moteur choisit donc la série d'après le mode, et ne laisse pas ce choix
+      à l'appelant.
     </p>
+    <div class="tree">
+      <svg viewBox="0 0 900 470" role="img" aria-label="Arbre des modes : le kernel Numba se sépare en algorithmique et allocation, qui se rejoignent pour former le mode investissement">
+        <path class="tl" d="M450,410 L450,384"/>
+        <path class="tl" d="M450,384 C450,352 350,332 292,320"/>
+        <path class="tl" d="M450,384 C450,352 550,332 608,320"/>
+        <path class="tl-i" d="M165,248 C165,200 250,175 348,144"/>
+        <path class="tl-i" d="M735,248 C735,200 650,175 552,144"/>
+
+        <rect class="tn" x="300" y="410" width="300" height="48" rx="1"/>
+        <text class="tk" x="450" y="431" text-anchor="middle">KERNEL NUMBA</text>
+        <text class="t2" x="450" y="449" text-anchor="middle">lecture des barres, une seule fois</text>
+
+        <rect class="tn" x="40" y="250" width="250" height="92" rx="1"/>
+        <text class="t1" x="60" y="280">Algorithmique</text>
+        <text class="t2" x="60" y="303">une règle a-t-elle un edge ?</text>
+        <text class="t3" x="60" y="327">PORTEUR : TRADES CLOS</text>
+
+        <rect class="tn" x="610" y="250" width="250" height="92" rx="1"/>
+        <text class="t1" x="630" y="280">Allocation</text>
+        <text class="t2" x="630" y="303">une pondération bat-elle le 1/N ?</text>
+        <text class="t3" x="630" y="327">PORTEUR : NAV NETTE DE L'EMPRUNT</text>
+
+        <rect class="tn-i" x="305" y="40" width="290" height="100" rx="1"/>
+        <text class="t1" x="325" y="74">Investissement</text>
+        <text class="t2" x="325" y="97">qu'a réellement vécu un compte ?</text>
+        <text class="t3" x="325" y="124">PORTEUR : RENDEMENT PONDÉRÉ PAR LE TEMPS</text>
+
+        <rect class="tchip" x="140" y="174" width="168" height="32" rx="1"/>
+        <text class="t2" x="224" y="195" text-anchor="middle">couche de sizing</text>
+      </svg>
+      <p class="tcap">
+        <b>Les trois modes ne sont pas trois produits, ils partagent le même noyau.</b> Le mode
+        investissement reprend la comptabilité de portefeuille de l'allocation sans en subir les
+        contraintes de rebalancement, et y ajoute l'assetification d'une stratégie
+        algorithmique : la stratégie devient une ligne du portefeuille, avec sa propre gestion
+        du risque et son accès à la trésorerie. C'est pourquoi la couche de sizing, greffée sur
+        la branche algorithmique, remonte jusqu'à lui. L'investissement se traite au comptant.
+      </p>
+    </div>
     <div class="modes">
       <div class="mode">
         <h3>Algorithmique</h3>
@@ -265,12 +325,13 @@ h1{
       <div>Multi-asset backtesting · 2026</div>
     </div>
 
-    <h1>A backtesting engine, and the layer built to reject its results.</h1>
+    <h1>A multi-asset backtesting engine, and the layer that tests what it produces.</h1>
 
     <p class="lede">
-      A Numba-compiled accounting core over a ledger that closes: cash tiers, borrow tranches
-      indexed on a real market rate, currencies, fees that accrue on one clock and are paid on
-      another. All of it shipped with a <b>validation layer</b>.
+      A Numba-compiled core keeps the portfolio's books bar after bar: cash tiers, borrow
+      tranches indexed on a real market rate, several currencies, fees that accrue on one clock
+      and are paid on another. <b>Three execution modes share that core</b>, and a validation
+      layer comes with them, to test the robustness of any strategy that runs on it.
     </p>
 
     <div class="figs">
@@ -299,10 +360,51 @@ h1{
 
     <div class="lbl">One core, three questions</div>
     <p class="lede" style="margin-top:-.4rem">
-      The modes share the ledger, but not the question, and not the series that carries their
-      performance. <b>Reading the wrong series produces wrong numbers without looking wrong</b>,
-      so the mode decides it, never the caller.
+      Each mode answers a different question, and measures its performance on a different
+      series. <b>Reading another mode's series gives a wrong answer that looks like a right
+      one</b>: measured here, 11.1 % of drawdown reported where the correct series gave 5.2.
+      So the engine picks the series from the mode, and does not leave that choice to the
+      caller.
     </p>
+    <div class="tree">
+      <svg viewBox="0 0 900 470" role="img" aria-label="Mode tree: the Numba kernel splits into algorithmic and allocation, which rejoin to form investment mode">
+        <path class="tl" d="M450,410 L450,384"/>
+        <path class="tl" d="M450,384 C450,352 350,332 292,320"/>
+        <path class="tl" d="M450,384 C450,352 550,332 608,320"/>
+        <path class="tl-i" d="M165,248 C165,200 250,175 348,144"/>
+        <path class="tl-i" d="M735,248 C735,200 650,175 552,144"/>
+
+        <rect class="tn" x="300" y="410" width="300" height="48" rx="1"/>
+        <text class="tk" x="450" y="431" text-anchor="middle">NUMBA KERNEL</text>
+        <text class="t2" x="450" y="449" text-anchor="middle">bars read once</text>
+
+        <rect class="tn" x="40" y="250" width="250" height="92" rx="1"/>
+        <text class="t1" x="60" y="280">Algorithmic</text>
+        <text class="t2" x="60" y="303">does a rule have an edge?</text>
+        <text class="t3" x="60" y="327">CARRIER: CLOSED TRADES</text>
+
+        <rect class="tn" x="610" y="250" width="250" height="92" rx="1"/>
+        <text class="t1" x="630" y="280">Allocation</text>
+        <text class="t2" x="630" y="303">does a weighting beat 1/N?</text>
+        <text class="t3" x="630" y="327">CARRIER: NAV NET OF BORROWING</text>
+
+        <rect class="tn-i" x="305" y="40" width="290" height="100" rx="1"/>
+        <text class="t1" x="325" y="74">Investment</text>
+        <text class="t2" x="325" y="97">what did an account live through?</text>
+        <text class="t3" x="325" y="124">CARRIER: TIME-WEIGHTED RETURN</text>
+
+        <rect class="tchip" x="140" y="174" width="168" height="32" rx="1"/>
+        <text class="t2" x="224" y="195" text-anchor="middle">sizing layer</text>
+      </svg>
+      <p class="tcap">
+        <b>The three modes are not three products; they share one core.</b> Investment mode
+        takes allocation's portfolio accounting without inheriting its rebalance constraints,
+        and adds the assetification of an algorithmic strategy: the strategy becomes a line of
+        the portfolio, with its own risk management and its own access to cash. That is why the
+        sizing layer, grafted onto the algorithmic branch, carries up into it. Investment mode
+        is spot only.
+      </p>
+    </div>
     <div class="modes">
       <div class="mode">
         <h3>Algorithmic</h3>
