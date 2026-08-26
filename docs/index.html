@@ -201,41 +201,36 @@ h1{
 
     <div class="lbl">Un noyau, trois questions</div>
     <p class="lede" style="margin-top:-.4rem">
-      Chaque mode répond à une question différente, et mesure sa performance sur une série
-      différente. <b>Lire la série d'un autre mode donne un résultat faux qui ressemble à un
-      résultat juste</b> : mesuré ici, 11,1 % de drawdown annoncé là où la bonne série en
-      donnait 5,2. Le moteur choisit donc la série d'après le mode, et ne laisse pas ce choix
-      à l'appelant.
+      Trois modes, un seul noyau comptable. Chacun répond à une question différente, et se
+      mesure donc différemment. <b>C'est le moteur qui applique la bonne mesure, pas
+      l'utilisateur.</b>
     </p>
     <div class="tree">
-      <svg viewBox="0 0 900 470" role="img" aria-label="Arbre des modes : le kernel Numba se sépare en algorithmique et allocation, qui se rejoignent pour former le mode investissement">
-        <path class="tl" d="M450,410 L450,384"/>
-        <path class="tl" d="M450,384 C450,352 350,332 292,320"/>
-        <path class="tl" d="M450,384 C450,352 550,332 608,320"/>
-        <path class="tl-i" d="M165,248 C165,200 250,175 348,144"/>
-        <path class="tl-i" d="M735,248 C735,200 650,175 552,144"/>
+      <svg viewBox="0 0 900 430" role="img" aria-label="Arbre des modes : le kernel Numba se sépare en algorithmique et allocation, qui se rejoignent pour former le mode investissement">
+        <path class="tl" d="M450,372 L450,346"/>
+        <path class="tl" d="M450,346 C450,320 350,300 292,290"/>
+        <path class="tl" d="M450,346 C450,320 550,300 608,290"/>
+        <path class="tl-i" d="M165,238 C165,195 250,165 348,124"/>
+        <path class="tl-i" d="M735,238 C735,195 650,165 552,124"/>
 
-        <rect class="tn" x="300" y="410" width="300" height="48" rx="1"/>
-        <text class="tk" x="450" y="431" text-anchor="middle">KERNEL NUMBA</text>
-        <text class="t2" x="450" y="449" text-anchor="middle">lecture des barres, une seule fois</text>
+        <rect class="tn" x="300" y="372" width="300" height="48" rx="1"/>
+        <text class="tk" x="450" y="394" text-anchor="middle">KERNEL NUMBA</text>
+        <text class="t2" x="450" y="412" text-anchor="middle">lecture des barres, une seule fois</text>
 
-        <rect class="tn" x="40" y="250" width="250" height="92" rx="1"/>
-        <text class="t1" x="60" y="280">Algorithmique</text>
-        <text class="t2" x="60" y="303">une règle a-t-elle un edge ?</text>
-        <text class="t3" x="60" y="327">PORTEUR : TRADES CLOS</text>
+        <rect class="tn" x="40" y="240" width="250" height="68" rx="1"/>
+        <text class="t1" x="62" y="272">Algorithmique</text>
+        <text class="t2" x="62" y="294">une règle a-t-elle un edge ?</text>
 
-        <rect class="tn" x="610" y="250" width="250" height="92" rx="1"/>
-        <text class="t1" x="630" y="280">Allocation</text>
-        <text class="t2" x="630" y="303">une pondération bat-elle le 1/N ?</text>
-        <text class="t3" x="630" y="327">PORTEUR : NAV NETTE DE L'EMPRUNT</text>
+        <rect class="tn" x="610" y="240" width="250" height="68" rx="1"/>
+        <text class="t1" x="632" y="272">Allocation</text>
+        <text class="t2" x="632" y="294">une pondération bat-elle 1/N ?</text>
 
-        <rect class="tn-i" x="305" y="40" width="290" height="100" rx="1"/>
-        <text class="t1" x="325" y="74">Investissement</text>
-        <text class="t2" x="325" y="97">qu'a réellement vécu un compte ?</text>
-        <text class="t3" x="325" y="124">PORTEUR : RENDEMENT PONDÉRÉ PAR LE TEMPS</text>
+        <rect class="tn-i" x="305" y="44" width="290" height="76" rx="1"/>
+        <text class="t1" x="327" y="80">Investissement</text>
+        <text class="t2" x="327" y="104">qu'a vécu un compte réel ?</text>
 
-        <rect class="tchip" x="140" y="174" width="168" height="32" rx="1"/>
-        <text class="t2" x="224" y="195" text-anchor="middle">couche de sizing</text>
+        <rect class="tchip" x="136" y="164" width="168" height="32" rx="1"/>
+        <text class="t2" x="220" y="185" text-anchor="middle">couche de sizing</text>
       </svg>
       <p class="tcap">
         <b>Les trois modes ne sont pas trois produits, ils partagent le même noyau.</b> Le mode
@@ -360,41 +355,35 @@ h1{
 
     <div class="lbl">One core, three questions</div>
     <p class="lede" style="margin-top:-.4rem">
-      Each mode answers a different question, and measures its performance on a different
-      series. <b>Reading another mode's series gives a wrong answer that looks like a right
-      one</b>: measured here, 11.1 % of drawdown reported where the correct series gave 5.2.
-      So the engine picks the series from the mode, and does not leave that choice to the
-      caller.
+      Three modes, one accounting core. Each answers a different question, and is therefore
+      measured differently. <b>The engine applies the right measure, not the user.</b>
     </p>
     <div class="tree">
-      <svg viewBox="0 0 900 470" role="img" aria-label="Mode tree: the Numba kernel splits into algorithmic and allocation, which rejoin to form investment mode">
-        <path class="tl" d="M450,410 L450,384"/>
-        <path class="tl" d="M450,384 C450,352 350,332 292,320"/>
-        <path class="tl" d="M450,384 C450,352 550,332 608,320"/>
-        <path class="tl-i" d="M165,248 C165,200 250,175 348,144"/>
-        <path class="tl-i" d="M735,248 C735,200 650,175 552,144"/>
+      <svg viewBox="0 0 900 430" role="img" aria-label="Mode tree: the Numba kernel splits into algorithmic and allocation, which rejoin to form investment mode">
+        <path class="tl" d="M450,372 L450,346"/>
+        <path class="tl" d="M450,346 C450,320 350,300 292,290"/>
+        <path class="tl" d="M450,346 C450,320 550,300 608,290"/>
+        <path class="tl-i" d="M165,238 C165,195 250,165 348,124"/>
+        <path class="tl-i" d="M735,238 C735,195 650,165 552,124"/>
 
-        <rect class="tn" x="300" y="410" width="300" height="48" rx="1"/>
-        <text class="tk" x="450" y="431" text-anchor="middle">NUMBA KERNEL</text>
-        <text class="t2" x="450" y="449" text-anchor="middle">bars read once</text>
+        <rect class="tn" x="300" y="372" width="300" height="48" rx="1"/>
+        <text class="tk" x="450" y="394" text-anchor="middle">NUMBA KERNEL</text>
+        <text class="t2" x="450" y="412" text-anchor="middle">bars read once</text>
 
-        <rect class="tn" x="40" y="250" width="250" height="92" rx="1"/>
-        <text class="t1" x="60" y="280">Algorithmic</text>
-        <text class="t2" x="60" y="303">does a rule have an edge?</text>
-        <text class="t3" x="60" y="327">CARRIER: CLOSED TRADES</text>
+        <rect class="tn" x="40" y="240" width="250" height="68" rx="1"/>
+        <text class="t1" x="62" y="272">Algorithmic</text>
+        <text class="t2" x="62" y="294">does a rule have an edge?</text>
 
-        <rect class="tn" x="610" y="250" width="250" height="92" rx="1"/>
-        <text class="t1" x="630" y="280">Allocation</text>
-        <text class="t2" x="630" y="303">does a weighting beat 1/N?</text>
-        <text class="t3" x="630" y="327">CARRIER: NAV NET OF BORROWING</text>
+        <rect class="tn" x="610" y="240" width="250" height="68" rx="1"/>
+        <text class="t1" x="632" y="272">Allocation</text>
+        <text class="t2" x="632" y="294">does a weighting beat 1/N?</text>
 
-        <rect class="tn-i" x="305" y="40" width="290" height="100" rx="1"/>
-        <text class="t1" x="325" y="74">Investment</text>
-        <text class="t2" x="325" y="97">what did an account live through?</text>
-        <text class="t3" x="325" y="124">CARRIER: TIME-WEIGHTED RETURN</text>
+        <rect class="tn-i" x="305" y="44" width="290" height="76" rx="1"/>
+        <text class="t1" x="327" y="80">Investment</text>
+        <text class="t2" x="327" y="104">what did a real account live?</text>
 
-        <rect class="tchip" x="140" y="174" width="168" height="32" rx="1"/>
-        <text class="t2" x="224" y="195" text-anchor="middle">sizing layer</text>
+        <rect class="tchip" x="136" y="164" width="168" height="32" rx="1"/>
+        <text class="t2" x="220" y="185" text-anchor="middle">sizing layer</text>
       </svg>
       <p class="tcap">
         <b>The three modes are not three products; they share one core.</b> Investment mode
