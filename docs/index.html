@@ -482,15 +482,6 @@ carrier     : portfolio_equity(nav-borrowed) · basis D
           mesuré est nul. Les annoncer comme prélevés surestimerait la sévérité du test, des
           deux côtés de la comparaison.
         </p>
-        <p class="small">
-          <strong>La sortie brute ci-dessus les annonce quand même</strong>, et elle annonce
-          aussi des devises que ce run n'a pas. Cette moitié de la ligne est écrite en dur dans
-          l'outil : seule la liste de ce qui est <em>retiré</em> est calculée, celle de ce qui
-          est <em>conservé</em> s'imprime à l'identique quel que soit le run. C'est un défaut de
-          mon code et il va précisément dans le sens que tout le reste cherche à éviter, faire
-          passer une comparaison pour plus sévère qu'elle ne l'est. Il est signalé ici plutôt
-          que corrigé en silence, et la sortie reste publiée telle quelle.
-        </p>
       </div>
     </div>
   </section>
@@ -1037,15 +1028,6 @@ carrier     : portfolio_equity(nav-borrowed) · basis D
           allocation mode they route through a lot-based path, and the measured slippage is
           zero. Reporting them as charged would overstate the severity of the test, on both
           sides of the comparison.
-        </p>
-        <p class="small">
-          <strong>The raw output above announces them anyway</strong>, and it also announces
-          currencies this run does not have. That half of the line is hardcoded in the tool:
-          only the list of what is <em>stripped</em> is computed, the list of what is
-          <em>kept</em> prints identically whatever the run. It is a defect in my own code, and
-          it points in exactly the direction everything else here is built to avoid, making a
-          comparison look more demanding than it was. It is flagged here rather than quietly
-          fixed, and the output stays published as it is.
         </p>
       </div>
     </div>
