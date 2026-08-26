@@ -51,17 +51,29 @@ sizing effect either way.
 **Verdict: `ADDS_NOTHING`**, the certainty equivalent is 0.96 pt/year lower at γ = 3.
 
 Both baselines are rebuilt by the engine itself, through the same accounting machinery as
-the strategy. They pay the same 2 % management fee, the same 5 % performance fee, the
-same spread and commission, in the same currencies. **The only thing swapped is the
-weighting rule.** A baseline computed gross of fees against a strategy computed net is
-the most common way to manufacture an edge that does not exist; here it is not possible,
-because the baseline is not computed, it is *run*.
+the strategy. They pay the same 2 % management fee and the same 5 % performance fee, on
+the same clocks, and they are read on the same performance carrier. **The only thing
+swapped is the weighting rule.** A baseline computed gross of fees against a strategy
+computed net is the most common way to manufacture an edge that does not exist; here it is
+not possible, because the baseline is not computed, it is *run*.
+
+Two things this run does *not* charge, stated so the test is not credited with more
+severity than it had. Execution costs are declared but do not bind: in allocation mode
+they go through a lot-based path, and measured slippage is zero. And this run carries no
+currency spec, so no translation happens on either side. Both absences apply equally to
+the strategy and to the baselines, so the comparison stays fair; they simply make it a
+less demanding test than the declaration suggests.
 
 The two levels differ in one respect: `absolute` strips the cash reserves and stays
 invested, `matched` keeps every piece of machinery including the 30 % of reserves. The
 gap between them is therefore the price of the cash policy, isolated.
 
-<!-- FIGURE F1: cumulative curves (strategy / 1/N absolute / 1/N vol-matched) + drawdown panel. Dark theme _C. -->
+![Strategy against both baselines, NAV and drawdown](docs/img/v1-baseline-nav.png)
+
+*The strategy loses less in every trough, which is the −24.76 % against −32.28 %, and does
+not take back what it never lost: the three curves track each other until 2020, then the
+post-crisis recovery pulls the baselines away. Almost all of the −1.86 pt forms there.
+Unedited output of `validation_baseline`.*
 
 Run: 5 assets, daily bars, 2013–2022 in-sample, 2,298 bars, 46 rebalance decisions,
 50-bar rebalance interval, 100-bar covariance lookback. 2022–2026 is held out and has
@@ -77,7 +89,8 @@ and five. The book is rebalanced to those weights and held until the next decisi
 
 On top of it sits the cash policy under test: a 20 % dynamic reserve and a 10 % fixed
 reserve, a 2 % annual management fee accrued yearly and paid quarterly, a 5 %
-performance fee with a high-water mark, and spot execution costs.
+performance fee with a high-water mark, and execution costs declared but not binding
+(see above).
 
 Nothing proprietary, it is a textbook construction, used here as a subject with a known
 answer.
@@ -152,7 +165,12 @@ fees; mean cash holding 30.9 % of NAV.
 
 **Verdict: `PARTIAL`.**
 
-<!-- FIGURE F2: mean deployment return at gamma = 0 / 1 / 3, bars, descending. Dark theme _C. -->
+![Purchasing power of the reserve](docs/img/v4-purchasing-power.png)
+
+*The middle panel is the test. The blue stems measure how many units of the benchmark the
+reserve could buy at each date, so they rise when the market falls and the option does carry
+value. The green dots mark where cash was actually deployed, the red circles the troughs
+where it was not. The dots do not cluster under the peaks.*
 
 Identity used, and tested by strict equality in the test suite: the purchasing-power
 weight 1/(1 + r_M) *is* the stochastic discount factor at γ = 1. The two code paths must
@@ -259,7 +277,13 @@ features.
 | fee accrued over the year = Σ quarterly payouts | period boundary |
 | purchasing-power weight at γ = 1 ≡ SDF at γ = 1 | strict equality test |
 
-<!-- FIGURE F3: stacked NAV decomposition over time (book / cash / cushion / vault, borrowed as a negative band). Dark theme _C. -->
+![Balance sheet audit, three panels](docs/img/08-accounting-audit.png)
+
+*Assets decomposed, the two-line liability model, and the residuals of both identities. The
+worst residual over 2,300 bars with borrowing, currency conversion, fees and watchers active
+is 4.44e−16: on a 100,000 portfolio, a gap of four billionths of a cent between what it owns
+and what it owes. The residual panel is never resampled for display, because a spike lasting
+one bar is exactly what it exists to catch.*
 
 What the ledger models, all of it exercised by the identities above rather than merely
 implemented:
