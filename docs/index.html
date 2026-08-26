@@ -89,6 +89,14 @@ h1{
 .fig .n{font-size:.78rem;color:var(--sub);margin-top:.4rem;line-height:1.42}
 .neg{color:var(--red)}
 
+.modes{display:grid;grid-template-columns:repeat(auto-fit,minmax(238px,1fr));gap:0;
+       border-top:1px solid var(--hair);margin:2.6rem 0 0}
+.mode{padding:1rem 1.3rem 1.1rem 0;margin-right:1.3rem;border-right:1px solid var(--hair)}
+.mode:last-child{border-right:none;margin-right:0}
+.mode h3{font-size:.95rem;font-weight:600;letter-spacing:-.01em;margin:0 0 .4rem}
+.mode p{font-size:.83rem;color:var(--sub);line-height:1.5;margin:0}
+.mode .c{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--red);
+         margin-top:.55rem;font-weight:600}
 .band{border:1px solid var(--hair);margin:2.6rem 0 0;background:#0e1117}
 .band img{display:block;width:100%;height:auto}
 .band .cap{
@@ -172,12 +180,39 @@ h1{
     </div>
 
 
+    <div class="lbl">Un noyau, trois questions</div>
+    <p class="lede" style="margin-top:-.4rem">
+      Les modes partagent le registre, mais pas la question ni la série qui porte leur
+      performance. <b>Se tromper de série produit des chiffres faux sans en avoir l'air</b>,
+      donc c'est le mode qui la détermine, jamais l'appelant.
+    </p>
+    <div class="modes">
+      <div class="mode">
+        <h3>Algorithmique</h3>
+        <p>Signaux, setups, routage par régime, entrées et sorties sous une exécution réaliste
+           à la barre. Une règle a-t-elle un edge ?</p>
+        <div class="c">porteur : trades clos</div>
+      </div>
+      <div class="mode">
+        <h3>Allocation</h3>
+        <p>Poids cibles, calendriers de rebalancement, paliers de trésorerie, emprunt et frais.
+           Une règle de pondération bat-elle la détention équipondérée ?</p>
+        <div class="c">porteur : NAV nette de l'emprunt</div>
+      </div>
+      <div class="mode">
+        <h3>Investissement</h3>
+        <p>Apports et retraits, high-water marks, gates de drawdown, restauration du capital.
+           Qu'a réellement vécu un compte ?</p>
+        <div class="c">porteur : rendement pondéré par le temps</div>
+      </div>
+    </div>
+
     <div class="band">
       <img src="img/band-equity.png" alt="Sortie du moteur : NAV, paliers de trésorerie, rebalancements, drawdown" loading="lazy">
       <div class="cap">
-        Sortie brute du moteur. La courbe verte est la NAV, les losanges violets les décisions
-        de rebalancement, les lignes basses les paliers de trésorerie, le panneau du bas le
-        drawdown.
+        Mode allocation, sortie brute. La courbe verte est la NAV, les losanges violets les
+        décisions de rebalancement, les lignes basses les paliers de trésorerie, le panneau du
+        bas le drawdown.
       </div>
     </div>
 
@@ -262,11 +297,38 @@ h1{
     </div>
 
 
+    <div class="lbl">One core, three questions</div>
+    <p class="lede" style="margin-top:-.4rem">
+      The modes share the ledger, but not the question, and not the series that carries their
+      performance. <b>Reading the wrong series produces wrong numbers without looking wrong</b>,
+      so the mode decides it, never the caller.
+    </p>
+    <div class="modes">
+      <div class="mode">
+        <h3>Algorithmic</h3>
+        <p>Signals, setups, regime routing, entries and exits under a realistic bar-level
+           execution model. Does a rule have an edge?</p>
+        <div class="c">carrier: closed trades</div>
+      </div>
+      <div class="mode">
+        <h3>Allocation</h3>
+        <p>Target weights, rebalance calendars, cash tiers, borrowing and fees. Does a weighting
+           rule beat holding everything equally?</p>
+        <div class="c">carrier: NAV net of borrowing</div>
+      </div>
+      <div class="mode">
+        <h3>Investment</h3>
+        <p>Contributions and withdrawals, high-water marks, drawdown gates, capital
+           restoration. What did an account actually live through?</p>
+        <div class="c">carrier: time-weighted return</div>
+      </div>
+    </div>
+
     <div class="band">
       <img src="img/band-equity.png" alt="Engine output: NAV, cash tiers, rebalances, drawdown" loading="lazy">
       <div class="cap">
-        Unedited engine output. The green line is NAV, the purple diamonds are rebalance
-        decisions, the lower lines are the cash tiers, the bottom panel is drawdown.
+        Allocation mode, unedited output. The green line is NAV, the purple diamonds are
+        rebalance decisions, the lower lines are the cash tiers, the bottom panel is drawdown.
       </div>
     </div>
 
