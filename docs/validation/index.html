@@ -20,7 +20,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400..700&family=Archivo:wght@400;500;600;700&display=swap">
 
 <style>
 :root{
@@ -29,6 +29,7 @@
   --ink:#101215; --sub:#54585F; --faint:#868B93;
   --accent:#A85F00; --accent-well:#FDF7EE;
   --f-sans:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --f-serif:"Newsreader",Georgia,"Times New Roman",serif;
   --f-term:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
 }
 @media (prefers-color-scheme:dark){
@@ -49,7 +50,7 @@
 *{box-sizing:border-box}
 body{
   background:var(--bg);color:var(--ink);
-  font-family:var(--f-sans);font-size:16px;line-height:1.58;
+  font-family:var(--f-serif);font-size:17px;line-height:1.66;
   margin:0;padding:0 1.5rem 5rem;-webkit-font-smoothing:antialiased;
 }
 .wrap{max-width:1080px;margin:0 auto}
@@ -70,9 +71,9 @@ body{
   padding-bottom:.7rem;border-bottom:1px solid var(--hair);
 }
 h1{
-  font-family:var(--f-sans);font-weight:700;
-  font-size:clamp(1.95rem,4.6vw,2.95rem);line-height:1.06;
-  letter-spacing:-.03em;text-wrap:balance;
+  font-family:var(--f-serif);font-weight:700;
+  font-size:clamp(1.75rem,3.4vw,2.35rem);line-height:1.06;
+  letter-spacing:-.005em;text-wrap:balance;
   margin:2.25rem 0 0;max-width:24ch;
 }
 .lede{font-size:1.06rem;color:var(--sub);max-width:60ch;margin:1.35rem 0 2.25rem;}
@@ -125,9 +126,9 @@ section{padding:3rem 0 0}
 .snum{font-family:var(--f-sans);font-size:.72rem;font-weight:600;letter-spacing:.1em;color:var(--accent)}
 .stitle{font-family:var(--f-sans);font-size:.72rem;font-weight:500;letter-spacing:.17em;text-transform:uppercase;color:var(--sub)}
 h2{
-  font-family:var(--f-sans);font-weight:600;
+  font-family:var(--f-serif);font-weight:600;
   font-size:clamp(1.4rem,2.8vw,1.85rem);line-height:1.16;
-  letter-spacing:-.02em;text-wrap:balance;max-width:26ch;margin:0 0 1.1rem;
+  letter-spacing:0;text-wrap:balance;max-width:26ch;margin:0 0 1.1rem;
 }
 h3{font-family:var(--f-sans);font-weight:600;font-size:.95rem;margin:1.9rem 0 .85rem;letter-spacing:-.005em}
 p{max-width:64ch;margin:0 0 1.05rem}

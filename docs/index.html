@@ -17,7 +17,7 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><polygon points='50,6 90,50 50,94 10,50' fill='%23bc8cff'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400..700&family=Archivo:wght@400;500;600;700&display=swap">
 <style>
 :root{
   --bg:#FFFFFF; --well:#F5F6F7;
@@ -25,6 +25,7 @@
   --ink:#101215; --sub:#54585F; --faint:#868B93;
   --accent:#A85F00; --accent-well:#FDF7EE;
   --f-sans:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --f-serif:"Newsreader",Georgia,"Times New Roman",serif;
 }
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
@@ -44,8 +45,8 @@
 html{-webkit-text-size-adjust:100%}
 body,h1,h2,h3,p{margin:0}
 body{
-  background:var(--bg);color:var(--ink);font-family:var(--f-sans);
-  font-size:16px;line-height:1.62;-webkit-font-smoothing:antialiased;
+  background:var(--bg);color:var(--ink);font-family:var(--f-serif);
+  font-size:17px;line-height:1.66;-webkit-font-smoothing:antialiased;
   padding:0 1.4rem 4rem;
 }
 a{color:var(--accent)}
@@ -65,6 +66,7 @@ a{color:var(--accent)}
 .topbar button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
 .mast-top{
+  font-family:var(--f-sans);
   display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;
   font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;color:var(--faint);
   border-bottom:0;padding:0 0 .7rem;margin:2.2rem 0 0;
@@ -72,8 +74,8 @@ a{color:var(--accent)}
   background-repeat:no-repeat;background-size:100% 2px;background-position:0 100%;
 }
 h1{
-  font-size:clamp(1.85rem,4.6vw,3rem);font-weight:700;line-height:1.05;
-  letter-spacing:-.035em;text-wrap:balance;max-width:24ch;margin:2.4rem 0 0;
+  font-size:clamp(1.75rem,3.4vw,2.35rem);font-weight:700;line-height:1.05;
+  letter-spacing:-.005em;text-wrap:balance;max-width:24ch;margin:2.4rem 0 0;
 }
 .lede{font-size:1.06rem;color:var(--sub);max-width:62ch;margin:1.5rem 0 0}
 .lede b{color:var(--ink);font-weight:600}
@@ -87,10 +89,10 @@ h1{
 }
 .fig{padding:1rem 1.2rem 1.05rem 0;margin-right:1.2rem;border-right:1px solid var(--hair)}
 .fig:last-child{border-right:none;margin-right:0}
-.fig .k{font-size:.63rem;letter-spacing:.13em;text-transform:uppercase;color:var(--faint)}
-.fig .v{font-size:1.85rem;font-weight:700;letter-spacing:-.035em;margin-top:.4rem;
+.fig .k{font-family:var(--f-sans);font-size:.63rem;letter-spacing:.13em;text-transform:uppercase;color:var(--faint)}
+.fig .v{font-family:var(--f-sans);font-size:1.85rem;font-weight:700;letter-spacing:-.035em;margin-top:.4rem;
         font-variant-numeric:tabular-nums;line-height:1}
-.fig .n{font-size:.78rem;color:var(--sub);margin-top:.4rem;line-height:1.42}
+.fig .n{font-family:var(--f-sans);font-size:.78rem;color:var(--sub);margin-top:.4rem;line-height:1.42}
 .neg{color:var(--accent)}
 
 .tree{margin:1.6rem 0 0;border:1px solid var(--hair);padding:1.3rem 1.2rem 1rem;background:var(--bg)}
@@ -112,7 +114,7 @@ h1{
 .mode:last-child{border-right:none;margin-right:0}
 .mode h3{font-size:.95rem;font-weight:600;letter-spacing:-.01em;margin:0 0 .4rem}
 .mode p{font-size:.83rem;color:var(--sub);line-height:1.5;margin:0}
-.mode .c{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);
+.mode .c{font-family:var(--f-sans);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);
          margin-top:.55rem;font-weight:600}
 .band{border:1px solid var(--hair);margin:2.6rem 0 0;background:#0e1117}
 .band img{display:block;width:100%;height:auto}
@@ -126,6 +128,7 @@ h1{
 }
 .card .shot img{display:block;width:100%;height:104px;object-fit:cover;object-position:left top}
 .lbl{
+  font-family:var(--f-sans);
   font-size:.63rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);
   font-weight:600;margin:3.4rem 0 1.1rem;
 }
@@ -138,12 +141,13 @@ h1{
 .card:hover{background:var(--well)}
 .card:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 .card .tag{
+  font-family:var(--f-sans);
   font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);
   display:flex;justify-content:space-between;gap:1rem;
 }
 .card h2{font-size:1.16rem;font-weight:600;letter-spacing:-.02em;line-height:1.25}
 .card p{font-size:.885rem;color:var(--sub);line-height:1.55;flex:1}
-.card .go{font-size:.83rem;font-weight:600;color:var(--accent)}
+.card .go{font-family:var(--f-sans);font-size:.83rem;font-weight:600;color:var(--accent)}
 
 .foot{
   border-top:1px solid var(--hair);margin-top:3.4rem;padding-top:1.1rem;
@@ -154,7 +158,7 @@ h1{
   border-top:1px solid var(--hair);margin-top:1.35rem;padding-top:1.1rem;
   display:flex;flex-wrap:wrap;gap:.5rem 1.6rem;align-items:baseline;
 }
-.contact .k{font-size:.63rem;letter-spacing:.15em;text-transform:uppercase;color:var(--faint)}
+.contact .k{font-family:var(--f-sans);font-size:.63rem;letter-spacing:.15em;text-transform:uppercase;color:var(--faint)}
 .contact a{font-size:.93rem;font-weight:600;text-decoration:none;border-bottom:1px solid var(--accent)}
 .contact a:hover{color:var(--ink);border-bottom-color:var(--ink)}
 
@@ -181,8 +185,8 @@ h1{
     <p class="lede">
       L'objectif du projet : <b>réduire le temps entre une hypothèse d'investissement, son test
       et sa validation</b>. L'utilisateur écrit la logique de sa stratégie, et déclare la
-      politique comptable qui la sert : trésorerie, emprunt, frais, devises sont des leviers
-      à sa main. Il n'a à construire ni le moteur qui l'exécute, ni la couche qui juge le
+      politique comptable du portefeuille : la trésorerie, l'emprunt, les frais et les devises
+      sont des leviers à sa main. Il n'a à construire ni le moteur qui l'exécute, ni la couche qui juge le
       résultat.
     </p>
 
@@ -252,11 +256,9 @@ h1{
         <text class="t2" x="220" y="185" text-anchor="middle">couche de sizing</text>
       </svg>
       <p class="tcap">
-        <b>Les trois modes ne sont pas trois produits, ils partagent le même noyau.</b> Le mode
-        investissement reprend la comptabilité de portefeuille de l'allocation sans en subir les
-        contraintes de rebalancement, et y ajoute l'assetification d'une stratégie
-        algorithmique : la stratégie devient une ligne du portefeuille, avec sa propre gestion
-        du risque et son accès à la trésorerie. C'est pourquoi la couche de sizing, greffée sur
+        <b>Le mode investissement reprend</b> la comptabilité de portefeuille de l'allocation sans en subir les
+        contraintes de rebalancement, et y fait entrer une stratégie algorithmique comme une
+        ligne du portefeuille, avec sa propre gestion du risque et son accès à la trésorerie. C'est pourquoi la couche de sizing, greffée sur
         la branche algorithmique, remonte jusqu'à lui. L'investissement se traite au comptant.
       </p>
     </div>
@@ -337,9 +339,9 @@ h1{
     </div>
 
     <p class="foot">
-      <b>Ce que ces pages ne sont pas.</b> Elles ne présentent aucune stratégie gagnante. La
-      stratégie testée est une construction de manuel, retenue parce qu'elle est connue et
-      reproductible. Le sujet est l'instrument qui la juge.
+      <b>Aucune stratégie gagnante n'est présentée ici.</b> La stratégie testée est une
+      construction de manuel, retenue parce qu'elle est connue et reproductible. L'objet de ces
+      pages est l'instrument qui la juge.
     </p>
     <div class="contact">
       <span class="k">Contact</span>
@@ -359,8 +361,8 @@ h1{
     <p class="lede">
       The point of the project: <b>cut the time between an investment hypothesis, its test and
       its validation</b>. The user writes the logic of the strategy, and declares the
-      accounting policy that serves it: cash, borrowing, fees and currencies are levers in
-      their hands. Neither the engine that runs it nor the layer that judges the result has to
+      portfolio's accounting policy: cash, borrowing, fees and currencies are levers in their
+      hands. Neither the engine that runs it nor the layer that judges the result has to
       be built.
     </p>
 
@@ -428,10 +430,9 @@ h1{
         <text class="t2" x="220" y="185" text-anchor="middle">sizing layer</text>
       </svg>
       <p class="tcap">
-        <b>The three modes are not three products; they share one core.</b> Investment mode
-        takes allocation's portfolio accounting without inheriting its rebalance constraints,
-        and adds the assetification of an algorithmic strategy: the strategy becomes a line of
-        the portfolio, with its own risk management and its own access to cash. That is why the
+        <b>Investment mode takes</b> allocation's portfolio accounting without inheriting its rebalance constraints,
+        and brings an algorithmic strategy in as a line of the portfolio, with its own risk
+        management and its own access to cash. That is why the
         sizing layer, grafted onto the algorithmic branch, carries up into it. Investment mode
         is spot only.
       </p>
@@ -511,8 +512,8 @@ h1{
     </div>
 
     <p class="foot">
-      <b>What these pages are not.</b> They present no winning strategy. The strategy under test
-      is a textbook construction, chosen because it is well known and reproducible. The subject
+      <b>No winning strategy is presented here.</b> The strategy under test is a textbook
+      construction, chosen because it is well known and reproducible. What these pages are about
       is the instrument that judges it.
     </p>
     <div class="contact">

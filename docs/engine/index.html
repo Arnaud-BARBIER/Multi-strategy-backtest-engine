@@ -19,7 +19,7 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><polygon points='50,8 90,68 10,68' fill='%233fb950'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400..700&family=Archivo:wght@400;500;600;700&display=swap">
 
 <style>
 :root{
@@ -28,6 +28,7 @@
   --ink:#101215; --sub:#54585F; --faint:#868B93;
   --accent:#A85F00; --accent-well:#FDF7EE;
   --f-sans:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --f-serif:"Newsreader",Georgia,"Times New Roman",serif;
   --f-term:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
 }
 @media (prefers-color-scheme:dark){
@@ -48,7 +49,7 @@
 *{box-sizing:border-box}
 body{
   background:var(--bg);color:var(--ink);
-  font-family:var(--f-sans);font-size:16px;line-height:1.58;
+  font-family:var(--f-serif);font-size:17px;line-height:1.66;
   margin:0;padding:0 1.5rem 5rem;-webkit-font-smoothing:antialiased;
 }
 .wrap{max-width:1080px;margin:0 auto}
@@ -69,9 +70,9 @@ body{
   padding-bottom:.7rem;border-bottom:1px solid var(--hair);
 }
 h1{
-  font-family:var(--f-sans);font-weight:700;
-  font-size:clamp(1.95rem,4.6vw,2.95rem);line-height:1.06;
-  letter-spacing:-.03em;text-wrap:balance;
+  font-family:var(--f-serif);font-weight:700;
+  font-size:clamp(1.75rem,3.4vw,2.35rem);line-height:1.06;
+  letter-spacing:-.005em;text-wrap:balance;
   margin:2.25rem 0 0;max-width:24ch;
 }
 .lede{font-size:1.06rem;color:var(--sub);max-width:60ch;margin:1.35rem 0 2.25rem;}
@@ -124,9 +125,9 @@ section{padding:3rem 0 0}
 .snum{font-family:var(--f-sans);font-size:.72rem;font-weight:600;letter-spacing:.1em;color:var(--accent)}
 .stitle{font-family:var(--f-sans);font-size:.72rem;font-weight:500;letter-spacing:.17em;text-transform:uppercase;color:var(--sub)}
 h2{
-  font-family:var(--f-sans);font-weight:600;
+  font-family:var(--f-serif);font-weight:600;
   font-size:clamp(1.4rem,2.8vw,1.85rem);line-height:1.16;
-  letter-spacing:-.02em;text-wrap:balance;max-width:26ch;margin:0 0 1.1rem;
+  letter-spacing:0;text-wrap:balance;max-width:26ch;margin:0 0 1.1rem;
 }
 h3{font-family:var(--f-sans);font-weight:600;font-size:.95rem;margin:1.9rem 0 .85rem;letter-spacing:-.005em}
 p{max-width:64ch;margin:0 0 1.05rem}
@@ -328,11 +329,11 @@ button{font:inherit}
       <div>Allocation multi-actifs · 2026</div>
     </div>
 
-    <h1>Une comptabilité de niveau institutionnel se déclare en quarante lignes.</h1>
+    <h1>Une politique comptable complète se déclare en quarante lignes.</h1>
 
     <p class="lede">
-      Cette page ne montre pas ce que l'outil sait faire. Elle montre ce qu'il en coûte de
-      s'en servir : le code réel que l'utilisateur écrit, et la sortie réelle que le moteur
+      Cette page montre ce qu'il en coûte de se servir de l'outil : le code réel que
+      l'utilisateur écrit, et la sortie réelle que le moteur
       renvoie. Le moteur est livré avec une couche
       de validation. Un exemple de son usage figure plus bas.
     </p>
@@ -533,9 +534,9 @@ button{font:inherit}
 
   <section>
     <div class="shead"><span class="snum">06</span><span class="stitle">Le verdict de ce run</span></div>
-    <h2>Une statistique favorable, et le test économique qui la contredit</h2>
+    <h2>Le verdict du moteur sur ce run</h2>
     <figure>
-      <img src="../img/11-performance-carrier.png" alt="Rapport de porteur de performance, verdict BELOW_RISK_FREE" loading="lazy">
+      <img src="../img/11-performance-carrier.png" alt="Résumé du run et verdict BELOW_RISK_FREE" loading="lazy">
       <figcaption>
         <b>Le run montré plus haut, jugé : une statistique favorable, contredite par un test
         économique.</b> Le PSR ressort à 100 % et la longueur de piste requise est largement
@@ -555,7 +556,7 @@ button{font:inherit}
       C'est la partie qui justifie tout ce qui précède. Une baseline construite dans un tableur
       ne paie ni frais ni devises : la comparer à une stratégie qui les paie fabrique un écart
       qui n'existe pas. Ici la baseline traverse le même kernel, le même registre de trésorerie
-      et le même porteur de performance. Seule la règle de pondération change, et l'écart mesuré
+      et la même série de mesure. Seule la règle de pondération change, et l'écart mesuré
       est donc bien celui de la règle.
     </p>
     <p class="small">
@@ -570,7 +571,7 @@ button{font:inherit}
         viennent du run avec emprunt et watcher : 30 décisions, drawdown maximal de 40,95 %.
         Les trois appels ci-dessous ont été passés sur un autre run, la même stratégie sans
         emprunt, sans watcher et sans spec de devises : 46 décisions, drawdown maximal de
-        24,76 %. Le registre de trésorerie et le porteur de performance y sont les mêmes ; ce
+        24,76 %. Le registre de trésorerie et la série de mesure y sont les mêmes ; ce
         qui change, c'est qu'il n'y a plus de levier, d'interruption ni de conversion entre la
         règle de pondération et le résultat. C'est ce second run que documente la note
         de validation.
@@ -667,11 +668,11 @@ button{font:inherit}
       <div>Multi-asset allocation · 2026</div>
     </div>
 
-    <h1>Institutional-grade accounting is declared in forty lines.</h1>
+    <h1>A complete accounting policy is declared in forty lines.</h1>
 
     <p class="lede">
-      This page does not show what the tool can do. It shows what it costs to use: the real
-      code that is written, and the real output it returns. The engine ships with a validation
+      This page shows what the tool costs to use: the real code that is written, and the real
+      output it returns. The engine ships with a validation
       layer. An example of it in use appears further down.
     </p>
 
@@ -863,7 +864,7 @@ button{font:inherit}
 
   <section>
     <div class="shead"><span class="snum">06</span><span class="stitle">This run's verdict</span></div>
-    <h2>A favourable statistic, and the economic test that overrules it</h2>
+    <h2>What the engine reports on this run</h2>
     <figure>
       <img src="../img/11-performance-carrier.png" alt="Performance carrier report, BELOW_RISK_FREE verdict" loading="lazy">
       <figcaption>
