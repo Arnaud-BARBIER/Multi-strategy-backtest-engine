@@ -473,45 +473,42 @@ td:first-child{font-weight:600;white-space:nowrap;padding-right:1.4rem}
     </figcaption>
   </figure>
 
-  <p>
-    Deux régimes sont assumés et explicites. En mode causal, la décision reste à la barre du
-    contrôle, ce qui est le comportement admissible pour une stratégie. En mode recherche, la
-    décision remonte à l'événement, ce qui est rétrospectif et doit être activé volontairement.
-    Chaque décision est étiquetée dans les journaux du run selon le régime qui l'a produite.
-  </p>
-  <p>
-    Les garde-fous ne sont pas décoratifs : temporisation par motif, verrou sur signal
-    persistant pour qu'une condition de niveau ne redéclenche pas à chaque barre, plafond
-    d'événements par contrôle, budget de déclenchements sur la durée du run.
-  </p>
-
-<h3>Comment tout cela se déclare</h3>
-<div class="split">
-  <div class="split-t">
-    <p>Un seul objet porte les trois régimes. <code>mode</code> choisit lequel,
-    <code>watch</code> greffe le contrôle intra-période par-dessus.</p>
-    <p>La fonction de décision reste du Python ordinaire : le moteur ne lui impose rien
-    d'autre que sa signature. Seul le scanner est compilé, parce que lui vit dans la boucle
-    de barres.</p>
-    <p class="small">Run présenté dans la page Moteur.
-    <a href="../img/st-spec-a.png" target="_blank" rel="noopener">Pleine taille</a></p>
+  <div class="split">
+    <div class="split-t">
+      <p>
+        Deux régimes sont assumés et explicites. En mode causal, la décision reste à la barre
+        du contrôle, ce qui est le comportement admissible pour une stratégie. En mode
+        recherche, la décision remonte à l'événement, ce qui est rétrospectif et doit être
+        activé volontairement. Chaque décision est étiquetée dans les journaux du run selon le
+        régime qui l'a produite.
+      </p>
+      <p class="small">
+        Tout cela se déclare dans un seul objet : <code>mode</code> choisit le régime,
+        <code>watch</code> greffe le contrôle par-dessus. Run présenté dans la page Moteur.
+        <a href="../img/st-spec-a.png" target="_blank" rel="noopener">Pleine taille</a>
+      </p>
+    </div>
+    <a class="split-i" href="../img/st-spec-a.png" target="_blank" rel="noopener">
+      <img src="../img/st-spec-a.png" alt="Déclaration du StatefulSpec et de son ResumeWatchSpec" loading="lazy">
+    </a>
   </div>
-  <a class="split-i" href="../img/st-spec-a.png" target="_blank" rel="noopener">
-    <img src="../img/st-spec-a.png" alt="Déclaration du StatefulSpec et de son ResumeWatchSpec" loading="lazy">
-  </a>
-</div>
 
-<div class="split">
-  <div class="split-t">
-    <p><b>Et ce qui empêche de tricher se déclare au même endroit.</b> Le délai d'une barre
-    interdit d'agir sur la clôture qui a déclenché. Le rembobinage est un choix explicite,
-    jamais un comportement implicite. Le nombre d'événements par découpe est plafonné.</p>
-    <p class="small"><a href="../img/st-spec-b.png" target="_blank" rel="noopener">Pleine taille</a></p>
+  <div class="split">
+    <div class="split-t">
+      <p>
+        Les garde-fous ne sont pas décoratifs : temporisation par motif, verrou sur signal
+        persistant pour qu'une condition de niveau ne redéclenche pas à chaque barre, plafond
+        d'événements par contrôle, budget de déclenchements sur la durée du run.
+      </p>
+      <p class="small">
+        Ils se déclarent au même endroit que le reste.
+        <a href="../img/st-spec-b.png" target="_blank" rel="noopener">Pleine taille</a>
+      </p>
+    </div>
+    <a class="split-i" href="../img/st-spec-b.png" target="_blank" rel="noopener">
+      <img src="../img/st-spec-b.png" alt="Bloc des garanties du ResumeWatchSpec" loading="lazy">
+    </a>
   </div>
-  <a class="split-i" href="../img/st-spec-b.png" target="_blank" rel="noopener">
-    <img src="../img/st-spec-b.png" alt="Bloc des garanties du ResumeWatchSpec" loading="lazy">
-  </a>
-</div>
 
 <h3>Ce que le contrôle inscrit dans le journal</h3>
 <div class="two-col">
