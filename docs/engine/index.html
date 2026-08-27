@@ -340,7 +340,8 @@ button{font:inherit}
       Cette page montre ce qu'il en coûte de se servir de l'outil : le code réel que
       l'utilisateur écrit, et la sortie réelle que le moteur
       renvoie. Tout ce qui suit vient du <b>mode allocation</b>, celui qui gère un portefeuille,
-      sa trésorerie et sa dette ; les deux autres modes tournent sur le même noyau comptable.
+      sa trésorerie et sa dette. Le mode investissement reprend cette comptabilité ; le mode
+      algorithmique n'y accède que par la couche de sizing.
       Le moteur est livré avec une couche de validation, et un exemple de son usage figure plus
       bas.
     </p>
@@ -680,7 +681,8 @@ button{font:inherit}
     <p class="lede">
       This page shows what the tool costs to use: the real code that is written, and the real
       output it returns. Everything below comes from <b>allocation mode</b>, the one that runs a
-      portfolio, its cash and its debt; the other two modes run on the same accounting core. The
+      portfolio, its cash and its debt. Investment mode takes that accounting over; algorithmic
+      mode only reaches it through the sizing layer. The
       engine ships with a validation layer, and an example of it in use appears further down.
     </p>
 

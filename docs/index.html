@@ -197,8 +197,8 @@ h1{
       Un noyau compilé en Numba tient la comptabilité du portefeuille à chaque barre :
       paliers de trésorerie, tranches d'emprunt indexées sur un taux de marché réel, plusieurs
       devises, frais provisionnés sur une horloge et payés sur une autre. Trois modes
-      d'exécution partagent ce noyau : signaux algorithmiques, allocation de portefeuille,
-      et suivi d'un compte réel.
+      d'exécution partagent ce kernel : signaux algorithmiques, allocation de portefeuille,
+      et suivi d'un compte réel. La comptabilité de portefeuille appartient aux deux derniers.
     </p>
 
     <div class="figs">
@@ -227,9 +227,8 @@ h1{
 
     <div class="lbl">Un noyau, trois questions</div>
     <p class="lede" style="margin-top:-.4rem">
-      Trois modes, un seul noyau comptable. Chacun répond à une question différente, et se
-      mesure donc différemment. <b>C'est le moteur qui applique la bonne mesure, pas
-      l'utilisateur.</b>
+      Trois modes, un seul kernel. Chacun répond à une question différente, et se mesure donc
+      différemment. <b>C'est le moteur qui applique la bonne mesure, pas l'utilisateur.</b>
     </p>
     <div class="tree">
       <svg viewBox="0 0 900 430" role="img" aria-label="Arbre des modes : le kernel Numba se sépare en algorithmique et allocation, qui se rejoignent pour former le mode investissement">
@@ -259,7 +258,8 @@ h1{
         <text class="t2" x="220" y="185" text-anchor="middle">couche de sizing</text>
       </svg>
       <p class="tcap">
-        <b>Le mode investissement reprend</b> la comptabilité de portefeuille de l'allocation sans en subir les
+        <b>La comptabilité de portefeuille appartient à la branche allocation.</b> Le mode
+        investissement en reprend
         contraintes de rebalancement, et y fait entrer une stratégie algorithmique comme une
         ligne du portefeuille, avec sa propre gestion du risque et son accès à la trésorerie. C'est pourquoi la couche de sizing, greffée sur
         la branche algorithmique, remonte jusqu'à lui. L'investissement se traite au comptant.
@@ -372,8 +372,9 @@ h1{
     <p class="lede2">
       A Numba-compiled core keeps the portfolio's books on every bar: cash tiers, borrow
       tranches indexed on a real market rate, several currencies, fees that accrue on one clock
-      and are paid on another. Three execution modes share that core: algorithmic signals,
-      portfolio allocation, and tracking a real account.
+      and are paid on another. Three execution modes share that kernel: algorithmic signals,
+      portfolio allocation, and tracking a real account. The portfolio accounting belongs to the
+      last two.
     </p>
 
     <div class="figs">
@@ -402,8 +403,8 @@ h1{
 
     <div class="lbl">One core, three questions</div>
     <p class="lede" style="margin-top:-.4rem">
-      Three modes, one accounting core. Each answers a different question, and is therefore
-      measured differently. <b>The engine applies the right measure, not the user.</b>
+      Three modes, one kernel. Each answers a different question, and is therefore measured
+      differently. <b>The engine applies the right measure, not the user.</b>
     </p>
     <div class="tree">
       <svg viewBox="0 0 900 430" role="img" aria-label="Mode tree: the Numba kernel splits into algorithmic and allocation, which rejoin to form investment mode">
@@ -433,7 +434,8 @@ h1{
         <text class="t2" x="220" y="185" text-anchor="middle">sizing layer</text>
       </svg>
       <p class="tcap">
-        <b>Investment mode takes</b> allocation's portfolio accounting without inheriting its rebalance constraints,
+        <b>The portfolio accounting belongs to the allocation branch.</b> Investment mode takes
+        it over without inheriting its rebalance constraints,
         and brings an algorithmic strategy in as a line of the portfolio, with its own risk
         management and its own access to cash. That is why the
         sizing layer, grafted onto the algorithmic branch, carries up into it. Investment mode

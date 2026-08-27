@@ -322,7 +322,8 @@ reimplemented against any return series.
 <img width="907" height="72" alt="Pipeline strip" src="https://github.com/user-attachments/assets/98c073a1-116a-4bce-ab1d-083f4628e795" />
 
 A Numba-compiled multi-asset kernel underneath; the research surface stays in Python.
-Three execution modes, algorithmic, allocation, investment, share one accounting core,
+Three execution modes, algorithmic, allocation and investment, share one kernel. Portfolio
+accounting belongs to the last two; algorithmic mode reaches it only through the sizing layer,
 which is why the carrier-selection rule above is enforced rather than documented.
 
 Signal logic and execution assumptions are kept separate by construction: a strategy
