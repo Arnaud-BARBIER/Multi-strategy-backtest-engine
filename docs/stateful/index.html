@@ -101,12 +101,22 @@ code{font-family:var(--f-term);font-size:.85em;background:var(--well);
 
 img{max-width:100%;height:auto;display:block}
 figure{margin:1.7rem 0 2.3rem;padding:0}
-.split{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:1.8rem;align-items:start;margin:.4rem 0 2.2rem}
+.split{display:grid;grid-template-columns:minmax(0,330px) minmax(0,1fr);gap:1.8rem;align-items:start;margin:.4rem 0 2.4rem}
 .split-t p{max-width:none;font-size:.92rem;margin:0 0 .8rem}
 .split-t .small{font-size:.8rem;color:var(--faint)}
-.split-i{display:block;text-decoration:none}
-.split-i img{width:100%}
-@media (max-width:760px){.split{grid-template-columns:1fr}}
+/* la capture est encadree pour marquer la transition entre le fond du site et celui de
+   l'editeur, et tronquee a la hauteur du texte : le lien ouvre la version entiere */
+.split-i{
+  display:block;text-decoration:none;position:relative;overflow:hidden;
+  border:1px solid var(--hair);background:#252334;
+}
+.split-i img{width:100%;display:block}
+.split-i.clip{max-height:300px}
+.split-i.clip::after{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:96px;pointer-events:none;
+  background:linear-gradient(180deg,rgba(37,35,52,0),#252334 82%);
+}
+@media (max-width:760px){.split{grid-template-columns:1fr}.split-i.clip{max-height:none}.split-i.clip::after{display:none}}
 .two-col{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(215px,1fr);gap:2rem;align-items:start;margin:0 0 1.5rem}
 .two-col .side p{max-width:none;font-size:.9rem;margin:0 0 .85rem}
 .two-col .side .small{font-size:.8rem;color:var(--faint)}
@@ -488,7 +498,7 @@ td:first-child{font-weight:600;white-space:nowrap;padding-right:1.4rem}
         <a href="../img/st-spec-a.png" target="_blank" rel="noopener">Pleine taille</a>
       </p>
     </div>
-    <a class="split-i" href="../img/st-spec-a.png" target="_blank" rel="noopener">
+    <a class="split-i clip" href="../img/st-spec-a.png" target="_blank" rel="noopener">
       <img src="../img/st-spec-a.png" alt="Déclaration du StatefulSpec et de son ResumeWatchSpec" loading="lazy">
     </a>
   </div>
