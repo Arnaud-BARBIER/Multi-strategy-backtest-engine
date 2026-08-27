@@ -138,8 +138,9 @@ td:first-child{font-weight:600;white-space:nowrap;padding-right:1.4rem}
   <h1>Rendre un kernel compilé capable de décisions stateful</h1>
   <p class="lede">
     Un kernel Numba ne peut pas s'arrêter à chaque barre pour demander l'avis d'une fonction
-    Python. Trois mécanismes contournent cette contrainte sans renoncer à la vitesse : le
-    replay, le resume, et le watcher qui relie les deux.
+    Python. Et cette fonction doit rester du Python ordinaire, puisque c'est là que
+    l'utilisateur écrit sa stratégie. Trois mécanismes tiennent les deux à la fois : le replay,
+    le resume, et le watcher qui relie les deux.
   </p>
   <div class="tickers">
     <div>Replay : rétrospectif</div>
@@ -160,11 +161,23 @@ td:first-child{font-weight:600;white-space:nowrap;padding-right:1.4rem}
     de marché. Elles n'existent qu'une fois le portefeuille simulé.
   </p>
   <p>
-    Dans un moteur écrit en Python, on injecte un callback appelé à chaque barre. Le coût est
+    Dans un moteur écrit en Python, un callback est appelé à chaque barre. Le coût est
     prohibitif : la boucle quitte le code machine des millions de fois, et la simulation
     devient plus lente que la recherche qu'elle est censée servir. Dans un kernel compilé,
-    ce callback n'existe tout simplement pas. Il fallait donc obtenir la même information
-    autrement.
+    ce callback n'existe pas.
+  </p>
+  <p>
+    La réponse évidente serait de compiler la fonction de décision elle-même. Elle est écartée,
+    et c'est le choix qui structure tout le reste. <b>La fonction de décision est l'endroit où
+    l'utilisateur écrit sa stratégie</b> : l'y contraindre à un sous-ensemble compilable du
+    langage reviendrait à lui interdire pandas, un optimiseur, un modèle entraîné, une
+    bibliothèque tierce, tout ce qu'il pourrait vouloir appeler. Le moteur cesserait alors de
+    servir son but, qui est de laisser l'utilisateur écrire sa logique et rien d'autre.
+  </p>
+  <p>
+    La contrainte se referme donc des deux côtés. <b>La décision doit rester du Python
+    ordinaire, et la boucle ne doit pas l'appeler à chaque barre.</b> Les trois mécanismes qui
+    suivent sont des façons de tenir les deux à la fois.
   </p>
 </section>
 
@@ -257,9 +270,9 @@ td:first-child{font-weight:600;white-space:nowrap;padding-right:1.4rem}
       descendrait en dessous : <code>entry_delay</code> vaut 1, et une valeur nulle est rejetée
       à la construction comme un biais de look-ahead. Les actions de replay et les décisions de
       watcher portent le même délai d'une barre par défaut. En revanche, le moteur ne peut pas
-      savoir ce que la fonction de replay ira chercher dans l'état qu'on lui remet. C'est à
+      savoir ce que la fonction de replay ira chercher dans l'état qui lui est remis. C'est à
       l'utilisateur de ne pas y puiser du futur. La fuite de données ne vient pas de la
-      mécanique du moteur, elle vient de ce qu'on écrit dans la fonction.</p>
+      mécanique du moteur, elle vient de ce que l'utilisateur écrit dans la fonction.</p>
   </div>
 </section>
 
@@ -324,7 +337,7 @@ td:first-child{font-weight:600;white-space:nowrap;padding-right:1.4rem}
       </svg>
     </div>
     <figcaption>
-      Mode resume. On paie une sortie du code compilé par frontière, pas par barre, et la
+      Mode resume. Le coût est d'une sortie du code compilé par frontière, pas par barre, et la
       décision ne voit jamais rien qui se situe après la coupe.
     </figcaption>
   </figure>
@@ -376,8 +389,8 @@ td:first-child{font-weight:600;white-space:nowrap;padding-right:1.4rem}
     barre. Le watcher est donc convoqué à sa fréquence déclarée, et à chaque convocation il
     examine la période écoulée depuis la précédente, puis s'arrête au premier événement qu'il
     y trouve. Le reste de la fenêtre n'est pas perdu : le run reprend à la barre de décision et
-    la suite de la période est réexaminée ensuite. C'est le meilleur compromis que j'ai trouvé
-    entre réactivité et coût.
+    la suite de la période est réexaminée ensuite. C'est le meilleur compromis trouvé entre
+    réactivité et coût.
   </p>
 
   <figure>
