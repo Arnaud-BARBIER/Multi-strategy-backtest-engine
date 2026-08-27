@@ -346,7 +346,7 @@ button{font:inherit}
       <div class="metric">
         <div class="k">Durée du run</div>
         <div class="v">3,2 s</div>
-        <div class="n">2 298 barres, 46 retours en Python</div>
+        <div class="n">2 298 barres, 30 retours en Python</div>
       </div>
       <div class="metric">
         <div class="k">Tranches d'emprunt</div>
@@ -429,7 +429,7 @@ button{font:inherit}
         reprend. C'est ce que veut dire <code>mode="resume"</code> : l'état du portefeuille
         traverse la frontière au lieu d'être recalculé depuis le début. Positions, trésorerie
         par palier, frais provisionnés, tranches d'emprunt et high-water mark reviennent tels
-        quels de l'autre côté. Les 3,2 secondes sont donc le prix de 46 allers-retours avec un
+        quels de l'autre côté. Les 3,2 secondes sont donc le prix de 30 allers-retours avec un
         registre qui survit, pas celui du calcul numérique. La version rapide consisterait à
         garder la décision dans le kernel ; elle coûterait d'écrire chaque stratégie en numba.
       </p>
@@ -438,10 +438,10 @@ button{font:inherit}
       <img src="../img/02-stateful-driver.png" alt="StatefulSpec avec son ResumeWatchSpec" loading="lazy">
       <figcaption>
         <b>La décision reste du Python lisible ; seul le scanner est compilé.</b> Le partage
-        suit la fréquence d'appel, pas une intuition sur la taille des données : le scanner est
-        évalué à chaque barre, la fonction de décision 46 fois sur ce run. Ce qui tourne des
-        milliers de fois est compilé, ce qui tourne des dizaines de fois reste lisible. Le
-        rapport est de cinquante à un ici, et il ne fait que croître avec l'historique.
+        suit la fréquence d'appel, pas une intuition sur la taille des données : le scanner vit
+        dans la boucle de barres, la fonction de décision tourne 30 fois sur ce run. Ce qui est
+        parcouru en boucle est compilé, ce qui est appelé quelques dizaines de fois reste
+        lisible. L'écart entre les deux ne fait que croître avec la longueur de l'historique.
       </figcaption>
     </figure>
     <figure>
@@ -684,7 +684,7 @@ button{font:inherit}
       <div class="metric">
         <div class="k">Run time</div>
         <div class="v">3.2 s</div>
-        <div class="n">2,298 bars, 46 returns to Python</div>
+        <div class="n">2,298 bars, 30 returns to Python</div>
       </div>
       <div class="metric">
         <div class="k">Borrow tranches</div>
@@ -764,7 +764,7 @@ button{font:inherit}
         <code>mode="resume"</code> means: portfolio state crosses the boundary instead of being
         recomputed from the start. Positions, cash by tier, accrued fees, borrow tranches and the
         high-water mark all come back untouched on the other side. So the 3.2 seconds are the
-        price of 46 round trips with a surviving ledger, not the price of the arithmetic. The
+        price of 30 round trips with a surviving ledger, not the price of the arithmetic. The
         fast version would keep the decision inside the kernel; it would cost writing every
         strategy in numba.
       </p>
@@ -774,9 +774,9 @@ button{font:inherit}
       <figcaption>
         <b>The decision stays readable Python; only the scanner is compiled.</b> The split
         follows call frequency, not a guess about data size: the scanner is evaluated on every
-        bar, the decision function 46 times in this run. Compile what runs thousands of times,
-        keep readable what runs dozens of times. The ratio is fifty to one here, and it only
-        grows with the history.
+        loop, the decision function runs 30 times in this run. What is walked in a loop is
+        compiled, what is called a few dozen times stays readable. The gap between the two only
+        grows with the length of the history.
       </figcaption>
     </figure>
     <figure>
