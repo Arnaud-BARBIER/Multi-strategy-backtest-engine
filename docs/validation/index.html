@@ -20,7 +20,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400..700&family=Archivo:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap">
 
 <style>
 :root{
@@ -29,7 +29,7 @@
   --ink:#101215; --sub:#54585F; --faint:#868B93;
   --accent:#A85F00; --accent-well:#FDF7EE;
   --f-sans:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;
-  --f-serif:"Newsreader",Georgia,"Times New Roman",serif;
+  --f-serif:"Times New Roman",Times,"Liberation Serif",serif;
   --f-term:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
 }
 @media (prefers-color-scheme:dark){
@@ -98,7 +98,7 @@ h1{
 .fig .n{font-size:.8rem;color:var(--sub);margin-top:.45rem;line-height:1.4}
 .neg{color:var(--accent)}
 .subject{
-  border:1px solid var(--hard);padding:1.15rem 1.25rem;margin:0 0 2.25rem;max-width:74ch;
+  border:0;border-left:2px solid var(--hard);padding:.1rem 0 .1rem 1.15rem;margin:0 0 2.25rem;max-width:74ch;
 }
 .subject .lbl{
   font-size:.65rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);
@@ -142,7 +142,7 @@ a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 /* ---------- verdict bar ---------- */
 .verdict{
   display:flex;align-items:stretch;gap:0;margin:0 0 1.35rem;
-  border:1px solid var(--accent);background:var(--accent-well);
+  border:0;background:none;
 }
 .verdict .bar{background:linear-gradient(180deg,var(--accent),var(--accent-well));width:8px;flex:none}
 .verdict .txt{
@@ -151,7 +151,7 @@ a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 }
 
 /* ---------- raw output ---------- */
-.raw{border:1px solid var(--hair);background:var(--well);margin:0 0 1.35rem}
+.raw{border:0;border-left:2px solid var(--hair);background:none;padding-left:1rem;margin:0 0 1.35rem}
 .raw .lbl{
   font-family:var(--f-sans);font-size:.63rem;letter-spacing:.15em;text-transform:uppercase;
   color:var(--faint);padding:.45rem .85rem;border-bottom:1px solid var(--hair);
@@ -166,17 +166,16 @@ a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .raw pre i{color:var(--accent);font-style:normal;font-weight:600}
 
 /* ---------- plots ---------- */
-.plot{border:1px solid var(--hair);background:var(--well);margin:0 0 1.35rem;max-width:967px}
+.plot{border:0;background:none;margin:0 0 1.6rem;max-width:967px}
 .plot .lbl{
   font-family:var(--f-sans);font-size:.63rem;letter-spacing:.15em;text-transform:uppercase;
-  color:var(--faint);padding:.45rem .85rem;border-bottom:1px solid var(--hair);
+  color:var(--faint);padding:0 0 .5rem;
   display:flex;justify-content:space-between;gap:1rem;
 }
 /* les captures font 965 px : jamais les agrandir, le texte deviendrait flou */
 .plot img{display:block;width:auto;max-width:100%;height:auto}
 .plot .cap{
-  font-size:.78rem;color:var(--sub);line-height:1.5;
-  padding:.72rem .85rem;border-top:1px solid var(--hair);
+  font-size:.78rem;color:var(--sub);line-height:1.5;padding:.72rem 0 0;
 }
 .plot .cap b{color:var(--ink);font-weight:600}
 
@@ -218,7 +217,7 @@ tr.total td{border-top:1px solid var(--hard);font-weight:600}
 .ident code{font-family:var(--f-term);font-size:.82rem;color:var(--ink)}
 .ident span{font-family:var(--f-sans);font-size:.68rem;color:var(--faint);letter-spacing:.08em;text-transform:uppercase}
 .tags{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:1.05rem}
-.tag{font-family:var(--f-sans);font-size:.71rem;border:1px solid var(--hair);padding:.26rem .5rem;color:var(--sub)}
+.tag{font-family:var(--f-sans);font-size:.71rem;border:0;padding:.26rem .8rem .26rem 0;color:var(--sub)}
 
 .note{border-left:3px solid var(--accent);padding:.1rem 0 .1rem 1rem;margin:0 0 1.35rem}
 .note p{margin:0;color:var(--sub);font-size:.91rem;max-width:62ch}
@@ -242,12 +241,12 @@ footer{
 }
 .langbar button{
   font-family:var(--f-sans);font-size:.68rem;letter-spacing:.13em;text-transform:uppercase;
-  background:none;color:var(--faint);border:1px solid var(--hair);
-  padding:.32rem .7rem;cursor:pointer;margin-left:-1px;
+  background:none;color:var(--faint);border:0;
+  padding:.32rem 0;cursor:pointer;margin-left:1.1rem;
 }
 .langbar button:first-child{margin-left:0}
 .langbar button[aria-pressed="true"]{
-  color:var(--accent);border-color:var(--accent);position:relative;z-index:1;font-weight:600;
+  color:var(--ink);font-weight:600;
 }
 .langbar button:hover{color:var(--ink)}
 .langbar button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
@@ -255,14 +254,14 @@ footer{
 .pagenav{display:flex;gap:0;padding:.9rem 0 0}
 .pagenav>a,.pagenav>span{
   font-family:var(--f-sans);font-size:.68rem;letter-spacing:.13em;text-transform:uppercase;
-  color:var(--faint);border:1px solid var(--hair);text-decoration:none;
-  padding:.32rem .7rem;margin-left:-1px;white-space:nowrap;
+  color:var(--faint);border:0;text-decoration:none;
+  padding:.32rem 0;margin-left:1.4rem;white-space:nowrap;
 }
 .pagenav>:first-child{margin-left:0}
 .pagenav [aria-current="page"]{
   color:var(--ink);border-color:var(--hard);font-weight:600;position:relative;z-index:1;
 }
-.pagenav>a:hover{color:var(--accent);border-color:var(--accent);position:relative;z-index:2}
+.pagenav>a:hover{color:var(--accent)}
 .pagenav>a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 </style>
 

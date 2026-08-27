@@ -16,7 +16,7 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><polygon points='50,6 90,50 50,94 10,50' fill='%233fb950'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400..700&family=Archivo:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap">
 <style>
 :root{
   --bg:#FFFFFF; --panel:#FFFFFF; --well:#F5F6F7;
@@ -24,7 +24,7 @@
   --ink:#101215; --sub:#54585F; --faint:#868B93;
   --accent:#A85F00; --accent-well:#FDF7EE;
   --f-sans:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;
-  --f-serif:"Newsreader",Georgia,"Times New Roman",serif;
+  --f-serif:"Times New Roman",Times,"Liberation Serif",serif;
   --f-term:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
 }
 @media (prefers-color-scheme:dark){
@@ -92,10 +92,10 @@ ul{max-width:66ch;margin:0 0 1.05rem;padding-left:1.15rem}
 li{margin:0 0 .45rem}
 b{font-weight:600}
 code{font-family:var(--f-term);font-size:.85em;background:var(--well);
-  border:1px solid var(--soft);border-radius:2px;padding:.06em .32em}
+  padding:.06em .32em}
 
 figure{margin:1.7rem 0 2.3rem;padding:0}
-.figbox{border:1px solid var(--hair);background:var(--panel);padding:1.15rem .9rem .5rem;overflow-x:auto}
+.figbox{border:0;background:none;padding:.4rem 0 .5rem;overflow-x:auto}
 figure svg{font-family:var(--f-sans);display:block;width:100%;min-width:640px;max-width:100%;height:auto;color:var(--ink)}
 figcaption{font-size:.82rem;color:var(--sub);max-width:70ch;margin:.75rem 0 0;line-height:1.5}
 
@@ -118,12 +118,12 @@ td:first-child{font-weight:600;white-space:nowrap;padding-right:1.4rem}
 .pagenav{display:flex;gap:0;padding:.9rem 0 0;flex-wrap:wrap}
 .pagenav>a,.pagenav>span{
   font-family:var(--f-sans);font-size:.68rem;letter-spacing:.13em;text-transform:uppercase;
-  color:var(--faint);border:1px solid var(--hair);text-decoration:none;
-  padding:.32rem .7rem;margin-left:-1px;white-space:nowrap;
+  color:var(--faint);border:0;text-decoration:none;
+  padding:.32rem 0;margin-left:1.4rem;white-space:nowrap;
 }
 .pagenav>:first-child{margin-left:0}
-.pagenav [aria-current="page"]{color:var(--ink);border-color:var(--hard);position:relative;z-index:1;font-weight:600}
-.pagenav>a:hover{color:var(--accent);border-color:var(--accent);position:relative;z-index:2}
+.pagenav [aria-current="page"]{color:var(--ink);font-weight:600}
+.pagenav>a:hover{color:var(--accent)}
 .pagenav>a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 </style>
 </head>

@@ -17,7 +17,7 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><polygon points='50,6 90,50 50,94 10,50' fill='%23bc8cff'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400..700&family=Archivo:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap">
 <style>
 :root{
   --bg:#FFFFFF; --well:#F5F6F7;
@@ -25,7 +25,7 @@
   --ink:#101215; --sub:#54585F; --faint:#868B93;
   --accent:#A85F00; --accent-well:#FDF7EE;
   --f-sans:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;
-  --f-serif:"Newsreader",Georgia,"Times New Roman",serif;
+  --f-serif:"Times New Roman",Times,"Liberation Serif",serif;
 }
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
@@ -57,8 +57,8 @@ a{color:var(--accent)}
 .topbar{display:flex;justify-content:flex-end;padding:.9rem 0 0}
 .topbar button{
   font-family:var(--f-sans);font-size:.68rem;letter-spacing:.13em;text-transform:uppercase;
-  background:none;color:var(--faint);border:1px solid var(--hair);
-  padding:.32rem .7rem;cursor:pointer;margin-left:-1px;
+  background:none;color:var(--faint);border:0;
+  padding:.32rem 0;cursor:pointer;margin-left:1.1rem;
 }
 .topbar button:first-child{margin-left:0}
 .topbar button[aria-pressed="true"]{color:var(--accent);border-color:var(--accent);position:relative;z-index:1;font-weight:600}
@@ -95,7 +95,7 @@ h1{
 .fig .n{font-family:var(--f-sans);font-size:.78rem;color:var(--sub);margin-top:.4rem;line-height:1.42}
 .neg{color:var(--accent)}
 
-.tree{margin:1.6rem 0 0;border:1px solid var(--hair);padding:1.3rem 1.2rem 1rem;background:var(--bg)}
+.tree{margin:1.6rem 0 0;border:0;padding:.6rem 0 0;background:none}
 .tree svg{width:100%;height:auto;display:block;font-family:var(--f-sans)}
 .tn{fill:var(--well);stroke:var(--hard);stroke-width:1.3}
 .tn-i{fill:var(--accent-well);stroke:var(--accent);stroke-width:1.6}
@@ -116,15 +116,13 @@ h1{
 .mode p{font-size:.83rem;color:var(--sub);line-height:1.5;margin:0}
 .mode .c{font-family:var(--f-sans);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);
          margin-top:.55rem;font-weight:600}
-.band{border:1px solid var(--hair);margin:2.6rem 0 0;background:#0e1117}
+.band{border:0;margin:2.6rem 0 0;background:none}
 .band img{display:block;width:100%;height:auto}
 .band .cap{
-  font-size:.75rem;color:var(--faint);line-height:1.5;
-  padding:.6rem .8rem;border-top:1px solid var(--hair);background:var(--bg);
+  font-size:.75rem;color:var(--faint);line-height:1.5;padding:.7rem 0 0;
 }
 .card .shot{
-  margin:-1.35rem -1.4rem .35rem;border-bottom:1px solid var(--hair);
-  background:#0e1117;height:104px;overflow:hidden;
+  margin:0 0 .35rem;background:#0e1117;height:104px;overflow:hidden;
 }
 .card .shot img{display:block;width:100%;height:104px;object-fit:cover;object-position:left top}
 .lbl{
@@ -132,13 +130,13 @@ h1{
   font-size:.63rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);
   font-weight:600;margin:3.4rem 0 1.1rem;
 }
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(272px,1fr));gap:1px;
-       background:var(--hair);border:1px solid var(--hair)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(272px,1fr));
+       gap:0;border-top:1px solid var(--hair)}
 .card{
-  background:var(--bg);padding:1.35rem 1.4rem 1.5rem;
+  background:none;padding:1.5rem 1.6rem 1.7rem 0;border-bottom:1px solid var(--hair);
   display:flex;flex-direction:column;gap:.6rem;text-decoration:none;color:inherit;
 }
-.card:hover{background:var(--well)}
+.card:hover .go{color:var(--ink)}
 .card:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 .card .tag{
   font-family:var(--f-sans);
