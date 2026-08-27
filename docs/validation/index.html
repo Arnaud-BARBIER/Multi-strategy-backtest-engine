@@ -55,7 +55,14 @@ body{
 .wrap{max-width:1080px;margin:0 auto}
 
 /* ---------- masthead ---------- */
-.mast{padding:2.25rem 0 0;border-bottom:3px solid var(--hard)}
+.mast{
+  padding:2.25rem 0 0;border-bottom:0;
+  /* sans bordure, la marge du dernier enfant sortirait du bloc et decalerait le filet */
+  display:flow-root;
+  /* le filet de tete chauffe a gauche puis rejoint la grille */
+  background-image:linear-gradient(90deg,var(--accent) 0%,var(--hard) 34%,var(--hair) 78%);
+  background-repeat:no-repeat;background-size:100% 3px;background-position:0 100%;
+}
 .mast-top{
   display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem;
   font-family:var(--f-sans);font-size:.7rem;letter-spacing:.13em;
@@ -136,7 +143,7 @@ a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
   display:flex;align-items:stretch;gap:0;margin:0 0 1.35rem;
   border:1px solid var(--accent);background:var(--accent-well);
 }
-.verdict .bar{background:var(--accent);width:8px;flex:none}
+.verdict .bar{background:linear-gradient(180deg,var(--accent),var(--accent-well));width:8px;flex:none}
 .verdict .txt{
   padding:.7rem 1rem;font-family:var(--f-sans);font-size:.8rem;font-weight:600;
   letter-spacing:.14em;text-transform:uppercase;color:var(--accent);

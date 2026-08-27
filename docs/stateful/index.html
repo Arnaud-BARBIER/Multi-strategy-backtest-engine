@@ -49,7 +49,14 @@ body{
 }
 .wrap{max-width:1000px;margin:0 auto}
 
-.mast{padding:2.25rem 0 0;border-bottom:3px solid var(--hard)}
+.mast{
+  padding:2.25rem 0 0;border-bottom:0;
+  /* sans bordure, la marge du dernier enfant sortirait du bloc et decalerait le filet */
+  display:flow-root;
+  /* le filet de tete chauffe a gauche puis rejoint la grille */
+  background-image:linear-gradient(90deg,var(--accent) 0%,var(--hard) 34%,var(--hair) 78%);
+  background-repeat:no-repeat;background-size:100% 3px;background-position:0 100%;
+}
 .mast-top{
   display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem;
   font-size:.7rem;letter-spacing:.13em;text-transform:uppercase;color:var(--sub);
