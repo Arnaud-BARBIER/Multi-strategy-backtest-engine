@@ -100,6 +100,11 @@ code{font-family:var(--f-term);font-size:.85em;background:var(--well);
   padding:.06em .32em}
 
 figure{margin:1.7rem 0 2.3rem;padding:0}
+.two-col{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(215px,1fr);gap:2rem;align-items:start;margin:0 0 1.5rem}
+.two-col .side p{max-width:none;font-size:.9rem;margin:0 0 .85rem}
+.two-col .side .small{font-size:.8rem;color:var(--faint)}
+@media (max-width:760px){.two-col{grid-template-columns:1fr}}
+
 .figbox{border:0;background:none;padding:.4rem 0 .5rem;overflow-x:auto}
 figure svg{font-family:var(--f-sans);display:block;width:100%;min-width:640px;max-width:100%;height:auto;color:var(--ink)}
 figcaption{font-size:.82rem;color:var(--sub);max-width:70ch;margin:.75rem 0 0;line-height:1.5}
@@ -472,6 +477,56 @@ td:first-child{font-weight:600;white-space:nowrap;padding-right:1.4rem}
     persistant pour qu'une condition de niveau ne redéclenche pas à chaque barre, plafond
     d'événements par contrôle, budget de déclenchements sur la durée du run.
   </p>
+
+<figure>
+  <div class="figbox">
+    <img src="../img/st-statefulspec.png" alt="Déclaration complète du StatefulSpec avec son ResumeWatchSpec" loading="lazy">
+  </div>
+  <figcaption>
+    Tout se déclare au même endroit. <code>mode="resume"</code> choisit le régime,
+    <code>watch=ResumeWatchSpec(...)</code> greffe le contrôle intra-période dessus, et le bloc
+    du bas rassemble les garanties : délai d'une barre, rembobinage explicite, plafond
+    d'événements par découpe. Run présenté dans la page Moteur.
+  </figcaption>
+</figure>
+
+<h3>Ce que le contrôle inscrit dans le journal</h3>
+<div class="two-col">
+  <div class="tablewrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Barre de<br>l'événement</th>
+          <th>Barre de<br>décision</th>
+          <th>Mode</th>
+          <th>Fonction appelée</th>
+          <th>Raison</th>
+          <th>Statut</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>371</td><td>372</td><td>3</td><td>borrow_overlay</td><td>underwater_duration &gt; 100</td><td>fired</td></tr>
+        <tr><td>547</td><td>548</td><td>2</td><td>mpt_reallocation</td><td>current_drawdown &ge; 20 %</td><td>fired</td></tr>
+        <tr><td>…</td><td>…</td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>1801</td><td>1802</td><td>2</td><td>mpt_reallocation</td><td>current_drawdown &ge; 20 %</td><td>cooldown</td></tr>
+        <tr><td>1802</td><td>1803</td><td>2</td><td>mpt_reallocation</td><td>current_drawdown &ge; 20 %</td><td>cooldown</td></tr>
+        <tr><td>1803</td><td>1804</td><td>2</td><td>mpt_reallocation</td><td>current_drawdown &ge; 20 %</td><td>cooldown</td></tr>
+        <tr><td>1887</td><td>1888</td><td>2</td><td>mpt_reallocation</td><td>current_drawdown &ge; 20 %</td><td>fired</td></tr>
+        <tr><td>1889</td><td>1890</td><td>3</td><td>borrow_overlay</td><td>underwater_duration &gt; 100</td><td>fired</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="side">
+    <p><b>La barre de décision suit toujours celle de l'événement.</b> Jamais la même : la
+    clôture qui a déclenché n'est pas connaissable au moment du signal.</p>
+    <p><b>Deux fonctions alternent</b>, chacune avec son mode de déclenchement. Le mode 2
+    remplace la décision programmée, le mode 3 s'insère à l'intérieur de la période.</p>
+    <p><b>Trois <code>cooldown</code> consécutifs, puis un <code>fired</code>.</b> La condition
+    reste vraie d'une barre à l'autre ; le verrou l'empêche de redéclencher, et il compte par
+    raison, pas par contrôle.</p>
+    <p class="small">1 253 lignes sur ce run, huit montrées.</p>
+  </div>
+</div>
 </section>
 
 <section>
