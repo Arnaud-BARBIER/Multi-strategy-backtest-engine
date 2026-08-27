@@ -70,7 +70,7 @@ gap between them is therefore the price of the cash policy, isolated.
 *The strategy loses less in every trough, which is the −24.76 % against −32.28 %, and does
 not take back what it never lost: the three curves track each other until 2020, then the
 post-crisis recovery pulls the baselines away. Almost all of the −1.86 pt forms there.
-Unedited output of `validation_baseline`.*
+Output of `validation_baseline`.*
 
 Run: 5 assets, daily bars, 2013–2022 in-sample, 2,298 bars, 46 rebalance decisions,
 50-bar rebalance interval, 100-bar covariance lookback. 2022–2026 is held out and has

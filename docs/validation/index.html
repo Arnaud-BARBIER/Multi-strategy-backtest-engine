@@ -337,7 +337,7 @@ button{font:inherit}
     </div>
 
     <div class="plot">
-      <div class="lbl"><span>Graphique · plot_results_alloc</span><span>non retouché</span></div>
+      <div class="lbl"><span>Graphique · plot_results_alloc</span></div>
       <img src="../img/v0-run-tested.png" alt="Courbe d'equity du run testé" loading="lazy">
       <div class="cap">
         <b>Le run soumis aux tests, avec sa mécanique apparente.</b> Les losanges violets sont
@@ -451,7 +451,7 @@ button{font:inherit}
     <div class="verdict"><div class="bar"></div><div class="txt">Verdict : n'apporte rien</div></div>
 
     <div class="raw">
-      <div class="lbl"><span>Sortie brute · validation_baseline</span><span>non retouchée</span></div>
+      <div class="lbl"><span>Sortie brute · validation_baseline</span></div>
 <pre>absolute    : stripped reserve_cash_pct, fixed_cash_reserve · keeps execution
               costs, management fee, performance fee, currencies
 matched     : every piece of machinery kept, only the weighting rule swapped
@@ -463,7 +463,7 @@ carrier     : portfolio_equity(nav-borrowed) · basis D
     </div>
 
     <div class="plot">
-      <div class="lbl"><span>Graphique · validation_baseline</span><span>non retouché</span></div>
+      <div class="lbl"><span>Graphique · validation_baseline</span></div>
       <img src="../img/v1-baseline-nav.png" alt="Graphique · validation_baseline" loading="lazy">
       <div class="cap"><b>La stratégie perd moins dans chaque creux, et ne reprend pas ce qu'elle n'a pas perdu.</b> Le panneau du bas montre le drawdown : la courbe verte est au-dessus des deux autres partout, c'est le −24,76 % contre −32,28 %. Le panneau du haut montre ce que cela coûte : jusqu'en 2020 les trois courbes se tiennent, puis la reprise post-crise écarte les baselines et la stratégie ne suit pas. L'écart de −1,86 pt se forme presque entièrement là.</div>
     </div>
@@ -522,7 +522,7 @@ carrier     : portfolio_equity(nav-borrowed) · basis D
     </div>
 
     <div class="raw">
-      <div class="lbl"><span>Sortie brute · validation_null_sizing</span><span>non retouchée</span></div>
+      <div class="lbl"><span>Sortie brute · validation_null_sizing</span></div>
 <pre><b>N_eff = 46 decisions -> nothing finer than p ≈ 0.02 is resolvable here</b>
 
 <i>VERDICT   SIZING: NO DETECTABLE EFFECT</i> — -0.84 pt on 46 decisions (t = -0.63)
@@ -533,12 +533,12 @@ carrier     : portfolio_equity(nav-borrowed) · basis D
     </div>
 
     <div class="plot">
-      <div class="lbl"><span>Graphique · validation_null_sizing</span><span>non retouché</span></div>
+      <div class="lbl"><span>Graphique · validation_null_sizing</span></div>
       <img src="../img/v2-attribution.png" alt="Graphique · validation_null_sizing" loading="lazy">
       <div class="cap"><b>Les deux marches, dans l'ordre.</b> À gauche le CAGR, à droite l'équivalent certain. La barre grise est l'équipondération, la bleue le run à poids plats à l'intérieur de la sélection de la stratégie, la verte la stratégie. La première marche retire le panier et la trésorerie, la seconde retire l'optimiseur. Sur le rendement, celle de l'optimiseur est la plus courte. Sur l'équivalent certain à γ = 3 le classement s'inverse, parce que la volatilité plus basse de la stratégie lui rend une partie du terrain.</div>
     </div>
     <div class="plot">
-      <div class="lbl"><span>Graphique · effet de sizing cumulé</span><span>non retouché</span></div>
+      <div class="lbl"><span>Graphique · effet de sizing cumulé</span></div>
       <img src="../img/v3-sizing-effect.png" alt="Effet de sizing cumulé" loading="lazy">
       <div class="cap"><b>Voilà à quoi ressemble un effet non détectable.</b> La contribution cumulée de l'optimiseur monte à +5 % et y reste six ans, pointe à +10,6 % pendant le krach de mars 2020, puis rend tout en quelques semaines et finit à −8 %. <b>Le −0,84 pt n'est pas un handicap constant : c'est le solde de clôture d'une série qui a changé de signe.</b> C'est exactement ce que produit le bruit d'échantillonnage, et c'est ce que le t de −0,63 dit sous une autre forme. Un backtest qui n'aurait publié que la moyenne aurait laissé croire à une dégradation régulière.</div>
     </div>
@@ -624,7 +624,7 @@ carrier     : portfolio_equity(nav-borrowed) · basis D
         </div>
         <div class="verdict"><div class="bar"></div><div class="txt">Verdict : dominé</div></div>
         <div class="raw">
-          <div class="lbl"><span>Sortie brute · validation_null_leverage</span><span>non retouchée</span></div>
+          <div class="lbl"><span>Sortie brute · validation_null_leverage</span></div>
 <pre><i>VERDICT   DOMINATED</i> — below the capital market
 line at every assumed risk-free rate
 (-1.42 to -0.74 pt). The same risk was
@@ -636,13 +636,13 @@ holding less of the benchmark
     </div>
 
     <div class="plot">
-      <div class="lbl"><span>Graphique · pouvoir d'achat de la réserve</span><span>non retouché</span></div>
+      <div class="lbl"><span>Graphique · pouvoir d'achat de la réserve</span></div>
       <img src="../img/v4-purchasing-power.png" alt="Graphique · pouvoir d'achat de la réserve" loading="lazy">
       <div class="cap"><b>Le milieu du graphique est le test.</b> Les traits bleus mesurent le nombre d'unités du benchmark que la réserve pourrait acheter à chaque date : ils montent quand le marché baisse, donc l'option a de la valeur. Les points verts marquent les moments où le cash a réellement été déployé, et les cercles rouges les creux où il ne l'a pas été. Les points ne se rassemblent pas sous les pics.</div>
     </div>
 
     <div class="plot">
-      <div class="lbl"><span>Graphique · validation_null_leverage</span><span>non retouché</span></div>
+      <div class="lbl"><span>Graphique · validation_null_leverage</span></div>
       <img src="../img/v5-capital-market-line.png" alt="Graphique · validation_null_leverage" loading="lazy">
       <div class="cap"><b>L'étoile verte est la stratégie ; les quatre droites sont ce qu'un simple mélange rapporte, sans modèle.</b> Chaque droite relie le cash au benchmark pour un taux sans risque supposé. L'étoile est en dessous des quatre, à 8,1 % de volatilité pour 1,94 % de rendement, là où un simple mélange donnait entre 2,68 % et 3,36 %. La distance verticale est l'écart du tableau.</div>
     </div>
@@ -890,7 +890,7 @@ holding less of the benchmark
     </div>
 
     <div class="plot">
-      <div class="lbl"><span>Chart · plot_results_alloc</span><span>unedited</span></div>
+      <div class="lbl"><span>Chart · plot_results_alloc</span></div>
       <img src="../img/v0-run-tested.png" alt="Equity curve of the run under test" loading="lazy">
       <div class="cap">
         <b>The run put to the tests, with its machinery visible.</b> The purple diamonds are the
@@ -1000,7 +1000,7 @@ holding less of the benchmark
     <div class="verdict"><div class="bar"></div><div class="txt">Verdict : adds nothing</div></div>
 
     <div class="raw">
-      <div class="lbl"><span>Raw output · validation_baseline</span><span>unedited</span></div>
+      <div class="lbl"><span>Raw output · validation_baseline</span></div>
 <pre>absolute    : stripped reserve_cash_pct, fixed_cash_reserve · keeps execution
               costs, management fee, performance fee, currencies
 matched     : every piece of machinery kept, only the weighting rule swapped
@@ -1012,7 +1012,7 @@ carrier     : portfolio_equity(nav-borrowed) · basis D
     </div>
 
     <div class="plot">
-      <div class="lbl"><span>Chart · validation_baseline</span><span>unedited</span></div>
+      <div class="lbl"><span>Chart · validation_baseline</span></div>
       <img src="../img/v1-baseline-nav.png" alt="Chart · validation_baseline" loading="lazy">
       <div class="cap"><b>The strategy loses less in every trough, and does not take back what it never lost.</b> The lower panel is drawdown: the green line sits above the other two throughout, which is the −24.76 % against −32.28 %. The upper panel shows the price of that: the three curves track each other until 2020, then the post-crisis recovery pulls the baselines away and the strategy does not follow. Almost all of the −1.86 pt gap forms there.</div>
     </div>
@@ -1069,7 +1069,7 @@ carrier     : portfolio_equity(nav-borrowed) · basis D
     </div>
 
     <div class="raw">
-      <div class="lbl"><span>Raw output · validation_null_sizing</span><span>unedited</span></div>
+      <div class="lbl"><span>Raw output · validation_null_sizing</span></div>
 <pre><b>N_eff = 46 decisions -> nothing finer than p ≈ 0.02 is resolvable here</b>
 
 <i>VERDICT   SIZING: NO DETECTABLE EFFECT</i> — -0.84 pt on 46 decisions (t = -0.63)
@@ -1080,12 +1080,12 @@ carrier     : portfolio_equity(nav-borrowed) · basis D
     </div>
 
     <div class="plot">
-      <div class="lbl"><span>Chart · validation_null_sizing</span><span>unedited</span></div>
+      <div class="lbl"><span>Chart · validation_null_sizing</span></div>
       <img src="../img/v2-attribution.png" alt="Chart · validation_null_sizing" loading="lazy">
       <div class="cap"><b>The two steps, in order.</b> CAGR on the left, certainty equivalent on the right. The grey bar is equal weight, the blue one the flat-weight run inside the strategy's own selection, the green one the strategy. The first step removes the basket and the cash policy, the second removes the optimiser. On return, the optimiser's step is the shorter of the two. On the certainty equivalent at γ = 3 the ranking flips, because the strategy's lower volatility gives it some of the ground back.</div>
     </div>
     <div class="plot">
-      <div class="lbl"><span>Chart · cumulative sizing effect</span><span>unedited</span></div>
+      <div class="lbl"><span>Chart · cumulative sizing effect</span></div>
       <img src="../img/v3-sizing-effect.png" alt="Cumulative sizing effect" loading="lazy">
       <div class="cap"><b>This is what an undetectable effect looks like.</b> The optimiser's cumulative contribution climbs to +5 % and stays there for six years, peaks at +10.6 % through the March 2020 crash, then gives it all back within weeks and ends at −8 %. <b>The −0.84 pt is not a steady handicap: it is the closing balance of a series that changed sign.</b> That is exactly what sampling noise produces, and it is what the t of −0.63 says in another form. A backtest reporting only the average would have suggested a steady decline.</div>
     </div>
@@ -1171,7 +1171,7 @@ carrier     : portfolio_equity(nav-borrowed) · basis D
         </div>
         <div class="verdict"><div class="bar"></div><div class="txt">Verdict : dominated</div></div>
         <div class="raw">
-          <div class="lbl"><span>Raw output · validation_null_leverage</span><span>unedited</span></div>
+          <div class="lbl"><span>Raw output · validation_null_leverage</span></div>
 <pre><i>VERDICT   DOMINATED</i> — below the capital market
 line at every assumed risk-free rate
 (-1.42 to -0.74 pt). The same risk was
@@ -1183,13 +1183,13 @@ holding less of the benchmark
     </div>
 
     <div class="plot">
-      <div class="lbl"><span>Chart · purchasing power of the reserve</span><span>unedited</span></div>
+      <div class="lbl"><span>Chart · purchasing power of the reserve</span></div>
       <img src="../img/v4-purchasing-power.png" alt="Chart · purchasing power of the reserve" loading="lazy">
       <div class="cap"><b>The middle panel is the test.</b> The blue stems measure how many units of the benchmark the reserve could buy at each date: they rise when the market falls, so the option does carry value. The green dots mark where cash was actually deployed, the red circles the troughs where it was not. The dots do not cluster under the peaks.</div>
     </div>
 
     <div class="plot">
-      <div class="lbl"><span>Chart · validation_null_leverage</span><span>unedited</span></div>
+      <div class="lbl"><span>Chart · validation_null_leverage</span></div>
       <img src="../img/v5-capital-market-line.png" alt="Chart · validation_null_leverage" loading="lazy">
       <div class="cap"><b>The green star is the strategy; the four lines are what a blend returns with no model at all.</b> Each line joins cash to the benchmark for one assumed risk-free rate. The star sits below all four, at 8.1 % volatility for 1.94 % return, where a plain blend returned between 2.68 % and 3.36 %. The vertical distance is the gap in the table.</div>
     </div>
