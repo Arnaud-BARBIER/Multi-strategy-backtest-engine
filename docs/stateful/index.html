@@ -107,16 +107,12 @@ figure{margin:1.7rem 0 2.3rem;padding:0}
 /* la capture est encadree pour marquer la transition entre le fond du site et celui de
    l'editeur, et tronquee a la hauteur du texte : le lien ouvre la version entiere */
 .split-i{
-  display:block;text-decoration:none;position:relative;overflow:hidden;
-  border:1px solid var(--hair);background:#252334;
+  display:block;text-decoration:none;
+  /* marge du fond de l'editeur, puis un filet contraste : sans lui la capture flotte */
+  background:#252334;padding:12px;border:1px solid var(--hard);
 }
 .split-i img{width:100%;display:block}
-.split-i.clip{max-height:300px}
-.split-i.clip::after{
-  content:"";position:absolute;left:0;right:0;bottom:0;height:96px;pointer-events:none;
-  background:linear-gradient(180deg,rgba(37,35,52,0),#252334 82%);
-}
-@media (max-width:760px){.split{grid-template-columns:1fr}.split-i.clip{max-height:none}.split-i.clip::after{display:none}}
+@media (max-width:760px){.split{grid-template-columns:1fr}}
 .two-col{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(215px,1fr);gap:2rem;align-items:start;margin:0 0 1.5rem}
 .two-col .side p{max-width:none;font-size:.9rem;margin:0 0 .85rem}
 .two-col .side .small{font-size:.8rem;color:var(--faint)}
@@ -492,31 +488,20 @@ td:first-child{font-weight:600;white-space:nowrap;padding-right:1.4rem}
         activé volontairement. Chaque décision est étiquetée dans les journaux du run selon le
         régime qui l'a produite.
       </p>
-      <p class="small">
-        Tout cela se déclare dans un seul objet : <code>mode</code> choisit le régime,
-        <code>watch</code> greffe le contrôle par-dessus. Run présenté dans la page Moteur.
-        <a href="../img/st-spec-a.png" target="_blank" rel="noopener">Pleine taille</a>
-      </p>
-    </div>
-    <a class="split-i clip" href="../img/st-spec-a.png" target="_blank" rel="noopener">
-      <img src="../img/st-spec-a.png" alt="Déclaration du StatefulSpec et de son ResumeWatchSpec" loading="lazy">
-    </a>
-  </div>
-
-  <div class="split">
-    <div class="split-t">
       <p>
         Les garde-fous ne sont pas décoratifs : temporisation par motif, verrou sur signal
         persistant pour qu'une condition de niveau ne redéclenche pas à chaque barre, plafond
         d'événements par contrôle, budget de déclenchements sur la durée du run.
       </p>
       <p class="small">
-        Ils se déclarent au même endroit que le reste.
-        <a href="../img/st-spec-b.png" target="_blank" rel="noopener">Pleine taille</a>
+        Tout se déclare dans un seul objet : <code>mode</code> choisit le régime,
+        <code>watch</code> greffe le contrôle par-dessus, et le bloc du bas rassemble les
+        garanties. Run présenté dans la page Moteur.
+        <a href="../img/st-spec.png" target="_blank" rel="noopener">Pleine taille</a>
       </p>
     </div>
-    <a class="split-i" href="../img/st-spec-b.png" target="_blank" rel="noopener">
-      <img src="../img/st-spec-b.png" alt="Bloc des garanties du ResumeWatchSpec" loading="lazy">
+    <a class="split-i" href="../img/st-spec.png" target="_blank" rel="noopener">
+      <img src="../img/st-spec.png" alt="Déclaration complète du StatefulSpec, du ResumeWatchSpec et des garanties" loading="lazy">
     </a>
   </div>
 
