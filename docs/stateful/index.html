@@ -22,7 +22,7 @@
   --bg:#FFFFFF; --panel:#FFFFFF; --well:#F5F6F7;
   --hair:#C9CCD1; --hard:#101215; --soft:#E3E5E8;
   --ink:#101215; --sub:#54585F; --faint:#868B93;
-  --red:#C8102E; --red-well:#FBF0F1;
+  --accent:#A85F00; --accent-well:#FDF7EE;
   --f-sans:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;
   --f-term:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
 }
@@ -31,14 +31,14 @@
     --bg:#0e1117; --panel:#161b22; --well:#12171f;
     --hair:#21262d; --hard:#3d444d; --soft:#1b2028;
     --ink:#e6edf3; --sub:#8b949e; --faint:#6e7681;
-    --red:#F0625F; --red-well:#1F1517;
+    --accent:#F0A93A; --accent-well:#1E1710;
   }
 }
 :root[data-theme="dark"]{
   --bg:#0e1117; --panel:#161b22; --well:#12171f;
   --hair:#21262d; --hard:#3d444d; --soft:#1b2028;
   --ink:#e6edf3; --sub:#8b949e; --faint:#6e7681;
-  --red:#F0625F; --red-well:#1F1517;
+  --accent:#F0A93A; --accent-well:#1E1710;
 }
 
 *{box-sizing:border-box}
@@ -72,7 +72,7 @@ section{padding:2.9rem 0 0;border-bottom:1px solid var(--hair)}
 section:last-of-type{border-bottom:0}
 .eyebrow{
   font-family:var(--f-term);font-size:.7rem;letter-spacing:.16em;
-  text-transform:uppercase;color:var(--red);margin:0 0 .55rem;
+  text-transform:uppercase;color:var(--accent);margin:0 0 .55rem;
 }
 h2{font-weight:600;font-size:clamp(1.3rem,2.6vw,1.72rem);line-height:1.16;
   letter-spacing:-.02em;text-wrap:balance;margin:0 0 1.05rem;max-width:32ch}
@@ -90,7 +90,7 @@ figure{margin:1.7rem 0 2.3rem;padding:0}
 figure svg{display:block;width:100%;min-width:640px;max-width:100%;height:auto;color:var(--ink)}
 figcaption{font-size:.82rem;color:var(--sub);max-width:70ch;margin:.75rem 0 0;line-height:1.5}
 
-.note{border-left:3px solid var(--red);background:var(--red-well);
+.note{border-left:3px solid var(--accent);background:var(--accent-well);
   padding:1rem 1.15rem;margin:1.7rem 0;max-width:70ch}
 .note p{margin:0;max-width:none;font-size:.95rem}
 .note p + p{margin-top:.7rem}
@@ -114,8 +114,8 @@ td:first-child{font-weight:600;white-space:nowrap;padding-right:1.4rem}
 }
 .pagenav>:first-child{margin-left:0}
 .pagenav [aria-current="page"]{color:var(--ink);border-color:var(--hard);position:relative;z-index:1;font-weight:600}
-.pagenav>a:hover{color:var(--red);border-color:var(--red);position:relative;z-index:2}
-.pagenav>a:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+.pagenav>a:hover{color:var(--accent);border-color:var(--accent);position:relative;z-index:2}
+.pagenav>a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 </style>
 </head>
 <body>
@@ -199,7 +199,7 @@ td:first-child{font-weight:600;white-space:nowrap;padding-right:1.4rem}
             <polygon points="0,0 10,5 0,10" fill="currentColor"/>
           </marker>
           <marker id="a1r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-            <polygon points="0,0 10,5 0,10" fill="#C8102E"/>
+            <polygon points="0,0 10,5 0,10" fill="var(--accent)"/>
           </marker>
         </defs>
 
@@ -215,8 +215,8 @@ td:first-child{font-weight:600;white-space:nowrap;padding-right:1.4rem}
         <text x="352" y="105" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".68">P&amp;L latent, trades,</text>
         <text x="352" y="121" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".68">événements, expositions</text>
 
-        <rect x="508" y="60" width="176" height="78" fill="none" stroke="#C8102E" stroke-width="2"/>
-        <text x="596" y="86" text-anchor="middle" font-size="13" font-weight="600" fill="#C8102E">FONCTION PYTHON</text>
+        <rect x="508" y="60" width="176" height="78" fill="none" stroke="var(--accent)" stroke-width="2"/>
+        <text x="596" y="86" text-anchor="middle" font-size="13" font-weight="600" fill="var(--accent)">FONCTION PYTHON</text>
         <text x="596" y="105" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".68">lit l'état,</text>
         <text x="596" y="121" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".68">renvoie un patch</text>
 
@@ -232,8 +232,8 @@ td:first-child{font-weight:600;white-space:nowrap;padding-right:1.4rem}
         <line x1="688" y1="99" x2="744" y2="99" stroke="currentColor" stroke-width="1.4" marker-end="url(#a1)"/>
         <text x="716" y="88" text-anchor="middle" font-size="10" fill="currentColor" opacity=".62">réinjecte</text>
 
-        <path d="M840 142 V 206 H 352 V 146" fill="none" stroke="#C8102E" stroke-width="1.4" stroke-dasharray="5 4" marker-end="url(#a1r)"/>
-        <text x="596" y="232" text-anchor="middle" font-size="11" fill="#C8102E">itération suivante : le patch est écrit en connaissant tout le run précédent</text>
+        <path d="M840 142 V 206 H 352 V 146" fill="none" stroke="var(--accent)" stroke-width="1.4" stroke-dasharray="5 4" marker-end="url(#a1r)"/>
+        <text x="596" y="232" text-anchor="middle" font-size="11" fill="var(--accent)">itération suivante : le patch est écrit en connaissant tout le run précédent</text>
         <text x="596" y="252" text-anchor="middle" font-size="11" fill="currentColor" opacity=".62">y compris son futur</text>
       </svg>
     </div>
@@ -297,18 +297,18 @@ td:first-child{font-weight:600;white-space:nowrap;padding-right:1.4rem}
 
         <text x="20" y="26" font-size="11" fill="currentColor" opacity=".62">Frontières déclarées : calendrier, tous les N barres, clôture de trade, tous les N trades, colonne d'événements.</text>
 
-        <rect x="195" y="52" width="150" height="58" fill="none" stroke="#C8102E" stroke-width="2"/>
-        <text x="270" y="74" text-anchor="middle" font-size="11" font-weight="600" fill="#C8102E">FONCTION UTILISATEUR</text>
+        <rect x="195" y="52" width="150" height="58" fill="none" stroke="var(--accent)" stroke-width="2"/>
+        <text x="270" y="74" text-anchor="middle" font-size="11" font-weight="600" fill="var(--accent)">FONCTION UTILISATEUR</text>
         <text x="270" y="91" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".68">poids ou risque</text>
         <text x="270" y="105" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".68">pour la suite</text>
 
-        <rect x="445" y="52" width="150" height="58" fill="none" stroke="#C8102E" stroke-width="2"/>
-        <text x="520" y="74" text-anchor="middle" font-size="11" font-weight="600" fill="#C8102E">FONCTION UTILISATEUR</text>
+        <rect x="445" y="52" width="150" height="58" fill="none" stroke="var(--accent)" stroke-width="2"/>
+        <text x="520" y="74" text-anchor="middle" font-size="11" font-weight="600" fill="var(--accent)">FONCTION UTILISATEUR</text>
         <text x="520" y="91" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".68">contexte causal :</text>
         <text x="520" y="105" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".68">rien après la coupe</text>
 
-        <rect x="695" y="52" width="150" height="58" fill="none" stroke="#C8102E" stroke-width="2"/>
-        <text x="770" y="74" text-anchor="middle" font-size="11" font-weight="600" fill="#C8102E">FONCTION UTILISATEUR</text>
+        <rect x="695" y="52" width="150" height="58" fill="none" stroke="var(--accent)" stroke-width="2"/>
+        <text x="770" y="74" text-anchor="middle" font-size="11" font-weight="600" fill="var(--accent)">FONCTION UTILISATEUR</text>
         <text x="770" y="91" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".68">Python pur</text>
         <text x="770" y="105" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".68">ou njit bridgée</text>
 
@@ -321,9 +321,9 @@ td:first-child{font-weight:600;white-space:nowrap;padding-right:1.4rem}
         <rect x="790" y="155" width="130" height="38" fill="none" stroke="currentColor" stroke-width="1.5"/>
         <text x="855" y="179" text-anchor="middle" font-size="11.5" fill="currentColor">kernel</text>
 
-        <rect x="250" y="155" width="40" height="38" fill="#C8102E" opacity=".14"/>
-        <rect x="500" y="155" width="40" height="38" fill="#C8102E" opacity=".14"/>
-        <rect x="750" y="155" width="40" height="38" fill="#C8102E" opacity=".14"/>
+        <rect x="250" y="155" width="40" height="38" fill="var(--accent)" opacity=".14"/>
+        <rect x="500" y="155" width="40" height="38" fill="var(--accent)" opacity=".14"/>
+        <rect x="750" y="155" width="40" height="38" fill="var(--accent)" opacity=".14"/>
 
         <line x1="250" y1="152" x2="250" y2="116" stroke="currentColor" stroke-width="1.4" marker-end="url(#a2)"/>
         <line x1="290" y1="116" x2="290" y2="152" stroke="currentColor" stroke-width="1.4" marker-end="url(#a2)"/>
@@ -401,30 +401,30 @@ td:first-child{font-weight:600;white-space:nowrap;padding-right:1.4rem}
             <polygon points="0,0 10,5 0,10" fill="currentColor"/>
           </marker>
           <marker id="a3r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-            <polygon points="0,0 10,5 0,10" fill="#C8102E"/>
+            <polygon points="0,0 10,5 0,10" fill="var(--accent)"/>
           </marker>
         </defs>
 
         <text x="20" y="26" font-size="11" fill="currentColor" opacity=".62">La détection est compilée et tourne à chaque barre. La décision reste en Python et n'est appelée que sur événement.</text>
 
-        <rect x="286" y="58" width="190" height="62" fill="none" stroke="#C8102E" stroke-width="2"/>
-        <text x="381" y="80" text-anchor="middle" font-size="11.5" font-weight="600" fill="#C8102E">FONCTION PYTHON</text>
+        <rect x="286" y="58" width="190" height="62" fill="none" stroke="var(--accent)" stroke-width="2"/>
+        <text x="381" y="80" text-anchor="middle" font-size="11.5" font-weight="600" fill="var(--accent)">FONCTION PYTHON</text>
         <text x="381" y="97" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".68">décision lourde,</text>
         <text x="381" y="112" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".68">appelée seulement ici</text>
 
-        <rect x="180" y="170" width="440" height="40" fill="#C8102E" opacity=".09"/>
-        <text x="255" y="163" text-anchor="middle" font-size="10" fill="#C8102E" opacity=".8">fenêtre examinée par ce contrôle</text>
+        <rect x="180" y="170" width="440" height="40" fill="var(--accent)" opacity=".09"/>
+        <text x="255" y="163" text-anchor="middle" font-size="10" fill="var(--accent)" opacity=".8">fenêtre examinée par ce contrôle</text>
         <rect x="40" y="170" width="880" height="40" fill="none" stroke="currentColor" stroke-width="1.5"/>
         <text x="58" y="195" font-size="12" fill="currentColor">kernel Numba</text>
         <text x="902" y="195" text-anchor="end" font-size="10.5" fill="currentColor" opacity=".68">watcher njit scanné à chaque barre</text>
 
-        <line x1="330" y1="210" x2="330" y2="262" stroke="#C8102E" stroke-width="1.4" stroke-dasharray="4 4"/>
-        <circle cx="330" cy="190" r="5.5" fill="#C8102E"/>
-        <text x="322" y="278" text-anchor="end" font-size="11" fill="#C8102E">barre t : premier événement de la fenêtre</text>
+        <line x1="330" y1="210" x2="330" y2="262" stroke="var(--accent)" stroke-width="1.4" stroke-dasharray="4 4"/>
+        <circle cx="330" cy="190" r="5.5" fill="var(--accent)"/>
+        <text x="322" y="278" text-anchor="end" font-size="11" fill="var(--accent)">barre t : premier événement de la fenêtre</text>
 
-        <circle cx="520" cy="190" r="4.5" fill="none" stroke="#C8102E" stroke-width="1.6"/>
-        <line x1="520" y1="210" x2="520" y2="242" stroke="#C8102E" stroke-width="1.2" stroke-dasharray="3 4" opacity=".7"/>
-        <text x="520" y="256" text-anchor="middle" font-size="10" fill="#C8102E" opacity=".8">événement suivant : réexaminé après la reprise</text>
+        <circle cx="520" cy="190" r="4.5" fill="none" stroke="var(--accent)" stroke-width="1.6"/>
+        <line x1="520" y1="210" x2="520" y2="242" stroke="var(--accent)" stroke-width="1.2" stroke-dasharray="3 4" opacity=".7"/>
+        <text x="520" y="256" text-anchor="middle" font-size="10" fill="var(--accent)" opacity=".8">événement suivant : réexaminé après la reprise</text>
 
         <line x1="376" y1="150" x2="376" y2="210" stroke="currentColor" stroke-width="1.4"/>
         <circle cx="376" cy="190" r="4" fill="none" stroke="currentColor" stroke-width="1.5"/>
@@ -435,9 +435,9 @@ td:first-child{font-weight:600;white-space:nowrap;padding-right:1.4rem}
         <text x="620" y="278" text-anchor="middle" font-size="11" fill="currentColor" opacity=".78">contrôle périodique : le watcher voit l'événement passé</text>
         <text x="640" y="296" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".55">sans watcher, la décision arriverait ici</text>
 
-        <line x1="614" y1="150" x2="380" y2="150" stroke="#C8102E" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#a3r)"/>
-        <text x="497" y="140" text-anchor="middle" font-size="11" fill="#C8102E">le run revient au moment de l'événement</text>
-        <line x1="376" y1="148" x2="376" y2="126" stroke="#C8102E" stroke-width="1.5" marker-end="url(#a3r)"/>
+        <line x1="614" y1="150" x2="380" y2="150" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#a3r)"/>
+        <text x="497" y="140" text-anchor="middle" font-size="11" fill="var(--accent)">le run revient au moment de l'événement</text>
+        <line x1="376" y1="148" x2="376" y2="126" stroke="var(--accent)" stroke-width="1.5" marker-end="url(#a3r)"/>
       </svg>
     </div>
     <figcaption>
