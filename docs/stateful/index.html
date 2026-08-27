@@ -99,7 +99,14 @@ b{font-weight:600}
 code{font-family:var(--f-term);font-size:.85em;background:var(--well);
   padding:.06em .32em}
 
+img{max-width:100%;height:auto;display:block}
 figure{margin:1.7rem 0 2.3rem;padding:0}
+.split{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:1.8rem;align-items:start;margin:.4rem 0 2.2rem}
+.split-t p{max-width:none;font-size:.92rem;margin:0 0 .8rem}
+.split-t .small{font-size:.8rem;color:var(--faint)}
+.split-i{display:block;text-decoration:none}
+.split-i img{width:100%}
+@media (max-width:760px){.split{grid-template-columns:1fr}}
 .two-col{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(215px,1fr);gap:2rem;align-items:start;margin:0 0 1.5rem}
 .two-col .side p{max-width:none;font-size:.9rem;margin:0 0 .85rem}
 .two-col .side .small{font-size:.8rem;color:var(--faint)}
@@ -478,17 +485,33 @@ td:first-child{font-weight:600;white-space:nowrap;padding-right:1.4rem}
     d'événements par contrôle, budget de déclenchements sur la durée du run.
   </p>
 
-<figure>
-  <div class="figbox">
-    <img src="../img/st-statefulspec.png" alt="Déclaration complète du StatefulSpec avec son ResumeWatchSpec" loading="lazy">
+<h3>Comment tout cela se déclare</h3>
+<div class="split">
+  <div class="split-t">
+    <p>Un seul objet porte les trois régimes. <code>mode</code> choisit lequel,
+    <code>watch</code> greffe le contrôle intra-période par-dessus.</p>
+    <p>La fonction de décision reste du Python ordinaire : le moteur ne lui impose rien
+    d'autre que sa signature. Seul le scanner est compilé, parce que lui vit dans la boucle
+    de barres.</p>
+    <p class="small">Run présenté dans la page Moteur.
+    <a href="../img/st-spec-a.png" target="_blank" rel="noopener">Pleine taille</a></p>
   </div>
-  <figcaption>
-    Tout se déclare au même endroit. <code>mode="resume"</code> choisit le régime,
-    <code>watch=ResumeWatchSpec(...)</code> greffe le contrôle intra-période dessus, et le bloc
-    du bas rassemble les garanties : délai d'une barre, rembobinage explicite, plafond
-    d'événements par découpe. Run présenté dans la page Moteur.
-  </figcaption>
-</figure>
+  <a class="split-i" href="../img/st-spec-a.png" target="_blank" rel="noopener">
+    <img src="../img/st-spec-a.png" alt="Déclaration du StatefulSpec et de son ResumeWatchSpec" loading="lazy">
+  </a>
+</div>
+
+<div class="split">
+  <div class="split-t">
+    <p><b>Et ce qui empêche de tricher se déclare au même endroit.</b> Le délai d'une barre
+    interdit d'agir sur la clôture qui a déclenché. Le rembobinage est un choix explicite,
+    jamais un comportement implicite. Le nombre d'événements par découpe est plafonné.</p>
+    <p class="small"><a href="../img/st-spec-b.png" target="_blank" rel="noopener">Pleine taille</a></p>
+  </div>
+  <a class="split-i" href="../img/st-spec-b.png" target="_blank" rel="noopener">
+    <img src="../img/st-spec-b.png" alt="Bloc des garanties du ResumeWatchSpec" loading="lazy">
+  </a>
+</div>
 
 <h3>Ce que le contrôle inscrit dans le journal</h3>
 <div class="two-col">
