@@ -165,9 +165,26 @@ h1{
 .contact a{font-size:.93rem;font-weight:600;text-decoration:none;border-bottom:1px solid var(--accent)}
 .contact a:hover{color:var(--ink);border-bottom-color:var(--ink)}
 
+.roadmap{
+  margin-top:3.6rem;padding:1.7rem 0 1.8rem;
+  border-top:2px solid var(--hard);border-bottom:1px solid var(--hair)
+}
+.roadmap .lbl{margin:0 0 1.15rem}
+.roadmap-grid{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.roadmap article{padding-right:2rem}
+.roadmap article+article{padding:0 0 0 2rem;border-left:1px solid var(--hair)}
+.roadmap h2{font-size:1.12rem;font-weight:600;letter-spacing:-.02em;line-height:1.28;margin-bottom:.55rem}
+.roadmap p{font-size:.9rem;color:var(--sub);line-height:1.58}
+.roadmap .continuity{margin-top:1.35rem;padding-top:1rem;border-top:1px solid var(--hair);max-width:78ch}
+
 /* l'arbre porte les modes au-dessus de 760 px, les colonnes prennent le relais en dessous */
 @media (min-width:761px){.modes{display:none}}
-@media (max-width:760px){.tree{display:none}}
+@media (max-width:760px){
+  .tree{display:none}
+  .roadmap-grid{grid-template-columns:1fr}
+  .roadmap article{padding:0 0 1.2rem}
+  .roadmap article+article{padding:1.2rem 0 0;border-left:0;border-top:1px solid var(--hair)}
+}
 </style>
 </head>
 <body>
@@ -189,8 +206,9 @@ h1{
       L'objectif du projet : <b>réduire le temps entre une hypothèse d'investissement, son test
       et sa validation</b>. L'utilisateur écrit la logique de sa stratégie, et déclare la
       politique comptable du portefeuille : la trésorerie, l'emprunt, les frais et les devises
-      sont des leviers à sa main. Il n'a à construire ni le moteur qui l'exécute, ni la couche qui juge le
-      résultat.
+      sont des leviers à sa main. Il n'a à construire ni le moteur qui l'exécute, ni la couche qui
+      juge le résultat. Cette couche peut aussi évaluer une stratégie déjà rentable en mesurant
+      si sa performance se maintient sur une période restée à l'écart de sa conception.
     </p>
 
     <p class="lede2">
@@ -341,6 +359,32 @@ h1{
       </a>
     </div>
 
+    <section class="roadmap" aria-labelledby="roadmap-fr">
+      <div class="lbl" id="roadmap-fr">Travaux à venir</div>
+      <div class="roadmap-grid">
+        <article>
+          <h2>Retirer une stratégie au bon moment</h2>
+          <p>
+            Une stratégie peut cesser de produire l'edge qui justifiait son déploiement. Le
+            prochain axe cherchera à détecter cette dégradation pendant qu'elle se produit, afin
+            de retirer la stratégie au bon moment plutôt qu'après coup.
+          </p>
+        </article>
+        <article>
+          <h2>Déclencher une mesure d'urgence au bon seuil</h2>
+          <p>
+            Un passage forcé à plat peut éviter un événement qui détruirait la stratégie, mais
+            aussi coûter davantage que la protection apportée. Le travail cherchera à déterminer
+            quand déclencher cette mesure et à partir de quel seuil son coût dépasse son bénéfice.
+          </p>
+        </article>
+      </div>
+      <p class="continuity">
+        Le reverse stress déterministe déjà en ligne constitue le point de départ : il mesure ce
+        que la protection coûte lorsqu'elle se déclenche.
+      </p>
+    </section>
+
     <p class="foot">
       <b>Aucune stratégie gagnante n'est présentée ici.</b> La stratégie testée est une
       construction de manuel, retenue parce qu'elle est connue et reproductible. L'objet de ces
@@ -363,10 +407,11 @@ h1{
 
     <p class="lede">
       The point of the project: <b>cut the time between an investment hypothesis, its test and
-      its validation</b>. The user writes the logic of the strategy, and declares the
-      portfolio's accounting policy: cash, borrowing, fees and currencies are levers in their
-      hands. Neither the engine that runs it nor the layer that judges the result has to
-      be built.
+      its validation</b>. The user writes the logic of the strategy, and declares the portfolio's
+      accounting policy: cash, borrowing, fees and currencies are levers in their hands. Neither
+      the engine that runs it nor the layer that judges the result has to be built. That layer can
+      also evaluate an already profitable strategy by measuring whether its performance holds on
+      a period kept separate from its design process.
     </p>
 
     <p class="lede2">
@@ -515,6 +560,32 @@ h1{
         <div class="go">Open on GitHub →</div>
       </a>
     </div>
+
+    <section class="roadmap" aria-labelledby="roadmap-en">
+      <div class="lbl" id="roadmap-en">Work ahead</div>
+      <div class="roadmap-grid">
+        <article>
+          <h2>Withdraw a strategy at the right time</h2>
+          <p>
+            A strategy can stop producing the edge that justified its deployment. The next line
+            of work will seek to detect that deterioration as it happens, so the strategy can be
+            withdrawn at the right time rather than after the fact.
+          </p>
+        </article>
+        <article>
+          <h2>Trigger an emergency measure at the right threshold</h2>
+          <p>
+            A forced move to flat can avoid an event that would destroy the strategy, but it can
+            also cost more than the protection it provides. The work will seek to determine when
+            to trigger that measure and at what threshold its cost exceeds its benefit.
+          </p>
+        </article>
+      </div>
+      <p class="continuity">
+        The deterministic reverse stress already online provides the starting point: it measures
+        what the protection costs when it is triggered.
+      </p>
+    </section>
 
     <p class="foot">
       <b>No winning strategy is presented here.</b> The strategy under test is a textbook
