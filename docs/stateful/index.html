@@ -169,10 +169,11 @@ td:first-child{font-weight:600;white-space:nowrap;padding-right:1.4rem}
   </div>
   <h1>Rendre un kernel compilé capable de décisions stateful</h1>
   <p class="lede">
-    Un kernel Numba ne peut pas s'arrêter à chaque barre pour demander l'avis d'une fonction
-    Python écrite par l'utilisateur. Et cette fonction doit rester du Python ordinaire, puisque
-    c'est là que l'utilisateur écrit sa stratégie. Trois mécanismes tiennent les deux à la fois :
-    le replay, le resume, et le watcher qui relie les deux.
+    L'ambition du moteur est d'accueillir toutes les stratégies, y compris celles dont la
+    décision dépend d'un état accumulé, sans que l'utilisateur traduise sa logique. Dans un
+    moteur hybride Python/Numba, appeler à chaque barre la fonction Python utilisateur où cette
+    logique est écrite serait trop lourd. Le replay, le resume et le watcher préservent cette
+    liberté sans payer ce coût.
   </p>
   <div class="tickers">
     <div>Replay : rétrospectif</div>
