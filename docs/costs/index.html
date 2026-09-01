@@ -76,10 +76,6 @@ p{max-width:65ch;margin:0 0 1.05rem}
 .layer:last-child{border-right:0;margin-right:0}
 .layer .t{font-family:var(--sans);font-size:.7rem;letter-spacing:.13em;text-transform:uppercase;color:var(--accent);font-weight:600}
 .layer p{font-size:.86rem;line-height:1.55;color:var(--sub);margin:.55rem 0 0}
-.raw{border-left:2px solid var(--hair);margin:1.4rem 0 1.6rem;padding-left:1rem}
-.raw .lbl{font-family:var(--sans);font-size:.63rem;letter-spacing:.15em;text-transform:uppercase;color:var(--faint);padding:.45rem .85rem;border-bottom:1px solid var(--hair)}
-.raw pre{margin:0;padding:.9rem .85rem;overflow-x:auto;font-family:var(--term);font-size:.765rem;line-height:1.6;color:var(--sub);white-space:pre}
-.raw pre b{color:var(--ink);font-weight:600}
 .tw{overflow-x:auto;margin:1.45rem 0 1.35rem;border-top:2px solid var(--hard);border-bottom:1px solid var(--hair)}
 table{border-collapse:collapse;width:100%;min-width:1380px}
 caption{text-align:left;font-family:var(--sans);font-size:.72rem;color:var(--sub);padding:.7rem 0 .55rem}
@@ -94,6 +90,7 @@ details{margin:1.15rem 0 0;border-top:1px solid var(--hair);padding-top:.8rem}
 summary{cursor:pointer;font-family:var(--sans);font-size:.78rem;font-weight:600;color:var(--accent)}
 figure{margin:1.4rem 0 1.6rem;max-width:1080px}
 figure img{display:block;width:100%;height:auto}
+figure.spec-shot{max-width:720px;margin-left:auto;margin-right:auto}
 figcaption{font-size:.82rem;color:var(--sub);margin-top:.7rem;line-height:1.55;max-width:74ch}
 figcaption b{color:var(--ink);font-weight:600}
 .note{border-left:3px solid var(--accent);padding:.1rem 0 .1rem 1rem;margin:1.35rem 0}
@@ -167,7 +164,7 @@ footer{border-top:3px solid var(--hard);margin-top:3.5rem;padding-top:1.1rem;dis
       <div class="layer"><div class="t">Financement</div><p>Intérêts de l'emprunt indexés sur une série de taux overnight, séparés du carry des contrats.</p></div>
     </div>
 
-    <figure>
+    <figure class="spec-shot">
       <img src="../img/costs-slippage-spec.png" alt="Configuration du slippage dynamique commun aux actifs" loading="lazy">
       <figcaption>
         <b>Le slippage est une politique d'exécution, pas un pourcentage ajouté après le
@@ -175,7 +172,7 @@ footer{border-top:3px solid var(--hard);margin-top:3.5rem;padding-top:1.1rem;dis
         et s'applique ici aux rebalancements avec un déplacement défavorable du prix de fill.
       </figcaption>
     </figure>
-    <figure>
+    <figure class="spec-shot">
       <img src="../img/costs-execution-assets.png" alt="Contrats et coûts d'exécution déclarés par actif" loading="lazy">
       <figcaption>
         <b>La convention du contrat précède le coût.</b> Taille du contrat, lot minimal, pas de
@@ -184,41 +181,6 @@ footer{border-top:3px solid var(--hard);margin-top:3.5rem;padding-top:1.1rem;dis
       </figcaption>
     </figure>
 
-    <div class="raw">
-      <div class="lbl">Version abrégée de la politique déclarée</div>
-<pre>execution_costs = ExecutionCostSpec(
-    product_type="spot", kernel_settlement="charge",
-    slippage=SlippageSpec(
-        enabled=True, model="simple_range", simple_range_frac=0.02,
-        adverse_only=True, apply_rebalance=True,
-    ),
-    assets={
-        "XAUUSD": AssetExecutionCostSpec(
-            spread_points=0.20,
-            commission_per_lot_round_turn_usd=3.0,
-            transaction_tax_pct_buy=0.01,
-            transaction_tax_pct_sell=0.0033,
-            carry_cost=CarryCostSpec(per_contract=1.50,
-                                     charge_frequency="ME"),
-        ),
-        "GBPUSD": AssetExecutionCostSpec(
-            spread_points=0.00008,
-            commission_per_lot_round_turn_usd=3.0,
-        ),
-    },
-)
-
-borrow = BorrowPolicySpec(amount=1.0, amount_basis="pct_of_initial",
-                          rate="SOFR", spread=0.015, day_count=360)
-
-fees = PortfolioFeeSpec(
-    management=ManagementChargeSpec(annual_rate=0.02,
-                                    charge_frequency="year",
-                                    payout_frequency="quarter"),
-    performance=PerformanceChargeSpec(rate=0.05,
-                                      high_water_mark=True),
-)</pre>
-    </div>
   </section>
 
   <section>
