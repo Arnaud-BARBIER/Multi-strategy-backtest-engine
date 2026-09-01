@@ -4,19 +4,19 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Du signal à la NAV nette · Arnaud Barbier</title>
-<meta name="description" content="Spread, commissions, taxes, slippage, carry, frais de gestion et financement : comment sont-ils calculés et appliqués pour un backtest réaliste et robuste ?">
+<meta name="description" content="Coûts d'exécution spot, carry, frais de gestion et financement : calcul, application et rapprochement jusqu'à la NAV.">
 <meta name="author" content="Arnaud Barbier">
 <link rel="canonical" href="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/costs/">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/costs/">
 <meta property="og:title" content="Du signal à la NAV nette · Arnaud Barbier">
-<meta property="og:description" content="Chaque coût est appliqué là où il naît, rapproché par actif, puis isolé sur la trajectoire de NAV.">
+<meta property="og:description" content="Coûts d'exécution spot, carry, frais de gestion et financement : calcul, application et rapprochement jusqu'à la NAV.">
 <meta property="og:locale" content="fr_FR">
 <meta property="og:image" content="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/img/costs-cascade.png">
-<meta property="og:image:alt" content="Trajectoire de la NAV nette et courbes reconstituées sans chaque couche de coût.">
+<meta property="og:image:alt" content="Trajectoire de la NAV nette et courbes reconstituées avant coûts.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Du signal à la NAV nette · Arnaud Barbier">
-<meta name="twitter:description" content="Spread, commissions, taxes, slippage, carry, frais de gestion et financement, rapprochés jusqu'à la NAV.">
+<meta name="twitter:description" content="Coûts d'exécution spot, carry, frais de gestion et financement, rapprochés jusqu'à la NAV.">
 <meta name="twitter:image" content="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/img/costs-cascade.png">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpolygon points='50,8 90,68 10,68' fill='%233fb950'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -112,7 +112,7 @@ footer{border-top:3px solid var(--hard);margin-top:3.5rem;padding-top:1.1rem;dis
   <nav class="pagenav" aria-label="Pages">
     <a href="../">Accueil</a>
     <a href="../validation/">Note de validation</a>
-    <a href="../engine/">Le moteur</a>
+    <a href="../engine/">Mode allocation</a>
     <span aria-current="page">Les coûts</span>
     <a href="../stateful/">Replay &amp; resume</a>
   </nav>
@@ -122,17 +122,18 @@ footer{border-top:3px solid var(--hard);margin-top:3.5rem;padding-top:1.1rem;dis
   <header class="mast">
     <div class="mast-top">
       <div>Arnaud Barbier · note technique</div>
-      <div>Allocation multi-actifs · 2026</div>
+      <div>Allocation multi-actifs · coûts spot · 2026</div>
     </div>
     <h1>Un coût n'est réel que lorsqu'il atteint la NAV.</h1>
     <p class="lede">
       Spread, commission, taxe, slippage, portage d'un contrat, frais de gestion et financement
       n'apparaissent ni au même moment ni au même endroit. Le moteur les applique là où ils
-      naissent, les rapproche par actif, puis mesure séparément ce que chaque couche a retiré à
-      la trajectoire du portefeuille.
+      naissent, les rapproche par actif, puis mesure séparément l'incidence de chaque catégorie
+      de coûts sur la trajectoire du portefeuille. Pour les coûts d'exécution, cette page traite
+      la famille spot.
     </p>
     <div class="figs">
-      <div class="fig"><div class="k">Coûts d'exécution</div><div class="v">35 813</div><div class="n">devise du compte, configuration de démonstration</div></div>
+      <div class="fig"><div class="k">Coûts d'exécution spot</div><div class="v">35 813</div><div class="n">devise du compte, configuration de démonstration</div></div>
       <div class="fig"><div class="k">Dont slippage mesuré</div><div class="v">8 011</div><div class="n">écart entre prix cible et prix exécuté</div></div>
       <div class="fig"><div class="k">Carry de contrat</div><div class="v">46</div><div class="n">isolé du financement de l'emprunt</div></div>
       <div class="fig"><div class="k">Financement</div><div class="v">SOFR + 150 pb</div><div class="n">capital emprunté dès le début du run</div></div>
@@ -155,6 +156,17 @@ footer{border-top:3px solid var(--hard);margin-top:3.5rem;padding-top:1.1rem;dis
         <b>paramètre de démonstration</b>, pas l'hypothèse d'un marché ou d'un courtier. Comme le
         portefeuille ferme puis rouvre ses lignes à chaque rebalancement, elle frappe chaque
         jambe exécutée et domine volontairement le résultat.
+      </p>
+    </div>
+
+    <div class="note">
+      <p>
+        <b>Le run utilise <code>product_type="spot"</code>.</b>
+        <code>ExecutionCostSpec</code> prend actuellement en charge deux familles de coûts
+        d'exécution, <code>spot</code> et <code>cfd</code>. L'argument
+        <code>product_type</code> sélectionne celle qui est utilisée. Le rapprochement présenté
+        ici utilise la famille <code>spot</code>. Les frais de portefeuille et le financement
+        restent comptabilisés séparément.
       </p>
     </div>
 
@@ -240,21 +252,22 @@ footer{border-top:3px solid var(--hard);margin-top:3.5rem;padding-top:1.1rem;dis
 
   <section>
     <div class="shead"><span class="snum">03</span><span class="stitle">La cascade</span></div>
-    <h2>Retirer une couche à la fois, sur la même trajectoire</h2>
+    <h2>Du rendement avant coûts au rendement net</h2>
     <figure>
-      <img src="../img/costs-cascade.png" alt="NAV nette et trajectoires reconstituées sans chaque couche de coût" loading="lazy">
+      <img src="../img/costs-cascade.png" alt="NAV nette et trajectoires reconstituées avant coûts" loading="lazy">
       <figcaption>
         <b>Une attribution à chemin fixé, pas six backtests indépendants.</b> La courbe blanche
-        est la NAV effectivement produite. Chaque courbe pointillée réintègre une seule couche
-        à la trajectoire observée ; la verte les réintègre toutes. Le carry de contrat vaut ici
+        est la NAV effectivement produite. Chaque courbe pointillée réintègre une seule catégorie
+        de coûts à la trajectoire observée ; la verte les réintègre toutes. Le carry de contrat
+        vaut ici
         seulement 46,15 et se confond presque avec la NAV nette. Le financement de l'emprunt
-        reste une couche distincte.
+        reste une composante distincte.
       </figcaption>
     </figure>
     <p class="small">
       « 103,7 % de la valeur terminale » compare le coût cumulé à la valeur finale du run ; ce
       n'est ni 103,7 % du capital initial ni une perte annuelle. Avec la taxe volontairement
-      punitive, le run passe de +8,51 %/an sans aucune couche à +0,37 %/an net. La figure sert à
+      punitive, le run passe de +8,51 %/an avant coûts à +0,37 %/an net. La figure sert à
       vérifier la propagation des coûts, pas à proposer une hypothèse réaliste de rendement.
     </p>
     <figure>

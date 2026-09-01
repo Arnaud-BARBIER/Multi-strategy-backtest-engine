@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Allocation Engine · Arnaud Barbier</title>
-<meta name="description" content="Le code réel d'un moteur d'allocation multi-actifs et les sorties qu'il produit : registre d'emprunt, identités comptables, watcher compilé, coûts avec et sans.">
+<title>Mode allocation · Arnaud Barbier</title>
+<meta name="description" content="Le code réel du mode allocation multi-actifs et les sorties qu'il produit : registre d'emprunt, identités comptables, watcher compilé et attribution des coûts.">
 <meta name="author" content="Arnaud Barbier">
 <link rel="canonical" href="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/engine/">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/engine/">
-<meta property="og:title" content="Allocation Engine · Arnaud Barbier">
-<meta property="og:description" content="Le code réel d'un moteur d'allocation multi-actifs et les sorties qu'il produit : registre d'emprunt, identités comptables, watcher compilé, coûts avec et sans.">
+<meta property="og:title" content="Mode allocation · Arnaud Barbier">
+<meta property="og:description" content="Le code réel du mode allocation multi-actifs et les sorties qu'il produit : registre d'emprunt, identités comptables, watcher compilé et attribution des coûts.">
 <meta property="og:locale" content="fr_FR">
 <meta property="og:locale:alternate" content="en_GB">
 <meta property="og:image" content="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/img/og-engine-v2.png">
@@ -19,8 +19,8 @@
 <meta property="og:image:alt" content="Une politique comptable complète se déclare en quarante lignes.">
 <meta name="twitter:image" content="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/img/og-engine-v2.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Allocation Engine · Arnaud Barbier">
-<meta name="twitter:description" content="Le code réel d'un moteur d'allocation multi-actifs et les sorties qu'il produit : registre d'emprunt, identités comptables, watcher compilé, coûts avec et sans.">
+<meta name="twitter:title" content="Mode allocation · Arnaud Barbier">
+<meta name="twitter:description" content="Le code réel du mode allocation multi-actifs et les sorties qu'il produit : registre d'emprunt, identités comptables, watcher compilé et attribution des coûts.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpolygon points='50,8 90,68 10,68' fill='%233fb950'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -324,7 +324,7 @@ button{font:inherit}
     <nav class="pagenav" aria-label="Pages">
       <a href="../"><span class="lang-fr">Accueil</span><span class="lang-en">Home</span></a>
       <a href="../validation/"><span class="lang-fr">Note de validation</span><span class="lang-en">Validation note</span></a>
-      <span aria-current="page"><span class="lang-fr">Le moteur</span><span class="lang-en">The engine</span></span>
+      <span aria-current="page"><span class="lang-fr">Mode allocation</span><span class="lang-en">Allocation mode</span></span>
       <a href="../costs/"><span class="lang-fr">Les coûts</span><span class="lang-en">Costs · FR</span></a>
       <a href="../stateful/"><span class="lang-fr">Replay &amp; resume</span><span class="lang-en">Replay &amp; resume</span></a>
     </nav>
@@ -337,7 +337,7 @@ button{font:inherit}
   <div class="wrap lang-fr">
   <header class="mast">
     <div class="mast-top">
-      <div>Arnaud Barbier · le moteur</div>
+      <div>Arnaud Barbier · mode allocation</div>
       <div>Allocation multi-actifs · 2026</div>
     </div>
 
@@ -531,8 +531,8 @@ button{font:inherit}
   </section>
 
   <section id="execution-costs">
-    <div class="shead"><span class="snum">05</span><span class="stitle">Ce que les coûts prennent</span></div>
-    <h2>Le même portefeuille, avec et sans chaque couche</h2>
+    <div class="shead"><span class="snum">05</span><span class="stitle">Attribution des coûts</span></div>
+    <h2>Du rendement avant coûts au rendement net</h2>
     <p>
       Les coûts d'exécution ne sont plus une déclaration sans effet dans le mode allocation.
       Spread, commission, taxe, impact résiduel et slippage sont rapprochés sur les jambes
@@ -541,9 +541,9 @@ button{font:inherit}
       capital initial de 100 000.
     </p>
     <figure>
-      <img src="../img/engine-cost-cascade.png" alt="NAV nette et trajectoires sans chaque couche de coût sur le run moteur" loading="lazy">
+      <img src="../img/engine-cost-cascade.png" alt="NAV nette et trajectoires reconstituées avant coûts sur le run du mode allocation" loading="lazy">
       <figcaption>
-        <b>Une couche à la fois, sur le chemin effectivement observé.</b> Le run produit
+        <b>Une attribution sur le chemin effectivement observé.</b> Le run produit
         +0,40 %/an net. Réintégrer seulement les coûts d'exécution donne +0,80 %/an ; retirer
         le carry de contrat change à peine la courbe ; sans frais de gestion, elle atteint
         +2,23 %/an ; sans financement de l'emprunt, +1,79 %/an. Sans aucun coût, le même chemin
@@ -561,7 +561,7 @@ button{font:inherit}
     </figure>
     <div class="tw cost-table">
       <table>
-        <caption>Coûts par actif — devise du compte, capital initial 100 000</caption>
+        <caption>Coûts par actif en devise du compte, capital initial 100 000</caption>
         <thead><tr><th>Actif</th><th>Spread</th><th>Commission</th><th>Taxe</th><th>Impact résiduel</th><th>Slippage</th><th>Exécution</th><th>Carry / roll</th><th>Total</th><th>% capital</th><th>Carry pb/an</th><th>Slip fill pb A/R</th><th>Dates carry</th></tr></thead>
         <tbody>
           <tr><td>BRENTCMDUSD</td><td>134,52</td><td>134,52</td><td>0,00</td><td>53,61</td><td>807,00</td><td>1 129,65</td><td>0,00</td><td>1 129,65</td><td>1,1297 %</td><td>0,0</td><td>26,981</td><td>0</td></tr>
@@ -569,7 +569,7 @@ button{font:inherit}
           <tr><td>DEUIDXEUR</td><td>32,36</td><td>97,08</td><td>0,00</td><td>20,83</td><td>601,39</td><td>751,66</td><td>0,00</td><td>751,66</td><td>0,7517 %</td><td>0,0</td><td>16,424</td><td>0</td></tr>
           <tr><td>XAUUSD</td><td>71,94</td><td>10,79</td><td>0,00</td><td>13,75</td><td>517,99</td><td>614,47</td><td>29,99</td><td>644,45</td><td>0,6445 %</td><td>1,4</td><td>10,766</td><td>101</td></tr>
           <tr><td>GBPUSD</td><td>21,51</td><td>8,07</td><td>0,00</td><td>0,96</td><td>232,18</td><td>262,71</td><td>0,00</td><td>262,71</td><td>0,2627 %</td><td>0,0</td><td>6,557</td><td>0</td></tr>
-          <tr class="total"><td>Portefeuille</td><td>314,57</td><td>575,90</td><td>0,00</td><td>186,36</td><td>2 499,89</td><td>3 576,71</td><td>29,99</td><td>3 606,69</td><td class="hl">3,6068 %</td><td>—</td><td>—</td><td>101</td></tr>
+          <tr class="total"><td>Portefeuille</td><td>314,57</td><td>575,90</td><td>0,00</td><td>186,36</td><td>2 499,89</td><td>3 576,71</td><td>29,99</td><td>3 606,69</td><td class="hl">3,6068 %</td><td>s.o.</td><td>s.o.</td><td>101</td></tr>
         </tbody>
       </table>
     </div>
@@ -577,7 +577,7 @@ button{font:inherit}
       Le slippage est mesuré par l'écart entre prix cible et prix exécuté. Son effet est déjà
       dans la NAV : le tableau le rend visible sans le débiter une seconde fois. La page
       consacrée aux coûts publie la spec, le même rapprochement dans deux unités et la cascade
-      qui réintègre une couche à la fois sur une trajectoire fixe.
+      qui réintègre chaque catégorie de coûts séparément sur une trajectoire fixe.
     </p>
     <div class="crosslink">
       <p>
@@ -743,7 +743,7 @@ button{font:inherit}
   <div class="wrap lang-en">
   <header class="mast">
     <div class="mast-top">
-      <div>Arnaud Barbier · the engine</div>
+      <div>Arnaud Barbier · allocation mode</div>
       <div>Multi-asset allocation · 2026</div>
     </div>
 
@@ -928,8 +928,8 @@ button{font:inherit}
   </section>
 
   <section id="execution-costs-en">
-    <div class="shead"><span class="snum">05</span><span class="stitle">What the costs took</span></div>
-    <h2>The same portfolio, with and without each layer</h2>
+    <div class="shead"><span class="snum">05</span><span class="stitle">Cost attribution</span></div>
+    <h2>From pre-cost to net performance</h2>
     <p>
       Execution costs are no longer declarations without effect in allocation mode. Spread,
       commission, tax, residual impact and slippage are reconciled against the legs that were
@@ -938,9 +938,9 @@ button{font:inherit}
       capital of 100,000.
     </p>
     <figure>
-      <img src="../img/engine-cost-cascade.png" alt="Net NAV and paths without each cost layer on the engine run" loading="lazy">
+      <img src="../img/engine-cost-cascade.png" alt="Net NAV and reconstructed pre-cost paths on the allocation-mode run" loading="lazy">
       <figcaption>
-        <b>One layer at a time, on the path that was actually observed.</b> The run produces
+        <b>An attribution on the path that was actually observed.</b> The run produces
         +0.40 %/year net. Adding back execution costs alone gives +0.80 %/year; removing
         contract carry barely changes the path; without management fees it reaches
         +2.23 %/year; without borrow financing, +1.79 %/year. Without any cost, the same path
@@ -958,7 +958,7 @@ button{font:inherit}
     </figure>
     <div class="tw cost-table">
       <table>
-        <caption>Costs by asset — account currency, initial capital 100,000</caption>
+        <caption>Costs by asset in account currency, initial capital 100,000</caption>
         <thead><tr><th>Asset</th><th>Spread</th><th>Commission</th><th>Tax</th><th>Residual impact</th><th>Slippage</th><th>Execution</th><th>Carry / roll</th><th>Total</th><th>% capital</th><th>Carry bp/y</th><th>Fill slip bp RT</th><th>Carry dates</th></tr></thead>
         <tbody>
           <tr><td>BRENTCMDUSD</td><td>134.52</td><td>134.52</td><td>0.00</td><td>53.61</td><td>807.00</td><td>1,129.65</td><td>0.00</td><td>1,129.65</td><td>1.1297 %</td><td>0.0</td><td>26.981</td><td>0</td></tr>
@@ -966,7 +966,7 @@ button{font:inherit}
           <tr><td>DEUIDXEUR</td><td>32.36</td><td>97.08</td><td>0.00</td><td>20.83</td><td>601.39</td><td>751.66</td><td>0.00</td><td>751.66</td><td>0.7517 %</td><td>0.0</td><td>16.424</td><td>0</td></tr>
           <tr><td>XAUUSD</td><td>71.94</td><td>10.79</td><td>0.00</td><td>13.75</td><td>517.99</td><td>614.47</td><td>29.99</td><td>644.45</td><td>0.6445 %</td><td>1.4</td><td>10.766</td><td>101</td></tr>
           <tr><td>GBPUSD</td><td>21.51</td><td>8.07</td><td>0.00</td><td>0.96</td><td>232.18</td><td>262.71</td><td>0.00</td><td>262.71</td><td>0.2627 %</td><td>0.0</td><td>6.557</td><td>0</td></tr>
-          <tr class="total"><td>Portfolio</td><td>314.57</td><td>575.90</td><td>0.00</td><td>186.36</td><td>2,499.89</td><td>3,576.71</td><td>29.99</td><td>3,606.69</td><td class="hl">3.6068 %</td><td>—</td><td>—</td><td>101</td></tr>
+          <tr class="total"><td>Portfolio</td><td>314.57</td><td>575.90</td><td>0.00</td><td>186.36</td><td>2,499.89</td><td>3,576.71</td><td>29.99</td><td>3,606.69</td><td class="hl">3.6068 %</td><td>n/a</td><td>n/a</td><td>101</td></tr>
         </tbody>
       </table>
     </div>

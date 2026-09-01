@@ -177,8 +177,6 @@ h1{
 .roadmap p{font-size:.9rem;color:var(--sub);line-height:1.58}
 .roadmap .continuity{margin-top:1.35rem;padding-top:1rem;border-top:1px solid var(--hair);max-width:78ch}
 
-/* l'arbre porte les modes au-dessus de 760 px, les colonnes prennent le relais en dessous */
-@media (min-width:761px){.modes{display:none}}
 @media (max-width:760px){
   .tree{display:none}
   .roadmap-grid{grid-template-columns:1fr}
@@ -245,8 +243,9 @@ h1{
 
     <div class="lbl">Un noyau, trois questions</div>
     <p class="lede" style="margin-top:-.4rem">
-      Trois modes, un seul kernel. Chacun répond à une question différente, et se mesure donc
-      différemment. <b>C'est le moteur qui applique la bonne mesure, pas l'utilisateur.</b>
+      Le moteur s'organise autour de trois modes complémentaires. Chacun répond à une question
+      différente et se mesure donc différemment. <b>C'est le moteur qui applique la bonne
+      mesure, pas l'utilisateur.</b>
     </p>
     <div class="tree">
       <svg viewBox="0 0 900 430" role="img" aria-label="Arbre des modes : le kernel Numba se sépare en algorithmique et allocation, qui se rejoignent pour former le mode investissement">
@@ -275,34 +274,35 @@ h1{
         <rect class="tchip" x="136" y="164" width="168" height="32" rx="1"/>
         <text class="t2" x="220" y="185" text-anchor="middle">couche de sizing</text>
       </svg>
-      <p class="tcap">
-        <b>La comptabilité de portefeuille appartient à la branche allocation.</b> Le mode
-        investissement en reprend
-        contraintes de rebalancement, et y fait entrer une stratégie algorithmique comme une
-        ligne du portefeuille, avec sa propre gestion du risque et son accès à la trésorerie. C'est pourquoi la couche de sizing, greffée sur
-        la branche algorithmique, remonte jusqu'à lui. L'investissement se traite au comptant.
-      </p>
     </div>
     <div class="modes">
       <div class="mode">
         <h3>Algorithmique</h3>
-        <p>Signaux, setups, routage par régime, entrées et sorties sous une exécution réaliste
-           à la barre. Une règle a-t-elle un edge ?</p>
+        <p>Le mode algorithmique permet de tester et d'évaluer des stratégies systématiques,
+           avec leur propre logique de signal, de sizing et de gestion du risque.</p>
         <div class="c">porteur : trades clos</div>
       </div>
       <div class="mode">
         <h3>Allocation</h3>
-        <p>Poids cibles, calendriers de rebalancement, paliers de trésorerie, emprunt et frais.
-           Une règle de pondération bat-elle la détention équipondérée ?</p>
+        <p>Le mode allocation applique cette architecture à la construction et au suivi de
+           portefeuilles multi-actifs, avec des règles de pondération et de rebalancement
+           configurables.</p>
         <div class="c">porteur : NAV nette de l'emprunt</div>
       </div>
       <div class="mode">
-        <h3>Investissement</h3>
-        <p>Apports et retraits, high-water marks, gates de drawdown, restauration du capital.
-           Qu'a réellement vécu un compte ?</p>
+        <h3>Investissement, en développement</h3>
+        <p>Le mode investissement prolonge cette logique en traitant chaque stratégie
+           algorithmique comme une ligne de portefeuille à part entière. Chaque stratégie
+           conserve sa propre gestion du risque et son accès à la trésorerie. Les contraintes de
+           rebalancement peuvent également y être appliquées de manière optionnelle, notamment
+           pour piloter l'utilisation du cash. L'investissement est traité au comptant.</p>
         <div class="c">porteur : rendement pondéré par le temps</div>
       </div>
     </div>
+    <p class="tcap">
+      Cette « assetification » des stratégies permet de faire remonter la couche de sizing de la
+      branche algorithmique jusqu'au niveau du portefeuille d'investissement.
+    </p>
 
     <div class="band">
       <img src="img/band-equity.png" alt="Sortie du moteur : NAV, paliers de trésorerie, rebalancements, drawdown" loading="lazy">
@@ -329,21 +329,22 @@ h1{
       <a class="card" href="engine/">
         <div class="shot"><img src="img/thumb-engine.png" alt="Bloc AllocationSpec" loading="lazy"></div>
         <div class="tag"><span>L'instrument</span><span>5 min</span></div>
-        <h2>Le moteur</h2>
+        <h2>Mode allocation</h2>
         <p>
           Le code réel que l'utilisateur écrit et la sortie réelle que le moteur renvoie. Quarante lignes déclarent
           les réserves, l'emprunt indexé, les frais à deux horloges et quatre devises. Le bilan
           boucle à l'unité près.
         </p>
-        <div class="go">Voir le moteur →</div>
+        <div class="go">Voir le mode allocation →</div>
       </a>
       <a class="card" href="costs/">
-        <div class="shot"><img src="img/costs-cascade.png" alt="NAV nette et courbes sans chaque couche de coût" loading="lazy"></div>
+        <div class="shot"><img src="img/costs-cascade.png" alt="NAV nette et courbes reconstituées avant coûts" loading="lazy"></div>
         <div class="tag"><span>Le rapprochement</span><span>5 min</span></div>
         <h2>Du signal à la NAV nette</h2>
         <p>
           Spread, commissions, taxes, slippage, carry, frais de gestion et financement :
-          comment sont-ils calculés et appliqués pour un backtest réaliste et robuste ?
+          comment sont-ils calculés et appliqués pour un backtest réaliste et robuste en mode
+          spot ?
         </p>
         <div class="go">Suivre les coûts →</div>
       </a>
@@ -373,11 +374,12 @@ h1{
       <div class="lbl" id="roadmap-fr">Travaux à venir</div>
       <div class="roadmap-grid">
         <article>
-          <h2>Retirer une stratégie au bon moment</h2>
+          <h2>Détecter la dégradation d'une stratégie avant les pertes</h2>
           <p>
-            Une stratégie peut cesser de produire l'edge qui justifiait son déploiement. Le
-            prochain axe cherchera à détecter cette dégradation pendant qu'elle se produit, afin
-            de retirer la stratégie au bon moment plutôt qu'après coup.
+            Une stratégie peut progressivement perdre l'edge qui justifiait son déploiement. Le
+            prochain axe de développement cherchera à détecter, voire anticiper, cette
+            dégradation avant qu'elle ne se traduise par des pertes significatives, afin de
+            réduire ou retirer l'exposition suffisamment tôt.
           </p>
         </article>
         <article>
@@ -458,8 +460,9 @@ h1{
 
     <div class="lbl">One core, three questions</div>
     <p class="lede" style="margin-top:-.4rem">
-      Three modes, one kernel. Each answers a different question, and is therefore measured
-      differently. <b>The engine applies the right measure, not the user.</b>
+      The engine is organised around three complementary modes. Each answers a different
+      question and is therefore measured differently. <b>The engine applies the right measure,
+      not the user.</b>
     </p>
     <div class="tree">
       <svg viewBox="0 0 900 430" role="img" aria-label="Mode tree: the Numba kernel splits into algorithmic and allocation, which rejoin to form investment mode">
@@ -488,35 +491,33 @@ h1{
         <rect class="tchip" x="136" y="164" width="168" height="32" rx="1"/>
         <text class="t2" x="220" y="185" text-anchor="middle">sizing layer</text>
       </svg>
-      <p class="tcap">
-        <b>The portfolio accounting belongs to the allocation branch.</b> Investment mode takes
-        it over without inheriting its rebalance constraints,
-        and brings an algorithmic strategy in as a line of the portfolio, with its own risk
-        management and its own access to cash. That is why the
-        sizing layer, grafted onto the algorithmic branch, carries up into it. Investment mode
-        is spot only.
-      </p>
     </div>
     <div class="modes">
       <div class="mode">
         <h3>Algorithmic</h3>
-        <p>Signals, setups, regime routing, entries and exits under a realistic bar-level
-           execution model. Does a rule have an edge?</p>
+        <p>Algorithmic mode tests and evaluates systematic strategies, each with its own signal
+           logic, sizing and risk management.</p>
         <div class="c">carrier: closed trades</div>
       </div>
       <div class="mode">
         <h3>Allocation</h3>
-        <p>Target weights, rebalance calendars, cash tiers, borrowing and fees. Does a weighting
-           rule beat holding everything equally?</p>
+        <p>Allocation mode applies this architecture to building and monitoring multi-asset
+           portfolios, with configurable weighting and rebalancing rules.</p>
         <div class="c">carrier: NAV net of borrowing</div>
       </div>
       <div class="mode">
-        <h3>Investment</h3>
-        <p>Contributions and withdrawals, high-water marks, drawdown gates, capital
-           restoration. What did an account actually live through?</p>
+        <h3>Investment, in development</h3>
+        <p>Investment mode extends this logic by treating each algorithmic strategy as a
+           portfolio line in its own right. Each strategy retains its own risk management and
+           access to cash. Rebalancing constraints can also be applied optionally, notably to
+           manage the use of cash. Investment is handled on a spot basis.</p>
         <div class="c">carrier: time-weighted return</div>
       </div>
     </div>
+    <p class="tcap">
+      This assetification of strategies carries the sizing layer from the algorithmic branch up
+      to the investment-portfolio level.
+    </p>
 
     <div class="band">
       <img src="img/band-equity.png" alt="Engine output: NAV, cash tiers, rebalances, drawdown" loading="lazy">
@@ -541,21 +542,22 @@ h1{
       <a class="card" href="engine/">
         <div class="shot"><img src="img/thumb-engine.png" alt="Bloc AllocationSpec" loading="lazy"></div>
         <div class="tag"><span>The instrument</span><span>5 min</span></div>
-        <h2>The engine</h2>
+        <h2>Allocation mode</h2>
         <p>
           The real code that is written and the real output it returns. Forty lines declare
           the reserves, the indexed borrowing, fees on two clocks and four currencies. The
           balance sheet closes to the last unit.
         </p>
-        <div class="go">See the engine →</div>
+        <div class="go">View allocation mode →</div>
       </a>
       <a class="card" href="costs/">
-        <div class="shot"><img src="img/costs-cascade.png" alt="Net NAV and curves without each cost layer" loading="lazy"></div>
+        <div class="shot"><img src="img/costs-cascade.png" alt="Net NAV and reconstructed pre-cost curves" loading="lazy"></div>
         <div class="tag"><span>The reconciliation</span><span>5 min · FR</span></div>
         <h2>From signal to net NAV</h2>
         <p>
-          Spread, commissions, taxes, slippage, carry, portfolio fees and financing: where
-          each one bites, by asset and then on the portfolio path. French only for now.
+          Spread, commissions, taxes, slippage, carry, portfolio fees and financing: how are
+          they calculated and applied to a realistic and robust backtest in spot mode? French
+          only for now.
         </p>
         <div class="go">Follow the costs →</div>
       </a>
@@ -585,11 +587,12 @@ h1{
       <div class="lbl" id="roadmap-en">Work ahead</div>
       <div class="roadmap-grid">
         <article>
-          <h2>Withdraw a strategy at the right time</h2>
+          <h2>Detect strategy deterioration before losses</h2>
           <p>
-            A strategy can stop producing the edge that justified its deployment. The next line
-            of work will seek to detect that deterioration as it happens, so the strategy can be
-            withdrawn at the right time rather than after the fact.
+            A strategy can gradually lose the edge that justified its deployment. The next line
+            of development will seek to detect, or even anticipate, that deterioration before it
+            translates into significant losses, so exposure can be reduced or withdrawn early
+            enough.
           </p>
         </article>
         <article>
