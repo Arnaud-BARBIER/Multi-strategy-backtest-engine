@@ -3,19 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Du signal à la NAV nette · Arnaud Barbier</title>
+<title>Attribution des coûts et de la performance · Arnaud Barbier</title>
 <meta name="description" content="Coûts d'exécution spot, carry, frais de gestion et financement : calcul, application et rapprochement jusqu'à la NAV.">
 <meta name="author" content="Arnaud Barbier">
 <link rel="canonical" href="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/costs/">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/costs/">
-<meta property="og:title" content="Du signal à la NAV nette · Arnaud Barbier">
+<meta property="og:title" content="Attribution des coûts et de la performance · Arnaud Barbier">
 <meta property="og:description" content="Coûts d'exécution spot, carry, frais de gestion et financement : calcul, application et rapprochement jusqu'à la NAV.">
 <meta property="og:locale" content="fr_FR">
 <meta property="og:image" content="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/img/costs-cascade.png">
 <meta property="og:image:alt" content="Trajectoire de la NAV nette et courbes reconstituées avant coûts.">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Du signal à la NAV nette · Arnaud Barbier">
+<meta name="twitter:title" content="Attribution des coûts et de la performance · Arnaud Barbier">
 <meta name="twitter:description" content="Coûts d'exécution spot, carry, frais de gestion et financement, rapprochés jusqu'à la NAV.">
 <meta name="twitter:image" content="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/img/costs-cascade.png">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpolygon points='50,8 90,68 10,68' fill='%233fb950'/%3E%3C/svg%3E">
@@ -98,10 +98,17 @@ figcaption b{color:var(--ink);font-weight:600}
 .crosslink{border-left:2px solid var(--accent);padding:.1rem 0 .1rem 1.15rem;margin:1.5rem 0}
 .crosslink p{margin:0 0 .55rem;font-size:.94rem}
 .crosslink p:last-child{margin-bottom:0}
+.glossary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));margin:1.35rem 0 0;border-top:2px solid var(--hard)}
+.glossary>div{padding:1rem 1.2rem 1rem 0;border-bottom:1px solid var(--hair)}
+.glossary>div:nth-child(odd){margin-right:1.2rem;border-right:1px solid var(--hair)}
+.glossary dt{font-family:var(--sans);font-size:.73rem;font-weight:600;letter-spacing:.08em;color:var(--accent)}
+.glossary dd{margin:.38rem 0 0;font-size:.86rem;line-height:1.5;color:var(--sub)}
+.glossary dd b{color:var(--ink);font-weight:600}
 footer{border-top:3px solid var(--hard);margin-top:3.5rem;padding-top:1.1rem;display:flex;flex-wrap:wrap;gap:1.25rem;justify-content:space-between;font-family:var(--sans);font-size:.72rem;color:var(--faint);letter-spacing:.06em;text-transform:uppercase}
 @media (max-width:700px){
   body{padding-left:1rem;padding-right:1rem}.fig{border-right:0;border-bottom:1px solid var(--hair);padding:.9rem 0;margin:0}.fig:last-child{border-bottom:0}
   .layer{border-right:0;border-bottom:1px solid var(--hair);padding-right:0;margin-right:0}.layer:last-child{border-bottom:0}
+  .glossary{grid-template-columns:1fr}.glossary>div:nth-child(odd){margin-right:0;border-right:0}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
@@ -298,6 +305,85 @@ footer{border-top:3px solid var(--hard);margin-top:3.5rem;padding-top:1.1rem;dis
       chaîne de calcul : convention du contrat, jambe exécutée, débit du kernel, conversion en
       devise du compte, rapprochement par actif et effet final sur la NAV.
     </p>
+  </section>
+
+  <section>
+    <div class="shead"><span class="snum">05</span><span class="stitle">Lexique</span></div>
+    <h2>Sigles et conventions de lecture</h2>
+    <dl class="glossary">
+      <div>
+        <dt>NAV</dt>
+        <dd><b>Net Asset Value</b> : valeur liquidative, soit la valeur nette du portefeuille.</dd>
+      </div>
+      <div>
+        <dt>MPT</dt>
+        <dd><b>Modern Portfolio Theory</b> : théorie moderne du portefeuille.</dd>
+      </div>
+      <div>
+        <dt>SOFR</dt>
+        <dd><b>Secured Overnight Financing Rate</b> : taux de financement garanti au jour le jour en dollars américains.</dd>
+      </div>
+      <div>
+        <dt>CFD</dt>
+        <dd><b>Contract for Difference</b> : contrat sur différence.</dd>
+      </div>
+      <div>
+        <dt>ATR</dt>
+        <dd><b>Average True Range</b> : amplitude vraie moyenne, utilisée ici comme mesure de volatilité.</dd>
+      </div>
+      <div>
+        <dt>pb</dt>
+        <dd><b>Basis point</b> : point de base. Un point de base correspond à 0,01 point de pourcentage.</dd>
+      </div>
+      <div>
+        <dt>A/R</dt>
+        <dd><b>Round trip</b> : aller-retour, soit l'ouverture puis la fermeture complète d'une position.</dd>
+      </div>
+      <div>
+        <dt>ME</dt>
+        <dd><b>Month End</b> : fin de mois, utilisée comme fréquence de facturation.</dd>
+      </div>
+      <div>
+        <dt>XAU</dt>
+        <dd><b>Gold</b> : code international représentant une once troy d'or.</dd>
+      </div>
+      <div>
+        <dt>USD</dt>
+        <dd><b>United States Dollar</b> : dollar américain.</dd>
+      </div>
+      <div>
+        <dt>GBP</dt>
+        <dd><b>British pound</b> : livre sterling.</dd>
+      </div>
+      <div>
+        <dt>EUR</dt>
+        <dd><b>Euro</b> : monnaie commune européenne.</dd>
+      </div>
+      <div>
+        <dt>CMD</dt>
+        <dd><b>Commodity</b> : matière première dans les identifiants d'actifs utilisés ici.</dd>
+      </div>
+      <div>
+        <dt>IDX</dt>
+        <dd><b>Index</b> : indice dans les identifiants d'actifs utilisés ici.</dd>
+      </div>
+      <div>
+        <dt>USA</dt>
+        <dd><b>United States of America</b> : États-Unis dans les identifiants d'actifs utilisés ici.</dd>
+      </div>
+      <div>
+        <dt>DEU</dt>
+        <dd><b>Deutschland</b> : Allemagne dans les identifiants d'actifs utilisés ici.</dd>
+      </div>
+      <div>
+        <dt>S&amp;P 500</dt>
+        <dd><b>Standard &amp; Poor's 500</b> : indice regroupant cinq cents grandes sociétés cotées aux États-Unis.</dd>
+      </div>
+      <div>
+        <dt>s.o.</dt>
+        <dd><b>Sans objet</b> : la mesure ne peut pas être interprétée au niveau agrégé du portefeuille.</dd>
+      </div>
+    </dl>
   </section>
 
   <footer>
