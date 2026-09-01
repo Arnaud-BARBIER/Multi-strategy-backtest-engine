@@ -18,12 +18,18 @@ plafonné à 965 px, donc jamais agrandies non plus.
 | `08-accounting-audit.png` | Bilan comptable, 4 panneaux, `4.44e-16` | `..._comptale1` (bas) + `..._comptale2` (haut) |
 | `09-cost-layers.png` | Ancienne cascade, conservée comme archive mais retirée de la page moteur | `Cost_cascade` + `..._comptale2` (bas) |
 | `10-validation-calls.png` | Baseline naïve, purchasing power, thresholds | `validation_baseline1/_2/3` |
-| `11-performance-carrier.png` | Run + résumé alloc, verdict `BELOW_RISK_FREE` | `Run function + alloc_audit` + `...2` |
+| `11-performance-carrier.png` | Ancien résumé du run, conservé comme archive mais retiré de la page moteur | `Run function + alloc_audit` + `...2` |
 | `12-engine-run.png` | `NJITEngine` avec `simple_oos(0.30)` | `engine_run_OOS` |
 | `13-null-sizing.png` | Null de sizing, attribution, N_eff | `Null_Sizing1/2/_3` |
 | `14-null-leverage.png` | Null de levier, frontière atteignable | `validation_null_levreage` (1337 px natifs) |
 | `16-overnight-rate.png` | Courbe SOFR/DFF lue par le kernel | `courbe_des_taux` |
-| `costs-cascade.png` | Cascade courante : exécution, carry/roll, frais de gestion et financement séparés | sortie Plotly enregistrée dans `pia_valid.ipynb` |
+| `costs-cascade.png` | Cascade du run coûts : exécution, carry/roll, frais de gestion et financement séparés | `SS4html/costs/cascades.png` |
+| `costs-allocation-cost-drag.png` | Débits cumulés et annuels du run coûts | `SS4html/costs/Allocation_cost_drag.png` |
+| `costs-slippage-spec.png` | Politique de slippage dynamique | `SS4html/costs/execspec = slipage_spec.png` |
+| `costs-execution-assets.png` | Contrats, spreads, commissions, taxe et carry par actif | `SS4html/costs/execspec = contract spec, carry, tax, .png` |
+| `engine-cost-cascade.png` | Cascade du run moteur avec watcher | `SS4html/maj_moteur/nouvelle cascade.png` |
+| `engine-cost-drag.png` | Débits cumulés et annuels du run moteur | `SS4html/maj_moteur/nouveau_cost_drag.png` |
+| `engine-verdict-1.png` à `engine-verdict-4.png` | Run, résumé, verdict et trajectoire actualisés | `SS4html/maj_moteur/new_verdict_1.png`, `nv_2.png`, `nv3.png`, `nv_4.png` |
 
 ## Encore à capturer
 

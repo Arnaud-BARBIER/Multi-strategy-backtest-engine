@@ -532,7 +532,7 @@ button{font:inherit}
 
   <section id="execution-costs">
     <div class="shead"><span class="snum">05</span><span class="stitle">Ce que les coûts prennent</span></div>
-    <h2>Chaque débit est rapproché jusqu'à la NAV</h2>
+    <h2>Le même portefeuille, avec et sans chaque couche</h2>
     <p>
       Les coûts d'exécution ne sont plus une déclaration sans effet dans le mode allocation.
       Spread, commission, taxe, impact résiduel et slippage sont rapprochés sur les jambes
@@ -540,6 +540,25 @@ button{font:inherit}
       Sur ce run avec watcher, ils retirent ensemble <b>3 606,69</b>, soit <b>3,6068 %</b> du
       capital initial de 100 000.
     </p>
+    <figure>
+      <img src="../img/engine-cost-cascade.png" alt="NAV nette et trajectoires sans chaque couche de coût sur le run moteur" loading="lazy">
+      <figcaption>
+        <b>Une couche à la fois, sur le chemin effectivement observé.</b> Le run produit
+        +0,40 %/an net. Réintégrer seulement les coûts d'exécution donne +0,80 %/an ; retirer
+        le carry de contrat change à peine la courbe ; sans frais de gestion, elle atteint
+        +2,23 %/an ; sans financement de l'emprunt, +1,79 %/an. Sans aucun coût, le même chemin
+        ressort à +4,06 %/an. Les coûts représentent 38,5 % de la valeur terminale sur 9,12 ans.
+      </figcaption>
+    </figure>
+    <figure>
+      <img src="../img/engine-cost-drag.png" alt="Accumulation des frais de gestion, intérêts d'emprunt et coûts d'exécution" loading="lazy">
+      <figcaption>
+        <b>Le registre des débits explicites, cumulé puis ventilé par année.</b> Les frais de
+        gestion et le financement dominent ce run ; la ligne violette retrace les débits
+        d'exécution du kernel. Le slippage mesuré n'est pas ajouté à ce registre de cash : il
+        mord déjà dans le prix de fill et apparaît dans le tableau et dans la cascade.
+      </figcaption>
+    </figure>
     <div class="tw cost-table">
       <table>
         <caption>Coûts par actif — devise du compte, capital initial 100 000</caption>
@@ -561,7 +580,11 @@ button{font:inherit}
       qui réintègre une couche à la fois sur une trajectoire fixe.
     </p>
     <div class="crosslink">
-      <p><a href="../costs/">Voir la chaîne complète, de la spec à la NAV nette →</a></p>
+      <p>
+        La configuration complète, la convention des contrats, le slippage et la lecture des
+        deux graphiques sont détaillés séparément.
+      </p>
+      <p><a href="../costs/">Lire la page consacrée aux frais de transaction →</a></p>
     </div>
   </section>
 
@@ -569,15 +592,39 @@ button{font:inherit}
     <div class="shead"><span class="snum">06</span><span class="stitle">Le verdict de ce run</span></div>
     <h2>Le verdict du moteur sur ce run</h2>
     <figure>
-      <img src="../img/11-performance-carrier.png" alt="Résumé du run et verdict BELOW_RISK_FREE" loading="lazy">
+      <img src="../img/engine-verdict-1.png" alt="Appel du moteur et première partie du résumé du run" loading="lazy">
       <figcaption>
-        <b>Le run montré plus haut, jugé : une statistique favorable, contredite par un test
-        économique.</b> Le PSR ressort à 100 % et la longueur de piste requise est largement
-        dépassée, ce qui passerait pour un succès. Le seuil d'aversion au risque γ* est
-        pourtant négatif, et le verdict tombe : <code>BELOW_RISK_FREE</code>, un actif sans
-        risque à 4 % fait mieux dès γ = 0. Le porteur mesuré est indiqué en tête,
-        <code>portfolio_equity(nav−borrowed)</code>, parce que lire la mauvaise série donnerait
-        un résultat faux sans en avoir l'air.
+        <b>Le run et son porteur sont identifiés avant le verdict.</b> 2 298 observations,
+        9 ans et 30 décisions, lus sur <code>portfolio_equity(nav−borrowed)</code>. Le Sharpe
+        corrigé de l'autocorrélation vaut 0,09, avec un intervalle de Lo à 95 % de
+        [−0,50 ; 0,68].
+      </figcaption>
+    </figure>
+    <figure>
+      <img src="../img/engine-verdict-2.png" alt="Deuxième partie du résumé du run et verdict BELOW_RISK_FREE" loading="lazy">
+      <figcaption>
+        <b>Une garde statistique favorable ne suffit pas à sauver un résultat économiquement
+        faible.</b> Le PSR ressort à 100 % et le MinTRL demande 288 observations contre 2 298
+        disponibles. Pourtant, avec un CAGR de +0,42 % et un drawdown de −43,43 %, l'équivalent
+        certain devient négatif dès γ = 3. Le seuil γ* est inférieur à zéro : l'actif sans
+        risque à 4 % gagne dès γ = 0. Verdict <code>BELOW_RISK_FREE</code>.
+      </figcaption>
+    </figure>
+    <figure>
+      <img src="../img/engine-verdict-3.png" alt="Registre d'emprunt et frais payés sur le run" loading="lazy">
+      <figcaption>
+        <b>Le verdict est relié aux écritures qui l'ont produit.</b> Le levier brut culmine à
+        1,657× ; onze tirages d'emprunt coûtent 0,125008, neuf sont refermés ou expirent, et les
+        frais de gestion totalisent 0,163899. Aucun appel de marge n'est enregistré.
+      </figcaption>
+    </figure>
+    <figure>
+      <img src="../img/engine-verdict-4.png" alt="NAV, equity nette de l'emprunt et drawdown du run moteur" loading="lazy">
+      <figcaption>
+        <b>La trajectoire qui se trouve derrière le tableau.</b> La NAV brute termine à 1,4534,
+        mais l'equity nette de l'emprunt à 1,0383. Les marqueurs montrent les trente
+        rebalancements, les actions intra-période et les ouvertures ou fermetures d'emprunt ; le
+        panneau inférieur matérialise le drawdown maximal de 43,43 %.
       </figcaption>
     </figure>
   </section>
@@ -601,7 +648,7 @@ button{font:inherit}
     <div class="note">
       <p>
         <b>Deux runs distincts, et il ne faut pas les confondre.</b> Les sections 01 à 06
-        viennent du run avec emprunt et watcher : 30 décisions, drawdown maximal de 40,95 %.
+        viennent du run avec emprunt et watcher : 30 décisions, drawdown maximal de 43,43 %.
         Les trois appels ci-dessous ont été passés sur un autre run, la même stratégie sans
         emprunt, sans watcher et sans spec de devises : 46 décisions, drawdown maximal de
         24,76 %. Le registre de trésorerie et la série de mesure y sont les mêmes ; ce
@@ -882,7 +929,7 @@ button{font:inherit}
 
   <section id="execution-costs-en">
     <div class="shead"><span class="snum">05</span><span class="stitle">What the costs took</span></div>
-    <h2>Every debit is reconciled through to NAV</h2>
+    <h2>The same portfolio, with and without each layer</h2>
     <p>
       Execution costs are no longer declarations without effect in allocation mode. Spread,
       commission, tax, residual impact and slippage are reconciled against the legs that were
@@ -890,6 +937,25 @@ button{font:inherit}
       with a watcher, they remove <b>3,606.69</b> in total, or <b>3.6068 %</b> of the initial
       capital of 100,000.
     </p>
+    <figure>
+      <img src="../img/engine-cost-cascade.png" alt="Net NAV and paths without each cost layer on the engine run" loading="lazy">
+      <figcaption>
+        <b>One layer at a time, on the path that was actually observed.</b> The run produces
+        +0.40 %/year net. Adding back execution costs alone gives +0.80 %/year; removing
+        contract carry barely changes the path; without management fees it reaches
+        +2.23 %/year; without borrow financing, +1.79 %/year. Without any cost, the same path
+        returns +4.06 %/year. Costs represent 38.5 % of terminal value over 9.12 years.
+      </figcaption>
+    </figure>
+    <figure>
+      <img src="../img/engine-cost-drag.png" alt="Accumulation of management fees, borrow interest and execution costs" loading="lazy">
+      <figcaption>
+        <b>The ledger of explicit debits, accumulated and then split by year.</b> Management
+        fees and financing dominate this run; the purple line records kernel execution debits.
+        Measured slippage is not added to this cash ledger: it already bites through the fill
+        price and appears in the table and the cascade.
+      </figcaption>
+    </figure>
     <div class="tw cost-table">
       <table>
         <caption>Costs by asset — account currency, initial capital 100,000</caption>
@@ -910,7 +976,11 @@ button{font:inherit}
       publishes the specification, the reconciliation in two units, and the fixed-path cascade.
     </p>
     <div class="crosslink">
-      <p><a href="../costs/">Read the full cost chain, from specification to net NAV (FR) →</a></p>
+      <p>
+        The full configuration, contract conventions, slippage and both charts are documented
+        separately.
+      </p>
+      <p><a href="../costs/">Read the transaction-cost page (FR) →</a></p>
     </div>
   </section>
 
@@ -918,15 +988,37 @@ button{font:inherit}
     <div class="shead"><span class="snum">06</span><span class="stitle">This run's verdict</span></div>
     <h2>What the engine reports on this run</h2>
     <figure>
-      <img src="../img/11-performance-carrier.png" alt="Performance carrier report, BELOW_RISK_FREE verdict" loading="lazy">
+      <img src="../img/engine-verdict-1.png" alt="Engine call and first part of the run summary" loading="lazy">
       <figcaption>
-        <b>The run shown above, judged: a favourable statistic, overruled by an economic
-        test.</b> The PSR comes out at 100 % and the required track length is far exceeded,
-        which would read as a pass. Yet the risk-aversion threshold γ* is negative, and the
-        verdict lands: <code>BELOW_RISK_FREE</code>, a 4 % risk-free asset does better from
-        γ = 0. The measured carrier is stated at the top,
-        <code>portfolio_equity(nav−borrowed)</code>, because reading the wrong series would be
-        wrong without looking wrong.
+        <b>The run and its carrier are identified before the verdict.</b> 2,298 observations,
+        9 years and 30 decisions, read from <code>portfolio_equity(nav−borrowed)</code>. The
+        autocorrelation-corrected Sharpe is 0.09, with a 95 % Lo interval of [−0.50; 0.68].
+      </figcaption>
+    </figure>
+    <figure>
+      <img src="../img/engine-verdict-2.png" alt="Second part of the run summary and BELOW_RISK_FREE verdict" loading="lazy">
+      <figcaption>
+        <b>A favourable statistical guard cannot rescue a weak economic result.</b> PSR is
+        100 % and MinTRL requires 288 observations against 2,298 available. Yet a +0.42 % CAGR
+        with a −43.43 % drawdown makes the certainty equivalent negative from γ = 3. The γ*
+        threshold is below zero: the 4 % risk-free asset wins from γ = 0. Verdict
+        <code>BELOW_RISK_FREE</code>.
+      </figcaption>
+    </figure>
+    <figure>
+      <img src="../img/engine-verdict-3.png" alt="Borrow ledger and fees paid on the run" loading="lazy">
+      <figcaption>
+        <b>The verdict is tied back to the entries that produced it.</b> Gross leverage peaks
+        at 1.657×; eleven borrow draws cost 0.125008, nine close or expire, and management fees
+        total 0.163899. No margin call is recorded.
+      </figcaption>
+    </figure>
+    <figure>
+      <img src="../img/engine-verdict-4.png" alt="NAV, equity net of borrowing and drawdown on the engine run" loading="lazy">
+      <figcaption>
+        <b>The path behind the table.</b> Gross NAV ends at 1.4534, while equity net of
+        borrowing ends at 1.0383. Markers identify the thirty rebalances, intra-period actions,
+        and borrow opens or closes; the lower panel shows the 43.43 % maximum drawdown.
       </figcaption>
     </figure>
   </section>
@@ -950,7 +1042,7 @@ button{font:inherit}
     <div class="note">
       <p>
         <b>Two separate runs, and they must not be conflated.</b> Sections 01 to 06 come from
-        the run with borrowing and a watcher: 30 decisions, 40.95 % maximum drawdown. The three
+        the run with borrowing and a watcher: 30 decisions, 43.43 % maximum drawdown. The three
         calls below were made against a different run, the same strategy with no borrowing, no
         watcher and no currency spec: 46 decisions, 24.76 % maximum drawdown. The cash ledger
         and the performance carrier are the same there; what changes is that no leverage, no
