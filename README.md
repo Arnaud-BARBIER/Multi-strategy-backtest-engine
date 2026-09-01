@@ -5,7 +5,7 @@
 **A backtesting engine where refuting a result costs one line, which is why it happens.**
 
 **[arnaud-barbier.github.io/Multi-strategy-backtest-engine](https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/)**
- — the validation note, the engine page, and the numbers below in context.
+ — the validation note, the engine page, the cost reconciliation, and the numbers below in context.
 
 ---
 
@@ -54,12 +54,14 @@ swapped is the weighting rule.** A baseline computed gross of fees against a str
 computed net is the most common way to manufacture an edge that does not exist; here it is
 not possible, because the baseline is not computed, it is *run*.
 
-Two things this run does *not* charge, stated so the test is not credited with more
-severity than it had. Execution costs are declared but do not bind: in allocation mode
-they go through a lot-based path, and measured slippage is zero. And this run carries no
-currency spec, so no translation happens on either side. Both absences apply equally to
-the strategy and to the baselines, so the comparison stays fair; they simply make it a
-less demanding test than the declaration suggests.
+Two things this frozen run does *not* charge, stated so the test is not credited with more
+severity than it had. It predates the correction to allocation-mode execution-cost
+settlement, so costs are declared but do not bind in the figures below. The current engine
+does debit and reconcile them by asset, as documented in the
+[cost note](https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/costs/).
+This frozen run also carries no currency spec, so no translation happens on either side.
+Both absences apply equally to the strategy and to the baselines, so the comparison stays
+fair; the historical result is not rewritten retroactively.
 
 The two levels differ in one respect: `absolute` strips the cash reserves and stays
 invested, `matched` keeps every piece of machinery including the 30 % of reserves. The
@@ -86,8 +88,8 @@ and five. The book is rebalanced to those weights and held until the next decisi
 
 On top of it sits the cash policy under test: a 20 % dynamic reserve and a 10 % fixed
 reserve, a 2 % annual management fee accrued yearly and paid quarterly, a 5 %
-performance fee with a high-water mark, and execution costs declared but not binding
-(see above).
+performance fee with a high-water mark, and the historical execution-cost limitation
+stated above.
 
 Nothing proprietary, it is a textbook construction, used here as a subject with a known
 answer.

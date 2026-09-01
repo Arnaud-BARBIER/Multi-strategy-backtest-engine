@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Du signal à la NAV nette · Arnaud Barbier</title>
+<meta name="description" content="Spread, commissions, taxes, slippage, carry, frais de gestion et financement : où chaque coût mord dans un portefeuille multi-actifs.">
+<meta name="author" content="Arnaud Barbier">
+<link rel="canonical" href="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/costs/">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/costs/">
+<meta property="og:title" content="Du signal à la NAV nette · Arnaud Barbier">
+<meta property="og:description" content="Chaque coût est appliqué là où il naît, rapproché par actif, puis isolé sur la trajectoire de NAV.">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:image" content="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/img/costs-cascade.png">
+<meta property="og:image:alt" content="Trajectoire de la NAV nette et courbes reconstituées sans chaque couche de coût.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Du signal à la NAV nette · Arnaud Barbier">
+<meta name="twitter:description" content="Spread, commissions, taxes, slippage, carry, frais de gestion et financement, rapprochés jusqu'à la NAV.">
+<meta name="twitter:image" content="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/img/costs-cascade.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpolygon points='50,8 90,68 10,68' fill='%233fb950'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&amp;display=swap">
+
+<style>
+:root{
+  --bg:#fff;--panel:#fff;--well:#f5f6f7;--hair:#c9ccd1;--hard:#101215;--soft:#e3e5e8;
+  --ink:#101215;--sub:#54585f;--faint:#868b93;--accent:#a85f00;--accent-well:#fdf7ee;
+  --sans:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --serif:"Times New Roman",Times,"Liberation Serif",serif;
+  --term:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#0e1117;--panel:#161b22;--well:#12171f;--hair:#21262d;--hard:#3d444d;--soft:#1b2028;
+    --ink:#e6edf3;--sub:#8b949e;--faint:#6e7681;--accent:#f0a93a;--accent-well:#1e1710;
+  }
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;padding:0 1.5rem 5rem;background:var(--bg);color:var(--ink);font-family:var(--serif);font-size:17px;line-height:1.66;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto}
+a{color:var(--accent);text-decoration-thickness:1px;text-underline-offset:2px}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.topbar{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.pagenav{display:flex;flex-wrap:wrap;gap:0;padding:.9rem 0 0}
+.pagenav>a,.pagenav>span{font-family:var(--sans);font-size:.68rem;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);text-decoration:none;padding:.32rem 0;margin-left:1.4rem;white-space:nowrap}
+.pagenav>:first-child{margin-left:0}
+.pagenav [aria-current="page"]{color:var(--ink);font-weight:600}
+.pagenav>a:hover{color:var(--accent)}
+.mast{padding:2.25rem 0 0;display:flow-root;background-image:linear-gradient(90deg,var(--accent) 0%,var(--hard) 34%,var(--hair) 78%);background-repeat:no-repeat;background-size:100% 3px;background-position:0 100%}
+.mast-top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem;font-family:var(--sans);font-size:.7rem;letter-spacing:.13em;text-transform:uppercase;color:var(--sub);padding-bottom:.7rem;border-bottom:1px solid var(--hair)}
+h1{font-family:var(--serif);font-weight:700;font-size:clamp(1.9rem,3.8vw,2.65rem);line-height:1.06;letter-spacing:-.005em;text-wrap:balance;margin:2.25rem 0 0;max-width:24ch}
+.lede{font-size:1.08rem;color:var(--sub);max-width:61ch;margin:1.35rem 0 2.25rem}
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:0;margin-bottom:2.5rem}
+.fig{padding:0 1.2rem 0 0;margin-right:1.2rem;border-right:1px solid var(--hair)}
+.fig:last-child{border-right:0;margin-right:0;padding-right:0}
+.fig .k{font-family:var(--sans);font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+.fig .v{font-family:var(--sans);font-size:1.85rem;font-weight:600;letter-spacing:-.03em;margin-top:.45rem;font-variant-numeric:tabular-nums;line-height:1}
+.fig .n{font-size:.8rem;color:var(--sub);margin-top:.45rem;line-height:1.4}
+section{padding:3rem 0 0}
+.shead{display:flex;align-items:baseline;gap:1rem;border-bottom:2px solid var(--hard);padding-bottom:.6rem;margin-bottom:1.9rem}
+.snum{font-family:var(--sans);font-size:.72rem;font-weight:600;letter-spacing:.1em;color:var(--accent)}
+.stitle{font-family:var(--sans);font-size:.72rem;font-weight:500;letter-spacing:.17em;text-transform:uppercase;color:var(--sub)}
+h2{font-family:var(--serif);font-weight:600;font-size:clamp(1.4rem,2.8vw,1.85rem);line-height:1.16;text-wrap:balance;max-width:28ch;margin:0 0 1.1rem}
+h3{font-family:var(--sans);font-weight:600;font-size:.95rem;margin:1.9rem 0 .85rem}
+p{max-width:65ch;margin:0 0 1.05rem}
+.small{font-size:.88rem;color:var(--sub);max-width:72ch}
+.subject{border-left:2px solid var(--hard);padding:.1rem 0 .1rem 1.15rem;margin:0 0 2rem;max-width:76ch}
+.subject .lbl,.label{font-family:var(--sans);font-size:.65rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:.7rem}
+.subject p{font-size:.92rem;margin:0 0 .75rem;max-width:none}
+.subject p:last-child{margin-bottom:0;color:var(--sub)}
+.layers{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));border-top:2px solid var(--hard);margin:1.5rem 0 2rem}
+.layer{padding:1rem 1.15rem 1rem 0;margin-right:1.15rem;border-right:1px solid var(--hair)}
+.layer:last-child{border-right:0;margin-right:0}
+.layer .t{font-family:var(--sans);font-size:.7rem;letter-spacing:.13em;text-transform:uppercase;color:var(--accent);font-weight:600}
+.layer p{font-size:.86rem;line-height:1.55;color:var(--sub);margin:.55rem 0 0}
+.raw{border-left:2px solid var(--hair);margin:1.4rem 0 1.6rem;padding-left:1rem}
+.raw .lbl{font-family:var(--sans);font-size:.63rem;letter-spacing:.15em;text-transform:uppercase;color:var(--faint);padding:.45rem .85rem;border-bottom:1px solid var(--hair)}
+.raw pre{margin:0;padding:.9rem .85rem;overflow-x:auto;font-family:var(--term);font-size:.765rem;line-height:1.6;color:var(--sub);white-space:pre}
+.raw pre b{color:var(--ink);font-weight:600}
+.tw{overflow-x:auto;margin:1.45rem 0 1.35rem;border-top:2px solid var(--hard);border-bottom:1px solid var(--hair)}
+table{border-collapse:collapse;width:100%;min-width:1380px}
+caption{text-align:left;font-family:var(--sans);font-size:.72rem;color:var(--sub);padding:.7rem 0 .55rem}
+th,td{padding:.62rem .72rem;text-align:right;border-bottom:1px solid var(--soft);white-space:nowrap}
+th:first-child,td:first-child{text-align:left;padding-left:0;position:sticky;left:0;background:var(--bg);z-index:1}
+thead th{font-family:var(--sans);font-size:.61rem;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);font-weight:500;border-bottom:1px solid var(--hair)}
+td{font-family:var(--sans);font-size:.8rem;font-variant-numeric:tabular-nums}
+tbody tr:last-child td{border-bottom:0}
+tr.total td{border-top:1px solid var(--hard);font-weight:600}
+.hl{color:var(--accent);font-weight:600}
+details{margin:1.15rem 0 0;border-top:1px solid var(--hair);padding-top:.8rem}
+summary{cursor:pointer;font-family:var(--sans);font-size:.78rem;font-weight:600;color:var(--accent)}
+figure{margin:1.4rem 0 1.6rem;max-width:1080px}
+figure img{display:block;width:100%;height:auto}
+figcaption{font-size:.82rem;color:var(--sub);margin-top:.7rem;line-height:1.55;max-width:74ch}
+figcaption b{color:var(--ink);font-weight:600}
+.note{border-left:3px solid var(--accent);padding:.1rem 0 .1rem 1rem;margin:1.35rem 0}
+.note p{margin:0;color:var(--sub);font-size:.91rem;max-width:67ch}
+.crosslink{border-left:2px solid var(--accent);padding:.1rem 0 .1rem 1.15rem;margin:1.5rem 0}
+.crosslink p{margin:0 0 .55rem;font-size:.94rem}
+.crosslink p:last-child{margin-bottom:0}
+footer{border-top:3px solid var(--hard);margin-top:3.5rem;padding-top:1.1rem;display:flex;flex-wrap:wrap;gap:1.25rem;justify-content:space-between;font-family:var(--sans);font-size:.72rem;color:var(--faint);letter-spacing:.06em;text-transform:uppercase}
+@media (max-width:700px){
+  body{padding-left:1rem;padding-right:1rem}.fig{border-right:0;border-bottom:1px solid var(--hair);padding:.9rem 0;margin:0}.fig:last-child{border-bottom:0}
+  .layer{border-right:0;border-bottom:1px solid var(--hair);padding-right:0;margin-right:0}.layer:last-child{border-bottom:0}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+
+<body>
+<div class="wrap topbar">
+  <nav class="pagenav" aria-label="Pages">
+    <a href="../">Accueil</a>
+    <a href="../validation/">Note de validation</a>
+    <a href="../engine/">Le moteur</a>
+    <span aria-current="page">Les coûts</span>
+    <a href="../stateful/">Replay &amp; resume</a>
+  </nav>
+</div>
+
+<main class="wrap">
+  <header class="mast">
+    <div class="mast-top">
+      <div>Arnaud Barbier · note technique</div>
+      <div>Allocation multi-actifs · 2026</div>
+    </div>
+    <h1>Un coût n'est réel que lorsqu'il atteint la NAV.</h1>
+    <p class="lede">
+      Spread, commission, taxe, slippage, portage d'un contrat, frais de gestion et financement
+      n'apparaissent ni au même moment ni au même endroit. Le moteur les applique là où ils
+      naissent, les rapproche par actif, puis mesure séparément ce que chaque couche a retiré à
+      la trajectoire du portefeuille.
+    </p>
+    <div class="figs">
+      <div class="fig"><div class="k">Coûts d'exécution</div><div class="v">35 813</div><div class="n">devise du compte, configuration de démonstration</div></div>
+      <div class="fig"><div class="k">Dont slippage mesuré</div><div class="v">8 011</div><div class="n">écart entre prix cible et prix exécuté</div></div>
+      <div class="fig"><div class="k">Carry de contrat</div><div class="v">46</div><div class="n">isolé du financement de l'emprunt</div></div>
+      <div class="fig"><div class="k">Financement</div><div class="v">SOFR + 150 pb</div><div class="n">capital emprunté dès le début du run</div></div>
+    </div>
+  </header>
+
+  <section>
+    <div class="shead"><span class="snum">01</span><span class="stitle">Le cas présenté</span></div>
+    <h2>Une configuration volontairement sévère pour rendre chaque débit visible</h2>
+    <div class="subject">
+      <div class="lbl">Le run</div>
+      <p>
+        La même allocation MPT long-only sur cinq marchés — or, livre-dollar, Brent, S&amp;P 500
+        et DAX — avec 100 000 de capital initial. Le portefeuille emprunte en plus 100 % du
+        capital initial pendant toute la période, au SOFR augmenté de 150 points de base.
+      </p>
+      <p>
+        La taxe appliquée uniquement à l'or, 1 % à l'achat et 0,33 % à la vente, est un
+        <b>paramètre de démonstration</b>, pas l'hypothèse d'un marché ou d'un courtier. Comme le
+        portefeuille ferme puis rouvre ses lignes à chaque rebalancement, elle frappe chaque
+        jambe exécutée et domine volontairement le résultat.
+      </p>
+    </div>
+
+    <div class="layers">
+      <div class="layer"><div class="t">Exécution</div><p>Spread, commission, taxe, impact résiduel et slippage, calculés sur les jambes réellement exécutées.</p></div>
+      <div class="layer"><div class="t">Contrat</div><p>Carry ou coût de roll attaché à l'instrument et débité selon son propre calendrier.</p></div>
+      <div class="layer"><div class="t">Portefeuille</div><p>Frais de gestion et de surperformance, avec une horloge de provision et une autre de paiement.</p></div>
+      <div class="layer"><div class="t">Financement</div><p>Intérêts de l'emprunt indexés sur une série de taux overnight, séparés du carry des contrats.</p></div>
+    </div>
+
+    <div class="raw">
+      <div class="lbl">Extrait de la politique déclarée</div>
+<pre>execution_costs = ExecutionCostSpec(
+    product_type="spot", kernel_settlement="charge",
+    slippage=SlippageSpec(
+        enabled=True, model="simple_range", simple_range_frac=0.02,
+        adverse_only=True, apply_rebalance=True,
+    ),
+    assets={
+        "XAUUSD": AssetExecutionCostSpec(
+            spread_points=0.20,
+            commission_per_lot_round_turn_usd=3.0,
+            transaction_tax_pct_buy=0.01,
+            transaction_tax_pct_sell=0.0033,
+            carry_cost=CarryCostSpec(per_contract=1.50,
+                                     charge_frequency="ME"),
+        ),
+        "GBPUSD": AssetExecutionCostSpec(
+            spread_points=0.00008,
+            commission_per_lot_round_turn_usd=3.0,
+        ),
+    },
+)
+
+borrow = BorrowPolicySpec(amount=1.0, amount_basis="pct_of_initial",
+                          rate="SOFR", spread=0.015, day_count=360)
+
+fees = PortfolioFeeSpec(
+    management=ManagementChargeSpec(annual_rate=0.02,
+                                    charge_frequency="year",
+                                    payout_frequency="quarter"),
+    performance=PerformanceChargeSpec(rate=0.05,
+                                      high_water_mark=True),
+)</pre>
+    </div>
+  </section>
+
+  <section>
+    <div class="shead"><span class="snum">02</span><span class="stitle">Le rapprochement</span></div>
+    <h2>Du prix exécuté au total payé, actif par actif</h2>
+    <p class="small">
+      <code>exécution = spread + commission + taxe + impact résiduel + slippage</code>, puis
+      <code>total = exécution + carry</code>. Le slippage est observé dans l'écart entre le prix
+      cible et le prix de fill : son effet est déjà contenu dans la NAV et n'est pas débité une
+      seconde fois.
+    </p>
+
+    <div class="tw">
+      <table>
+        <caption>Coûts par actif — devise du compte, capital initial 100 000</caption>
+        <thead><tr><th>Actif</th><th>Spread</th><th>Commission</th><th>Taxe</th><th>Impact résiduel</th><th>Slippage</th><th>Exécution</th><th>Carry / roll</th><th>Total</th><th>% capital</th><th>Carry pb/an</th><th>Slip fill pb A/R</th><th>Dates carry</th></tr></thead>
+        <tbody>
+          <tr><td>XAUUSD</td><td>254,95</td><td>38,24</td><td class="hl">24 272,51</td><td>14,93</td><td>1 822,06</td><td>26 402,69</td><td>46,15</td><td>26 448,84</td><td>26,4488 %</td><td>1,4</td><td>10,273</td><td>99</td></tr>
+          <tr><td>BRENTCMDUSD</td><td>516,59</td><td>516,59</td><td>0,00</td><td>103,66</td><td>2 652,47</td><td>3 789,30</td><td>0,00</td><td>3 789,30</td><td>3,7893 %</td><td>0,0</td><td>23,327</td><td>0</td></tr>
+          <tr><td>USA500IDXUSD</td><td>194,38</td><td>1 166,29</td><td>0,00</td><td>76,20</td><td>951,12</td><td>2 387,99</td><td>0,00</td><td>2 387,99</td><td>2,3880 %</td><td>0,0</td><td>9,275</td><td>0</td></tr>
+          <tr><td>DEUIDXEUR</td><td>131,61</td><td>394,84</td><td>0,00</td><td>0,58</td><td>1 702,83</td><td>2 229,86</td><td>0,00</td><td>2 229,86</td><td>2,2299 %</td><td>0,0</td><td>11,152</td><td>0</td></tr>
+          <tr><td>GBPUSD</td><td>87,23</td><td>32,71</td><td>0,00</td><td>1,14</td><td>882,34</td><td>1 003,43</td><td>0,00</td><td>1 003,43</td><td>1,0034 %</td><td>0,0</td><td>5,821</td><td>0</td></tr>
+          <tr class="total"><td>Portefeuille</td><td>1 184,76</td><td>2 148,67</td><td class="hl">24 272,51</td><td>196,51</td><td>8 010,82</td><td>35 813,27</td><td>46,15</td><td>35 859,42</td><td class="hl">35,8594 %</td><td>—</td><td>—</td><td>99</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <details>
+      <summary>Voir le même rapprochement en points de capital</summary>
+      <p class="small">Dans cette vue, 1,00 correspond au capital initial de 100 000.</p>
+      <div class="tw">
+        <table>
+          <caption>Coûts par actif — points de capital initial</caption>
+          <thead><tr><th>Actif</th><th>Spread</th><th>Commission</th><th>Taxe</th><th>Impact résiduel</th><th>Slippage</th><th>Exécution</th><th>Carry / roll</th><th>Total</th><th>% capital</th><th>Carry pb/an</th><th>Slip fill pb A/R</th><th>Dates carry</th></tr></thead>
+          <tbody>
+            <tr><td>XAUUSD</td><td>0,002550</td><td>0,000382</td><td class="hl">0,242725</td><td>0,000149</td><td>0,018221</td><td>0,264027</td><td>0,000461</td><td>0,264488</td><td>26,4488 %</td><td>1,4</td><td>10,273</td><td>99</td></tr>
+            <tr><td>BRENTCMDUSD</td><td>0,005166</td><td>0,005166</td><td>0,000000</td><td>0,001037</td><td>0,026525</td><td>0,037893</td><td>0,000000</td><td>0,037893</td><td>3,7893 %</td><td>0,0</td><td>23,327</td><td>0</td></tr>
+            <tr><td>USA500IDXUSD</td><td>0,001944</td><td>0,011663</td><td>0,000000</td><td>0,000762</td><td>0,009511</td><td>0,023880</td><td>0,000000</td><td>0,023880</td><td>2,3880 %</td><td>0,0</td><td>9,275</td><td>0</td></tr>
+            <tr><td>DEUIDXEUR</td><td>0,001316</td><td>0,003948</td><td>0,000000</td><td>0,000006</td><td>0,017028</td><td>0,022299</td><td>0,000000</td><td>0,022299</td><td>2,2299 %</td><td>0,0</td><td>11,152</td><td>0</td></tr>
+            <tr><td>GBPUSD</td><td>0,000872</td><td>0,000327</td><td>0,000000</td><td>0,000011</td><td>0,008823</td><td>0,010034</td><td>0,000000</td><td>0,010034</td><td>1,0034 %</td><td>0,0</td><td>5,821</td><td>0</td></tr>
+            <tr class="total"><td>Portefeuille</td><td>0,011848</td><td>0,021487</td><td class="hl">0,242725</td><td>0,001965</td><td>0,080108</td><td>0,358133</td><td>0,000461</td><td>0,358594</td><td class="hl">35,8594 %</td><td>—</td><td>—</td><td>99</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </details>
+
+    <div class="note">
+      <p>
+        Les 24 272,51 de taxe ne viennent pas d'un taux appliqué une seule fois au capital. Ils
+        sont la somme de 1 % sur chaque achat d'or et de 0,33 % sur chaque vente, sur toute la
+        rotation du portefeuille. Le tableau rend justement visible cette différence entre un
+        taux déclaré et ce qui a réellement été payé.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="shead"><span class="snum">03</span><span class="stitle">La cascade</span></div>
+    <h2>Retirer une couche à la fois, sur la même trajectoire</h2>
+    <figure>
+      <img src="../img/costs-cascade.png" alt="NAV nette et trajectoires reconstituées sans chaque couche de coût" loading="lazy">
+      <figcaption>
+        <b>Une attribution à chemin fixé, pas six backtests indépendants.</b> La courbe blanche
+        est la NAV effectivement produite. Chaque courbe pointillée réintègre une seule couche
+        à la trajectoire observée ; la verte les réintègre toutes. Le carry de contrat vaut ici
+        seulement 46,15 et se confond presque avec la NAV nette. Le financement de l'emprunt
+        reste une couche distincte.
+      </figcaption>
+    </figure>
+    <p class="small">
+      « 103,7 % de la valeur terminale » compare le coût cumulé à la valeur finale du run ; ce
+      n'est ni 103,7 % du capital initial ni une perte annuelle. Avec la taxe volontairement
+      punitive, le run passe de +8,51 %/an sans aucune couche à +0,37 %/an net. La figure sert à
+      vérifier la propagation des coûts, pas à proposer une hypothèse réaliste de rendement.
+    </p>
+  </section>
+
+  <section>
+    <div class="shead"><span class="snum">04</span><span class="stitle">Ce que la démonstration établit</span></div>
+    <h2>Un modèle de coût doit pouvoir être rapproché, pas seulement déclaré</h2>
+    <div class="crosslink">
+      <p>
+        Le run principal du moteur utilise une hypothèse moins sévère et un watcher. Son tableau
+        d'exécution, pour 3 606,69 de coûts totaux, est publié dans la page moteur.
+      </p>
+      <p><a href="../engine/#execution-costs">Voir le rapprochement du run moteur →</a></p>
+    </div>
+    <p class="small">
+      Les paramètres restent des hypothèses : ni le spread, ni le slippage, ni les taxes ne sont
+      présentés comme les conditions d'un courtier particulier. Ce qui est contrôlé ici est la
+      chaîne de calcul : convention du contrat, jambe exécutée, débit du kernel, conversion en
+      devise du compte, rapprochement par actif et effet final sur la NAV.
+    </p>
+  </section>
+
+  <footer>
+    <div>Arnaud Barbier · moteur de backtest multi-stratégie</div>
+    <div><a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine">Code source →</a></div>
+  </footer>
+</main>
+</body>
+</html>

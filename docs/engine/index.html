@@ -184,6 +184,12 @@ td:first-child{font-family:var(--f-sans);font-size:.9rem}
 tbody tr:last-child td{border-bottom:none}
 tr.total td{border-top:1px solid var(--hard);font-weight:600}
 .hl{color:var(--accent);font-weight:600}
+.tw.cost-table table{min-width:1380px}
+.tw.cost-table caption{
+  text-align:left;font-family:var(--f-sans);font-size:.72rem;color:var(--sub);
+  padding:.7rem 0 .55rem;
+}
+.tw.cost-table th,.tw.cost-table td{padding-left:.72rem;padding-right:.72rem;white-space:nowrap}
 
 /* ---------- refusals ---------- */
 .refs{border-top:1px solid var(--hair)}
@@ -319,6 +325,7 @@ button{font:inherit}
       <a href="../"><span class="lang-fr">Accueil</span><span class="lang-en">Home</span></a>
       <a href="../validation/"><span class="lang-fr">Note de validation</span><span class="lang-en">Validation note</span></a>
       <span aria-current="page"><span class="lang-fr">Le moteur</span><span class="lang-en">The engine</span></span>
+      <a href="../costs/"><span class="lang-fr">Les coûts</span><span class="lang-en">Costs · FR</span></a>
       <a href="../stateful/"><span class="lang-fr">Replay &amp; resume</span><span class="lang-en">Replay &amp; resume</span></a>
     </nav>
     <div class="langbar">
@@ -523,21 +530,39 @@ button{font:inherit}
     </figure>
   </section>
 
-  <section>
+  <section id="execution-costs">
     <div class="shead"><span class="snum">05</span><span class="stitle">Ce que les coûts prennent</span></div>
-    <h2>Le même portefeuille, avec et sans chaque couche</h2>
-    <figure>
-      <img src="../img/09-cost-layers.png" alt="Courbes avec et sans les coûts" loading="lazy">
-      <figcaption>
-        Les courbes sont reconstruites en rajoutant la fraction de coût de chaque barre au
-        rendement et en recomposant. Ensemble, les deux couches ont pris <b>34,8 % de la
-        valeur terminale sur 9,12 ans</b> : +0,81 %/an nets deviennent +4,17 %/an bruts.
-        Contrôle : la commission de gestion ressort à 1,88 pt/an contre 2 %/an déclarés dans
-        la spec, l'écart venant de ce qu'elle porte sur l'equity nette. Le second panneau les
-        sépare et les cumule année par année. <b>Ce run ne revendique aucune performance</b> ;
-        il existe pour montrer que le registre boucle.
-      </figcaption>
-    </figure>
+    <h2>Chaque débit est rapproché jusqu'à la NAV</h2>
+    <p>
+      Les coûts d'exécution ne sont plus une déclaration sans effet dans le mode allocation.
+      Spread, commission, taxe, impact résiduel et slippage sont rapprochés sur les jambes
+      réellement exécutées ; le carry de contrat reste séparé du financement de l'emprunt.
+      Sur ce run avec watcher, ils retirent ensemble <b>3 606,69</b>, soit <b>3,6068 %</b> du
+      capital initial de 100 000.
+    </p>
+    <div class="tw cost-table">
+      <table>
+        <caption>Coûts par actif — devise du compte, capital initial 100 000</caption>
+        <thead><tr><th>Actif</th><th>Spread</th><th>Commission</th><th>Taxe</th><th>Impact résiduel</th><th>Slippage</th><th>Exécution</th><th>Carry / roll</th><th>Total</th><th>% capital</th><th>Carry pb/an</th><th>Slip fill pb A/R</th><th>Dates carry</th></tr></thead>
+        <tbody>
+          <tr><td>BRENTCMDUSD</td><td>134,52</td><td>134,52</td><td>0,00</td><td>53,61</td><td>807,00</td><td>1 129,65</td><td>0,00</td><td>1 129,65</td><td>1,1297 %</td><td>0,0</td><td>26,981</td><td>0</td></tr>
+          <tr><td>USA500IDXUSD</td><td>54,24</td><td>325,44</td><td>0,00</td><td>97,21</td><td>341,33</td><td>818,22</td><td>0,00</td><td>818,22</td><td>0,8182 %</td><td>0,0</td><td>12,281</td><td>0</td></tr>
+          <tr><td>DEUIDXEUR</td><td>32,36</td><td>97,08</td><td>0,00</td><td>20,83</td><td>601,39</td><td>751,66</td><td>0,00</td><td>751,66</td><td>0,7517 %</td><td>0,0</td><td>16,424</td><td>0</td></tr>
+          <tr><td>XAUUSD</td><td>71,94</td><td>10,79</td><td>0,00</td><td>13,75</td><td>517,99</td><td>614,47</td><td>29,99</td><td>644,45</td><td>0,6445 %</td><td>1,4</td><td>10,766</td><td>101</td></tr>
+          <tr><td>GBPUSD</td><td>21,51</td><td>8,07</td><td>0,00</td><td>0,96</td><td>232,18</td><td>262,71</td><td>0,00</td><td>262,71</td><td>0,2627 %</td><td>0,0</td><td>6,557</td><td>0</td></tr>
+          <tr class="total"><td>Portefeuille</td><td>314,57</td><td>575,90</td><td>0,00</td><td>186,36</td><td>2 499,89</td><td>3 576,71</td><td>29,99</td><td>3 606,69</td><td class="hl">3,6068 %</td><td>—</td><td>—</td><td>101</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small">
+      Le slippage est mesuré par l'écart entre prix cible et prix exécuté. Son effet est déjà
+      dans la NAV : le tableau le rend visible sans le débiter une seconde fois. La page
+      consacrée aux coûts publie la spec, le même rapprochement dans deux unités et la cascade
+      qui réintègre une couche à la fois sur une trajectoire fixe.
+    </p>
+    <div class="crosslink">
+      <p><a href="../costs/">Voir la chaîne complète, de la spec à la NAV nette →</a></p>
+    </div>
   </section>
 
   <section>
@@ -654,10 +679,9 @@ button{font:inherit}
     </p>
     <div class="note">
       <p>
-        Une limite mesurée sur ce run : les coûts d'exécution sont déclarés mais ne mordent
-        pas. En mode allocation ils passent par un chemin fondé sur les lots, et le slippage
-        mesuré est nul. Le dire vaut mieux que de laisser croire à une sévérité qui n'a pas
-        été exercée.
+        Les coûts d'exécution du mode allocation sont désormais débités par le kernel et
+        rapprochés par actif. Leur effet mesuré sur ce run est publié en section 05 ; les
+        hypothèses restent des paramètres de démonstration, pas les conditions d'un courtier.
       </p>
     </div>
   </section>
@@ -856,20 +880,38 @@ button{font:inherit}
     </figure>
   </section>
 
-  <section>
+  <section id="execution-costs-en">
     <div class="shead"><span class="snum">05</span><span class="stitle">What the costs took</span></div>
-    <h2>The same portfolio, with and without each layer</h2>
-    <figure>
-      <img src="../img/09-cost-layers.png" alt="Equity curves with and without costs" loading="lazy">
-      <figcaption>
-        The curves are rebuilt by adding each bar's cost fraction back to the return and
-        recompounding. Together the two layers took <b>34.8 % of terminal value over 9.12
-        years</b>: +0.81 %/year net becomes +4.17 %/year gross. Control: the management fee
-        comes out at 1.88 pt/year against 2 %/year declared in the spec, the gap coming from it
-        being charged on net equity. The second panel separates them and cumulates them year by
-        year. <b>This run claims no performance</b>; it exists to show the ledger closes.
-      </figcaption>
-    </figure>
+    <h2>Every debit is reconciled through to NAV</h2>
+    <p>
+      Execution costs are no longer declarations without effect in allocation mode. Spread,
+      commission, tax, residual impact and slippage are reconciled against the legs that were
+      actually executed; contract carry remains separate from borrow financing. On this run
+      with a watcher, they remove <b>3,606.69</b> in total, or <b>3.6068 %</b> of the initial
+      capital of 100,000.
+    </p>
+    <div class="tw cost-table">
+      <table>
+        <caption>Costs by asset — account currency, initial capital 100,000</caption>
+        <thead><tr><th>Asset</th><th>Spread</th><th>Commission</th><th>Tax</th><th>Residual impact</th><th>Slippage</th><th>Execution</th><th>Carry / roll</th><th>Total</th><th>% capital</th><th>Carry bp/y</th><th>Fill slip bp RT</th><th>Carry dates</th></tr></thead>
+        <tbody>
+          <tr><td>BRENTCMDUSD</td><td>134.52</td><td>134.52</td><td>0.00</td><td>53.61</td><td>807.00</td><td>1,129.65</td><td>0.00</td><td>1,129.65</td><td>1.1297 %</td><td>0.0</td><td>26.981</td><td>0</td></tr>
+          <tr><td>USA500IDXUSD</td><td>54.24</td><td>325.44</td><td>0.00</td><td>97.21</td><td>341.33</td><td>818.22</td><td>0.00</td><td>818.22</td><td>0.8182 %</td><td>0.0</td><td>12.281</td><td>0</td></tr>
+          <tr><td>DEUIDXEUR</td><td>32.36</td><td>97.08</td><td>0.00</td><td>20.83</td><td>601.39</td><td>751.66</td><td>0.00</td><td>751.66</td><td>0.7517 %</td><td>0.0</td><td>16.424</td><td>0</td></tr>
+          <tr><td>XAUUSD</td><td>71.94</td><td>10.79</td><td>0.00</td><td>13.75</td><td>517.99</td><td>614.47</td><td>29.99</td><td>644.45</td><td>0.6445 %</td><td>1.4</td><td>10.766</td><td>101</td></tr>
+          <tr><td>GBPUSD</td><td>21.51</td><td>8.07</td><td>0.00</td><td>0.96</td><td>232.18</td><td>262.71</td><td>0.00</td><td>262.71</td><td>0.2627 %</td><td>0.0</td><td>6.557</td><td>0</td></tr>
+          <tr class="total"><td>Portfolio</td><td>314.57</td><td>575.90</td><td>0.00</td><td>186.36</td><td>2,499.89</td><td>3,576.71</td><td>29.99</td><td>3,606.69</td><td class="hl">3.6068 %</td><td>—</td><td>—</td><td>101</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small">
+      Slippage is measured as the gap between target and execution price. Its effect is already
+      in NAV: the table makes it visible without charging it twice. The dedicated French note
+      publishes the specification, the reconciliation in two units, and the fixed-path cascade.
+    </p>
+    <div class="crosslink">
+      <p><a href="../costs/">Read the full cost chain, from specification to net NAV (FR) →</a></p>
+    </div>
   </section>
 
   <section>
@@ -982,9 +1024,9 @@ button{font:inherit}
     </p>
     <div class="note">
       <p>
-        One limit measured on this run: execution costs are declared but do not bind. In
-        allocation mode they route through a lot-based path, and the measured slippage is zero.
-        Saying so is better than implying a severity that was never exercised.
+        Allocation-mode execution costs are now debited by the kernel and reconciled by asset.
+        Their measured effect on this run is published in section 05; the inputs remain
+        demonstration parameters, not the terms of a specific broker.
       </p>
     </div>
   </section>

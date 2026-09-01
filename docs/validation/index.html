@@ -287,6 +287,7 @@ button{font:inherit}
       <a href="../"><span class="lang-fr">Accueil</span><span class="lang-en">Home</span></a>
       <span aria-current="page"><span class="lang-fr">Note de validation</span><span class="lang-en">Validation note</span></span>
       <a href="../engine/"><span class="lang-fr">Le moteur</span><span class="lang-en">The engine</span></a>
+      <a href="../costs/"><span class="lang-fr">Les coûts</span><span class="lang-en">Costs · FR</span></a>
       <a href="../stateful/"><span class="lang-fr">Replay &amp; resume</span><span class="lang-en">Replay &amp; resume</span></a>
     </nav>
     <div class="langbar">
@@ -491,10 +492,11 @@ carrier     : portfolio_equity(nav-borrowed) · basis D
           impossible.
         </p>
         <p class="small">
-          Les coûts d'exécution sont déclarés dans le run mais <strong>ne mordent pas</strong> :
-          en mode allocation ils passent par un chemin fondé sur les lots, et le slippage
-          mesuré est nul. Les annoncer comme prélevés surestimerait la sévérité du test, des
-          deux côtés de la comparaison.
+          <strong>Trace historique.</strong> Les chiffres de cette note viennent du run gelé
+          avant la correction du règlement des coûts d'exécution en mode allocation : ils y
+          étaient déclarés mais ne mordaient pas. Le chemin courant les débite désormais et les
+          rapproche par actif ; son audit est publié dans <a href="../costs/">la note sur les
+          coûts</a>. Les résultats de cette page ne sont pas réécrits rétroactivement.
         </p>
       </div>
     </div>
@@ -1038,10 +1040,11 @@ carrier     : portfolio_equity(nav-borrowed) · basis D
           does not exist. Here it is structurally unavailable.
         </p>
         <p class="small">
-          Execution costs are declared in the run but <strong>do not bind</strong>: in
-          allocation mode they route through a lot-based path, and the measured slippage is
-          zero. Reporting them as charged would overstate the severity of the test, on both
-          sides of the comparison.
+          <strong>Historical record.</strong> The numbers in this note come from the run frozen
+          before allocation-mode execution-cost settlement was corrected: costs were declared
+          but did not bind there. The current path now debits and reconciles them by asset; its
+          audit is published in the <a href="../costs/">French cost note</a>. The results on
+          this page have not been rewritten retroactively.
         </p>
       </div>
     </div>

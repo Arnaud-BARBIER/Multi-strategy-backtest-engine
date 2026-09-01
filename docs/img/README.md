@@ -16,13 +16,14 @@ plafonné à 965 px, donc jamais agrandies non plus.
 | `04-watch-scanner.png` | `watch_two_actions_numba` | `watch_two_action` |
 | `07-borrow-timeline.png` | Chronologie des tranches | `Borrow_timeline_Audit_comptale1` (haut) |
 | `08-accounting-audit.png` | Bilan comptable, 4 panneaux, `4.44e-16` | `..._comptale1` (bas) + `..._comptale2` (haut) |
-| `09-cost-layers.png` | Coûts avec et sans + cost drag cumulé | `Cost_cascade` + `..._comptale2` (bas) |
+| `09-cost-layers.png` | Ancienne cascade, conservée comme archive mais retirée de la page moteur | `Cost_cascade` + `..._comptale2` (bas) |
 | `10-validation-calls.png` | Baseline naïve, purchasing power, thresholds | `validation_baseline1/_2/3` |
 | `11-performance-carrier.png` | Run + résumé alloc, verdict `BELOW_RISK_FREE` | `Run function + alloc_audit` + `...2` |
 | `12-engine-run.png` | `NJITEngine` avec `simple_oos(0.30)` | `engine_run_OOS` |
 | `13-null-sizing.png` | Null de sizing, attribution, N_eff | `Null_Sizing1/2/_3` |
 | `14-null-leverage.png` | Null de levier, frontière atteignable | `validation_null_levreage` (1337 px natifs) |
 | `16-overnight-rate.png` | Courbe SOFR/DFF lue par le kernel | `courbe_des_taux` |
+| `costs-cascade.png` | Cascade courante : exécution, carry/roll, frais de gestion et financement séparés | sortie Plotly enregistrée dans `pia_valid.ipynb` |
 
 ## Encore à capturer
 
