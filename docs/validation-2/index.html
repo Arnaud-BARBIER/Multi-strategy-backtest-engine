@@ -1,0 +1,961 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tous les tests d'allocation · Arnaud Barbier</title>
+<meta name="description" content="Une optimisation du ratio de Sharpe passée dans la chaîne de tests, et cinq tests ajoutés depuis la première note : compteur d'essais, Sharpe déflaté, concentration de l'écart, univers inédits, préinscription.">
+<meta name="author" content="Arnaud Barbier">
+<link rel="canonical" href="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/validation-2/">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/validation-2/">
+<meta property="og:title" content="Tous les tests d'allocation · Arnaud Barbier">
+<meta property="og:description" content="Une optimisation du ratio de Sharpe passée dans la chaîne de tests, et cinq tests ajoutés depuis la première note : compteur d'essais, Sharpe déflaté, concentration de l'écart, univers inédits, préinscription.">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:locale:alternate" content="en_GB">
+<meta property="og:image" content="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/img/og-validation.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Ce que la couche de validation a renvoyé sur la seconde règle de pondération.">
+<meta name="twitter:image" content="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/img/og-validation.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Tous les tests d'allocation · Arnaud Barbier">
+<meta name="twitter:description" content="Une optimisation du ratio de Sharpe passée dans la chaîne de tests, et cinq tests ajoutés depuis la première note : compteur d'essais, Sharpe déflaté, concentration de l'écart, univers inédits, préinscription.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpolygon points='50,92 90,32 10,32' fill='%2358a6ff'/%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap">
+
+<style>
+:root{
+  --bg:#FFFFFF; --panel:#FFFFFF; --well:#F5F6F7;
+  --hair:#C9CCD1; --hard:#101215; --soft:#E3E5E8;
+  --ink:#101215; --sub:#54585F; --faint:#868B93;
+  --accent:#A85F00; --accent-well:#FDF7EE;
+  --f-sans:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --f-serif:"Times New Roman",Times,"Liberation Serif",serif;
+  --f-term:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0e1117; --panel:#161b22; --well:#12171f;
+    --hair:#21262d; --hard:#3d444d; --soft:#1b2028;
+    --ink:#e6edf3; --sub:#8b949e; --faint:#6e7681;
+    --accent:#F0A93A; --accent-well:#1E1710;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0e1117; --panel:#161b22; --well:#12171f;
+  --hair:#21262d; --hard:#3d444d; --soft:#1b2028;
+  --ink:#e6edf3; --sub:#8b949e; --faint:#6e7681;
+  --accent:#F0A93A; --accent-well:#1E1710;
+}
+
+*{box-sizing:border-box}
+body{
+  background:var(--bg);color:var(--ink);
+  font-family:var(--f-serif);font-size:17px;line-height:1.66;
+  margin:0;padding:0 1.5rem 5rem;-webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1080px;margin:0 auto}
+
+/* ---------- masthead ---------- */
+.mast{
+  padding:2.25rem 0 0;border-bottom:0;
+  /* sans bordure, la marge du dernier enfant sortirait du bloc et decalerait le filet */
+  display:flow-root;
+  /* le filet de tete chauffe a gauche puis rejoint la grille */
+  background-image:linear-gradient(90deg,var(--accent) 0%,var(--hard) 34%,var(--hair) 78%);
+  background-repeat:no-repeat;background-size:100% 3px;background-position:0 100%;
+}
+.mast-top{
+  display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem;
+  font-family:var(--f-sans);font-size:.7rem;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--sub);
+  padding-bottom:.7rem;border-bottom:1px solid var(--hair);
+}
+h1{
+  font-family:var(--f-serif);font-weight:700;
+  font-size:clamp(1.75rem,3.4vw,2.35rem);line-height:1.06;
+  letter-spacing:-.005em;text-wrap:balance;
+  margin:2.25rem 0 0;max-width:24ch;
+}
+.lede{font-size:1.06rem;color:var(--sub);max-width:60ch;margin:1.35rem 0 2.25rem;}
+.tickers{
+  display:flex;flex-wrap:wrap;gap:0;margin:0 0 2.25rem;
+  border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);
+}
+.tickers div{
+  font-family:var(--f-sans);font-size:.74rem;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--sub);
+  padding:.6rem 1.05rem .6rem 0;margin-right:1.05rem;
+  border-right:1px solid var(--hair);
+}
+.tickers div:last-child{border-right:none;margin-right:0}
+
+/* ---------- headline figures ---------- */
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:0;margin-bottom:2.5rem}
+.fig{padding:0 1.25rem 0 0;margin-right:1.25rem;border-right:1px solid var(--hair)}
+.fig:last-child{border-right:none;margin-right:0;padding-right:0}
+.fig .k{font-family:var(--f-sans);font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+.fig .v{font-family:var(--f-sans);font-size:2rem;font-weight:600;letter-spacing:-.03em;margin-top:.45rem;font-variant-numeric:tabular-nums;line-height:1}
+.fig .n{font-size:.8rem;color:var(--sub);margin-top:.45rem;line-height:1.4}
+.neg{color:var(--accent)}
+.subject{
+  border:0;border-left:2px solid var(--hard);padding:.1rem 0 .1rem 1.15rem;margin:0 0 2.25rem;max-width:74ch;
+}
+.subject .lbl{
+  font-size:.65rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);
+  font-weight:600;margin-bottom:.7rem;
+}
+.subject p{font-size:.92rem;margin:0 0 .8rem;max-width:none}
+.subject p:last-child{margin-bottom:0;color:var(--sub)}
+
+.units{
+  font-family:var(--f-sans);font-variant-numeric:tabular-nums;font-size:.71rem;line-height:1.65;color:var(--faint);
+  border-top:1px solid var(--hair);padding:.7rem 0 0;margin:0 0 2.5rem;max-width:78ch;
+}
+.units b{color:var(--sub);font-weight:600}
+@media (max-width:640px){
+  .fig{border-right:none;border-bottom:1px solid var(--hair);padding:.9rem 0;margin-right:0}
+  .fig:last-child{border-bottom:none}
+}
+
+/* ---------- sections ---------- */
+section{padding:3rem 0 0}
+.shead{
+  display:flex;align-items:baseline;gap:1rem;
+  border-bottom:2px solid var(--hard);padding-bottom:.6rem;margin-bottom:1.9rem;
+}
+.snum{font-family:var(--f-sans);font-size:.72rem;font-weight:600;letter-spacing:.1em;color:var(--accent)}
+.stitle{font-family:var(--f-sans);font-size:.72rem;font-weight:500;letter-spacing:.17em;text-transform:uppercase;color:var(--sub)}
+h2{
+  font-family:var(--f-serif);font-weight:600;
+  font-size:clamp(1.4rem,2.8vw,1.85rem);line-height:1.16;
+  letter-spacing:0;text-wrap:balance;max-width:26ch;margin:0 0 1.1rem;
+}
+h3{font-family:var(--f-sans);font-weight:600;font-size:.95rem;margin:1.9rem 0 .85rem;letter-spacing:-.005em}
+p{max-width:64ch;margin:0 0 1.05rem}
+.small{font-size:.87rem;color:var(--sub);max-width:70ch}
+strong{font-weight:600}
+a{color:var(--accent);text-decoration-thickness:1px;text-underline-offset:2px}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.body{display:grid;grid-template-columns:minmax(0,1fr);gap:0}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:2.25rem}
+
+/* ---------- verdict bar ---------- */
+.verdict{
+  display:flex;align-items:stretch;gap:0;margin:0 0 1.35rem;
+  border:0;background:none;
+}
+.verdict .bar{background:linear-gradient(180deg,var(--accent),var(--accent-well));width:8px;flex:none}
+.verdict .txt{
+  padding:.7rem 1rem;font-family:var(--f-sans);font-size:.8rem;font-weight:600;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--accent);
+}
+
+/* ---------- raw output ---------- */
+.raw{border:0;border-left:2px solid var(--hair);background:none;padding-left:1rem;margin:0 0 1.35rem}
+.raw .lbl{
+  font-family:var(--f-sans);font-size:.63rem;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--faint);padding:.45rem .85rem;border-bottom:1px solid var(--hair);
+  display:flex;justify-content:space-between;gap:1rem;
+}
+.raw pre{
+  margin:0;padding:.9rem .85rem;overflow-x:auto;
+  font-family:var(--f-term);font-size:.775rem;line-height:1.62;color:var(--sub);
+  white-space:pre;
+}
+.raw pre b{color:var(--ink);font-weight:600}
+.raw pre i{color:var(--accent);font-style:normal;font-weight:600}
+
+/* ---------- plots ---------- */
+.plot{border:0;background:none;margin:0 0 1.6rem;max-width:967px}
+.plot .lbl{
+  font-family:var(--f-sans);font-size:.63rem;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--faint);padding:0 0 .5rem;
+  display:flex;justify-content:space-between;gap:1rem;
+}
+/* les captures font 965 px : jamais les agrandir, le texte deviendrait flou */
+.plot img{display:block;width:auto;max-width:100%;height:auto;padding:10px;background:var(--well);border:1px solid var(--hard);}
+.plot .cap{
+  font-size:.78rem;color:var(--sub);line-height:1.5;padding:.72rem 0 0;
+}
+.plot .cap b{color:var(--ink);font-weight:600}
+
+/* ---------- tables ---------- */
+.tw{overflow-x:auto;margin:0 0 1.35rem;border-top:2px solid var(--hard);border-bottom:1px solid var(--hair)}
+table{border-collapse:collapse;width:100%;font-size:.9rem;min-width:470px}
+th,td{padding:.62rem .8rem;text-align:right;border-bottom:1px solid var(--soft)}
+th:first-child,td:first-child{text-align:left;padding-left:0}
+th:last-child,td:last-child{padding-right:0}
+thead th{
+  font-family:var(--f-sans);font-size:.63rem;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--faint);font-weight:500;border-bottom:1px solid var(--hair);white-space:nowrap;
+}
+td{font-variant-numeric:tabular-nums;font-family:var(--f-sans);font-size:.86rem}
+td:first-child{font-family:var(--f-sans);font-size:.9rem}
+tbody tr:last-child td{border-bottom:none}
+tr.total td{border-top:1px solid var(--hard);font-weight:600}
+.hl{color:var(--accent);font-weight:600}
+
+/* ---------- refusals ---------- */
+.refs{border-top:1px solid var(--hair)}
+.ref{display:grid;grid-template-columns:2.4rem minmax(0,1fr);gap:.5rem;padding:.95rem 0;border-bottom:1px solid var(--soft)}
+.ref .n{font-family:var(--f-sans);font-size:.72rem;color:var(--accent);font-weight:600;padding-top:.15rem}
+.ref p{margin:0;font-size:.93rem;max-width:62ch}
+
+/* ---------- modes + ledger ---------- */
+.modes{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0;border-top:2px solid var(--hard)}
+.mode{padding:1.1rem 1.15rem 1.1rem 0;margin-right:1.15rem;border-right:1px solid var(--hair);display:flex;flex-direction:column;gap:.55rem}
+.mode:last-child{border-right:none;margin-right:0;padding-right:0}
+.mode .t{font-family:var(--f-sans);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:600}
+.mode p{font-size:.875rem;margin:0;color:var(--sub);max-width:none}
+.mode .c{font-family:var(--f-sans);font-size:.7rem;color:var(--faint);border-top:1px solid var(--soft);padding-top:.55rem;margin-top:auto;letter-spacing:.03em}
+@media (max-width:700px){
+  .mode{border-right:none;border-bottom:1px solid var(--hair);margin-right:0;padding-right:0}
+  .mode:last-child{border-bottom:none}
+}
+.ident{border-top:1px solid var(--hair);margin-bottom:1.35rem}
+.ident div{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.75rem;padding:.62rem 0;border-bottom:1px solid var(--soft)}
+.ident code{font-family:var(--f-term);font-size:.82rem;color:var(--ink)}
+.ident span{font-family:var(--f-sans);font-size:.68rem;color:var(--faint);letter-spacing:.08em;text-transform:uppercase}
+.tags{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:1.05rem}
+.tag{font-family:var(--f-sans);font-size:.71rem;border:0;padding:.26rem .8rem .26rem 0;color:var(--sub)}
+
+.note{border-left:3px solid var(--accent);padding:.1rem 0 .1rem 1rem;margin:0 0 1.35rem}
+.note p{margin:0;color:var(--sub);font-size:.91rem;max-width:62ch}
+
+ul.plain{margin:0 0 1.05rem;padding-left:1.1rem;display:flex;flex-direction:column;gap:.55rem}
+ul.plain li{font-size:.93rem;max-width:64ch}
+ul.plain li::marker{color:var(--accent)}
+
+footer{
+  border-top:3px solid var(--hard);margin-top:3.5rem;padding-top:1.1rem;
+  display:flex;flex-wrap:wrap;gap:1.25rem;justify-content:space-between;
+  font-family:var(--f-sans);font-size:.72rem;color:var(--faint);letter-spacing:.06em;text-transform:uppercase;
+}
+
+/* ---------- sélecteur de langue ---------- */
+#page[data-lang="fr"] .lang-en{display:none}
+#page[data-lang="en"] .lang-fr{display:none}
+.langbar{
+  display:flex;justify-content:flex-end;gap:0;
+  padding:.9rem 0 0;
+}
+.langbar button{
+  font-family:var(--f-sans);font-size:.68rem;letter-spacing:.13em;text-transform:uppercase;
+  background:none;color:var(--faint);border:0;
+  padding:.32rem 0;cursor:pointer;margin-left:1.1rem;
+}
+.langbar button:first-child{margin-left:0}
+.langbar button[aria-pressed="true"]{
+  color:var(--ink);font-weight:600;
+}
+.langbar button:hover{color:var(--ink)}
+.langbar button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.topbar{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.pagenav{display:flex;gap:0;padding:.9rem 0 0}
+.pagenav>a,.pagenav>span{
+  font-family:var(--f-sans);font-size:.68rem;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--faint);border:0;text-decoration:none;
+  padding:.32rem 0;margin-left:1.4rem;white-space:nowrap;
+}
+.pagenav>:first-child{margin-left:0}
+.pagenav [aria-current="page"]{
+  color:var(--ink);border-color:var(--hard);font-weight:600;position:relative;z-index:1;
+}
+.pagenav>a:hover{color:var(--accent)}
+.pagenav>a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+table code{font-family:var(--f-term);font-size:.82em;color:var(--sub)}
+</style>
+</head>
+<body>
+<div id="page" data-lang="fr">
+  <div class="wrap topbar">
+    <nav class="pagenav" aria-label="Pages">
+      <a href="../"><span class="lang-fr">Accueil</span><span class="lang-en">Home</span></a>
+      <a href="../validation/"><span class="lang-fr">Note de validation 1</span><span class="lang-en">Validation note 1</span></a>
+      <span aria-current="page"><span class="lang-fr">Note de validation 2</span><span class="lang-en">Validation note 2</span></span>
+      <a href="../engine/"><span class="lang-fr">Mode allocation</span><span class="lang-en">Allocation mode</span></a>
+      <a href="../costs/"><span class="lang-fr">Les coûts</span><span class="lang-en">Costs · FR</span></a>
+      <a href="../stateful/"><span class="lang-fr">Replay &amp; resume</span><span class="lang-en">Replay &amp; resume</span></a>
+    </nav>
+    <div class="langbar">
+      <button type="button" data-set="fr" aria-pressed="true">Français</button>
+      <button type="button" data-set="en" aria-pressed="false">English</button>
+    </div>
+  </div>
+  <div class="wrap lang-fr">
+  <header class="mast">
+    <div class="mast-top">
+      <div>Arnaud Barbier · note de recherche</div>
+      <div>Moteur de backtest multi-actifs · 4 septembre 2026</div>
+    </div>
+
+    <h1>Une autre règle de pondération, et cinq tests de plus.</h1>
+
+    <p class="lede">Cette note applique la couche de validation à une optimisation du ratio de Sharpe. Elle ajoute surtout <b>cinq tests que la première note n'avait pas</b> : un compteur d'essais indexé par les données, un Sharpe déflaté, une mesure de concentration de l'écart, une distribution d'écarts sur des univers jamais vus, et un registre de préinscription. La stratégie testée sert de banc d'essai.</p>
+
+    <div class="subject">
+      <div class="lbl">Ce qui a été testé</div>
+      <p>Une optimisation moyenne-variance glissante, long-only, plafonnée à 35 % par nom, réestimée sur 100 barres et rebalancée toutes les 100. Cinq actifs : Brent, DAX, GBP/USD, S&amp;P 500, or. Barres journalières de mai 2013 à juin 2022, soit 2 298 barres et 22 décisions ; les derniers 30 % de l'historique servent d'échantillon hors échantillon, soit 1 126 barres.</p>
+      <p>Par-dessus, la politique testée : 30 % de réserve de trésorerie (20 % dynamique, 10 % fixe), 2 % de frais de gestion provisionnés à l'année et payés au trimestre, 5 % de commission de surperformance avec high-water mark, coûts d'exécution au comptant prélevés dans le run. Le capital est géré en capitalisation : les gains restent dans le portefeuille et la base sur laquelle les poids s'appliquent suit l'equity. La performance est mesurée sur l'equity nette de la dette, jamais sur les rendements par trade.</p>
+      <p><b>Une marge volontaire :</b> la fenêtre d'estimation s'arrête une barre plus tôt que ce que le délai d'exécution imposerait. La section 08 chiffre ce qu'elle coûte.</p>
+    </div>
+  </header>
+
+  <section>
+    <div class="shead"><span class="snum">01</span><span class="stitle">Les tests</span></div>
+    <h2>La couche compte quatorze tests, en cinq catégories</h2>
+    <p class="small">Chaque table de cette page est une sortie de la couche de validation, reproduite telle quelle ; les paragraphes sont ma lecture. Les verdicts en majuscules sont ceux que l'outil imprime, pas les miens.</p>
+    <p class="small">Le tableau les liste <b>tous</b>, pas seulement ceux qui ont tourné ici. Les deux colonnes qui comptent sont la catégorie, qui dit à quelle question le test répond, et le statut, qui dit ce qu'il a répondu sur ce run. La chaîne est exécutée dans un ordre imposé : tout ce qui ne consomme pas l'échantillon réservé passe avant.</p>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Catégorie</th><th>Test</th><th>Ce qu'il demande</th><th>Sur ce run</th></tr></thead>
+        <tbody>
+          <tr><td>Intégrité</td><td><code>validation_triage</code></td><td>Quelle série mesure-t-on, et combien d'observations ?</td><td>Prérequis</td></tr>
+          <tr><td></td><td><code>validation_covariance</code></td><td>L'estimateur de covariance prédit-il quelque chose ?</td><td>Non lancé</td></tr>
+          <tr><td>Détection</td><td><code>validation_baseline</code></td><td>L'écart existe-t-il contre l'équipondération ?</td><td>En échantillon oui, hors échantillon non</td></tr>
+          <tr><td></td><td><code>validation_null_leverage</code></td><td>Détenir moins du panier aurait-il suffi ?</td><td>Dépend du taux</td></tr>
+          <tr><td></td><td><code>validation_null_sizing</code></td><td>L'écart vient-il des poids ou du dimensionnement ?</td><td>Non lancé</td></tr>
+          <tr><td></td><td><code>validation_purchasing_power</code></td><td>L'écart est-il produit là où il sert ?</td><td>Partiel</td></tr>
+          <tr><td></td><td><code>validation_mc</code></td><td>Quelle dispersion est compatible avec cet écart ?</td><td>Non concluant</td></tr>
+          <tr><td>Rétention</td><td><code>validation_oos_retention</code></td><td>L'écart survit-il à la période mise de côté ?</td><td>Non retenu</td></tr>
+          <tr><td></td><td><code>validation_cross_asset</code></td><td>L'écart survit-il à des univers jamais vus ?</td><td class="hl">Généralise</td></tr>
+          <tr><td></td><td><code>validation_edge_concentration</code></td><td>L'écart repose-t-il sur quelques fenêtres ?</td><td>Sous le seuil</td></tr>
+          <tr><td>Surapprentissage</td><td><code>trial_counter_status</code></td><td>Combien de configurations distinctes ont été essayées ?</td><td>4 essais, 1,6 effectifs</td></tr>
+          <tr><td></td><td><code>validation_dsr</code></td><td>Le Sharpe survit-il au nombre d'essais ?</td><td>Indisponible</td></tr>
+          <tr><td>Gouvernance</td><td><code>freeze_configuration</code></td><td>La configuration est-elle préinscrite avant le holdout ?</td><td>Non exercé</td></tr>
+          <tr class="total"><td></td><td><code>validation_reverse_stress</code></td><td>Quel choc faut-il pour franchir un seuil qui compte ?</td><td>Page dédiée</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="shead"><span class="snum">02</span><span class="stitle">En échantillon</span></div>
+    <h2>En échantillon, la règle bat les deux références</h2>
+    <p class="small">Trois colonnes, trois questions. <b>1/N absolu</b> est le panier équipondéré sans aucune machinerie de trésorerie : ce qu'un investisseur aurait pu détenir sans modèle. <b>1/N apparié</b> garde toute la machinerie et ne change que la règle de pondération. La stratégie passe devant les deux, ce qui est le cas de figure le moins fréquent dans la littérature.</p>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Annualisé</th><th>Stratégie</th><th>1/N absolu</th><th>1/N apparié</th><th>Écart vs absolu</th></tr></thead>
+        <tbody>
+          <tr><td>Rendement (CAGR)</td><td>1,43 %</td><td>1,01 %</td><td>0,61 %</td><td class="hl">+0,42 pt</td></tr>
+          <tr><td>Volatilité</td><td>8,61 %</td><td>12,15 %</td><td>9,33 %</td><td>−3,54 pt</td></tr>
+          <tr><td>Drawdown maximal</td><td>−20,47 %</td><td>−36,77 %</td><td>−28,94 %</td><td>+16,30 pt</td></tr>
+          <tr><td>Calmar</td><td>0,07</td><td>0,03</td><td>0,02</td><td>+0,04</td></tr>
+          <tr class="total"><td>Équivalent certain, γ = 3</td><td>0,68 %</td><td>−0,50 %</td><td>−0,27 %</td><td class="hl">+1,17 pt</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="verdict"><div class="bar"></div><div class="txt">Verdict : apporte de la valeur</div></div>
+    <div class="raw">
+      <div class="lbl"><span>Sortie brute · validation_baseline</span></div>
+<pre>absolute    : stripped reserve_cash_pct, fixed_cash_reserve · keeps execution
+              costs, management fee, performance fee, currencies
+matched     : every piece of machinery kept, only the weighting rule swapped
+carrier     : portfolio_equity(nav-borrowed) · basis D
+
+<i>VERDICT   ADDS_VALUE</i> — certainty equivalent higher by +1.17%/y at &#947;=3
+<b>no p-value: the allocation baseline is deterministic. This is a gap, not a test.</b></pre>
+    </div>
+    <div class="plot">
+      <div class="lbl"><span>Graphique · validation_baseline</span></div>
+      <img src="../img/v2-baseline-is.png" alt="Graphique · validation_baseline" loading="lazy">
+      <div class="cap">Deux panneaux. En haut la NAV des trois séries, en bas leur drawdown. Dans le panneau du bas, la courbe de la stratégie reste au-dessus des deux autres sur toute la période ; son creux le plus profond atteint −20,47 % contre −36,77 % pour le 1/N absolu.</div>
+    </div>
+    <div class="two">
+      <div>
+        <h3>Où l'écart apparaît</h3>
+        <p class="small">L'objectif optimisé est le ratio de Sharpe. L'écart le plus large n'apparaît pourtant pas sur la volatilité, qui passe de 12,15 % à 8,61 %, mais sur le drawdown maximal, qui passe de −36,77 % à −20,47 %, soit 16,30 points. Le rendement, lui, gagne 0,42 point contre le 1/N absolu et 0,82 contre le 1/N apparié.</p>
+      </div>
+      <div>
+        <h3>Ce que la trésorerie prélève</h3>
+        <p class="small">Le passage de 1/N absolu à 1/N apparié isole la machinerie sur la jambe de référence : 1,01 % devient 0,61 %, soit 0,40 point. Sur la jambe de la stratégie, le même retrait vaut 0,98 point.</p>
+      </div>
+    </div>
+    <h3>La règle seule, sans trésorerie des deux côtés</h3>
+    <p class="small">La grille croise les deux leviers. Retirer la machinerie des deux jambes laisse la règle de pondération face à l'équipondération, toutes deux pleinement investies : <b>2,41 % contre 1,01 %, soit +1,41 point</b>. C'est la comparaison la plus directe entre les deux règles. La machinerie coûte 0,98 point à la stratégie et 0,40 à l'équipondération ; l'écart de 0,58 point entre ces deux coûts est le terme d'interaction que la grille isole.</p>
+    <div class="tw">
+      <table>
+        <thead><tr><th></th><th>Machinerie active</th><th>Machinerie retirée</th><th>Effet de la machinerie</th></tr></thead>
+        <tbody>
+          <tr><td>Poids de la stratégie</td><td>1,43 %</td><td>2,41 %</td><td>−0,98 pt</td></tr>
+          <tr><td>Équipondération</td><td>0,61 %</td><td>1,01 %</td><td>−0,40 pt</td></tr>
+          <tr><td>Interaction</td><td></td><td></td><td>−0,58 pt</td></tr>
+          <tr class="total"><td>Effet des poids</td><td>+0,82 pt</td><td class="hl">+1,41 pt</td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>La trésorerie est disponible, elle n'est presque jamais déployée</h3>
+    <p class="small">Sur 16 épisodes où le panier a perdu plus de 10 %, la réserve n'a été déployée que dans <b>4</b>. Elle bouge 24 fois au total, donc le mécanisme fonctionne ; il ne se déclenche simplement pas là où il compte. Et le rendement moyen pondéré par les états passe de +0,0071 % brut à <b>−0,0017 % à γ = 3</b> : l'écart est produit dans des états où il vaut moins cher, pas dans ceux où un investisseur averse au risque le paierait.</p>
+    <div class="raw">
+      <div class="lbl"><span>Sortie brute · validation_purchasing_power</span></div>
+<pre>deployable cash = cash_value - cash_fixed_reserve - cash_vault
+benchmark drawdown episodes below -10%        16
+<b>episodes where cash was deployed             4  (25%)</b>
+deployment episodes                           24
+mean cash fraction of NAV                     19.3%
+Merton indifference &#947; for this cash level   n/a — the benchmark did not
+                                              beat cash on this sample
+
+<i>VERDICT   PARTIAL</i> — deployed in only 4 of 16 drawdown episodes (25%)
+          — the option is exercised intermittently</pre>
+    </div>
+    <div class="plot">
+      <div class="lbl"><span>Graphique · validation_purchasing_power</span></div>
+      <img src="../img/v2-purchasing-power.png" alt="Graphique · validation_purchasing_power" loading="lazy">
+      <div class="cap">Trésorerie déployable médiane de 19,7 % de la NAV, 27,3 % au creux le plus profond du panier. Seize épisodes où le panier perd plus de 10 %, un déploiement dans quatre d'entre eux, vingt-quatre déploiements au total sur la période.</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="shead"><span class="snum">03</span><span class="stitle">Hors échantillon</span></div>
+    <h2>Sur la période mise de côté, l'ordre s'inverse</h2>
+    <p class="small">Mêmes trois colonnes, sur les 1 126 barres jamais regardées pendant la construction. Le panier monte nettement plus vite sur cette période, et la stratégie ne suit pas.</p>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Annualisé</th><th>Stratégie</th><th>1/N absolu</th><th>1/N apparié</th><th>Écart vs absolu</th></tr></thead>
+        <tbody>
+          <tr><td>Rendement (CAGR)</td><td>1,58 %</td><td>4,02 %</td><td>2,08 %</td><td class="hl">−2,44 pt</td></tr>
+          <tr><td>Volatilité</td><td>10,40 %</td><td>13,35 %</td><td>10,23 %</td><td>−2,95 pt</td></tr>
+          <tr><td>Drawdown maximal</td><td>−23,14 %</td><td>−27,00 %</td><td>−21,36 %</td><td>+3,86 pt</td></tr>
+          <tr><td>Calmar</td><td>0,07</td><td>0,15</td><td>0,10</td><td>−0,08</td></tr>
+          <tr class="total"><td>Équivalent certain, γ = 3</td><td>0,48 %</td><td>2,17 %</td><td>1,02 %</td><td class="hl">−1,69 pt</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="verdict"><div class="bar"></div><div class="txt">Verdict : n'apporte rien</div></div>
+    <p class="small">En échantillon, la règle valait +0,82 point contre le 1/N apparié ; hors échantillon elle vaut −0,50 point. La machinerie de trésorerie, qui coûtait 0,40 point en échantillon, en coûte <b>1,93</b> ici : sur une période où le panier monte, retenir un cinquième du capital coûte beaucoup plus cher que sur une période sans tendance. Une bonne part du renversement vient de là, et pas de la règle de pondération.</p>
+    <div class="raw">
+      <div class="lbl"><span>Sortie brute · validation_baseline (oos)</span></div>
+<pre><i>VERDICT   ADDS_NOTHING</i> — certainty equivalent lower by -1.69%/y at &#947;=3
+          — equal_weight absolute does better for a risk-averse investor
+<b>no p-value: the allocation baseline is deterministic. This is a gap, not a test.</b></pre>
+    </div>
+    <div class="plot">
+      <div class="lbl"><span>Graphique · validation_baseline (oos)</span></div>
+      <img src="../img/v2-baseline-oos.png" alt="Graphique · validation_baseline (oos)" loading="lazy">
+      <div class="cap">Les mêmes trois séries sur les 1 126 barres réservées. Le 1/N absolu termine à 4,02 % annualisés, la stratégie à 1,58 %. À la lecture des courbes, le 1/N est devant environ la moitié du temps, la stratégie environ quatre fois sur dix, et les deux se tiennent le reste du temps.</div>
+    </div>
+    <div class="plot">
+      <div class="lbl"><span>Sortie · validation_oos_retention</span></div>
+      <img src="../img/v2-oos-retention.png" alt="Sortie · validation_oos_retention" loading="lazy">
+      <div class="cap">Le tableau de rétention compare l'écart en échantillon et hors échantillon, métrique par métrique. Il ne calcule pas de ratio de rétention lorsque les deux écarts n'ont pas le même signe, et l'indique en clair dans la colonne de lecture.</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="shead"><span class="snum">04</span><span class="stitle">La réfutation arithmétique</span></div>
+    <h2>Détenir moins du panier aurait-il suffi ?</h2>
+    <p class="small">Toute stratégie qui rend moins que son benchmark invoque la même défense : elle échange du rendement contre moins de risque. La réfutation ne demande aucun modèle. Un investisseur qui veut moins de risque détient une fraction du panier et garde le reste en liquidités, et atterrit sur la droite qui relie le cash au panier. Une stratégie sous cette droite est dominée. Le taux sans risque est <b>balayé, pas supposé</b> : c'est le seul paramètre que personne ne peut trancher après coup.</p>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Taux sans risque</th><th>Fraction du panier</th><th>Mélange</th><th>Écart à vol égale</th><th>Écart à drawdown égal</th></tr></thead>
+        <tbody>
+          <tr><td>0,00 %</td><td>0,708</td><td>0,87 %</td><td class="hl">+0,56 pt</td><td>+0,72 pt</td></tr>
+          <tr><td>1,00 %</td><td>0,708</td><td>1,16 %</td><td class="hl">+0,27 pt</td><td>+0,24 pt</td></tr>
+          <tr><td>2,00 %</td><td>0,708</td><td>1,45 %</td><td>−0,02 pt</td><td>−0,13 pt</td></tr>
+          <tr class="total"><td>4,00 %</td><td>0,708</td><td>2,03 %</td><td>−0,60 pt</td><td>−0,78 pt</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="verdict"><div class="bar"></div><div class="txt">Verdict : au-dessus de la droite jusqu'à 2 % de taux sans risque, dominée au-delà</div></div>
+    <p class="small">Le signe s'inverse juste sous 2 %, au même endroit sur les deux appariements, ce qui écarte un artefact. Sur la période le taux court réalisé est resté sous ce seuil, ce qui place la stratégie du bon côté ; la marge est de 0,27 point à 1 %. À noter, l'outil ne peut pas calculer le γ d'indifférence de Merton pour ce niveau de trésorerie : <b>le panier lui-même n'a pas battu le cash sur l'échantillon</b>.</p>
+    <div class="raw">
+      <div class="lbl"><span>Sortie brute · validation_null_leverage</span></div>
+<pre>risk_free   w (vol-matched)   blend CAGR   strategy CAGR   gap at equal vol
+   0.00%             0.708        0.87%           1.43%          <i>+0.56 pt</i>
+   1.00%             0.708        1.16%           1.43%          <i>+0.27 pt</i>
+   2.00%             0.708        1.45%           1.43%          -0.02 pt
+   4.00%             0.708        2.03%           1.43%          -0.60 pt</pre>
+    </div>
+    <div class="plot">
+      <div class="lbl"><span>Graphique · validation_null_leverage</span></div>
+      <img src="../img/v2-leverage-null.png" alt="Graphique · validation_null_leverage" loading="lazy">
+      <div class="cap">La droite reliant le cash au panier, tracée aux quatre taux sans risque balayés, et la position de la stratégie par rapport à chacune.</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="shead"><span class="snum">05</span><span class="stitle">Quatre-vingts univers</span></div>
+    <h2>Ce que l'écart devient sur des paniers inédits</h2>
+    <p class="small">Le test précédent porte sur un panier et une période. Celui-ci rejoue la configuration enregistrée, sans changer un seul paramètre, sur <b>80 paniers de cinq actifs tirés dans un pool inédit</b>, sur cette même période hors échantillon. Actifs jamais vus sur une période jamais vue : c'est le double hors échantillon, et il consomme l'échantillon réservé. Dix-neuf tickers sur vingt couvrent la fenêtre, un est écarté pour un trou à l'intérieur.</p>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Écart contre 1/N absolu</th><th>5 %</th><th>25 %</th><th>50 %</th><th>75 %</th><th>95 %</th></tr></thead>
+        <tbody>
+          <tr><td>Écart de CAGR</td><td>−3,62 %</td><td>+0,04 %</td><td class="hl">+2,34 %</td><td>+4,71 %</td><td>+8,54 %</td></tr>
+          <tr><td>Écart d'équivalent certain, γ = 3</td><td>+7,55 %</td><td>+11,80 %</td><td>+13,89 %</td><td>+16,57 %</td><td>+18,48 %</td></tr>
+          <tr class="total"><td>Écart de drawdown</td><td>+6,31 %</td><td>+8,85 %</td><td>+10,19 %</td><td>+11,39 %</td><td>+12,68 %</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="verdict"><div class="bar"></div><div class="txt">Verdict : généralise</div></div>
+    <p class="small">L'univers d'origine marque <b>−2,44 %</b>, exactement l'écart mesuré par la baseline hors échantillon : les deux tests se recoupent. Mais il arrive <b>rang 10 sur 80, au 11ᵉ percentile</b>. Sur la même période, la même règle sort un écart positif sur 75 % des paniers tirés. Ce qui a été réfuté à la section 03, ce n'est donc pas la règle, c'est le panier.</p>
+    <div class="raw">
+      <div class="lbl"><span>Sortie brute · validation_cross_asset</span></div>
+<pre>eligible pool      19 ticker(s) cover the window; 1 dropped (gap inside window)
+draws              80 universes of 5 assets, uniform (not stratified), seed 0
+phase              oos — <b>DOUBLE OOS: unseen assets x unseen period</b>
+campaigns run      3 (registered as a diagnostic in the freeze registry)
+
+original universe  CAGR edge -2.44%  &#8594;  percentile rank 10 of 80 (11th)
+fraction of universes with a positive edge   75%
+
+<i>VERDICT   GENERALISES</i> — the median edge across 80 unseen universes is +2.34%/y
+<b>That is not the profile of a hand-picked basket.</b></pre>
+    </div>
+    <div class="plot">
+      <div class="lbl"><span>Graphique · validation_cross_asset</span></div>
+      <img src="../img/v2-cross-asset.png" alt="Graphique · validation_cross_asset" loading="lazy">
+      <div class="cap">Distribution des écarts de CAGR sur les 80 paniers tirés : médiane à +2,34 % par an, premier quartile à +0,04 %, cinquième centile à −3,62 %, quatre-vingt-quinzième à +8,54 %. L'univers d'origine, à −2,44 %, tombe au 11ᵉ percentile.</div>
+    </div>
+    <p class="small">Un panier choisi pour flatter la stratégie se placerait au-dessus du 90ᵉ percentile. Celui-ci est au 11ᵉ. C'est l'inverse du profil d'une sélection, et c'est la lecture la plus utile de cette page. <b>Trois campagnes</b> ont été lancées et le registre les enregistre : redessiner jusqu'à tomber sur un tirage flatteur se verrait.</p>
+  </section>
+
+  <section>
+    <div class="shead"><span class="snum">06</span><span class="stitle">Refus</span></div>
+    <h2>Ce que l'outil a refusé de conclure</h2>
+    <p class="small">C'est la section qui sépare cette couche d'un backtester. Un chiffre qui ne peut pas être soutenu n'est pas publié, et le refus est imprimé avec sa raison, à la place du chiffre.</p>
+    <h3>Monte-Carlo : non concluant</h3>
+    <p class="small">Bootstrap par blocs sur 22 périodes de décision, 10 000 chemins. L'écart réalisé est de +0,44 % et la médiane du bootstrap tombe dessus à 0,00 % près pour une tolérance déclarée de 0,07 % : le rééchantillonnage reproduit la série qu'il rééchantillonne, ce qui est la condition pour lire quoi que ce soit ensuite. Mais l'intervalle central à 90 % va de −2,59 % à +3,51 %, et <b>P(écart &gt; 0) = 59,6 %</b>.</p>
+    <div class="raw">
+      <div class="lbl"><span>Sortie brute · validation_mc</span></div>
+<pre>centering golden   <i>PASS</i> — bootstrap median +0.44% vs realised +0.44%,
+                   gap +0.00% against a declared tolerance of 0.07%
+
+relative CAGR      realised +0.44%   5% -2.59%   50% +0.44%   95% +3.51%
+<b>P(edge > 0)        59.6%</b>
+
+<b>WARNING</b>   LOW BLOCK COUNT — only 22 decision periods are observed.
+<i>VERDICT   INCONCLUSIVE</i> — the central 90% resampling interval crosses zero</pre>
+    </div>
+    <div class="plot">
+      <div class="lbl"><span>Graphique · validation_mc</span></div>
+      <img src="../img/v2-mc-distribution.png" alt="Graphique · validation_mc" loading="lazy">
+      <div class="cap">Histogramme des 10 000 chemins rééchantillonnés et position de l'écart réalisé, au 49,9ᵉ percentile de sa propre distribution.</div>
+    </div>
+    <h3>Concentration de l'écart : sous le seuil</h3>
+    <p class="small">Ce test décompose l'écart cumulé pour dire s'il repose sur quelques fenêtres. Il refuse ici, et son refus est le chiffre le plus honnête de la page : l'écart cumulé en log vaut <b>+0,0378</b> contre un requis de <b>+0,0389</b>, soit un quart de sigma de l'enveloppe d'une marche sans dérive de même dispersion. L'écart est positif, mais il passe à un cheveu sous le seuil à partir duquel une part de ce total voudrait dire quelque chose.</p>
+    <div class="raw">
+      <div class="lbl"><span>Sortie brute · validation_edge_concentration</span></div>
+<pre><i>VERDICT   NOT_APPLICABLE</i> — the cumulative edge is not positive enough,
+          so a share of it has no meaning.
+<b>Cumulative log edge +0.0378 against a required +0.0389</b> (0.25 sigma of the
+0.1557 one-sigma envelope of a driftless walk with the same per-period
+dispersion). Shares of a total near zero explode, and shares of a negative
+total change sign; neither is published.</pre>
+    </div>
+    <h3>Sharpe déflaté : indisponible, et pour une bonne raison</h3>
+    <p class="small">Le Sharpe déflaté corrige du nombre d'essais : il compare le Sharpe observé à celui que le meilleur de N stratégies nulles atteindrait par chance. Le compteur n'enregistre que <b>quatre essais</b>, et c'est fidèle à ce qui s'est passé : cette stratégie n'a pas été conçue ni optimisée, elle a été prise telle quelle dans un manuel et passée dans la chaîne de tests. Il n'y a donc presque rien à corriger. Mais la déflation a besoin de la <b>dispersion</b> des Sharpe entre essais, et quatre valeurs n'en donnent pas une estimation, seulement du bruit. L'outil refuse plutôt que de prétendre corriger.</p>
+    <div class="raw">
+      <div class="lbl"><span>Sortie brute · validation_dsr</span></div>
+<pre>trials counted     4 distinct configurations = 4 trials
+<b>effective trials   1.6 (measured on 4 decision series)</b>
+deflated sharpe    <i>UNAVAILABLE</i>
+why                only 4 trial(s) carry a Sharpe on this dataset; the deflated
+                   Sharpe needs the DISPERSION across trials and 10 is the floor
+                   below which that variance is noise.
+<b>honesty            Runs executed before the counter existed are not counted: any
+                   deflation is a LOWER BOUND on the correction.</b></pre>
+    </div>
+    <p class="small">La ligne <i>effective trials 1.6</i> dit la même chose autrement. Le compteur ne compte pas seulement : il mesure la corrélation entre les séries de décisions produites par chaque essai. Mes quatre variantes n'en valent que 1,6 d'indépendantes, parce qu'elles décident presque la même chose. C'est ce mécanisme qui empêche un balayage de grille de gonfler le dénominateur avec des essais qui n'en sont pas.</p>
+    <div class="plot">
+      <div class="lbl"><span>Sortie · trial_history</span></div>
+      <img src="../img/v2-trial-history.png" alt="Sortie · trial_history" loading="lazy">
+      <div class="cap">Douze lignes de diff entre essais consécutifs : deux changements de réserve de trésorerie, et des changements de fonction de décision détectés par l'empreinte de son bytecode et de sa source. Aucune de ces lignes n'a été déclarée à la main.</div>
+    </div>
+    <h3>Préinscription : le registre a enregistré l'accès</h3>
+    <p class="small">Le gel de configuration existe : document immuable, empreinte de la configuration et des données, registre d'accès en append-only. Il n'a pas été exercé <b>avant</b> ce run. Le registre enregistre donc les accès à l'échantillon réservé comme non préinscrits, et aucun des résultats hors échantillon de cette page ne peut être présenté comme une confirmation scellée. C'est l'outil qui me l'oppose, et il a raison.</p>
+    <div class="plot">
+      <div class="lbl"><span>Sortie · freeze_configuration</span></div>
+      <img src="../img/v2-freeze-declaration.png" alt="Sortie · freeze_configuration" loading="lazy">
+      <div class="cap">La déclaration de gel telle que l'outil l'imprime : identité, filiation, empreinte de configuration.</div>
+    </div>
+    <div class="plot">
+      <div class="lbl"><span>Sortie · frozen_configuration_status</span></div>
+      <img src="../img/v2-freeze-status.png" alt="Sortie · frozen_configuration_status" loading="lazy">
+      <div class="cap">Le statut après accès : la fenêtre réservée est marquée consommée, avec la date et le numéro d'accès.</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="shead"><span class="snum">07</span><span class="stitle">Reproductibilité</span></div>
+    <h2>Ce que chaque chiffre suppose</h2>
+    <p class="small">Toutes les mesures portent sur la même série : l'equity du portefeuille nette de la dette, en base journalière. Mesurer sur les rendements par trade ignore la taille des positions, compose des positions simultanées comme si elles s'étaient succédé, et n'écrit rien tant qu'une position reste ouverte. L'outil refuse de calculer un risque sur une autre série que le porteur du mode.</p>
+    <p class="small">Les deux baselines sont <b>rejouées, pas calculées</b>. Elles traversent la même machinerie comptable que la stratégie et paient les mêmes frais, dans les mêmes devises. Seule la règle de pondération change. Comparer une stratégie nette de frais à une baseline brute est la façon la plus courante de fabriquer un écart qui n'existe pas.</p>
+    <p class="small">Le décompte des essais et les accès à l'échantillon réservé sont enregistrés en append-only. Le compteur est indexé par les <b>données</b>, pas par la stratégie : deux cents configurations essayées sur un univers gonflent le maximum de Sharpe qu'on y trouvera, quel que soit le nom donné ensuite à la stratégie. Il ne se remet jamais à zéro.</p>
+  </section>
+
+  <section>
+    <div class="shead"><span class="snum">08</span><span class="stitle">Limites</span></div>
+    <h2>Ce que cette note ne permet pas de conclure</h2>
+    <p class="small"><b>Vingt-deux décisions.</b> Toute affirmation sur la taille d'échantillon appartient aux décisions, pas aux 2 298 barres. À ce compte, un effet d'un à deux points par an ne sera jamais établi statistiquement. Le rôle de ces tests n'est pas d'établir un écart, c'est de refuser ceux qui n'en sont pas.</p>
+    <p class="small"><b>Un rendement qui n'est pas investissable.</b> 1,43 % par an sur neuf ans pour un drawdown de 20 %, et le panier lui-même n'a pas battu le cash sur l'échantillon. La règle fait mieux que le panier ; le panier ne méritait pas d'être détenu.</p>
+    <p class="small"><b>Un régime, et il est favorable à ce genre de règle.</b> De 2014 à 2021 le panier passe l'essentiel du temps en drawdown sans tendance nette. C'est un régime où une règle qui cible la baisse paraît bonne, et le hors échantillon, plus haussier, le confirme en sens inverse. Le 1/N a subi le même régime, donc la comparaison relative tient ; mais la conclusion ne se transporte pas telle quelle à un marché en tendance.</p>
+    <p class="small"><b>Le pool cross-asset est déséquilibré.</b> Quatorze des vingt actifs éligibles sont des cryptomonnaies, parce que ce sont les seuls dont le calendrier couvre exactement celui du run. L'écart médian de +2,34 % mesure donc la généralisation vers des univers à forte dispersion. L'écart d'équivalent certain de +13,89 % est encore plus marqué par ce biais : il vient surtout de la volatilité que la règle retire à des paniers crypto, et ne se transporte pas à un univers ordinaire.</p>
+    <p class="small"><b>Les coûts d'exécution des univers tirés sont génériques.</b> Les déclarations par actif de l'univers d'origine ne sont pas transposables et sont retirées ; chaque ticker tiré est facturé au tarif de la place. Au premier ordre cela s'annule, puisque la stratégie et sa référence 1/N subissent le même traitement sur le même panier. Au second ordre non : la règle optimisée tourne davantage que l'équipondération, donc un coût sous-estimé flatte la jambe qui tourne le plus.</p>
+    <p class="small"><b>Biais de survie non vérifié.</b> L'outil le dit lui-même : il prend le fichier d'univers tel qu'il est fourni et ne peut pas garantir qu'il en est exempt. Un pool de noms cotés aujourd'hui flatte toute stratégie qu'on y tire, référence 1/N comprise.</p>
+    <p class="small"><b>Robustesse au décalage.</b> Les chiffres viennent d'un run dont la fenêtre de décision est raccourcie d'une barre au-delà du délai d'exécution déjà appliqué. Sans cette marge l'écart en échantillon est de +0,46 point au lieu de +0,42. L'écart ne vit donc pas dans la dernière barre disponible.</p>
+    <div class="note">
+      <p>Cette note et la note 1 ne se contredisent pas. La première portait sur une optimisation de la durée de drawdown, celle-ci sur une optimisation du Sharpe, et les univers diffèrent. Ce qu'on peut en dire ensemble tient en une phrase : l'écart entre une règle optimisée et l'équipondération dépend de la dispersion de l'univers et du régime, ce qui est le mécanisme décrit par DeMiguel, Garlappi et Uppal (2009). Ce n'est pas une réplication de leur travail, mais c'est la même frontière.</p>
+    </div>
+  </section>
+
+  <footer>
+    <div>Arnaud Barbier · moteur, couche de validation, et cette note</div>
+    <div><a href="../validation/">Lire la note de validation 1 →</a>
+         &nbsp;·&nbsp;
+         <a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine">Source →</a></div>
+  </footer>
+
+  </div>
+  <div class="wrap lang-en">
+  <header class="mast">
+    <div class="mast-top">
+      <div>Arnaud Barbier · research note</div>
+      <div>Multi-asset backtest engine · 4 September 2026</div>
+    </div>
+
+    <h1>Another weighting rule, and five more tests.</h1>
+
+    <p class="lede">This note applies the validation layer to a Sharpe ratio optimisation. Above all it adds <b>five tests the first note did not have</b>: a trial counter keyed by the data, a deflated Sharpe, an edge concentration measure, a distribution of edges across universes never seen, and a preregistration ledger. The strategy under test serves as the test bench.</p>
+
+    <div class="subject">
+      <div class="lbl">What was tested</div>
+      <p>A rolling mean-variance optimisation, long-only, capped at 35 % per name, re-estimated over 100 bars and rebalanced every 100. Five assets: Brent, DAX, GBP/USD, S&amp;P 500, gold. Daily bars from May 2013 to June 2022, that is 2,298 bars and 22 decisions; the last 30 % of the history serves as the held-out sample, 1,126 bars.</p>
+      <p>On top of it, the tested policy: 30 % cash reserve (20 % dynamic, 10 % fixed), 2 % management fee accrued yearly and paid quarterly, 5 % performance fee with a high-water mark, spot execution costs charged inside the run. Capital compounds: gains stay in the portfolio and the base the weights apply to follows equity. Performance is measured on equity net of debt, never on trade returns.</p>
+      <p><b>A deliberate margin:</b> the estimation window stops one bar earlier than the execution delay would require. Section 08 quantifies what it costs.</p>
+    </div>
+  </header>
+
+  <section>
+    <div class="shead"><span class="snum">01</span><span class="stitle">The tests</span></div>
+    <h2>The layer holds fourteen tests, in five categories</h2>
+    <p class="small">Every table on this page is an output of the validation layer, reproduced as printed; the paragraphs are my reading. The uppercase verdicts are the tool's own, not mine.</p>
+    <p class="small">The table lists them <b>all</b>, not only the ones that ran here. The two columns that matter are the category, which says what question the test answers, and the status, which says what it answered on this run. The chain runs in an imposed order: everything that does not consume the held-out sample comes first.</p>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Category</th><th>Test</th><th>What it asks</th><th>On this run</th></tr></thead>
+        <tbody>
+          <tr><td>Integrity</td><td><code>validation_triage</code></td><td>Which series is measured, and how many observations?</td><td>Prerequisite</td></tr>
+          <tr><td></td><td><code>validation_covariance</code></td><td>Does the covariance estimator predict anything?</td><td>Not run</td></tr>
+          <tr><td>Detection</td><td><code>validation_baseline</code></td><td>Is there a gap against equal weighting?</td><td>In sample yes, out of sample no</td></tr>
+          <tr><td></td><td><code>validation_null_leverage</code></td><td>Would holding less of the basket have done?</td><td>Depends on the rate</td></tr>
+          <tr><td></td><td><code>validation_null_sizing</code></td><td>Does the gap come from weights or from sizing?</td><td>Not run</td></tr>
+          <tr><td></td><td><code>validation_purchasing_power</code></td><td>Is the gap produced where it helps?</td><td>Partial</td></tr>
+          <tr><td></td><td><code>validation_mc</code></td><td>What dispersion is compatible with this gap?</td><td>Inconclusive</td></tr>
+          <tr><td>Retention</td><td><code>validation_oos_retention</code></td><td>Does the gap survive the held-out period?</td><td>Not retained</td></tr>
+          <tr><td></td><td><code>validation_cross_asset</code></td><td>Does the gap survive universes never seen?</td><td class="hl">Generalises</td></tr>
+          <tr><td></td><td><code>validation_edge_concentration</code></td><td>Does the gap rest on a few windows?</td><td>Below threshold</td></tr>
+          <tr><td>Overfitting</td><td><code>trial_counter_status</code></td><td>How many distinct configurations were tried?</td><td>4 trials, 1.6 effective</td></tr>
+          <tr><td></td><td><code>validation_dsr</code></td><td>Does the Sharpe survive the trial count?</td><td>Unavailable</td></tr>
+          <tr><td>Governance</td><td><code>freeze_configuration</code></td><td>Is the configuration preregistered before the holdout?</td><td>Not exercised</td></tr>
+          <tr class="total"><td></td><td><code>validation_reverse_stress</code></td><td>What shock crosses a threshold that matters?</td><td>Dedicated page</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="shead"><span class="snum">02</span><span class="stitle">In sample</span></div>
+    <h2>In sample, the rule beats both references</h2>
+    <p class="small">Three columns, three questions. <b>1/N absolute</b> is the equal-weighted basket with no cash machinery at all: what an investor could have held with no model. <b>1/N matched</b> keeps every piece of machinery and swaps only the weighting rule. The strategy comes out ahead of both, which is the least frequent case in the literature.</p>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Annualised</th><th>Strategy</th><th>1/N absolute</th><th>1/N matched</th><th>Gap vs absolute</th></tr></thead>
+        <tbody>
+          <tr><td>Return (CAGR)</td><td>1.43 %</td><td>1.01 %</td><td>0.61 %</td><td class="hl">+0.42 pt</td></tr>
+          <tr><td>Volatility</td><td>8.61 %</td><td>12.15 %</td><td>9.33 %</td><td>−3.54 pt</td></tr>
+          <tr><td>Maximum drawdown</td><td>−20.47 %</td><td>−36.77 %</td><td>−28.94 %</td><td>+16.30 pt</td></tr>
+          <tr><td>Calmar</td><td>0.07</td><td>0.03</td><td>0.02</td><td>+0.04</td></tr>
+          <tr class="total"><td>Certainty equivalent, γ = 3</td><td>0.68 %</td><td>−0.50 %</td><td>−0.27 %</td><td class="hl">+1.17 pt</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="verdict"><div class="bar"></div><div class="txt">Verdict: adds value</div></div>
+    <div class="raw">
+      <div class="lbl"><span>Raw output · validation_baseline</span></div>
+<pre>absolute    : stripped reserve_cash_pct, fixed_cash_reserve · keeps execution
+              costs, management fee, performance fee, currencies
+matched     : every piece of machinery kept, only the weighting rule swapped
+carrier     : portfolio_equity(nav-borrowed) · basis D
+
+<i>VERDICT   ADDS_VALUE</i> — certainty equivalent higher by +1.17%/y at &#947;=3
+<b>no p-value: the allocation baseline is deterministic. This is a gap, not a test.</b></pre>
+    </div>
+    <div class="plot">
+      <div class="lbl"><span>Chart · validation_baseline</span></div>
+      <img src="../img/v2-baseline-is.png" alt="Chart · validation_baseline" loading="lazy">
+      <div class="cap">Two panels. NAV of the three series on top, their drawdown below. In the lower panel the strategy curve stays above the other two throughout; its deepest trough reaches −20.47 % against −36.77 % for 1/N absolute.</div>
+    </div>
+    <div class="two">
+      <div>
+        <h3>Where the gap appears</h3>
+        <p class="small">The optimised objective is the Sharpe ratio. The widest gap does not appear on volatility, which goes from 12.15 % to 8.61 %, but on maximum drawdown, which goes from −36.77 % to −20.47 %, that is 16.30 points. Return gains 0.42 points against 1/N absolute and 0.82 against 1/N matched.</p>
+      </div>
+      <div>
+        <h3>What the cash takes</h3>
+        <p class="small">Moving from 1/N absolute to 1/N matched isolates the machinery on the reference leg: 1.01 % becomes 0.61 %, that is 0.40 points. On the strategy leg the same removal is worth 0.98 points.</p>
+      </div>
+    </div>
+    <h3>The rule alone, with no cash on either side</h3>
+    <p class="small">The grid crosses the two levers. Removing the machinery from both legs leaves the weighting rule against equal weighting, both fully invested: <b>2.41 % against 1.01 %, that is +1.41 points</b>. This is the most direct comparison between the two rules. The machinery costs 0.98 points to the strategy and 0.40 to equal weighting; the 0.58 point difference between those two costs is the interaction term the grid isolates.</p>
+    <div class="tw">
+      <table>
+        <thead><tr><th></th><th>Machinery on</th><th>Machinery off</th><th>Machinery effect</th></tr></thead>
+        <tbody>
+          <tr><td>Strategy weights</td><td>1.43 %</td><td>2.41 %</td><td>−0.98 pt</td></tr>
+          <tr><td>Equal weight</td><td>0.61 %</td><td>1.01 %</td><td>−0.40 pt</td></tr>
+          <tr><td>Interaction</td><td></td><td></td><td>−0.58 pt</td></tr>
+          <tr class="total"><td>Weights effect</td><td>+0.82 pt</td><td class="hl">+1.41 pt</td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>The cash is available, it is almost never deployed</h3>
+    <p class="small">Across 16 episodes where the basket lost more than 10 %, the reserve was deployed in only <b>4</b>. It moves 24 times in total, so the mechanism works; it simply does not fire where it counts. And the state-weighted mean return falls from +0.0071 % unweighted to <b>−0.0017 % at γ = 3</b>: the gap is produced in states where it is worth less, not in the ones a risk-averse investor would pay for.</p>
+    <div class="raw">
+      <div class="lbl"><span>Raw output · validation_purchasing_power</span></div>
+<pre>deployable cash = cash_value - cash_fixed_reserve - cash_vault
+benchmark drawdown episodes below -10%        16
+<b>episodes where cash was deployed             4  (25%)</b>
+deployment episodes                           24
+mean cash fraction of NAV                     19.3%
+Merton indifference &#947; for this cash level   n/a — the benchmark did not
+                                              beat cash on this sample
+
+<i>VERDICT   PARTIAL</i> — deployed in only 4 of 16 drawdown episodes (25%)
+          — the option is exercised intermittently</pre>
+    </div>
+    <div class="plot">
+      <div class="lbl"><span>Chart · validation_purchasing_power</span></div>
+      <img src="../img/v2-purchasing-power.png" alt="Chart · validation_purchasing_power" loading="lazy">
+      <div class="cap">Median deployable cash of 19.7 % of NAV, 27.3 % at the basket's deepest trough. Sixteen episodes where the basket loses more than 10 %, deployment in four of them, twenty-four deployments in total over the period.</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="shead"><span class="snum">03</span><span class="stitle">Out of sample</span></div>
+    <h2>On the held-out period, the order reverses</h2>
+    <p class="small">The same three columns, over the 1,126 bars never looked at during construction. The basket rises markedly faster over that period, and the strategy does not keep up.</p>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Annualised</th><th>Strategy</th><th>1/N absolute</th><th>1/N matched</th><th>Gap vs absolute</th></tr></thead>
+        <tbody>
+          <tr><td>Return (CAGR)</td><td>1.58 %</td><td>4.02 %</td><td>2.08 %</td><td class="hl">−2.44 pt</td></tr>
+          <tr><td>Volatility</td><td>10.40 %</td><td>13.35 %</td><td>10.23 %</td><td>−2.95 pt</td></tr>
+          <tr><td>Maximum drawdown</td><td>−23.14 %</td><td>−27.00 %</td><td>−21.36 %</td><td>+3.86 pt</td></tr>
+          <tr><td>Calmar</td><td>0.07</td><td>0.15</td><td>0.10</td><td>−0.08</td></tr>
+          <tr class="total"><td>Certainty equivalent, γ = 3</td><td>0.48 %</td><td>2.17 %</td><td>1.02 %</td><td class="hl">−1.69 pt</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="verdict"><div class="bar"></div><div class="txt">Verdict: adds nothing</div></div>
+    <p class="small">In sample the rule was worth +0.82 points against 1/N matched; out of sample it is worth −0.50 points. The cash machinery, which cost 0.40 points in sample, costs <b>1.93</b> here: over a period when the basket rises, holding back a fifth of the capital costs far more than over a flat one. A good part of the reversal comes from there, not from the weighting rule.</p>
+    <div class="raw">
+      <div class="lbl"><span>Raw output · validation_baseline (oos)</span></div>
+<pre><i>VERDICT   ADDS_NOTHING</i> — certainty equivalent lower by -1.69%/y at &#947;=3
+          — equal_weight absolute does better for a risk-averse investor
+<b>no p-value: the allocation baseline is deterministic. This is a gap, not a test.</b></pre>
+    </div>
+    <div class="plot">
+      <div class="lbl"><span>Chart · validation_baseline (oos)</span></div>
+      <img src="../img/v2-baseline-oos.png" alt="Chart · validation_baseline (oos)" loading="lazy">
+      <div class="cap">The same three series over the 1,126 held-out bars. 1/N absolute ends at 4.02 % annualised, the strategy at 1.58 %. Reading the curves, 1/N is ahead about half the time, the strategy about four times out of ten, and the two track each other the rest of the time.</div>
+    </div>
+    <div class="plot">
+      <div class="lbl"><span>Output · validation_oos_retention</span></div>
+      <img src="../img/v2-oos-retention.png" alt="Output · validation_oos_retention" loading="lazy">
+      <div class="cap">The retention table compares the in-sample and out-of-sample gaps, metric by metric. It does not compute a retention ratio when the two gaps do not share a sign, and says so in the reading column.</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="shead"><span class="snum">04</span><span class="stitle">The arithmetic refutation</span></div>
+    <h2>Would holding less of the basket have done the job?</h2>
+    <p class="small">Every strategy that trails its benchmark makes the same defence: it gives up return for less risk. The refutation needs no model. An investor who wants less risk holds a fraction of the basket and keeps the rest in cash, landing on the line from cash to the basket. A strategy below that line is dominated. The risk-free rate is <b>swept, not assumed</b>: it is the one input nobody can settle after the fact.</p>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Risk-free rate</th><th>Fraction of basket</th><th>Blend</th><th>Gap at equal vol</th><th>Gap at equal drawdown</th></tr></thead>
+        <tbody>
+          <tr><td>0.00 %</td><td>0.708</td><td>0.87 %</td><td class="hl">+0.56 pt</td><td>+0.72 pt</td></tr>
+          <tr><td>1.00 %</td><td>0.708</td><td>1.16 %</td><td class="hl">+0.27 pt</td><td>+0.24 pt</td></tr>
+          <tr><td>2.00 %</td><td>0.708</td><td>1.45 %</td><td>−0.02 pt</td><td>−0.13 pt</td></tr>
+          <tr class="total"><td>4.00 %</td><td>0.708</td><td>2.03 %</td><td>−0.60 pt</td><td>−0.78 pt</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="verdict"><div class="bar"></div><div class="txt">Verdict: above the line up to a 2 % risk-free rate, dominated beyond</div></div>
+    <p class="small">The sign flips just under 2 %, at the same place on both matchings, which rules out an artefact. Over the period the realised short rate stayed below that threshold, which puts the strategy on the right side; the margin is 0.27 points at 1 %. Note that the tool cannot compute Merton's indifference γ for this cash level: <b>the basket itself did not beat cash over the sample</b>.</p>
+    <div class="raw">
+      <div class="lbl"><span>Raw output · validation_null_leverage</span></div>
+<pre>risk_free   w (vol-matched)   blend CAGR   strategy CAGR   gap at equal vol
+   0.00%             0.708        0.87%           1.43%          <i>+0.56 pt</i>
+   1.00%             0.708        1.16%           1.43%          <i>+0.27 pt</i>
+   2.00%             0.708        1.45%           1.43%          -0.02 pt
+   4.00%             0.708        2.03%           1.43%          -0.60 pt</pre>
+    </div>
+    <div class="plot">
+      <div class="lbl"><span>Chart · validation_null_leverage</span></div>
+      <img src="../img/v2-leverage-null.png" alt="Chart · validation_null_leverage" loading="lazy">
+      <div class="cap">The line from cash to the basket, drawn at the four swept risk-free rates, and the position of the strategy against each.</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="shead"><span class="snum">05</span><span class="stitle">Eighty universes</span></div>
+    <h2>What the edge becomes on unseen baskets</h2>
+    <p class="small">The previous test covers one basket and one period. This one replays the recorded configuration, without changing a single parameter, across <b>80 baskets of five assets drawn from an unseen pool</b>, over that same held-out period. Unseen assets over an unseen period: this is the double out-of-sample, and it consumes the held-out sample. Nineteen tickers out of twenty cover the window, one is dropped for a gap inside it.</p>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Edge against 1/N absolute</th><th>5 %</th><th>25 %</th><th>50 %</th><th>75 %</th><th>95 %</th></tr></thead>
+        <tbody>
+          <tr><td>CAGR edge</td><td>-3.62 %</td><td>+0.04 %</td><td class="hl">+2.34 %</td><td>+4.71 %</td><td>+8.54 %</td></tr>
+          <tr><td>Certainty equivalent edge, γ = 3</td><td>+7.55 %</td><td>+11.80 %</td><td>+13.89 %</td><td>+16.57 %</td><td>+18.48 %</td></tr>
+          <tr class="total"><td>Drawdown edge</td><td>+6.31 %</td><td>+8.85 %</td><td>+10.19 %</td><td>+11.39 %</td><td>+12.68 %</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="verdict"><div class="bar"></div><div class="txt">Verdict: generalises</div></div>
+    <p class="small">The original universe scores <b>−2.44 %</b>, exactly the gap measured by the out-of-sample baseline: the two tests agree. But it lands <b>rank 10 of 80, at the 11th percentile</b>. Over the same period, the same rule produces a positive edge on 75 % of the drawn baskets. What section 03 refuted is therefore not the rule, it is the basket.</p>
+    <div class="raw">
+      <div class="lbl"><span>Raw output · validation_cross_asset</span></div>
+<pre>eligible pool      19 ticker(s) cover the window; 1 dropped (gap inside window)
+draws              80 universes of 5 assets, uniform (not stratified), seed 0
+phase              oos — <b>DOUBLE OOS: unseen assets x unseen period</b>
+campaigns run      3 (registered as a diagnostic in the freeze registry)
+
+original universe  CAGR edge -2.44%  &#8594;  percentile rank 10 of 80 (11th)
+fraction of universes with a positive edge   75%
+
+<i>VERDICT   GENERALISES</i> — the median edge across 80 unseen universes is +2.34%/y
+<b>That is not the profile of a hand-picked basket.</b></pre>
+    </div>
+    <div class="plot">
+      <div class="lbl"><span>Chart · validation_cross_asset</span></div>
+      <img src="../img/v2-cross-asset.png" alt="Chart · validation_cross_asset" loading="lazy">
+      <div class="cap">Distribution of CAGR edges across the 80 drawn baskets: median +2.34 % a year, first quartile +0.04 %, fifth percentile −3.62 %, ninety-fifth +8.54 %. The original universe, at −2.44 %, falls at the 11th percentile.</div>
+    </div>
+    <p class="small">A basket chosen to flatter the strategy would sit above the 90th percentile. This one is at the 11th. That is the opposite of a selection profile, and it is the most useful reading on this page. <b>Three campaigns</b> were launched and the ledger records them: redrawing until a flattering draw appears would show up.</p>
+  </section>
+
+  <section>
+    <div class="shead"><span class="snum">06</span><span class="stitle">Refusals</span></div>
+    <h2>What the tool refused to conclude</h2>
+    <p class="small">This is the section that separates this layer from a backtester. A number that cannot be supported is not published, and the refusal is printed with its reason, in place of the number.</p>
+    <h3>Monte Carlo: inconclusive</h3>
+    <p class="small">Block bootstrap over 22 decision periods, 10,000 paths. The realised edge is +0.44 % and the bootstrap median lands on it within 0.00 % against a declared tolerance of 0.07 %: the resampling reproduces the series it resamples, which is the condition for reading anything after it. But the central 90 % interval runs from −2.59 % to +3.51 %, and <b>P(edge &gt; 0) = 59.6 %</b>.</p>
+    <div class="raw">
+      <div class="lbl"><span>Raw output · validation_mc</span></div>
+<pre>centering golden   <i>PASS</i> — bootstrap median +0.44% vs realised +0.44%,
+                   gap +0.00% against a declared tolerance of 0.07%
+
+relative CAGR      realised +0.44%   5% -2.59%   50% +0.44%   95% +3.51%
+<b>P(edge > 0)        59.6%</b>
+
+<b>WARNING</b>   LOW BLOCK COUNT — only 22 decision periods are observed.
+<i>VERDICT   INCONCLUSIVE</i> — the central 90% resampling interval crosses zero</pre>
+    </div>
+    <div class="plot">
+      <div class="lbl"><span>Chart · validation_mc</span></div>
+      <img src="../img/v2-mc-distribution.png" alt="Chart · validation_mc" loading="lazy">
+      <div class="cap">Histogram of the 10,000 resampled paths and position of the realised edge, at the 49.9th percentile of its own distribution.</div>
+    </div>
+    <h3>Edge concentration: below threshold</h3>
+    <p class="small">This test decomposes the cumulative edge to say whether it rests on a few windows. It refuses here, and its refusal is the most honest number on the page: the cumulative log edge is <b>+0.0378</b> against a required <b>+0.0389</b>, a quarter sigma of the envelope of a driftless walk with the same dispersion. The edge is positive, but it passes a hair below the threshold at which a share of that total would mean anything.</p>
+    <div class="raw">
+      <div class="lbl"><span>Raw output · validation_edge_concentration</span></div>
+<pre><i>VERDICT   NOT_APPLICABLE</i> — the cumulative edge is not positive enough,
+          so a share of it has no meaning.
+<b>Cumulative log edge +0.0378 against a required +0.0389</b> (0.25 sigma of the
+0.1557 one-sigma envelope of a driftless walk with the same per-period
+dispersion). Shares of a total near zero explode, and shares of a negative
+total change sign; neither is published.</pre>
+    </div>
+    <h3>Deflated Sharpe: unavailable, and for a good reason</h3>
+    <p class="small">The deflated Sharpe corrects for the number of trials: it compares the observed Sharpe to the one the best of N null strategies would reach by luck. The counter records only <b>four trials</b>, and that is faithful to what happened: this strategy was neither designed nor optimised, it was taken as is from a textbook and put through the test chain. So there is almost nothing to correct for. But the deflation needs the <b>dispersion</b> of the Sharpe across trials, and four values do not estimate it, they only carry noise. The tool refuses rather than pretending to correct.</p>
+    <div class="raw">
+      <div class="lbl"><span>Raw output · validation_dsr</span></div>
+<pre>trials counted     4 distinct configurations = 4 trials
+<b>effective trials   1.6 (measured on 4 decision series)</b>
+deflated sharpe    <i>UNAVAILABLE</i>
+why                only 4 trial(s) carry a Sharpe on this dataset; the deflated
+                   Sharpe needs the DISPERSION across trials and 10 is the floor
+                   below which that variance is noise.
+<b>honesty            Runs executed before the counter existed are not counted: any
+                   deflation is a LOWER BOUND on the correction.</b></pre>
+    </div>
+    <p class="small">The <i>effective trials 1.6</i> line says the same thing differently. The counter does not merely count: it measures the correlation between the decision series each trial produced. My four variants are worth only 1.6 independent ones, because they decide almost the same thing. That mechanism is what stops a grid sweep from inflating the denominator with trials that are not trials.</p>
+    <div class="plot">
+      <div class="lbl"><span>Output · trial_history</span></div>
+      <img src="../img/v2-trial-history.png" alt="Output · trial_history" loading="lazy">
+      <div class="cap">Twelve diff lines between consecutive trials: two cash reserve changes, and decision function changes detected through the fingerprint of its bytecode and source. None of these lines was declared by hand.</div>
+    </div>
+    <h3>Preregistration: the ledger recorded the access</h3>
+    <p class="small">The configuration freeze exists: an immutable document, a fingerprint of the configuration and of the data, an append-only access ledger. It was not exercised <b>before</b> this run. The ledger therefore records the held-out accesses as unpreregistered, and none of the out-of-sample results on this page can be presented as a sealed confirmation. The tool holds that against me, and it is right.</p>
+    <div class="plot">
+      <div class="lbl"><span>Output · freeze_configuration</span></div>
+      <img src="../img/v2-freeze-declaration.png" alt="Output · freeze_configuration" loading="lazy">
+      <div class="cap">The freeze declaration as the tool prints it: identity, lineage, configuration fingerprint.</div>
+    </div>
+    <div class="plot">
+      <div class="lbl"><span>Output · frozen_configuration_status</span></div>
+      <img src="../img/v2-freeze-status.png" alt="Output · frozen_configuration_status" loading="lazy">
+      <div class="cap">The status after access: the held-out window is marked consumed, with the date and access number.</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="shead"><span class="snum">07</span><span class="stitle">Reproducibility</span></div>
+    <h2>What every number assumes</h2>
+    <p class="small">Every measurement is taken on the same series: portfolio equity net of debt, on a daily basis. Measuring on trade returns ignores position size, compounds simultaneous positions as if they had followed each other, and writes nothing while a position is open. The tool refuses to compute a risk figure on any series other than the mode's carrier.</p>
+    <p class="small">Both baselines are <b>replayed, not computed</b>. They travel through the same accounting machinery as the strategy and pay the same fees, in the same currencies. Only the weighting rule changes. Comparing a strategy net of fees to a gross baseline is the most common way to manufacture an edge that does not exist.</p>
+    <p class="small">Trial counting and held-out accesses are recorded append-only. The counter is keyed by the <b>data</b>, not by the strategy: two hundred configurations tried on one universe inflate the maximum Sharpe that will be found there, whatever the strategy is renamed to afterwards. It never resets.</p>
+  </section>
+
+  <section>
+    <div class="shead"><span class="snum">08</span><span class="stitle">Limits</span></div>
+    <h2>What this note does not allow me to conclude</h2>
+    <p class="small"><b>Twenty-two decisions.</b> Any claim about sample size belongs to the decisions, not to the 2,298 bars. At that count, an effect of one to two points a year will never be established statistically. The role of these tests is not to establish an edge, it is to refuse the ones that are not.</p>
+    <p class="small"><b>A return that is not investable.</b> 1.43 % a year over nine years for a 20 % drawdown, and the basket itself did not beat cash over the sample. The rule does better than the basket; the basket did not deserve to be held.</p>
+    <p class="small"><b>One regime, and it favours this kind of rule.</b> From 2014 to 2021 the basket spends most of its time in drawdown with no clear trend. That is a regime where a downside-targeting rule looks good, and the more bullish held-out period confirms it in reverse. 1/N faced the same regime, so the relative comparison holds; but the conclusion does not transport as is to a trending market.</p>
+    <p class="small"><b>The cross-asset pool is unbalanced.</b> Fourteen of the twenty eligible assets are cryptocurrencies, because they are the only ones whose calendar exactly covers the run's. The +2.34 % median edge therefore measures generalisation towards high-dispersion universes. The +13.89 % certainty equivalent edge is even more marked by that bias: it comes mostly from the volatility the rule strips out of crypto baskets, and does not transport to an ordinary universe.</p>
+    <p class="small"><b>Execution costs on the drawn universes are generic.</b> The original universe's per-asset declarations are not transposable and are dropped; every drawn ticker is charged the venue rate. To first order this cancels, since the strategy and its 1/N reference get the same treatment on the same basket. To second order it does not: the optimised rule turns over more than equal weighting, so an understated cost flatters the leg that trades most.</p>
+    <p class="small"><b>Survivorship bias not verified.</b> The tool says so itself: it takes the universe file as given and cannot guarantee it is free of it. A pool of names listed today flatters every strategy drawn from it, the 1/N reference included.</p>
+    <p class="small"><b>Robustness to a decision lag.</b> The figures come from a run whose decision window is shortened by one bar beyond the execution delay already applied. Without that margin the in-sample gap is +0.46 points instead of +0.42. The edge therefore does not live in the last available bar.</p>
+    <div class="note">
+      <p>This note and note 1 do not contradict each other. The first covered an optimisation of drawdown duration, this one an optimisation of the Sharpe ratio, and the universes differ. What can be said from both fits in one sentence: the gap between an optimised rule and equal weighting depends on the dispersion of the universe and on the regime, which is the mechanism described by DeMiguel, Garlappi and Uppal (2009). This is not a replication of their work, but it is the same frontier.</p>
+    </div>
+  </section>
+
+  <footer>
+    <div>Arnaud Barbier · engine, validation layer, and this note</div>
+    <div><a href="../validation/">Read validation note 1 →</a>
+         &nbsp;·&nbsp;
+         <a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine">Source →</a></div>
+  </footer>
+
+  </div>
+</div>
+
+<script>
+(function () {
+  var page = document.getElementById('page');
+  var btns = document.querySelectorAll('.langbar button');
+  btns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      var lang = b.dataset.set;
+      page.setAttribute('data-lang', lang);
+      btns.forEach(function (o) {
+        o.setAttribute('aria-pressed', o.dataset.set === lang ? 'true' : 'false');
+      });
+      window.scrollTo(0, 0);
+    });
+  });
+})();
+</script>
+</body>
+</html>
