@@ -368,9 +368,7 @@ p code{font-family:var(--f-term);font-size:.88em;color:var(--sub)}
   <section>
     <div class="shead"><span class="snum">01</span><span class="stitle">Les tests</span></div>
     <h2>Quatorze contrôles répartis en cinq catégories</h2>
-    <p class="small">La couche de validation comprend quatorze tests regroupés autour de cinq questions : l'intégrité des données et des mesures, l'existence d'un écart par rapport aux références, sa conservation hors de l'échantillon utilisé pour construire la stratégie, le risque de surapprentissage et la traçabilité du processus de validation.</p>
-    <p class="small">Les tableaux reproduits dans cette note correspondent directement aux sorties de l'outil. Certains tests ne sont pas exécutés sur ce run lorsque les données ou les conditions nécessaires ne sont pas réunies.</p>
-    <p class="small">L'ordre d'exécution est également contraint : les contrôles qui peuvent être réalisés sans utiliser l'échantillon réservé sont effectués avant les tests hors échantillon.</p>
+    <p class="small">La couche de validation comprend quatorze tests regroupés autour de cinq questions : l'intégrité des données et des mesures, l'existence d'un écart par rapport aux références, sa conservation hors de l'échantillon utilisé pour construire la stratégie, le risque de surapprentissage et la traçabilité du processus de validation. Les tableaux reproduits dans cette note correspondent directement aux sorties de l'outil. Certains tests ne sont pas exécutés sur ce run lorsque les données ou les conditions nécessaires ne sont pas réunies. L'ordre d'exécution est également contraint : les contrôles qui peuvent être réalisés sans utiliser l'échantillon réservé sont effectués avant les tests hors échantillon.</p>
     <div class="tw">
       <table>
         <thead><tr><th>Catégorie</th><th>Test</th><th>Ce qu'il demande</th><th>Sur ce run</th></tr></thead>
@@ -397,10 +395,7 @@ p code{font-family:var(--f-term);font-size:.88em;color:var(--sub)}
   <section>
     <div class="shead"><span class="snum">02</span><span class="stitle">En échantillon</span></div>
     <h2>Comparaison avec les deux références</h2>
-    <p class="small">La stratégie est comparée à deux versions de l'équipondération.</p>
-    <p class="small">Le <b>1/N absolu</b> correspond à un portefeuille équipondéré qui ne reprend pas la politique de réserve de trésorerie de la stratégie.</p>
-    <p class="small">Le <b>1/N apparié</b> conserve au contraire la même infrastructure de portefeuille : trésorerie, frais, devises et règles comptables, et remplace uniquement la règle de pondération par une équipondération.</p>
-    <p class="small">Cette double référence permet de distinguer plus facilement l'effet de la règle d'allocation de celui des autres mécanismes du portefeuille.</p>
+    <p class="small">Les deux références sont définies en tête de page. Le tableau ci-dessous les compare à la stratégie sur l'échantillon complet.</p>
     <div class="tw">
       <table>
         <thead><tr><th>Annualisé</th><th>Stratégie</th><th>1/N absolu</th><th>1/N apparié</th><th>Écart vs absolu</th></tr></thead>
@@ -414,9 +409,7 @@ p code{font-family:var(--f-term);font-size:.88em;color:var(--sub)}
       </table>
     </div>
     <h3>Résultat du test de baseline</h3>
-    <p class="small">Sur l'échantillon complet présenté ici, la stratégie affiche un CAGR de 1,43 %, contre 1,01 % pour le 1/N absolu et 0,61 % pour le 1/N apparié.</p>
-    <p class="small">Sa volatilité annualisée est également inférieure à celle du 1/N absolu : 8,61 % contre 12,15 %. Le drawdown maximal passe de −36,77 % pour cette référence à −20,47 % pour la stratégie.</p>
-    <p class="small">Avec un coefficient d'aversion au risque γ = 3, l'équivalent certain ressort à 0,68 % pour la stratégie, contre −0,50 % pour le 1/N absolu.</p>
+    <p class="small">Sur l'échantillon complet présenté ici, la stratégie affiche un CAGR de 1,43 %, contre 1,01 % pour le 1/N absolu et 0,61 % pour le 1/N apparié. Sa volatilité annualisée est également inférieure à celle du 1/N absolu : 8,61 % contre 12,15 %. Le drawdown maximal passe de −36,77 % pour cette référence à −20,47 % pour la stratégie. Avec un coefficient d'aversion au risque γ = 3, l'équivalent certain ressort à 0,68 % pour la stratégie, contre −0,50 % pour le 1/N absolu.</p>
     <p class="small">Le test de baseline classe donc l'écart comme positif sur cet échantillon. Il ne s'agit cependant pas d'un test statistique : la baseline étant déterministe, aucun niveau de significativité n'est associé à cette comparaison.</p>
     <div class="raw">
       <div class="lbl"><span>Sortie brute · validation_baseline</span></div>
@@ -434,17 +427,11 @@ carrier     : portfolio_equity(nav-borrowed) · basis D
       <div class="cap">Le graphique reprend les trois séries de NAV et leurs drawdowns respectifs. Sur cette période, le drawdown de la stratégie reste inférieur à celui du 1/N absolu, avec un point bas à −20,47 % contre −36,77 %.</div>
     </div>
     <h3>Décomposition de l'écart</h3>
-    <p class="small">L'objectif utilisé par la règle d'allocation est le ratio de Sharpe. Les différences observées ne portent cependant pas uniquement sur la volatilité.</p>
-    <p class="small">Par rapport au 1/N absolu, la volatilité passe de 12,15 % à 8,61 %, tandis que le drawdown maximal passe de −36,77 % à −20,47 %. Le CAGR augmente de 0,42 point.</p>
-    <p class="small">Par rapport au 1/N apparié, qui conserve la même politique de trésorerie, l'écart de CAGR atteint 0,82 point.</p>
+    <p class="small">L'objectif utilisé par la règle d'allocation est le ratio de Sharpe. Les différences observées ne portent cependant pas uniquement sur la volatilité. Par rapport au 1/N absolu, la volatilité passe de 12,15 % à 8,61 %, tandis que le drawdown maximal passe de −36,77 % à −20,47 %. Le CAGR augmente de 0,42 point. Par rapport au 1/N apparié, qui conserve la même politique de trésorerie, l'écart de CAGR atteint 0,82 point.</p>
     <h3>Effet de la politique de trésorerie</h3>
-    <p class="small">La comparaison entre les deux versions du 1/N permet d'observer l'effet de la machinerie de portefeuille indépendamment de la règle d'optimisation.</p>
-    <p class="small">Le CAGR du 1/N passe de 1,01 % dans sa version absolue à 0,61 % lorsque la politique de trésorerie est ajoutée, soit un écart de −0,40 point.</p>
-    <p class="small">Sur la stratégie, le même mécanisme représente un écart de −0,98 point entre la version avec et sans cette machinerie.</p>
+    <p class="small">La comparaison entre les deux versions du 1/N permet d'observer l'effet de la machinerie de portefeuille indépendamment de la règle d'optimisation. Le CAGR du 1/N passe de 1,01 % dans sa version absolue à 0,61 % lorsque la politique de trésorerie est ajoutée, soit un écart de −0,40 point. Sur la stratégie, le même mécanisme représente un écart de −0,98 point entre la version avec et sans cette machinerie.</p>
     <h3>Effet propre de la règle de pondération</h3>
-    <p class="small">Une seconde comparaison retire la politique de trésorerie des deux portefeuilles.</p>
-    <p class="small">Dans cette configuration, la stratégie pleinement investie affiche un CAGR de 2,41 %, contre 1,01 % pour l'équipondération pleinement investie, soit un écart de +1,41 point.</p>
-    <p class="small">Lorsque la machinerie est active, cet écart est ramené à +0,82 point. La différence entre ces deux écarts correspond à l'interaction entre la règle de pondération et le fonctionnement de la trésorerie.</p>
+    <p class="small">Une seconde comparaison retire la politique de trésorerie des deux portefeuilles. Dans cette configuration, la stratégie pleinement investie affiche un CAGR de 2,41 %, contre 1,01 % pour l'équipondération pleinement investie, soit un écart de +1,41 point. Lorsque la machinerie est active, cet écart est ramené à +0,82 point. La différence entre ces deux écarts correspond à l'interaction entre la règle de pondération et le fonctionnement de la trésorerie.</p>
     <div class="tw">
       <table>
         <thead><tr><th></th><th>Machinerie active</th><th>Machinerie retirée</th><th>Effet de la machinerie</th></tr></thead>
@@ -457,10 +444,7 @@ carrier     : portfolio_equity(nav-borrowed) · basis D
       </table>
     </div>
     <h3>Utilisation de la trésorerie disponible</h3>
-    <p class="small">La réserve dynamique peut être mobilisée au cours du run, mais son utilisation ne coïncide que partiellement avec les périodes de forte baisse du benchmark.</p>
-    <p class="small">Sur 16 épisodes au cours desquels le panier perd plus de 10 %, un déploiement de trésorerie est observé dans 4 cas. Au total, 24 épisodes de déploiement sont enregistrés sur la période.</p>
-    <p class="small">La trésorerie déployable représente en moyenne 19,3 % de la NAV.</p>
-    <p class="small">Le test <code>validation_purchasing_power</code> classe donc le mécanisme comme partiel : la réserve est effectivement utilisée, mais elle n'est pas systématiquement mobilisée pendant les épisodes de drawdown identifiés par le test.</p>
+    <p class="small">La réserve dynamique peut être mobilisée au cours du run, mais son utilisation ne coïncide que partiellement avec les périodes de forte baisse du benchmark. Sur 16 épisodes au cours desquels le panier perd plus de 10 %, un déploiement de trésorerie est observé dans 4 cas. Au total, 24 épisodes de déploiement sont enregistrés sur la période. La trésorerie déployable représente en moyenne 19,3 % de la NAV. Le test <code>validation_purchasing_power</code> classe donc le mécanisme comme partiel : la réserve est effectivement utilisée, mais elle n'est pas systématiquement mobilisée pendant les épisodes de drawdown identifiés par le test.</p>
     <div class="raw">
       <div class="lbl"><span>Sortie brute · validation_purchasing_power</span></div>
 <pre>deployable cash = cash_value - cash_fixed_reserve - cash_vault
@@ -484,8 +468,7 @@ Merton indifference &#947; for this cash level   n/a — the benchmark did not
   <section>
     <div class="shead"><span class="snum">03</span><span class="stitle">Hors échantillon</span></div>
     <h2>Résultats sur la période réservée</h2>
-    <p class="small">Les mêmes comparaisons sont ensuite répétées sur les 1 126 barres mises de côté pendant la construction de la stratégie.</p>
-    <p class="small">Cette période présente une dynamique différente : le panier équipondéré progresse davantage que sur l'échantillon précédent.</p>
+    <p class="small">Les mêmes comparaisons sont ensuite répétées sur les 1 126 barres mises de côté pendant la construction de la stratégie. Cette période présente une dynamique différente : le panier équipondéré progresse davantage que sur l'échantillon précédent.</p>
     <div class="tw">
       <table>
         <thead><tr><th>Annualisé</th><th>Stratégie</th><th>1/N absolu</th><th>1/N apparié</th><th>Écart vs absolu</th></tr></thead>
@@ -498,12 +481,8 @@ Merton indifference &#947; for this cash level   n/a — the benchmark did not
         </tbody>
       </table>
     </div>
-    <p class="small">Sur cette période, la stratégie affiche un CAGR de 1,58 %, contre 4,02 % pour le 1/N absolu et 2,08 % pour le 1/N apparié.</p>
-    <p class="small">La volatilité reste inférieure à celle du 1/N absolu, avec 10,40 % contre 13,35 %, mais l'écart de rendement devient négatif.</p>
-    <p class="small">L'équivalent certain à γ = 3 s'établit à 0,48 % pour la stratégie, contre 2,17 % pour le 1/N absolu. Le test de baseline ne conserve donc pas l'écart positif observé en échantillon.</p>
-    <p class="small">L'écart entre la stratégie et le 1/N apparié passe de +0,82 point en échantillon à −0,50 point hors échantillon.</p>
-    <p class="small">La politique de trésorerie joue également un rôle plus important sur cette période. L'écart entre les deux versions du 1/N atteint 1,93 point, contre 0,40 point précédemment. Sur une période davantage orientée à la hausse, conserver une fraction importante du portefeuille en trésorerie réduit mécaniquement la participation à cette hausse.</p>
-    <p class="small">Cette décomposition montre que la différence hors échantillon ne provient pas uniquement de la règle de pondération.</p>
+    <p class="small">Sur cette période, la stratégie affiche un CAGR de 1,58 %, contre 4,02 % pour le 1/N absolu et 2,08 % pour le 1/N apparié. La volatilité reste inférieure à celle du 1/N absolu, avec 10,40 % contre 13,35 %, mais l'écart de rendement devient négatif. L'équivalent certain à γ = 3 s'établit à 0,48 % pour la stratégie, contre 2,17 % pour le 1/N absolu. Le test de baseline ne conserve donc pas l'écart positif observé en échantillon. L'écart entre la stratégie et le 1/N apparié passe de +0,82 point en échantillon à −0,50 point hors échantillon.</p>
+    <p class="small">La politique de trésorerie joue également un rôle plus important sur cette période. L'écart entre les deux versions du 1/N atteint 1,93 point, contre 0,40 point précédemment. Sur une période davantage orientée à la hausse, conserver une fraction importante du portefeuille en trésorerie réduit mécaniquement la participation à cette hausse. Cette décomposition montre que la différence hors échantillon ne provient pas uniquement de la règle de pondération.</p>
     <div class="raw">
       <div class="lbl"><span>Sortie brute · validation_baseline (oos)</span></div>
 <pre><i>VERDICT   ADDS_NOTHING</i> — certainty equivalent lower by -1.69%/y at &#947;=3
@@ -525,9 +504,7 @@ Merton indifference &#947; for this cash level   n/a — the benchmark did not
   <section>
     <div class="shead"><span class="snum">04</span><span class="stitle">Portefeuille partiellement investi</span></div>
     <h2>Une réduction du risque par simple désinvestissement produit-elle le même résultat ?</h2>
-    <p class="small">Une stratégie peut afficher simultanément un rendement inférieur à son benchmark et une volatilité plus faible. Dans ce cas, il faut déterminer si cette réduction du risque provient réellement de la règle d'allocation ou si un résultat comparable aurait pu être obtenu simplement en détenant une fraction du benchmark et le reste en liquidités.</p>
-    <p class="small">Le test construit donc plusieurs combinaisons entre le panier équipondéré et le cash, puis compare la stratégie à ces portefeuilles pour un même niveau de volatilité ou de drawdown.</p>
-    <p class="small">Le taux sans risque est testé sur plusieurs valeurs plutôt que fixé à une hypothèse unique.</p>
+    <p class="small">Une stratégie peut afficher simultanément un rendement inférieur à son benchmark et une volatilité plus faible. Dans ce cas, il faut déterminer si cette réduction du risque provient réellement de la règle d'allocation ou si un résultat comparable aurait pu être obtenu simplement en détenant une fraction du benchmark et le reste en liquidités. Le test construit donc plusieurs combinaisons entre le panier équipondéré et le cash, puis compare la stratégie à ces portefeuilles pour un même niveau de volatilité ou de drawdown. Le taux sans risque est testé sur plusieurs valeurs plutôt que fixé à une hypothèse unique.</p>
     <div class="tw">
       <table>
         <thead><tr><th>Taux sans risque</th><th>Fraction du panier</th><th>Mélange</th><th>Écart à vol égale</th><th>Écart à drawdown égal</th></tr></thead>
@@ -539,10 +516,7 @@ Merton indifference &#947; for this cash level   n/a — the benchmark did not
         </tbody>
       </table>
     </div>
-    <p class="small">À volatilité équivalente, la fraction du panier nécessaire est de 70,8 %.</p>
-    <p class="small">Avec un taux sans risque de 0 %, le CAGR du portefeuille mixte est de 0,87 %, soit 0,56 point de moins que la stratégie. À 1 %, l'écart est encore de +0,27 point en faveur de la stratégie.</p>
-    <p class="small">Autour de 2 %, les deux résultats deviennent pratiquement équivalents, puis la combinaison panier-cash affiche un rendement supérieur lorsque le taux sans risque augmente davantage.</p>
-    <p class="small">Le résultat dépend donc directement de l'hypothèse retenue pour la rémunération du cash. Sur cet échantillon, le point d'équilibre se situe légèrement en dessous de 2 %.</p>
+    <p class="small">À volatilité équivalente, la fraction du panier nécessaire est de 70,8 %. Avec un taux sans risque de 0 %, le CAGR du portefeuille mixte est de 0,87 %, soit 0,56 point de moins que la stratégie. À 1 %, l'écart est encore de +0,27 point en faveur de la stratégie. Autour de 2 %, les deux résultats deviennent pratiquement équivalents, puis la combinaison panier-cash affiche un rendement supérieur lorsque le taux sans risque augmente davantage. Le résultat dépend donc directement de l'hypothèse retenue pour la rémunération du cash. Sur cet échantillon, le point d'équilibre se situe légèrement en dessous de 2 %.</p>
     <div class="raw">
       <div class="lbl"><span>Sortie brute · validation_null_leverage</span></div>
 <pre>risk_free   w (vol-matched)   blend CAGR   strategy CAGR   gap at equal vol
@@ -561,10 +535,7 @@ Merton indifference &#947; for this cash level   n/a — the benchmark did not
   <section>
     <div class="shead"><span class="snum">05</span><span class="stitle">Réplication sur 80 univers</span></div>
     <h2>Comportement de la même configuration sur des paniers non utilisés auparavant</h2>
-    <p class="small">Le test précédent reste limité à un univers de cinq actifs.</p>
-    <p class="small"><code>validation_cross_asset</code> conserve la configuration enregistrée et l'applique sans modification à 80 nouveaux paniers de cinq actifs, tirés dans un pool qui n'a pas servi au développement initial.</p>
-    <p class="small">Le test est réalisé sur la période hors échantillon. Les actifs et la période sont donc tous deux distincts de ceux utilisés pour construire la stratégie.</p>
-    <p class="small">Dix-neuf actifs du pool disposent de données couvrant toute la fenêtre. Un vingtième est exclu en raison d'une discontinuité dans son historique.</p>
+    <p class="small">Le test précédent reste limité à un univers de cinq actifs. <code>validation_cross_asset</code> conserve la configuration enregistrée et l'applique sans modification à 80 nouveaux paniers de cinq actifs, tirés dans un pool qui n'a pas servi au développement initial. Le test est réalisé sur la période hors échantillon. Les actifs et la période sont donc tous deux distincts de ceux utilisés pour construire la stratégie. Dix-neuf actifs du pool disposent de données couvrant toute la fenêtre. Un vingtième est exclu en raison d'une discontinuité dans son historique.</p>
     <div class="tw">
       <table>
         <thead><tr><th>Écart contre 1/N absolu</th><th>5 %</th><th>25 %</th><th>50 %</th><th>75 %</th><th>95 %</th></tr></thead>
@@ -575,10 +546,7 @@ Merton indifference &#947; for this cash level   n/a — the benchmark did not
         </tbody>
       </table>
     </div>
-    <p class="small">La distribution des 80 univers présente un écart médian de CAGR de +2,34 % par an par rapport au 1/N absolu.</p>
-    <p class="small">Le premier quartile se situe à +0,04 %, tandis que le cinquième percentile atteint −3,62 %.</p>
-    <p class="small">L'univers utilisé dans le test initial présente un écart de −2,44 %. Il se situe au 11ᵉ percentile de la distribution obtenue sur les 80 univers. Dans 75 % des univers tirés, l'écart de CAGR est positif.</p>
-    <p class="small">Le résultat hors échantillon négatif de l'univers d'origine apparaît donc dans la partie basse de la distribution obtenue avec la même règle appliquée aux autres paniers. Ce test ne permet pas d'attribuer définitivement cette différence à une cause unique, mais il montre que le résultat observé sur les cinq actifs d'origine n'est pas représentatif de la médiane des univers testés.</p>
+    <p class="small">La distribution des 80 univers présente un écart médian de CAGR de +2,34 % par an par rapport au 1/N absolu. Le premier quartile se situe à +0,04 %, tandis que le cinquième percentile atteint −3,62 %. L'univers utilisé dans le test initial présente un écart de −2,44 %. Il se situe au 11ᵉ percentile de la distribution obtenue sur les 80 univers. Dans 75 % des univers tirés, l'écart de CAGR est positif. Le résultat hors échantillon négatif de l'univers d'origine apparaît donc dans la partie basse de la distribution obtenue avec la même règle appliquée aux autres paniers. Ce test ne permet pas d'attribuer définitivement cette différence à une cause unique, mais il montre que le résultat observé sur les cinq actifs d'origine n'est pas représentatif de la médiane des univers testés.</p>
     <div class="raw">
       <div class="lbl"><span>Sortie brute · validation_cross_asset</span></div>
 <pre>eligible pool      19 ticker(s) cover the window; 1 dropped (gap inside window)
@@ -603,13 +571,9 @@ fraction of universes with a positive edge   75%
   <section>
     <div class="shead"><span class="snum">06</span><span class="stitle">Tests non conclusifs</span></div>
     <h2>Tests non conclusifs ou non applicables</h2>
-    <p class="small">Tous les contrôles ne produisent pas nécessairement une mesure exploitable.</p>
-    <p class="small">La couche de validation distingue un résultat négatif d'un résultat qui ne peut pas être interprété avec les données disponibles. Dans ce second cas, la sortie indique explicitement la raison pour laquelle aucune conclusion n'est produite.</p>
+    <p class="small">Tous les contrôles ne produisent pas nécessairement une mesure exploitable. La couche de validation distingue un résultat négatif d'un résultat qui ne peut pas être interprété avec les données disponibles. Dans ce second cas, la sortie indique explicitement la raison pour laquelle aucune conclusion n'est produite.</p>
     <h3>Monte-Carlo</h3>
-    <p class="small">Le test Monte-Carlo utilise un bootstrap par blocs appliqué aux 22 périodes de décision et génère 10 000 chemins.</p>
-    <p class="small">L'écart de CAGR réalisé est de +0,44 %. La médiane de la distribution rééchantillonnée est également de +0,44 %, ce qui indique que le bootstrap reproduit correctement le centre de la série observée.</p>
-    <p class="small">La dispersion reste cependant importante : l'intervalle central à 90 % s'étend de −2,59 % à +3,51 %, et la probabilité d'obtenir un écart positif dans le rééchantillonnage est de 59,6 %.</p>
-    <p class="small">Avec seulement 22 périodes de décision, le test ne permet donc pas de distinguer clairement l'écart observé de la variabilité compatible avec cet échantillon.</p>
+    <p class="small">Le test Monte-Carlo utilise un bootstrap par blocs appliqué aux 22 périodes de décision et génère 10 000 chemins. L'écart de CAGR réalisé est de +0,44 %. La médiane de la distribution rééchantillonnée est également de +0,44 %, ce qui indique que le bootstrap reproduit correctement le centre de la série observée. La dispersion reste cependant importante : l'intervalle central à 90 % s'étend de −2,59 % à +3,51 %, et la probabilité d'obtenir un écart positif dans le rééchantillonnage est de 59,6 %. Avec seulement 22 périodes de décision, le test ne permet donc pas de distinguer clairement l'écart observé de la variabilité compatible avec cet échantillon.</p>
     <div class="raw">
       <div class="lbl"><span>Sortie brute · validation_mc</span></div>
 <pre>centering golden   <i>PASS</i> — bootstrap median +0.44% vs realised +0.44%,
@@ -627,10 +591,7 @@ relative CAGR      realised +0.44%   5% -2.59%   50% +0.44%   95% +3.51%
       <div class="cap">L'écart réalisé se situe pratiquement au centre de sa propre distribution bootstrap, autour du 50ᵉ percentile.</div>
     </div>
     <h3>Concentration de l'écart</h3>
-    <p class="small">Ce contrôle cherche à déterminer si l'écart cumulé repose principalement sur un petit nombre de fenêtres.</p>
-    <p class="small">Avant de calculer cette concentration, l'outil vérifie que l'écart total est suffisamment éloigné de zéro pour qu'une décomposition en parts ait un sens.</p>
-    <p class="small">Ici, l'écart logarithmique cumulé atteint +0,0378, pour un seuil requis de +0,0389.</p>
-    <p class="small">La différence est faible mais place le résultat juste sous le niveau minimal prévu par le test. La mesure de concentration n'est donc pas publiée.</p>
+    <p class="small">Ce contrôle cherche à déterminer si l'écart cumulé repose principalement sur un petit nombre de fenêtres. Avant de calculer cette concentration, l'outil vérifie que l'écart total est suffisamment éloigné de zéro pour qu'une décomposition en parts ait un sens. Ici, l'écart logarithmique cumulé atteint +0,0378, pour un seuil requis de +0,0389. La différence est faible mais place le résultat juste sous le niveau minimal prévu par le test. La mesure de concentration n'est donc pas publiée.</p>
     <div class="raw">
       <div class="lbl"><span>Sortie brute · validation_edge_concentration</span></div>
 <pre><i>VERDICT   NOT_APPLICABLE</i> — the cumulative edge is not positive enough,
@@ -641,9 +602,7 @@ dispersion). Shares of a total near zero explode, and shares of a negative
 total change sign; neither is published.</pre>
     </div>
     <h3>Sharpe déflaté</h3>
-    <p class="small">Le Sharpe déflaté vise à corriger le ratio de Sharpe observé pour tenir compte du nombre de configurations essayées sur les mêmes données.</p>
-    <p class="small">Le registre contient ici quatre configurations distinctes.</p>
-    <p class="small">Ce nombre est insuffisant pour estimer de manière stable la dispersion des ratios de Sharpe entre les essais. L'outil exige au minimum dix observations pour effectuer cette correction et classe donc le Sharpe déflaté comme indisponible.</p>
+    <p class="small">Le Sharpe déflaté vise à corriger le ratio de Sharpe observé pour tenir compte du nombre de configurations essayées sur les mêmes données. Le registre contient ici quatre configurations distinctes. Ce nombre est insuffisant pour estimer de manière stable la dispersion des ratios de Sharpe entre les essais. L'outil exige au minimum dix observations pour effectuer cette correction et classe donc le Sharpe déflaté comme indisponible.</p>
     <div class="raw">
       <div class="lbl"><span>Sortie brute · validation_dsr</span></div>
 <pre>trials counted     4 distinct configurations = 4 trials
@@ -655,17 +614,14 @@ why                only 4 trial(s) carry a Sharpe on this dataset; the deflated
 <b>honesty            Runs executed before the counter existed are not counted: any
                    deflation is a LOWER BOUND on the correction.</b></pre>
     </div>
-    <p class="small">Le compteur estime par ailleurs que les quatre configurations correspondent à environ 1,6 essai indépendant.</p>
-    <p class="small">Cette valeur tient compte de la corrélation entre les séries de décisions produites par les différentes configurations : plusieurs variantes proches ne sont donc pas assimilées à autant de recherches entièrement indépendantes.</p>
+    <p class="small">Le compteur estime par ailleurs que les quatre configurations correspondent à environ 1,6 essai indépendant. Cette valeur tient compte de la corrélation entre les séries de décisions produites par les différentes configurations : plusieurs variantes proches ne sont donc pas assimilées à autant de recherches entièrement indépendantes.</p>
     <div class="plot">
       <div class="lbl"><span>Sortie · trial_history</span></div>
       <img src="../img/v2-trial-history.png" alt="Sortie · trial_history" loading="lazy">
       <div class="cap">L'historique enregistre les différences détectées entre les essais successifs, notamment les modifications de réserve de trésorerie et les changements de fonction de décision.</div>
     </div>
     <h3>Préinscription</h3>
-    <p class="small">Le système de gel de configuration enregistre une version immuable de la configuration, accompagnée des empreintes de la configuration et des données. Il conserve également la trace des accès à l'échantillon réservé.</p>
-    <p class="small">Dans le cas de cette note, la configuration n'avait pas été gelée avant le premier accès au holdout. Le registre classe donc les résultats hors échantillon comme obtenus après accès à la période réservée, et non comme une validation préinscrite.</p>
-    <p class="small">Cette distinction ne modifie pas les valeurs calculées, mais elle modifie leur statut méthodologique : elles peuvent être utilisées comme diagnostics, pas comme confirmation scellée d'une hypothèse préalablement enregistrée.</p>
+    <p class="small">Le système de gel de configuration enregistre une version immuable de la configuration, accompagnée des empreintes de la configuration et des données. Il conserve également la trace des accès à l'échantillon réservé. Dans le cas de cette note, la configuration n'avait pas été gelée avant le premier accès au holdout. Le registre classe donc les résultats hors échantillon comme obtenus après accès à la période réservée, et non comme une validation préinscrite. Cette distinction ne modifie pas les valeurs calculées, mais elle modifie leur statut méthodologique : elles peuvent être utilisées comme diagnostics, pas comme confirmation scellée d'une hypothèse préalablement enregistrée.</p>
     <div class="plot">
       <div class="lbl"><span>Sortie · freeze_configuration</span></div>
       <img src="../img/v2-freeze-declaration.png" alt="Sortie · freeze_configuration" loading="lazy">
@@ -682,57 +638,32 @@ why                only 4 trial(s) carry a Sharpe on this dataset; the deflated
     <div class="shead"><span class="snum">07</span><span class="stitle">Reproductibilité</span></div>
     <h2>Reproductibilité des mesures</h2>
     <h3>Série utilisée</h3>
-    <p class="small">Les mesures de performance et de risque sont calculées sur une série commune : l'equity du portefeuille nette de la dette, en fréquence journalière.</p>
-    <p class="small">Cette convention permet de tenir compte simultanément de la taille des positions, des positions ouvertes au même moment, du cash et de l'évolution globale du capital.</p>
-    <p class="small">Les rendements de trades pris individuellement ne constituent donc pas la série de référence pour les mesures de risque du mode allocation.</p>
+    <p class="small">Les mesures de performance et de risque sont calculées sur une série commune : l'equity du portefeuille nette de la dette, en fréquence journalière. Cette convention permet de tenir compte simultanément de la taille des positions, des positions ouvertes au même moment, du cash et de l'évolution globale du capital. Les rendements de trades pris individuellement ne constituent donc pas la série de référence pour les mesures de risque du mode allocation.</p>
     <h3>Construction des baselines</h3>
-    <p class="small">Les baselines sont exécutées dans le moteur comme des portefeuilles complets.</p>
-    <p class="small">Elles utilisent les mêmes mécanismes comptables, les mêmes devises et les mêmes coûts que la stratégie. Dans le cas du 1/N apparié, seule la règle de pondération est remplacée.</p>
-    <p class="small">Cette méthode évite d'attribuer à la règle d'allocation un écart qui proviendrait simplement de différences de frais, de traitement du cash ou de conventions comptables entre les deux séries.</p>
+    <p class="small">Les baselines sont exécutées dans le moteur comme des portefeuilles complets. Elles utilisent les mêmes mécanismes comptables, les mêmes devises et les mêmes coûts que la stratégie. Dans le cas du 1/N apparié, seule la règle de pondération est remplacée. Cette méthode évite d'attribuer à la règle d'allocation un écart qui proviendrait simplement de différences de frais, de traitement du cash ou de conventions comptables entre les deux séries.</p>
     <h3>Historique des essais</h3>
-    <p class="small">Les configurations testées ainsi que les accès au holdout sont inscrits dans des registres append-only.</p>
-    <p class="small">Le compteur est associé aux données utilisées. Plusieurs configurations essayées sur le même jeu de données contribuent donc au même historique d'essais, même si elles correspondent à des variantes ou à des stratégies portant des noms différents.</p>
-    <p class="small">L'objectif est de conserver une mesure du nombre de recherches effectuées sur un même échantillon avant de retenir un résultat.</p>
+    <p class="small">Les configurations testées ainsi que les accès au holdout sont inscrits dans des registres append-only. Le compteur est associé aux données utilisées. Plusieurs configurations essayées sur le même jeu de données contribuent donc au même historique d'essais, même si elles correspondent à des variantes ou à des stratégies portant des noms différents. L'objectif est de conserver une mesure du nombre de recherches effectuées sur un même échantillon avant de retenir un résultat.</p>
   </section>
 
   <section>
     <div class="shead"><span class="snum">08</span><span class="stitle">Limites</span></div>
     <h2>Limites et portée des résultats</h2>
     <h3>Nombre de décisions</h3>
-    <p class="small">Le run contient 2 298 barres mais seulement 22 décisions de rebalancement.</p>
-    <p class="small">Pour les tests portant sur le comportement de la règle d'allocation, la taille d'échantillon pertinente est donc beaucoup plus proche de 22 que de 2 298.</p>
-    <p class="small">Cette taille limite fortement la précision avec laquelle un écart annuel de quelques points peut être estimé. Le bootstrap de la section précédente en donne une illustration directe.</p>
+    <p class="small">Le run contient 2 298 barres mais seulement 22 décisions de rebalancement. Pour les tests portant sur le comportement de la règle d'allocation, la taille d'échantillon pertinente est donc beaucoup plus proche de 22 que de 2 298. Cette taille limite fortement la précision avec laquelle un écart annuel de quelques points peut être estimé. Le bootstrap de la section précédente en donne une illustration directe.</p>
     <h3>Niveau de performance absolue</h3>
-    <p class="small">Le CAGR du portefeuille testé est de 1,43 % sur l'ensemble de la période, avec un drawdown maximal de −20,47 %.</p>
-    <p class="small">Ces valeurs doivent être distinguées de la comparaison relative avec le 1/N. Une règle peut améliorer certaines caractéristiques par rapport à une référence sans que le portefeuille obtenu présente pour autant un couple rendement-risque attractif en valeur absolue.</p>
-    <p class="small">Sur cet échantillon, le benchmark lui-même affiche une performance faible par rapport au cash selon les hypothèses utilisées dans certains tests.</p>
+    <p class="small">Le CAGR du portefeuille testé est de 1,43 % sur l'ensemble de la période, avec un drawdown maximal de −20,47 %. Ces valeurs doivent être distinguées de la comparaison relative avec le 1/N. Une règle peut améliorer certaines caractéristiques par rapport à une référence sans que le portefeuille obtenu présente pour autant un couple rendement-risque attractif en valeur absolue. Sur cet échantillon, le benchmark lui-même affiche une performance faible par rapport au cash selon les hypothèses utilisées dans certains tests.</p>
     <h3>Dépendance au régime de marché</h3>
-    <p class="small">La période étudiée n'est pas homogène.</p>
-    <p class="small">Entre 2014 et 2021, le panier passe une part importante du temps en drawdown et présente relativement peu de tendance nette. La période hors échantillon est davantage orientée à la hausse.</p>
-    <p class="small">La stratégie et le 1/N sont soumis aux mêmes régimes, ce qui permet leur comparaison sur chaque période. En revanche, les écarts observés ici ne peuvent pas être transposés directement à d'autres régimes de marché.</p>
-    <p class="small">La différence entre les résultats en échantillon et hors échantillon montre notamment que l'effet de la réserve de trésorerie dépend fortement de la trajectoire du panier.</p>
+    <p class="small">La période étudiée n'est pas homogène. Entre 2014 et 2021, le panier passe une part importante du temps en drawdown et présente relativement peu de tendance nette. La période hors échantillon est davantage orientée à la hausse. La stratégie et le 1/N sont soumis aux mêmes régimes, ce qui permet leur comparaison sur chaque période. En revanche, les écarts observés ici ne peuvent pas être transposés directement à d'autres régimes de marché. La différence entre les résultats en échantillon et hors échantillon montre notamment que l'effet de la réserve de trésorerie dépend fortement de la trajectoire du panier.</p>
     <h3>Composition du pool cross-asset</h3>
-    <p class="small">Le pool utilisé pour le test cross-asset est déséquilibré : quatorze des vingt actifs éligibles sont des cryptomonnaies.</p>
-    <p class="small">Cette composition provient principalement des contraintes de disponibilité des historiques sur l'ensemble de la fenêtre.</p>
-    <p class="small">La médiane obtenue sur les 80 univers doit donc être interprétée comme un résultat sur ce pool particulier, caractérisé par une dispersion et une volatilité élevées.</p>
-    <p class="small">L'écart d'équivalent certain, notamment, est fortement influencé par la réduction de volatilité obtenue sur les paniers contenant des cryptomonnaies. Il ne peut pas être directement extrapolé à un univers multi-actifs plus conventionnel.</p>
+    <p class="small">Le pool utilisé pour le test cross-asset est déséquilibré : quatorze des vingt actifs éligibles sont des cryptomonnaies. Cette composition provient principalement des contraintes de disponibilité des historiques sur l'ensemble de la fenêtre. La médiane obtenue sur les 80 univers doit donc être interprétée comme un résultat sur ce pool particulier, caractérisé par une dispersion et une volatilité élevées. L'écart d'équivalent certain, notamment, est fortement influencé par la réduction de volatilité obtenue sur les paniers contenant des cryptomonnaies. Il ne peut pas être directement extrapolé à un univers multi-actifs plus conventionnel.</p>
     <h3>Coûts d'exécution sur les univers tirés</h3>
-    <p class="small">Pour les univers cross-asset, les coûts spécifiques définis pour les cinq actifs d'origine ne peuvent pas être réutilisés. Les actifs tirés utilisent donc les coûts génériques correspondant à leur place de cotation.</p>
-    <p class="small">La stratégie et sa référence 1/N sont soumises au même traitement, ce qui limite l'effet de cette approximation dans la comparaison de premier ordre.</p>
-    <p class="small">Elle peut toutefois modifier l'écart relatif lorsque les deux règles présentent des turnovers différents. Une sous-estimation des coûts favorise davantage la règle qui effectue le plus de transactions.</p>
+    <p class="small">Pour les univers cross-asset, les coûts spécifiques définis pour les cinq actifs d'origine ne peuvent pas être réutilisés. Les actifs tirés utilisent donc les coûts génériques correspondant à leur place de cotation. La stratégie et sa référence 1/N sont soumises au même traitement, ce qui limite l'effet de cette approximation dans la comparaison de premier ordre. Elle peut toutefois modifier l'écart relatif lorsque les deux règles présentent des turnovers différents. Une sous-estimation des coûts favorise davantage la règle qui effectue le plus de transactions.</p>
     <h3>Biais de survie</h3>
-    <p class="small">La couche de validation utilise l'univers d'actifs qui lui est fourni.</p>
-    <p class="small">Elle ne vérifie pas automatiquement si cet univers contient uniquement des actifs encore cotés aujourd'hui ou s'il reproduit fidèlement l'univers disponible à chaque date historique.</p>
-    <p class="small">Un biais de survie peut donc subsister dans le pool utilisé pour les tirages cross-asset. Il affecterait aussi bien la stratégie que les baselines exécutées sur ces mêmes actifs.</p>
+    <p class="small">La couche de validation utilise l'univers d'actifs qui lui est fourni. Elle ne vérifie pas automatiquement si cet univers contient uniquement des actifs encore cotés aujourd'hui ou s'il reproduit fidèlement l'univers disponible à chaque date historique. Un biais de survie peut donc subsister dans le pool utilisé pour les tirages cross-asset. Il affecterait aussi bien la stratégie que les baselines exécutées sur ces mêmes actifs.</p>
     <h3>Décalage de la fenêtre de décision</h3>
-    <p class="small">Le run présenté utilise une fenêtre d'estimation arrêtée une barre avant la limite déjà imposée par le délai d'exécution.</p>
-    <p class="small">Sans cette marge supplémentaire, l'écart de CAGR en échantillon est de +0,46 point au lieu de +0,42 point.</p>
-    <p class="small">La différence entre les deux configurations est donc de 0,04 point sur cet échantillon. Le résultat observé ne dépend pas uniquement de l'information contenue dans la dernière barre disponible.</p>
+    <p class="small">Le run présenté utilise une fenêtre d'estimation arrêtée une barre avant la limite déjà imposée par le délai d'exécution. Sans cette marge supplémentaire, l'écart de CAGR en échantillon est de +0,46 point au lieu de +0,42 point. La différence entre les deux configurations est donc de 0,04 point sur cet échantillon. Le résultat observé ne dépend pas uniquement de l'information contenue dans la dernière barre disponible.</p>
     <h3>Relation avec la première note de validation</h3>
-    <p class="small">La première note et celle-ci portent sur deux règles différentes.</p>
-    <p class="small">La première étudiait une optimisation liée à la durée du drawdown ; celle-ci utilise une optimisation du ratio de Sharpe. Les univers testés diffèrent également.</p>
-    <p class="small">Les deux expériences indiquent surtout que l'écart entre une allocation optimisée et une équipondération varie avec les caractéristiques de l'univers et le régime de marché.</p>
-    <p class="small">Cette sensibilité rejoint le problème général étudié dans la littérature sur la comparaison entre allocations optimisées et règles simples d'équipondération. Les expériences présentées ici ne constituent toutefois pas une réplication de ces travaux.</p>
+    <p class="small">La première note et celle-ci portent sur deux règles différentes. La première étudiait une optimisation liée à la durée du drawdown ; celle-ci utilise une optimisation du ratio de Sharpe. Les univers testés diffèrent également. Les deux expériences indiquent surtout que l'écart entre une allocation optimisée et une équipondération varie avec les caractéristiques de l'univers et le régime de marché. Cette sensibilité rejoint le problème général étudié dans la littérature sur la comparaison entre allocations optimisées et règles simples d'équipondération. Les expériences présentées ici ne constituent toutefois pas une réplication de ces travaux.</p>
   </section>
 
   <footer>
@@ -809,9 +740,7 @@ why                only 4 trial(s) carry a Sharpe on this dataset; the deflated
   <section>
     <div class="shead"><span class="snum">01</span><span class="stitle">The tests</span></div>
     <h2>Fourteen controls across five categories</h2>
-    <p class="small">The validation layer holds fourteen tests grouped around five questions: the integrity of the data and of the measures, the existence of a gap against the references, whether it holds outside the sample used to build the strategy, the risk of overfitting, and the traceability of the validation process.</p>
-    <p class="small">The tables reproduced in this note come directly from the tool's output. Some tests are not run here when the data or the required conditions are not met.</p>
-    <p class="small">The order of execution is constrained too: controls that can be carried out without using the reserved sample are performed before the out-of-sample tests.</p>
+    <p class="small">The validation layer holds fourteen tests grouped around five questions: the integrity of the data and of the measures, the existence of a gap against the references, whether it holds outside the sample used to build the strategy, the risk of overfitting, and the traceability of the validation process. The tables reproduced in this note come directly from the tool's output. Some tests are not run here when the data or the required conditions are not met. The order of execution is constrained too: controls that can be carried out without using the reserved sample are performed before the out-of-sample tests.</p>
     <div class="tw">
       <table>
         <thead><tr><th>Category</th><th>Test</th><th>What it asks</th><th>On this run</th></tr></thead>
@@ -838,10 +767,7 @@ why                only 4 trial(s) carry a Sharpe on this dataset; the deflated
   <section>
     <div class="shead"><span class="snum">02</span><span class="stitle">In sample</span></div>
     <h2>Comparison with the two references</h2>
-    <p class="small">The strategy is compared with two versions of equal weighting.</p>
-    <p class="small"><b>1/N absolute</b> is an equal-weighted portfolio that does not carry the strategy's cash reserve policy.</p>
-    <p class="small"><b>1/N matched</b> keeps the same portfolio infrastructure instead: cash, fees, currencies and accounting rules, and replaces only the weighting rule with equal weighting.</p>
-    <p class="small">This double reference makes it easier to separate the effect of the allocation rule from that of the other portfolio mechanisms.</p>
+    <p class="small">Both references are defined at the top of the page. The table below compares them with the strategy over the full sample.</p>
     <div class="tw">
       <table>
         <thead><tr><th>Annualised</th><th>Strategy</th><th>1/N absolute</th><th>1/N matched</th><th>Gap vs absolute</th></tr></thead>
@@ -855,9 +781,7 @@ why                only 4 trial(s) carry a Sharpe on this dataset; the deflated
       </table>
     </div>
     <h3>Result of the baseline test</h3>
-    <p class="small">Over the full sample presented here, the strategy shows a CAGR of 1.43 %, against 1.01 % for 1/N absolute and 0.61 % for 1/N matched.</p>
-    <p class="small">Its annualised volatility is also lower than that of 1/N absolute: 8.61 % against 12.15 %. Maximum drawdown moves from −36.77 % for that reference to −20.47 % for the strategy.</p>
-    <p class="small">With a risk aversion coefficient γ = 3, the certainty equivalent comes out at 0.68 % for the strategy, against −0.50 % for 1/N absolute.</p>
+    <p class="small">Over the full sample presented here, the strategy shows a CAGR of 1.43 %, against 1.01 % for 1/N absolute and 0.61 % for 1/N matched. Its annualised volatility is also lower than that of 1/N absolute: 8.61 % against 12.15 %. Maximum drawdown moves from −36.77 % for that reference to −20.47 % for the strategy. With a risk aversion coefficient γ = 3, the certainty equivalent comes out at 0.68 % for the strategy, against −0.50 % for 1/N absolute.</p>
     <p class="small">The baseline test therefore classes the gap as positive on this sample. It is not a statistical test, however: the baseline being deterministic, no significance level is attached to this comparison.</p>
     <div class="raw">
       <div class="lbl"><span>Raw output · validation_baseline</span></div>
@@ -875,17 +799,11 @@ carrier     : portfolio_equity(nav-borrowed) · basis D
       <div class="cap">The chart shows the three NAV series and their respective drawdowns. Over this period the strategy's drawdown stays below that of 1/N absolute, with a low point at −20.47 % against −36.77 %.</div>
     </div>
     <h3>Decomposition of the gap</h3>
-    <p class="small">The objective used by the allocation rule is the Sharpe ratio. The observed differences do not bear on volatility alone, however.</p>
-    <p class="small">Against 1/N absolute, volatility moves from 12.15 % to 8.61 %, while maximum drawdown moves from −36.77 % to −20.47 %. The CAGR increases by 0.42 points.</p>
-    <p class="small">Against 1/N matched, which keeps the same cash policy, the CAGR gap reaches 0.82 points.</p>
+    <p class="small">The objective used by the allocation rule is the Sharpe ratio. The observed differences do not bear on volatility alone, however. Against 1/N absolute, volatility moves from 12.15 % to 8.61 %, while maximum drawdown moves from −36.77 % to −20.47 %. The CAGR increases by 0.42 points. Against 1/N matched, which keeps the same cash policy, the CAGR gap reaches 0.82 points.</p>
     <h3>Effect of the cash policy</h3>
-    <p class="small">Comparing the two versions of 1/N shows the effect of the portfolio machinery independently of the optimisation rule.</p>
-    <p class="small">The CAGR of 1/N moves from 1.01 % in its absolute version to 0.61 % once the cash policy is added, a gap of −0.40 points.</p>
-    <p class="small">On the strategy, the same mechanism represents a gap of −0.98 points between the versions with and without that machinery.</p>
+    <p class="small">Comparing the two versions of 1/N shows the effect of the portfolio machinery independently of the optimisation rule. The CAGR of 1/N moves from 1.01 % in its absolute version to 0.61 % once the cash policy is added, a gap of −0.40 points. On the strategy, the same mechanism represents a gap of −0.98 points between the versions with and without that machinery.</p>
     <h3>Isolated effect of the weighting rule</h3>
-    <p class="small">A second comparison removes the cash policy from both portfolios.</p>
-    <p class="small">In that configuration the fully invested strategy shows a CAGR of 2.41 %, against 1.01 % for fully invested equal weighting, a gap of +1.41 points.</p>
-    <p class="small">When the machinery is active, that gap comes down to +0.82 points. The difference between the two gaps is the interaction between the weighting rule and the working of the cash policy.</p>
+    <p class="small">A second comparison removes the cash policy from both portfolios. In that configuration the fully invested strategy shows a CAGR of 2.41 %, against 1.01 % for fully invested equal weighting, a gap of +1.41 points. When the machinery is active, that gap comes down to +0.82 points. The difference between the two gaps is the interaction between the weighting rule and the working of the cash policy.</p>
     <div class="tw">
       <table>
         <thead><tr><th></th><th>Machinery on</th><th>Machinery off</th><th>Machinery effect</th></tr></thead>
@@ -898,10 +816,7 @@ carrier     : portfolio_equity(nav-borrowed) · basis D
       </table>
     </div>
     <h3>Use of the available cash</h3>
-    <p class="small">The dynamic reserve can be drawn on during the run, but its use only partly coincides with the periods when the benchmark falls sharply.</p>
-    <p class="small">Across 16 episodes in which the basket loses more than 10 %, a cash deployment is observed in 4 cases. In total, 24 deployment episodes are recorded over the period.</p>
-    <p class="small">Deployable cash averages 19.3 % of NAV.</p>
-    <p class="small">The <code>validation_purchasing_power</code> test therefore classes the mechanism as partial: the reserve is indeed used, but it is not systematically drawn on during the drawdown episodes the test identifies.</p>
+    <p class="small">The dynamic reserve can be drawn on during the run, but its use only partly coincides with the periods when the benchmark falls sharply. Across 16 episodes in which the basket loses more than 10 %, a cash deployment is observed in 4 cases. In total, 24 deployment episodes are recorded over the period. Deployable cash averages 19.3 % of NAV. The <code>validation_purchasing_power</code> test therefore classes the mechanism as partial: the reserve is indeed used, but it is not systematically drawn on during the drawdown episodes the test identifies.</p>
     <div class="raw">
       <div class="lbl"><span>Raw output · validation_purchasing_power</span></div>
 <pre>deployable cash = cash_value - cash_fixed_reserve - cash_vault
@@ -925,8 +840,7 @@ Merton indifference &#947; for this cash level   n/a — the benchmark did not
   <section>
     <div class="shead"><span class="snum">03</span><span class="stitle">Out of sample</span></div>
     <h2>Results over the reserved period</h2>
-    <p class="small">The same comparisons are then repeated over the 1,126 bars set aside during the construction of the strategy.</p>
-    <p class="small">This period shows a different dynamic: the equal-weighted basket rises more than over the previous sample.</p>
+    <p class="small">The same comparisons are then repeated over the 1,126 bars set aside during the construction of the strategy. This period shows a different dynamic: the equal-weighted basket rises more than over the previous sample.</p>
     <div class="tw">
       <table>
         <thead><tr><th>Annualised</th><th>Strategy</th><th>1/N absolute</th><th>1/N matched</th><th>Gap vs absolute</th></tr></thead>
@@ -939,12 +853,8 @@ Merton indifference &#947; for this cash level   n/a — the benchmark did not
         </tbody>
       </table>
     </div>
-    <p class="small">Over this period the strategy shows a CAGR of 1.58 %, against 4.02 % for 1/N absolute and 2.08 % for 1/N matched.</p>
-    <p class="small">Volatility stays below that of 1/N absolute, at 10.40 % against 13.35 %, but the return gap turns negative.</p>
-    <p class="small">The certainty equivalent at γ = 3 comes out at 0.48 % for the strategy, against 2.17 % for 1/N absolute. The baseline test therefore does not retain the positive gap observed in sample.</p>
-    <p class="small">The gap between the strategy and 1/N matched moves from +0.82 points in sample to −0.50 points out of sample.</p>
-    <p class="small">The cash policy also plays a larger role over this period. The gap between the two versions of 1/N reaches 1.93 points, against 0.40 points previously. Over a period more oriented upwards, keeping a large fraction of the portfolio in cash mechanically reduces participation in that rise.</p>
-    <p class="small">This decomposition shows that the out-of-sample difference does not come from the weighting rule alone.</p>
+    <p class="small">Over this period the strategy shows a CAGR of 1.58 %, against 4.02 % for 1/N absolute and 2.08 % for 1/N matched. Volatility stays below that of 1/N absolute, at 10.40 % against 13.35 %, but the return gap turns negative. The certainty equivalent at γ = 3 comes out at 0.48 % for the strategy, against 2.17 % for 1/N absolute. The baseline test therefore does not retain the positive gap observed in sample. The gap between the strategy and 1/N matched moves from +0.82 points in sample to −0.50 points out of sample.</p>
+    <p class="small">The cash policy also plays a larger role over this period. The gap between the two versions of 1/N reaches 1.93 points, against 0.40 points previously. Over a period more oriented upwards, keeping a large fraction of the portfolio in cash mechanically reduces participation in that rise. This decomposition shows that the out-of-sample difference does not come from the weighting rule alone.</p>
     <div class="raw">
       <div class="lbl"><span>Raw output · validation_baseline (oos)</span></div>
 <pre><i>VERDICT   ADDS_NOTHING</i> — certainty equivalent lower by -1.69%/y at &#947;=3
@@ -966,9 +876,7 @@ Merton indifference &#947; for this cash level   n/a — the benchmark did not
   <section>
     <div class="shead"><span class="snum">04</span><span class="stitle">Partially invested portfolio</span></div>
     <h2>Does reducing risk by simply holding less produce the same result?</h2>
-    <p class="small">A strategy can show both a lower return than its benchmark and a lower volatility. In that case it must be determined whether the reduction in risk really comes from the allocation rule or whether a comparable result could have been obtained by simply holding a fraction of the benchmark and the rest in cash.</p>
-    <p class="small">The test therefore builds several combinations of the equal-weighted basket and cash, then compares the strategy with those portfolios at the same level of volatility or drawdown.</p>
-    <p class="small">The risk-free rate is tested across several values rather than fixed at a single assumption.</p>
+    <p class="small">A strategy can show both a lower return than its benchmark and a lower volatility. In that case it must be determined whether the reduction in risk really comes from the allocation rule or whether a comparable result could have been obtained by simply holding a fraction of the benchmark and the rest in cash. The test therefore builds several combinations of the equal-weighted basket and cash, then compares the strategy with those portfolios at the same level of volatility or drawdown. The risk-free rate is tested across several values rather than fixed at a single assumption.</p>
     <div class="tw">
       <table>
         <thead><tr><th>Risk-free rate</th><th>Fraction of basket</th><th>Blend</th><th>Gap at equal vol</th><th>Gap at equal drawdown</th></tr></thead>
@@ -980,10 +888,7 @@ Merton indifference &#947; for this cash level   n/a — the benchmark did not
         </tbody>
       </table>
     </div>
-    <p class="small">At equivalent volatility, the required fraction of the basket is 70.8 %.</p>
-    <p class="small">With a 0 % risk-free rate, the CAGR of the mixed portfolio is 0.87 %, that is 0.56 points less than the strategy. At 1 %, the gap is still +0.27 points in favour of the strategy.</p>
-    <p class="small">Around 2 % the two results become practically equivalent, then the basket-cash combination shows a higher return as the risk-free rate increases further.</p>
-    <p class="small">The result therefore depends directly on the assumption made about the return on cash. On this sample the break-even point sits slightly below 2 %.</p>
+    <p class="small">At equivalent volatility, the required fraction of the basket is 70.8 %. With a 0 % risk-free rate, the CAGR of the mixed portfolio is 0.87 %, that is 0.56 points less than the strategy. At 1 %, the gap is still +0.27 points in favour of the strategy. Around 2 % the two results become practically equivalent, then the basket-cash combination shows a higher return as the risk-free rate increases further. The result therefore depends directly on the assumption made about the return on cash. On this sample the break-even point sits slightly below 2 %.</p>
     <div class="raw">
       <div class="lbl"><span>Raw output · validation_null_leverage</span></div>
 <pre>risk_free   w (vol-matched)   blend CAGR   strategy CAGR   gap at equal vol
@@ -1002,10 +907,7 @@ Merton indifference &#947; for this cash level   n/a — the benchmark did not
   <section>
     <div class="shead"><span class="snum">05</span><span class="stitle">Replication across 80 universes</span></div>
     <h2>Behaviour of the same configuration on baskets not previously used</h2>
-    <p class="small">The previous test remains limited to one universe of five assets.</p>
-    <p class="small"><code>validation_cross_asset</code> keeps the recorded configuration and applies it without modification to 80 new baskets of five assets, drawn from a pool that was not used in the initial development.</p>
-    <p class="small">The test is run over the out-of-sample period. Both the assets and the period are therefore distinct from those used to build the strategy.</p>
-    <p class="small">Nineteen assets in the pool have data covering the whole window. A twentieth is excluded because of a discontinuity in its history.</p>
+    <p class="small">The previous test remains limited to one universe of five assets. <code>validation_cross_asset</code> keeps the recorded configuration and applies it without modification to 80 new baskets of five assets, drawn from a pool that was not used in the initial development. The test is run over the out-of-sample period. Both the assets and the period are therefore distinct from those used to build the strategy. Nineteen assets in the pool have data covering the whole window. A twentieth is excluded because of a discontinuity in its history.</p>
     <div class="tw">
       <table>
         <thead><tr><th>Edge against 1/N absolute</th><th>5 %</th><th>25 %</th><th>50 %</th><th>75 %</th><th>95 %</th></tr></thead>
@@ -1016,10 +918,7 @@ Merton indifference &#947; for this cash level   n/a — the benchmark did not
         </tbody>
       </table>
     </div>
-    <p class="small">The distribution across the 80 universes shows a median CAGR edge of +2.34 % a year against 1/N absolute.</p>
-    <p class="small">The first quartile sits at +0.04 %, while the fifth percentile reaches −3.62 %.</p>
-    <p class="small">The universe used in the initial test shows an edge of −2.44 %. It sits at the 11th percentile of the distribution obtained across the 80 universes. In 75 % of the drawn universes the CAGR edge is positive.</p>
-    <p class="small">The negative out-of-sample result of the original universe therefore appears in the lower part of the distribution obtained with the same rule applied to other baskets. This test does not allow that difference to be attributed definitively to a single cause, but it shows that the result observed on the five original assets is not representative of the median of the tested universes.</p>
+    <p class="small">The distribution across the 80 universes shows a median CAGR edge of +2.34 % a year against 1/N absolute. The first quartile sits at +0.04 %, while the fifth percentile reaches −3.62 %. The universe used in the initial test shows an edge of −2.44 %. It sits at the 11th percentile of the distribution obtained across the 80 universes. In 75 % of the drawn universes the CAGR edge is positive. The negative out-of-sample result of the original universe therefore appears in the lower part of the distribution obtained with the same rule applied to other baskets. This test does not allow that difference to be attributed definitively to a single cause, but it shows that the result observed on the five original assets is not representative of the median of the tested universes.</p>
     <div class="raw">
       <div class="lbl"><span>Raw output · validation_cross_asset</span></div>
 <pre>eligible pool      19 ticker(s) cover the window; 1 dropped (gap inside window)
@@ -1044,13 +943,9 @@ fraction of universes with a positive edge   75%
   <section>
     <div class="shead"><span class="snum">06</span><span class="stitle">Inconclusive tests</span></div>
     <h2>Inconclusive or non-applicable tests</h2>
-    <p class="small">Not every control necessarily produces a usable measure.</p>
-    <p class="small">The validation layer distinguishes a negative result from a result that cannot be interpreted with the available data. In the second case, the output states explicitly why no conclusion is produced.</p>
+    <p class="small">Not every control necessarily produces a usable measure. The validation layer distinguishes a negative result from a result that cannot be interpreted with the available data. In the second case, the output states explicitly why no conclusion is produced.</p>
     <h3>Monte Carlo</h3>
-    <p class="small">The Monte Carlo test uses a block bootstrap applied to the 22 decision periods and generates 10,000 paths.</p>
-    <p class="small">The realised CAGR edge is +0.44 %. The median of the resampled distribution is also +0.44 %, which indicates that the bootstrap correctly reproduces the centre of the observed series.</p>
-    <p class="small">The dispersion remains large, however: the central 90 % interval runs from −2.59 % to +3.51 %, and the probability of a positive edge in the resampling is 59.6 %.</p>
-    <p class="small">With only 22 decision periods, the test therefore does not allow the observed edge to be clearly distinguished from the variability compatible with this sample.</p>
+    <p class="small">The Monte Carlo test uses a block bootstrap applied to the 22 decision periods and generates 10,000 paths. The realised CAGR edge is +0.44 %. The median of the resampled distribution is also +0.44 %, which indicates that the bootstrap correctly reproduces the centre of the observed series. The dispersion remains large, however: the central 90 % interval runs from −2.59 % to +3.51 %, and the probability of a positive edge in the resampling is 59.6 %. With only 22 decision periods, the test therefore does not allow the observed edge to be clearly distinguished from the variability compatible with this sample.</p>
     <div class="raw">
       <div class="lbl"><span>Raw output · validation_mc</span></div>
 <pre>centering golden   <i>PASS</i> — bootstrap median +0.44% vs realised +0.44%,
@@ -1068,10 +963,7 @@ relative CAGR      realised +0.44%   5% -2.59%   50% +0.44%   95% +3.51%
       <div class="cap">The realised edge sits practically at the centre of its own bootstrap distribution, around the 50th percentile.</div>
     </div>
     <h3>Concentration of the edge</h3>
-    <p class="small">This control seeks to determine whether the cumulative edge rests mainly on a small number of windows.</p>
-    <p class="small">Before computing that concentration, the tool checks that the total edge is far enough from zero for a decomposition into shares to mean anything.</p>
-    <p class="small">Here the cumulative log edge reaches +0.0378, against a required threshold of +0.0389.</p>
-    <p class="small">The difference is small but places the result just below the minimum level the test requires. The concentration measure is therefore not published.</p>
+    <p class="small">This control seeks to determine whether the cumulative edge rests mainly on a small number of windows. Before computing that concentration, the tool checks that the total edge is far enough from zero for a decomposition into shares to mean anything. Here the cumulative log edge reaches +0.0378, against a required threshold of +0.0389. The difference is small but places the result just below the minimum level the test requires. The concentration measure is therefore not published.</p>
     <div class="raw">
       <div class="lbl"><span>Raw output · validation_edge_concentration</span></div>
 <pre><i>VERDICT   NOT_APPLICABLE</i> — the cumulative edge is not positive enough,
@@ -1082,9 +974,7 @@ dispersion). Shares of a total near zero explode, and shares of a negative
 total change sign; neither is published.</pre>
     </div>
     <h3>Deflated Sharpe</h3>
-    <p class="small">The deflated Sharpe aims to correct the observed Sharpe ratio for the number of configurations tried on the same data.</p>
-    <p class="small">The ledger here contains four distinct configurations.</p>
-    <p class="small">That number is insufficient to estimate the dispersion of the Sharpe ratios across trials in a stable way. The tool requires at least ten observations to apply this correction and therefore classes the deflated Sharpe as unavailable.</p>
+    <p class="small">The deflated Sharpe aims to correct the observed Sharpe ratio for the number of configurations tried on the same data. The ledger here contains four distinct configurations. That number is insufficient to estimate the dispersion of the Sharpe ratios across trials in a stable way. The tool requires at least ten observations to apply this correction and therefore classes the deflated Sharpe as unavailable.</p>
     <div class="raw">
       <div class="lbl"><span>Raw output · validation_dsr</span></div>
 <pre>trials counted     4 distinct configurations = 4 trials
@@ -1096,17 +986,14 @@ why                only 4 trial(s) carry a Sharpe on this dataset; the deflated
 <b>honesty            Runs executed before the counter existed are not counted: any
                    deflation is a LOWER BOUND on the correction.</b></pre>
     </div>
-    <p class="small">The counter also estimates that the four configurations correspond to about 1.6 independent trials.</p>
-    <p class="small">That value accounts for the correlation between the decision series produced by the different configurations: several close variants are therefore not treated as that many entirely independent searches.</p>
+    <p class="small">The counter also estimates that the four configurations correspond to about 1.6 independent trials. That value accounts for the correlation between the decision series produced by the different configurations: several close variants are therefore not treated as that many entirely independent searches.</p>
     <div class="plot">
       <div class="lbl"><span>Output · trial_history</span></div>
       <img src="../img/v2-trial-history.png" alt="Output · trial_history" loading="lazy">
       <div class="cap">The history records the differences detected between successive trials, in particular changes to the cash reserve and changes to the decision function.</div>
     </div>
     <h3>Preregistration</h3>
-    <p class="small">The configuration freeze system records an immutable version of the configuration, together with fingerprints of the configuration and of the data. It also keeps track of accesses to the reserved sample.</p>
-    <p class="small">In the case of this note, the configuration had not been frozen before the first holdout access. The ledger therefore classes the out-of-sample results as obtained after access to the reserved period, and not as a preregistered validation.</p>
-    <p class="small">This distinction does not change the computed values, but it changes their methodological status: they can be used as diagnostics, not as sealed confirmation of a previously recorded hypothesis.</p>
+    <p class="small">The configuration freeze system records an immutable version of the configuration, together with fingerprints of the configuration and of the data. It also keeps track of accesses to the reserved sample. In the case of this note, the configuration had not been frozen before the first holdout access. The ledger therefore classes the out-of-sample results as obtained after access to the reserved period, and not as a preregistered validation. This distinction does not change the computed values, but it changes their methodological status: they can be used as diagnostics, not as sealed confirmation of a previously recorded hypothesis.</p>
     <div class="plot">
       <div class="lbl"><span>Output · freeze_configuration</span></div>
       <img src="../img/v2-freeze-declaration.png" alt="Output · freeze_configuration" loading="lazy">
@@ -1123,57 +1010,32 @@ why                only 4 trial(s) carry a Sharpe on this dataset; the deflated
     <div class="shead"><span class="snum">07</span><span class="stitle">Reproducibility</span></div>
     <h2>Reproducibility of the measures</h2>
     <h3>Series used</h3>
-    <p class="small">Performance and risk are measured on a common series: portfolio equity net of debt, at daily frequency.</p>
-    <p class="small">That convention accounts at once for position size, for positions open at the same time, for cash and for the overall path of capital.</p>
-    <p class="small">Individual trade returns are therefore not the reference series for the risk measures of allocation mode.</p>
+    <p class="small">Performance and risk are measured on a common series: portfolio equity net of debt, at daily frequency. That convention accounts at once for position size, for positions open at the same time, for cash and for the overall path of capital. Individual trade returns are therefore not the reference series for the risk measures of allocation mode.</p>
     <h3>Construction of the baselines</h3>
-    <p class="small">The baselines are executed in the engine as complete portfolios.</p>
-    <p class="small">They use the same accounting machinery, the same currencies and the same costs as the strategy. In the case of 1/N matched, only the weighting rule is replaced.</p>
-    <p class="small">This method avoids attributing to the allocation rule a gap that would simply come from differences in fees, cash treatment or accounting conventions between the two series.</p>
+    <p class="small">The baselines are executed in the engine as complete portfolios. They use the same accounting machinery, the same currencies and the same costs as the strategy. In the case of 1/N matched, only the weighting rule is replaced. This method avoids attributing to the allocation rule a gap that would simply come from differences in fees, cash treatment or accounting conventions between the two series.</p>
     <h3>Trial history</h3>
-    <p class="small">The tested configurations and the holdout accesses are written to append-only ledgers.</p>
-    <p class="small">The counter is tied to the data used. Several configurations tried on the same dataset therefore contribute to the same trial history, even when they correspond to variants or to strategies bearing different names.</p>
-    <p class="small">The aim is to keep a measure of how many searches were carried out on a given sample before a result is retained.</p>
+    <p class="small">The tested configurations and the holdout accesses are written to append-only ledgers. The counter is tied to the data used. Several configurations tried on the same dataset therefore contribute to the same trial history, even when they correspond to variants or to strategies bearing different names. The aim is to keep a measure of how many searches were carried out on a given sample before a result is retained.</p>
   </section>
 
   <section>
     <div class="shead"><span class="snum">08</span><span class="stitle">Limits</span></div>
     <h2>Limits and scope of the results</h2>
     <h3>Number of decisions</h3>
-    <p class="small">The run contains 2,298 bars but only 22 rebalancing decisions.</p>
-    <p class="small">For tests bearing on the behaviour of the allocation rule, the relevant sample size is therefore much closer to 22 than to 2,298.</p>
-    <p class="small">That size strongly limits the precision with which an annual gap of a few points can be estimated. The bootstrap in the previous section gives a direct illustration.</p>
+    <p class="small">The run contains 2,298 bars but only 22 rebalancing decisions. For tests bearing on the behaviour of the allocation rule, the relevant sample size is therefore much closer to 22 than to 2,298. That size strongly limits the precision with which an annual gap of a few points can be estimated. The bootstrap in the previous section gives a direct illustration.</p>
     <h3>Absolute level of performance</h3>
-    <p class="small">The CAGR of the tested portfolio is 1.43 % over the whole period, with a maximum drawdown of −20.47 %.</p>
-    <p class="small">These values must be distinguished from the relative comparison with 1/N. A rule can improve certain characteristics against a reference without the resulting portfolio presenting an attractive return-risk pair in absolute terms.</p>
-    <p class="small">On this sample the benchmark itself shows weak performance relative to cash under the assumptions used in some of the tests.</p>
+    <p class="small">The CAGR of the tested portfolio is 1.43 % over the whole period, with a maximum drawdown of −20.47 %. These values must be distinguished from the relative comparison with 1/N. A rule can improve certain characteristics against a reference without the resulting portfolio presenting an attractive return-risk pair in absolute terms. On this sample the benchmark itself shows weak performance relative to cash under the assumptions used in some of the tests.</p>
     <h3>Dependence on the market regime</h3>
-    <p class="small">The period studied is not homogeneous.</p>
-    <p class="small">Between 2014 and 2021 the basket spends a large share of the time in drawdown and shows relatively little clear trend. The out-of-sample period is more oriented upwards.</p>
-    <p class="small">The strategy and 1/N face the same regimes, which allows them to be compared within each period. The gaps observed here cannot, however, be transposed directly to other market regimes.</p>
-    <p class="small">The difference between the in-sample and out-of-sample results shows in particular that the effect of the cash reserve depends strongly on the path of the basket.</p>
+    <p class="small">The period studied is not homogeneous. Between 2014 and 2021 the basket spends a large share of the time in drawdown and shows relatively little clear trend. The out-of-sample period is more oriented upwards. The strategy and 1/N face the same regimes, which allows them to be compared within each period. The gaps observed here cannot, however, be transposed directly to other market regimes. The difference between the in-sample and out-of-sample results shows in particular that the effect of the cash reserve depends strongly on the path of the basket.</p>
     <h3>Composition of the cross-asset pool</h3>
-    <p class="small">The pool used for the cross-asset test is unbalanced: fourteen of the twenty eligible assets are cryptocurrencies.</p>
-    <p class="small">That composition comes mainly from the constraints on history availability over the whole window.</p>
-    <p class="small">The median obtained across the 80 universes must therefore be read as a result on this particular pool, characterised by high dispersion and volatility.</p>
-    <p class="small">The certainty equivalent edge in particular is strongly influenced by the volatility reduction obtained on baskets containing cryptocurrencies. It cannot be extrapolated directly to a more conventional multi-asset universe.</p>
+    <p class="small">The pool used for the cross-asset test is unbalanced: fourteen of the twenty eligible assets are cryptocurrencies. That composition comes mainly from the constraints on history availability over the whole window. The median obtained across the 80 universes must therefore be read as a result on this particular pool, characterised by high dispersion and volatility. The certainty equivalent edge in particular is strongly influenced by the volatility reduction obtained on baskets containing cryptocurrencies. It cannot be extrapolated directly to a more conventional multi-asset universe.</p>
     <h3>Execution costs on the drawn universes</h3>
-    <p class="small">For the cross-asset universes, the specific costs defined for the five original assets cannot be reused. The drawn assets therefore use the generic costs of their trading venue.</p>
-    <p class="small">The strategy and its 1/N reference are given the same treatment, which limits the effect of that approximation in the first-order comparison.</p>
-    <p class="small">It can nevertheless change the relative gap when the two rules have different turnover. Understating costs favours the rule that trades most.</p>
+    <p class="small">For the cross-asset universes, the specific costs defined for the five original assets cannot be reused. The drawn assets therefore use the generic costs of their trading venue. The strategy and its 1/N reference are given the same treatment, which limits the effect of that approximation in the first-order comparison. It can nevertheless change the relative gap when the two rules have different turnover. Understating costs favours the rule that trades most.</p>
     <h3>Survivorship bias</h3>
-    <p class="small">The validation layer uses the asset universe it is given.</p>
-    <p class="small">It does not automatically check whether that universe contains only assets still listed today, or whether it faithfully reproduces the universe available at each historical date.</p>
-    <p class="small">A survivorship bias may therefore remain in the pool used for the cross-asset draws. It would affect the strategy as much as the baselines executed on those same assets.</p>
+    <p class="small">The validation layer uses the asset universe it is given. It does not automatically check whether that universe contains only assets still listed today, or whether it faithfully reproduces the universe available at each historical date. A survivorship bias may therefore remain in the pool used for the cross-asset draws. It would affect the strategy as much as the baselines executed on those same assets.</p>
     <h3>Decision window offset</h3>
-    <p class="small">The run presented uses an estimation window that stops one bar before the limit already imposed by the execution delay.</p>
-    <p class="small">Without that additional margin, the in-sample CAGR gap is +0.46 points instead of +0.42 points.</p>
-    <p class="small">The difference between the two configurations is therefore 0.04 points on this sample. The observed result does not depend solely on the information contained in the last available bar.</p>
+    <p class="small">The run presented uses an estimation window that stops one bar before the limit already imposed by the execution delay. Without that additional margin, the in-sample CAGR gap is +0.46 points instead of +0.42 points. The difference between the two configurations is therefore 0.04 points on this sample. The observed result does not depend solely on the information contained in the last available bar.</p>
     <h3>Relation to the first validation note</h3>
-    <p class="small">The first note and this one bear on two different rules.</p>
-    <p class="small">The first studied an optimisation tied to drawdown duration; this one uses a Sharpe ratio optimisation. The tested universes also differ.</p>
-    <p class="small">Both experiments mainly indicate that the gap between an optimised allocation and equal weighting varies with the characteristics of the universe and with the market regime.</p>
-    <p class="small">That sensitivity meets the general problem studied in the literature comparing optimised allocations with simple equal-weighting rules. The experiments presented here do not, however, constitute a replication of that work.</p>
+    <p class="small">The first note and this one bear on two different rules. The first studied an optimisation tied to drawdown duration; this one uses a Sharpe ratio optimisation. The tested universes also differ. Both experiments mainly indicate that the gap between an optimised allocation and equal weighting varies with the characteristics of the universe and with the market regime. That sensitivity meets the general problem studied in the literature comparing optimised allocations with simple equal-weighting rules. The experiments presented here do not, however, constitute a replication of that work.</p>
   </section>
 
   <footer>
