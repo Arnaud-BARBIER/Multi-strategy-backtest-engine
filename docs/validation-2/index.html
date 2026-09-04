@@ -275,6 +275,13 @@ footer{
 .abstract li{font-size:.9rem;line-height:1.6;color:var(--sub);margin:0 0 .8rem;padding-left:.2rem}
 .abstract li:last-child{margin-bottom:0}
 .abstract li b{color:var(--ink);font-weight:600;display:block;margin-bottom:.15rem}
+
+.abstract p{font-size:.9rem;line-height:1.6;color:var(--sub);margin:0 0 .7rem;max-width:none}
+.abstract ul{margin:0 0 .7rem;padding-left:1.2rem;list-style:none}
+.abstract ul li{position:relative;margin:0 0 .35rem}
+.abstract ul li::before{content:"·";position:absolute;left:-1rem;color:var(--accent);font-weight:700}
+.abstract ul li b{display:inline;margin:0}
+.abstract ol{margin-top:1.1rem}
 table code{font-family:var(--f-term);font-size:.82em;color:var(--sub)}
 p code{font-family:var(--f-term);font-size:.88em;color:var(--sub)}
 </style>
@@ -309,13 +316,20 @@ p code{font-family:var(--f-term);font-size:.88em;color:var(--sub)}
 
     <div class="abstract">
       <div class="lbl">En résumé, dans l'ordre de lecture</div>
+      <p>La <b>machinerie de portefeuille</b> désigne ici tout ce qui relève du fonctionnement du portefeuille indépendamment de la règle de pondération : gestion du cash et des réserves, capacité d'emprunt ou de mobilisation de trésorerie, frais, devises et règles comptables.</p>
+      <p>Deux références sont utilisées dans toute la validation :</p>
+      <ul>
+        <li>le <b>1/N absolu</b>, simplement équipondéré entre les actifs ;</li>
+        <li>le <b>1/N apparié</b>, équipondéré lui aussi, mais soumis à la même machinerie de portefeuille que la stratégie : gestion du cash et des réserves, règles de financement, frais, devises et comptabilité.</li>
+      </ul>
+      <p>Cette seconde référence permet de comparer plus directement la règle d'allocation, sans mélanger son effet avec celui du fonctionnement du portefeuille.</p>
       <ol>
-        <li><b>En échantillon, la stratégie devance les deux références.</b>1,43 % de CAGR contre 1,01 % pour le 1/N absolu et 0,61 % pour le 1/N apparié, avec un drawdown maximal de −20,47 % contre −36,77 %. La baseline étant déterministe, cet écart n'est pas un test statistique : il ne dit rien de sa persistance.</li>
-        <li><b>Hors échantillon, l'ordre s'inverse.</b>1,58 % contre 4,02 % et 2,08 %. L'écart contre le 1/N apparié passe de +0,82 à −0,50 point. La politique de trésorerie explique une part importante du renversement : son coût passe de 0,40 à 1,93 point sur une période davantage orientée à la hausse. Reste à savoir si c'est la règle ou le panier qui échoue.</li>
-        <li><b>Un désinvestissement simple aurait-il produit le même résultat ?</b>À volatilité équivalente, détenir 70,8 % du panier et le reste en cash rapporte 0,87 % avec un taux sans risque nul, contre 1,43 % pour la stratégie. L'avantage en échantillon ne se réduit donc pas à une baisse de risque, mais il s'annule autour de 2 % de taux sans risque.</li>
-        <li><b>La même configuration appliquée à 80 paniers inédits.</b>Écart médian de +2,34 % par an, positif dans 75 % des univers. L'univers d'origine, à −2,44 %, se situe au 11ᵉ percentile de cette distribution : son résultat hors échantillon n'est pas représentatif du comportement de la règle sur les autres paniers.</li>
-        <li><b>Que permettent de conclure 22 décisions ?</b>Le bootstrap par blocs place l'intervalle central à 90 % entre −2,59 % et +3,51 %, avec une probabilité d'écart positif de 59,6 %. La concentration de l'écart n'est pas publiée : l'écart cumulé, à +0,0378, tombe juste sous le seuil de +0,0389 requis pour qu'une décomposition ait un sens.</li>
-        <li><b>Combien de configurations ont été essayées, et le processus était-il scellé ?</b>Quatre configurations, soit environ 1,6 essai indépendant : trop peu pour estimer la dispersion des Sharpe, donc pas de Sharpe déflaté. La configuration n'avait pas été gelée avant le premier accès au holdout, ce qui classe les résultats hors échantillon comme diagnostics et non comme confirmation préinscrite.</li>
+        <li><b>En échantillon, la stratégie obtient de meilleurs résultats que les deux références.</b>Son CAGR est de 1,43 %, contre 1,01 % pour le 1/N absolu et 0,61 % pour le 1/N apparié. Son drawdown maximal est également plus faible : −20,47 %, contre −36,77 % pour le 1/N absolu. Cette comparaison reste descriptive : elle ne mesure pas la probabilité que cet écart se reproduise.</li>
+        <li><b>Hors échantillon, cet avantage disparaît.</b>Le CAGR de la stratégie atteint 1,58 %, contre 4,02 % pour le 1/N absolu et 2,08 % pour le 1/N apparié. L'écart avec le 1/N apparié passe ainsi de +0,82 point en échantillon à −0,50 point hors échantillon. Une partie de cette différence vient de la gestion du cash, plus pénalisante sur cette période haussière.</li>
+        <li><b>La baisse de risque ne s'explique pas uniquement par une moindre exposition au marché.</b>Pour obtenir la même volatilité que la stratégie, un portefeuille composé de 70,8 % de 1/N et 29,2 % de cash aurait produit un CAGR de 0,87 % avec un taux sans risque nul, contre 1,43 % pour la stratégie. L'écart disparaît toutefois lorsque le cash rapporte environ 2 %.</li>
+        <li><b>Sur 80 nouveaux paniers, la même règle obtient généralement un résultat relatif plus favorable.</b>L'écart médian de CAGR face au 1/N est de +2,34 points par an, et il est positif dans 75 % des univers. Le panier d'origine, avec un écart de −2,44 points, se situe au 11ᵉ percentile de cette distribution. Son mauvais résultat hors échantillon se situe donc dans la partie basse des résultats obtenus avec la même configuration.</li>
+        <li><b>Les 22 décisions de rebalancement restent insuffisantes pour obtenir une estimation précise de l'écart.</b>Le bootstrap donne un intervalle central à 90 % allant de −2,59 à +3,51 points, avec 59,6 % des rééchantillonnages produisant un écart positif. La mesure de concentration n'est pas publiée, l'écart cumulé étant légèrement inférieur au seuil prévu par le test.</li>
+        <li><b>L'historique de recherche reste encore trop court pour corriger le Sharpe du nombre d'essais.</b>Quatre configurations ont été enregistrées, correspondant à environ 1,6 essai indépendant. Ce nombre est insuffisant pour calculer un Sharpe déflaté de manière exploitable. Par ailleurs, la configuration n'avait pas été gelée avant le premier accès au holdout : les résultats hors échantillon sont donc conservés comme diagnostics, et non comme validation préinscrite.</li>
       </ol>
     </div>
 
@@ -743,13 +757,20 @@ why                only 4 trial(s) carry a Sharpe on this dataset; the deflated
 
     <div class="abstract">
       <div class="lbl">Summary, in reading order</div>
+      <p><b>Portfolio machinery</b> here means everything that belongs to the running of the portfolio independently of the weighting rule: cash and reserve management, borrowing or cash mobilisation capacity, fees, currencies and accounting rules.</p>
+      <p>Two references are used throughout the validation:</p>
+      <ul>
+        <li><b>1/N absolute</b>, simply equal-weighted across the assets;</li>
+        <li><b>1/N matched</b>, equal-weighted as well, but subject to the same portfolio machinery as the strategy: cash and reserve management, funding rules, fees, currencies and accounting.</li>
+      </ul>
+      <p>This second reference allows the allocation rule to be compared more directly, without mixing its effect with that of the portfolio's operation.</p>
       <ol>
-        <li><b>In sample, the strategy leads both references.</b>1.43 % CAGR against 1.01 % for 1/N absolute and 0.61 % for 1/N matched, with a maximum drawdown of −20.47 % against −36.77 %. The baseline being deterministic, this gap is not a statistical test: it says nothing about persistence.</li>
-        <li><b>Out of sample, the order reverses.</b>1.58 % against 4.02 % and 2.08 %. The gap against 1/N matched moves from +0.82 to −0.50 points. The cash policy explains a large share of the reversal: its cost rises from 0.40 to 1.93 points over a period more oriented upwards. Whether the rule or the basket failed remains open.</li>
-        <li><b>Would simply holding less have produced the same result?</b>At equivalent volatility, holding 70.8 % of the basket and the rest in cash returns 0.87 % with a zero risk-free rate, against 1.43 % for the strategy. The in-sample advantage is therefore not merely a reduction in risk, but it vanishes around a 2 % risk-free rate.</li>
-        <li><b>The same configuration applied to 80 unseen baskets.</b>Median edge of +2.34 % a year, positive in 75 % of the universes. The original universe, at −2.44 %, sits at the 11th percentile of that distribution: its out-of-sample result is not representative of how the rule behaves on other baskets.</li>
-        <li><b>What can 22 decisions support?</b>The block bootstrap places the central 90 % interval between −2.59 % and +3.51 %, with a 59.6 % probability of a positive edge. Edge concentration is not published: the cumulative edge, at +0.0378, falls just under the +0.0389 threshold required for a decomposition to mean anything.</li>
-        <li><b>How many configurations were tried, and was the process sealed?</b>Four configurations, about 1.6 independent trials: too few to estimate the dispersion of the Sharpe, hence no deflated Sharpe. The configuration had not been frozen before the first holdout access, which classes the out-of-sample results as diagnostics rather than preregistered confirmation.</li>
+        <li><b>In sample, the strategy performs better than both references.</b>Its CAGR is 1.43 %, against 1.01 % for 1/N absolute and 0.61 % for 1/N matched. Its maximum drawdown is also lower: −20.47 %, against −36.77 % for 1/N absolute. This comparison stays descriptive: it does not measure the probability that the gap repeats.</li>
+        <li><b>Out of sample, that advantage disappears.</b>The strategy's CAGR reaches 1.58 %, against 4.02 % for 1/N absolute and 2.08 % for 1/N matched. The gap against 1/N matched thus moves from +0.82 points in sample to −0.50 points out of sample. Part of that difference comes from cash management, more costly over this rising period.</li>
+        <li><b>The reduction in risk is not explained by lower market exposure alone.</b>To obtain the same volatility as the strategy, a portfolio made of 70.8 % 1/N and 29.2 % cash would have produced a CAGR of 0.87 % with a zero risk-free rate, against 1.43 % for the strategy. The gap disappears, however, once cash returns around 2 %.</li>
+        <li><b>Across 80 new baskets, the same rule generally obtains a more favourable relative result.</b>The median CAGR edge against 1/N is +2.34 points a year, and it is positive in 75 % of the universes. The original basket, with an edge of −2.44 points, sits at the 11th percentile of that distribution. Its poor out-of-sample result therefore sits in the lower part of the results obtained with the same configuration.</li>
+        <li><b>The 22 rebalancing decisions remain insufficient for a precise estimate of the gap.</b>The bootstrap gives a central 90 % interval running from −2.59 to +3.51 points, with 59.6 % of the resamplings producing a positive edge. The concentration measure is not published, the cumulative edge being slightly below the threshold the test requires.</li>
+        <li><b>The research history is still too short to correct the Sharpe for the number of trials.</b>Four configurations have been recorded, corresponding to about 1.6 independent trials. That number is insufficient to compute a usable deflated Sharpe. Furthermore, the configuration had not been frozen before the first holdout access: the out-of-sample results are therefore kept as diagnostics, not as preregistered validation.</li>
       </ol>
     </div>
 
