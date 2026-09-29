@@ -1,0 +1,649 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Arnaud Barbier · Moteur de backtest multi-stratégie et couche de validation</title>
+<meta name="description" content="Réduire le temps entre une hypothèse d'investissement, son test et sa validation. Noyau comptable compilé en Numba, trois modes d'exécution, et la couche qui juge le résultat.">
+<meta name="author" content="Arnaud Barbier">
+<link rel="canonical" href="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/">
+<meta property="og:title" content="Arnaud Barbier · Moteur de backtest multi-stratégie et couche de validation">
+<meta property="og:description" content="Réduire le temps entre une hypothèse d'investissement, son test et sa validation.">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:locale:alternate" content="en_GB">
+<meta property="og:image" content="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/img/og-home-v3.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Moteur de backtest multi-stratégie, et couche de validation. Signaux, portefeuilles, comptes.">
+<meta name="twitter:image" content="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/img/og-home-v3.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpolygon points='50,6 90,50 50,94 10,50' fill='%23bc8cff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --bg:#FFFFFF; --well:#F5F6F7;
+  --hair:#C9CCD1; --hard:#101215;
+  --ink:#101215; --sub:#54585F; --faint:#868B93;
+  --accent:#A85F00; --accent-well:#FDF7EE;
+  --f-sans:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --f-serif:"Times New Roman",Times,"Liberation Serif",serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0e1117; --well:#12171f;
+    --hair:#21262d; --hard:#3d444d;
+    --ink:#e6edf3; --sub:#8b949e; --faint:#6e7681;
+    --accent:#F0A93A; --accent-well:#1E1710;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0e1117; --well:#12171f;
+  --hair:#21262d; --hard:#3d444d;
+  --ink:#e6edf3; --sub:#8b949e; --faint:#6e7681;
+  --accent:#F0A93A; --accent-well:#1E1710;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body,h1,h2,h3,p{margin:0}
+body{
+  background:var(--bg);color:var(--ink);font-family:var(--f-serif);
+  font-size:17px;line-height:1.66;-webkit-font-smoothing:antialiased;
+  padding:0 1.4rem 4rem;
+}
+a{color:var(--accent)}
+#page[data-lang="fr"] .lang-en{display:none}
+#page[data-lang="en"] .lang-fr{display:none}
+.wrap{max-width:980px;margin:0 auto}
+
+.topbar{display:flex;justify-content:flex-end;padding:.9rem 0 0}
+.topbar button{
+  font-family:var(--f-sans);font-size:.68rem;letter-spacing:.13em;text-transform:uppercase;
+  background:none;color:var(--faint);border:0;
+  padding:.32rem 0;cursor:pointer;margin-left:1.1rem;
+}
+.topbar button:first-child{margin-left:0}
+.topbar button[aria-pressed="true"]{color:var(--accent);border-color:var(--accent);position:relative;z-index:1;font-weight:600}
+.topbar button:hover{color:var(--ink)}
+.topbar button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.mast-top{
+  font-family:var(--f-sans);
+  display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;
+  font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;color:var(--faint);
+  border-bottom:0;padding:0 0 .7rem;margin:2.2rem 0 0;
+  background-image:linear-gradient(90deg,var(--accent) 0%,var(--hard) 30%,var(--hair) 74%);
+  background-repeat:no-repeat;background-size:100% 2px;background-position:0 100%;
+}
+h1{
+  font-size:clamp(1.75rem,3.4vw,2.35rem);font-weight:700;line-height:1.05;
+  letter-spacing:-.005em;text-wrap:balance;max-width:24ch;margin:2.4rem 0 0;
+}
+.lede{font-size:1.06rem;color:var(--sub);max-width:62ch;margin:1.5rem 0 0}
+.lede b{color:var(--ink);font-weight:600}
+.lede2{font-size:.95rem;color:var(--sub);max-width:64ch;margin:1.05rem 0 0}
+.lede2 b{color:var(--ink);font-weight:600}
+
+.figs{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(158px,1fr));gap:0;
+  border-top:0;background-image:linear-gradient(90deg,var(--accent) 0%,var(--hard) 30%,var(--hair) 74%);background-repeat:no-repeat;background-size:100% 2px;background-position:0 0;border-bottom:1px solid var(--hair);
+  margin:2.6rem 0 0;
+}
+.fig{padding:1rem 1.2rem 1.05rem 0;margin-right:1.2rem;border-right:1px solid var(--hair)}
+.fig:last-child{border-right:none;margin-right:0}
+.fig .k{font-family:var(--f-sans);font-size:.63rem;letter-spacing:.13em;text-transform:uppercase;color:var(--faint)}
+.fig .v{font-family:var(--f-sans);font-size:1.85rem;font-weight:700;letter-spacing:-.035em;margin-top:.4rem;
+        font-variant-numeric:tabular-nums;line-height:1}
+.fig .n{font-family:var(--f-sans);font-size:.78rem;color:var(--sub);margin-top:.4rem;line-height:1.42}
+.neg{color:var(--accent)}
+
+.tree{margin:1.6rem 0 0;border:0;padding:.6rem 0 0;background:none}
+.tree svg{width:100%;height:auto;display:block;font-family:var(--f-sans)}
+.tn{fill:var(--well);stroke:var(--hard);stroke-width:1.3}
+.tn-i{fill:var(--accent-well);stroke:var(--accent);stroke-width:1.6}
+.tchip{fill:var(--bg);stroke:var(--hair);stroke-width:1.2;stroke-dasharray:4 3}
+.tl{fill:none;stroke:var(--hair);stroke-width:1.7}
+.tl-i{fill:none;stroke:var(--accent);stroke-width:1.7}
+.t1{fill:var(--ink);font-size:17px;font-weight:600;letter-spacing:-.01em}
+.t2{fill:var(--sub);font-size:13px}
+.t3{fill:var(--accent);font-size:11px;font-weight:600;letter-spacing:.08em}
+.tk{fill:var(--faint);font-size:12px;letter-spacing:.09em}
+.tcap{font-size:.83rem;color:var(--sub);line-height:1.55;margin-top:1rem;max-width:70ch}
+.tcap b{color:var(--ink);font-weight:600}
+.modes{display:grid;grid-template-columns:repeat(auto-fit,minmax(238px,1fr));gap:0;
+       border-top:1px solid var(--hair);margin:2.6rem 0 0}
+.mode{padding:1rem 1.3rem 1.1rem 0;margin-right:1.3rem;border-right:1px solid var(--hair)}
+.mode:last-child{border-right:none;margin-right:0}
+.mode h3{font-size:.95rem;font-weight:600;letter-spacing:-.01em;margin:0 0 .4rem}
+.mode p{font-size:.83rem;color:var(--sub);line-height:1.5;margin:0}
+.mode .c{font-family:var(--f-sans);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);
+         margin-top:.55rem;font-weight:600}
+.band{border:0;margin:2.6rem 0 0;background:none}
+.band img{display:block;width:100%;height:auto;padding:10px;background:var(--well);border:1px solid var(--hard);}
+.band .cap{
+  font-size:.75rem;color:var(--faint);line-height:1.5;padding:.7rem 0 0;
+}
+.card .shot{
+  margin:0 0 .35rem;background:#0e1117;height:104px;overflow:hidden;
+}
+.card .shot img{display:block;width:100%;height:104px;object-fit:cover;object-position:left top}
+.lbl{
+  font-family:var(--f-sans);
+  font-size:.63rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);
+  font-weight:600;margin:3.4rem 0 1.1rem;
+}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(272px,1fr));
+       gap:0;border-top:1px solid var(--hair)}
+.card{
+  background:none;padding:1.5rem 1.6rem 1.7rem 0;border-bottom:1px solid var(--hair);
+  display:flex;flex-direction:column;gap:.6rem;text-decoration:none;color:inherit;
+}
+.card:hover .go{color:var(--ink)}
+.card:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.card .tag{
+  font-family:var(--f-sans);
+  font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);
+  display:flex;justify-content:space-between;gap:1rem;
+}
+.card h2{font-size:1.16rem;font-weight:600;letter-spacing:-.02em;line-height:1.25}
+.card p{font-size:.885rem;color:var(--sub);line-height:1.55;flex:1}
+.card .tests{font-family:var(--f-sans);font-size:.72rem;line-height:1.55;color:var(--faint)}
+.card .tests b{color:var(--ink);font-weight:600}
+.card .tests code{font-family:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;color:var(--sub)}
+.card .go{font-family:var(--f-sans);font-size:.83rem;font-weight:600;color:var(--accent)}
+
+.foot{
+  border-top:1px solid var(--hair);margin-top:3.4rem;padding-top:1.1rem;
+  font-size:.82rem;color:var(--faint);max-width:66ch;
+}
+.foot b{color:var(--sub);font-weight:600}
+.contact{
+  border-top:1px solid var(--hair);margin-top:1.35rem;padding-top:1.1rem;
+  display:flex;flex-wrap:wrap;gap:.5rem 1.6rem;align-items:baseline;
+}
+.contact .k{font-family:var(--f-sans);font-size:.63rem;letter-spacing:.15em;text-transform:uppercase;color:var(--faint)}
+.contact a{font-size:.93rem;font-weight:600;text-decoration:none;border-bottom:1px solid var(--accent)}
+.contact a:hover{color:var(--ink);border-bottom-color:var(--ink)}
+
+.roadmap{
+  margin-top:3.6rem;padding:1.7rem 0 1.8rem;
+  border-top:2px solid var(--hard);border-bottom:1px solid var(--hair)
+}
+.roadmap .lbl{margin:0 0 1.15rem}
+.roadmap-grid{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.roadmap article{padding-right:2rem}
+.roadmap article+article{padding:0 0 0 2rem;border-left:1px solid var(--hair)}
+.roadmap h2{font-size:1.12rem;font-weight:600;letter-spacing:-.02em;line-height:1.28;margin-bottom:.55rem}
+.roadmap p{font-size:.9rem;color:var(--sub);line-height:1.58}
+.roadmap .continuity{margin-top:1.35rem;padding-top:1rem;border-top:1px solid var(--hair);max-width:78ch}
+
+@media (max-width:760px){
+  .tree{display:none}
+  .roadmap-grid{grid-template-columns:1fr}
+  .roadmap article{padding:0 0 1.2rem}
+  .roadmap article+article{padding:1.2rem 0 0;border-left:0;border-top:1px solid var(--hair)}
+}
+</style>
+</head>
+<body>
+<div id="page" data-lang="fr">
+  <div class="wrap topbar">
+    <button type="button" data-set="fr" aria-pressed="true">Français</button>
+    <button type="button" data-set="en" aria-pressed="false">English</button>
+  </div>
+
+  <div class="wrap lang-fr">
+    <div class="mast-top">
+      <div>Arnaud Barbier</div>
+      <div>Signaux · Portefeuilles · Comptes</div>
+    </div>
+
+    <h1>Moteur de backtest multi-stratégie, et couche de validation.</h1>
+
+    <p class="lede">
+      L'objectif du projet : <b>réduire le temps entre une hypothèse d'investissement, son test
+      et sa validation</b>. L'utilisateur écrit la logique de sa stratégie et configure
+      directement la trésorerie, l'emprunt, les frais et les devises du portefeuille. Le moteur
+      prend entièrement en charge l'exécution. Une couche de validation met ensuite le résultat
+      à l'épreuve. Elle peut aussi évaluer une stratégie déjà rentable afin d'estimer dans quelle
+      mesure ses performances peuvent se reproduire.
+    </p>
+
+    <p class="lede2">
+      Un noyau compilé en Numba tient la comptabilité du portefeuille à chaque barre :
+      paliers de trésorerie, tranches d'emprunt indexées sur un taux de marché réel, plusieurs
+      devises, frais provisionnés sur une horloge et payés sur une autre. Trois modes
+      d'exécution partagent ce kernel : signaux algorithmiques, allocation de portefeuille,
+      et suivi d'un compte réel. La comptabilité de portefeuille appartient aux deux derniers.
+    </p>
+
+    <div class="figs">
+      <div class="fig">
+        <div class="k">Déclarer un portefeuille</div>
+        <div class="v">40 lignes</div>
+        <div class="n">réserves, emprunt, frais, devises</div>
+      </div>
+      <div class="fig">
+        <div class="k">Coût d'une réfutation</div>
+        <div class="v">3 lignes</div>
+        <div class="n">trois appels, trois verdicts</div>
+      </div>
+      <div class="fig">
+        <div class="k">Identité comptable</div>
+        <div class="v">4,44 e−16</div>
+        <div class="n">résidu maximal, neuf ans de barres journalières</div>
+      </div>
+      <div class="fig">
+        <div class="k">Hors échantillon</div>
+        <div class="v">jamais ouvert</div>
+        <div class="n">30 % de l'historique scellé</div>
+      </div>
+    </div>
+
+
+    <div class="lbl">Un noyau, trois questions</div>
+    <p class="lede" style="margin-top:-.4rem">
+      Le moteur s'organise autour de trois modes complémentaires. Chacun répond à une question
+      différente et se mesure donc différemment. <b>C'est le moteur qui applique la bonne
+      mesure, pas l'utilisateur.</b>
+    </p>
+    <div class="tree">
+      <svg viewBox="0 0 900 430" role="img" aria-label="Arbre des modes : le kernel Numba se sépare en algorithmique et allocation, qui se rejoignent pour former le mode investissement">
+        <path class="tl" d="M450,372 L450,346"/>
+        <path class="tl" d="M450,346 C450,320 350,300 292,290"/>
+        <path class="tl" d="M450,346 C450,320 550,300 608,290"/>
+        <path class="tl-i" d="M165,238 C165,195 250,165 348,124"/>
+        <path class="tl-i" d="M735,238 C735,195 650,165 552,124"/>
+
+        <rect class="tn" x="300" y="372" width="300" height="48" rx="1"/>
+        <text class="tk" x="450" y="394" text-anchor="middle">KERNEL NUMBA</text>
+        <text class="t2" x="450" y="412" text-anchor="middle">lecture des barres, une seule fois</text>
+
+        <rect class="tn" x="40" y="240" width="250" height="68" rx="1"/>
+        <text class="t1" x="62" y="272">Algorithmique</text>
+        <text class="t2" x="62" y="294">une règle a-t-elle un edge ?</text>
+
+        <rect class="tn" x="610" y="240" width="250" height="68" rx="1"/>
+        <text class="t1" x="632" y="272">Allocation</text>
+        <text class="t2" x="632" y="294">une pondération bat-elle 1/N ?</text>
+
+        <rect class="tn-i" x="305" y="44" width="290" height="76" rx="1"/>
+        <text class="t1" x="327" y="80">Investissement</text>
+        <text class="t2" x="327" y="104">qu'a vécu un compte réel ?</text>
+
+        <rect class="tchip" x="136" y="164" width="168" height="32" rx="1"/>
+        <text class="t2" x="220" y="185" text-anchor="middle">couche de sizing</text>
+      </svg>
+    </div>
+    <div class="modes">
+      <div class="mode">
+        <h3>Algorithmique</h3>
+        <p>Le mode algorithmique permet de tester et d'évaluer des stratégies systématiques,
+           avec leur propre logique de signal, de sizing et de gestion du risque.</p>
+        <div class="c">porteur : trades clos</div>
+      </div>
+      <div class="mode">
+        <h3>Allocation</h3>
+        <p>Le mode allocation applique cette architecture à la construction et au suivi de
+           portefeuilles multi-actifs, avec des règles de pondération et de rebalancement
+           configurables.</p>
+        <div class="c">porteur : NAV nette de l'emprunt</div>
+      </div>
+      <div class="mode">
+        <h3>Investissement, en développement</h3>
+        <p>Le mode investissement prolonge cette logique en traitant chaque stratégie
+           algorithmique comme une ligne de portefeuille à part entière. Chaque stratégie
+           conserve sa propre gestion du risque et son accès à la trésorerie. Les contraintes de
+           rebalancement peuvent également y être appliquées de manière optionnelle, notamment
+           pour piloter l'utilisation du cash. L'investissement est traité au comptant.</p>
+        <div class="c">porteur : rendement pondéré par le temps</div>
+      </div>
+    </div>
+    <p class="tcap">
+      Cette « assetification » des stratégies permet de faire remonter la couche de sizing de la
+      branche algorithmique jusqu'au niveau du portefeuille d'investissement.
+    </p>
+
+    <div class="band">
+      <img src="img/band-equity.png" alt="Sortie du moteur : NAV, paliers de trésorerie, rebalancements, drawdown" loading="lazy">
+      <div class="cap">
+        Mode allocation, sortie brute. La courbe verte est la NAV, les losanges violets les
+        décisions de rebalancement, les lignes basses les paliers de trésorerie, le panneau du
+        bas le drawdown.
+      </div>
+    </div>
+
+    <div class="lbl">Six entrées</div>
+    <div class="cards">
+      <a class="card" href="validation/">
+        <div class="shot"><img src="img/thumb-validation.png" alt="Courbes de la stratégie et des deux baselines" loading="lazy"></div>
+        <div class="tag"><span>La mesure</span><span>6 min · 26 août 2026</span></div>
+        <h2>Validation · Optimisation max DDR duration</h2>
+        <div class="tests"><b>Tests montrés :</b> <code>validation_baseline</code>, <code>validation_null_sizing</code>, <code>validation_null_leverage</code>.</div>
+        <div class="go">Lire la note →</div>
+      </a>
+      <a class="card" href="validation-2/">
+        <div class="shot"><img src="img/thumb-validation-2.png" alt="Courbes de la stratégie et des deux baselines" loading="lazy"></div>
+        <div class="tag"><span>La mesure</span><span>7 min · 4 septembre 2026</span></div>
+        <h2>Validation · Optimisation Sharpe</h2>
+        <div class="tests"><b>Tests montrés :</b> <code>validation_baseline</code>, <code>validation_purchasing_power</code>, <code>validation_oos_retention</code>, <code>validation_null_leverage</code>, <code>validation_cross_asset</code>, <code>validation_mc</code>, <code>validation_edge_concentration</code>, <code>validation_dsr</code>, <code>trial_counter_status</code> et <code>freeze_configuration</code>.</div>
+        <div class="go">Lire la note →</div>
+      </a>
+      <a class="card" href="engine/">
+        <div class="shot"><img src="img/thumb-engine.png" alt="Bloc AllocationSpec" loading="lazy"></div>
+        <div class="tag"><span>L'instrument</span><span>5 min · 26 août 2026</span></div>
+        <h2>Mode allocation</h2>
+        <p>
+          Le code réel que l'utilisateur écrit et la sortie réelle que le moteur renvoie. Quarante lignes déclarent
+          les réserves, l'emprunt indexé, les frais à deux horloges et quatre devises. Le bilan
+          boucle à l'unité près.
+        </p>
+        <div class="go">Voir le mode allocation →</div>
+      </a>
+      <a class="card" href="costs/">
+        <div class="shot"><img src="img/costs-cascade.png" alt="NAV nette et courbes reconstituées avant coûts" loading="lazy"></div>
+        <div class="tag"><span>Le rapprochement</span><span>5 min · 1er septembre 2026</span></div>
+        <h2>Attribution des coûts et de la performance</h2>
+        <p>
+          Spread, commissions, taxes, slippage, carry, frais de gestion et financement :
+          comment sont-ils calculés et appliqués pour un backtest réaliste et robuste en mode
+          spot ?
+        </p>
+        <div class="go">Suivre les coûts →</div>
+      </a>
+      <a class="card" href="stateful/">
+        <div class="shot"><img src="img/thumb-stateful.png" alt="Schéma du mode replay" loading="lazy"></div>
+        <div class="tag"><span>La mécanique</span><span>7 min · 26 août 2026</span></div>
+        <h2>Replay, resume, watcher</h2>
+        <p>
+          Comment un kernel compilé prend des décisions qui dépendent de son propre passé.
+          Trois régimes, trois schémas, et ce que chacun coûte.
+        </p>
+        <div class="go">Lire la note technique →</div>
+      </a>
+      <a class="card" href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine">
+        <div class="shot"><img src="img/thumb-repo.png" alt="Scanner njit" loading="lazy"></div>
+        <div class="tag"><span>Le code</span><span>MIT</span></div>
+        <h2>Le dépôt</h2>
+        <p>
+          Le moteur algorithmique, publié : de quoi définir un signal, le faire tourner sous un
+          modèle d'exécution réaliste, et inspecter les trades produits.
+        </p>
+        <div class="go">Ouvrir sur GitHub →</div>
+      </a>
+    </div>
+
+    <section class="roadmap" aria-labelledby="roadmap-fr">
+      <div class="lbl" id="roadmap-fr">Travaux à venir</div>
+      <div class="roadmap-grid">
+        <article>
+          <h2>Détecter la dégradation d'une stratégie avant les pertes</h2>
+          <p>
+            Une stratégie peut progressivement perdre l'edge qui justifiait son déploiement. Le
+            prochain axe de développement cherchera à détecter, voire anticiper, cette
+            dégradation avant qu'elle ne se traduise par des pertes significatives, afin de
+            réduire ou retirer l'exposition suffisamment tôt.
+          </p>
+        </article>
+        <article>
+          <h2>Déclencher une mesure d'urgence au bon seuil</h2>
+          <p>
+            Un passage forcé à plat peut éviter un événement qui détruirait la stratégie, mais
+            aussi coûter davantage que la protection apportée. Le travail cherchera à déterminer
+            quand déclencher cette mesure et à partir de quel seuil son coût dépasse son bénéfice.
+          </p>
+        </article>
+      </div>
+      <p class="continuity">
+        Le reverse stress déterministe déjà en ligne constitue le point de départ : il mesure ce
+        que la protection coûte lorsqu'elle se déclenche.
+      </p>
+    </section>
+
+    <p class="foot">
+      <b>Aucune stratégie gagnante n'est présentée ici.</b> La stratégie testée est une
+      construction de manuel, retenue parce qu'elle est connue et reproductible. L'objet de ces
+      pages est l'instrument qui la juge.
+    </p>
+    <div class="contact">
+      <span class="k">Contact</span>
+      <a href="mailto:arnaud.barbier@grenoble-em.com">arnaud.barbier@grenoble-em.com</a>
+      <span class="k">Une démonstration en direct du moteur est possible sur demande</span>
+    </div>
+  </div>
+
+  <div class="wrap lang-en">
+    <div class="mast-top">
+      <div>Arnaud Barbier</div>
+      <div>Signals · Portfolios · Accounts</div>
+    </div>
+
+    <h1>Multi-strategy backtesting engine, and validation layer.</h1>
+
+    <p class="lede">
+      The point of the project: <b>cut the time between an investment hypothesis, its test and
+      its validation</b>. The user writes the strategy logic and directly configures the
+      portfolio's cash, borrowing, fees and currencies. The engine handles the entire execution
+      process. A validation layer then puts the result to the test. It can also evaluate an
+      already profitable strategy to estimate the extent to which its performance can be
+      reproduced.
+    </p>
+
+    <p class="lede2">
+      A Numba-compiled core keeps the portfolio's books on every bar: cash tiers, borrow
+      tranches indexed on a real market rate, several currencies, fees that accrue on one clock
+      and are paid on another. Three execution modes share that kernel: algorithmic signals,
+      portfolio allocation, and tracking a real account. The portfolio accounting belongs to the
+      last two.
+    </p>
+
+    <div class="figs">
+      <div class="fig">
+        <div class="k">Declaring a portfolio</div>
+        <div class="v">40 lines</div>
+        <div class="n">reserves, borrowing, fees, currencies</div>
+      </div>
+      <div class="fig">
+        <div class="k">Cost of a refutation</div>
+        <div class="v">3 lines</div>
+        <div class="n">three calls, three verdicts</div>
+      </div>
+      <div class="fig">
+        <div class="k">Accounting identity</div>
+        <div class="v">4.44 e−16</div>
+        <div class="n">worst residual, nine years of daily bars</div>
+      </div>
+      <div class="fig">
+        <div class="k">Out of sample</div>
+        <div class="v">never opened</div>
+        <div class="n">30 % of the history sealed</div>
+      </div>
+    </div>
+
+
+    <div class="lbl">One core, three questions</div>
+    <p class="lede" style="margin-top:-.4rem">
+      The engine is organised around three complementary modes. Each answers a different
+      question and is therefore measured differently. <b>The engine applies the right measure,
+      not the user.</b>
+    </p>
+    <div class="tree">
+      <svg viewBox="0 0 900 430" role="img" aria-label="Mode tree: the Numba kernel splits into algorithmic and allocation, which rejoin to form investment mode">
+        <path class="tl" d="M450,372 L450,346"/>
+        <path class="tl" d="M450,346 C450,320 350,300 292,290"/>
+        <path class="tl" d="M450,346 C450,320 550,300 608,290"/>
+        <path class="tl-i" d="M165,238 C165,195 250,165 348,124"/>
+        <path class="tl-i" d="M735,238 C735,195 650,165 552,124"/>
+
+        <rect class="tn" x="300" y="372" width="300" height="48" rx="1"/>
+        <text class="tk" x="450" y="394" text-anchor="middle">NUMBA KERNEL</text>
+        <text class="t2" x="450" y="412" text-anchor="middle">bars read once</text>
+
+        <rect class="tn" x="40" y="240" width="250" height="68" rx="1"/>
+        <text class="t1" x="62" y="272">Algorithmic</text>
+        <text class="t2" x="62" y="294">does a rule have an edge?</text>
+
+        <rect class="tn" x="610" y="240" width="250" height="68" rx="1"/>
+        <text class="t1" x="632" y="272">Allocation</text>
+        <text class="t2" x="632" y="294">does a weighting beat 1/N?</text>
+
+        <rect class="tn-i" x="305" y="44" width="290" height="76" rx="1"/>
+        <text class="t1" x="327" y="80">Investment</text>
+        <text class="t2" x="327" y="104">what did a real account live?</text>
+
+        <rect class="tchip" x="136" y="164" width="168" height="32" rx="1"/>
+        <text class="t2" x="220" y="185" text-anchor="middle">sizing layer</text>
+      </svg>
+    </div>
+    <div class="modes">
+      <div class="mode">
+        <h3>Algorithmic</h3>
+        <p>Algorithmic mode tests and evaluates systematic strategies, each with its own signal
+           logic, sizing and risk management.</p>
+        <div class="c">carrier: closed trades</div>
+      </div>
+      <div class="mode">
+        <h3>Allocation</h3>
+        <p>Allocation mode applies this architecture to building and monitoring multi-asset
+           portfolios, with configurable weighting and rebalancing rules.</p>
+        <div class="c">carrier: NAV net of borrowing</div>
+      </div>
+      <div class="mode">
+        <h3>Investment, in development</h3>
+        <p>Investment mode extends this logic by treating each algorithmic strategy as a
+           portfolio line in its own right. Each strategy retains its own risk management and
+           access to cash. Rebalancing constraints can also be applied optionally, notably to
+           manage the use of cash. Investment is handled on a spot basis.</p>
+        <div class="c">carrier: time-weighted return</div>
+      </div>
+    </div>
+    <p class="tcap">
+      This assetification of strategies carries the sizing layer from the algorithmic branch up
+      to the investment-portfolio level.
+    </p>
+
+    <div class="band">
+      <img src="img/band-equity.png" alt="Engine output: NAV, cash tiers, rebalances, drawdown" loading="lazy">
+      <div class="cap">
+        Allocation mode, raw output. The green line is NAV, the purple diamonds are
+        rebalance decisions, the lower lines are the cash tiers, the bottom panel is drawdown.
+      </div>
+    </div>
+
+    <div class="lbl">Five ways in</div>
+    <div class="cards">
+      <a class="card" href="validation/">
+        <div class="shot"><img src="img/thumb-validation.png" alt="Courbes de la stratégie et des deux baselines" loading="lazy"></div>
+        <div class="tag"><span>The measurement</span><span>6 min · 26 August 2026</span></div>
+        <h2>Validation · max drawdown duration optimisation</h2>
+        <div class="tests"><b>Tests shown:</b> <code>validation_baseline</code>, <code>validation_null_sizing</code>, <code>validation_null_leverage</code>.</div>
+        <div class="go">Read the note →</div>
+      </a>
+    <a class="card" href="validation-2/">
+        <div class="shot"><img src="img/thumb-validation-2.png" alt="Strategy and both baselines" loading="lazy"></div>
+        <div class="tag"><span>The measurement</span><span>7 min · 4 September 2026</span></div>
+        <h2>Validation · Sharpe optimisation</h2>
+        <div class="tests"><b>Tests shown:</b> <code>validation_baseline</code>, <code>validation_purchasing_power</code>, <code>validation_oos_retention</code>, <code>validation_null_leverage</code>, <code>validation_cross_asset</code>, <code>validation_mc</code>, <code>validation_edge_concentration</code>, <code>validation_dsr</code>, <code>trial_counter_status</code> and <code>freeze_configuration</code>.</div>
+        <div class="go">Read the note →</div>
+      </a>
+      <a class="card" href="engine/">
+        <div class="shot"><img src="img/thumb-engine.png" alt="Bloc AllocationSpec" loading="lazy"></div>
+        <div class="tag"><span>The instrument</span><span>5 min · 26 August 2026</span></div>
+        <h2>Allocation mode</h2>
+        <p>
+          The real code that is written and the real output it returns. Forty lines declare
+          the reserves, the indexed borrowing, fees on two clocks and four currencies. The
+          balance sheet closes to the last unit.
+        </p>
+        <div class="go">View allocation mode →</div>
+      </a>
+      <a class="card" href="costs/">
+        <div class="shot"><img src="img/costs-cascade.png" alt="Net NAV and reconstructed pre-cost curves" loading="lazy"></div>
+        <div class="tag"><span>The reconciliation</span><span>5 min · FR · 1 September 2026</span></div>
+        <h2>Cost and performance attribution</h2>
+        <p>
+          Spread, commissions, taxes, slippage, carry, portfolio fees and financing: how are
+          they calculated and applied to a realistic and robust backtest in spot mode? French
+          only for now.
+        </p>
+        <div class="go">Follow the costs →</div>
+      </a>
+      <a class="card" href="stateful/">
+        <div class="shot"><img src="img/thumb-stateful.png" alt="Replay mode diagram" loading="lazy"></div>
+        <div class="tag"><span>The mechanics</span><span>7 min · FR · 26 August 2026</span></div>
+        <h2>Replay, resume, watcher</h2>
+        <p>
+          How a compiled kernel makes decisions that depend on its own past. Three regimes,
+          three diagrams, and what each one costs. French only for now.
+        </p>
+        <div class="go">Read the technical note →</div>
+      </a>
+      <a class="card" href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine">
+        <div class="shot"><img src="img/thumb-repo.png" alt="Scanner njit" loading="lazy"></div>
+        <div class="tag"><span>The code</span><span>MIT</span></div>
+        <h2>The repository</h2>
+        <p>
+          The algorithmic engine, published: enough to define a signal, run it under a realistic
+          execution model, and inspect the resulting trades.
+        </p>
+        <div class="go">Open on GitHub →</div>
+      </a>
+    </div>
+
+    <section class="roadmap" aria-labelledby="roadmap-en">
+      <div class="lbl" id="roadmap-en">Work ahead</div>
+      <div class="roadmap-grid">
+        <article>
+          <h2>Detect strategy deterioration before losses</h2>
+          <p>
+            A strategy can gradually lose the edge that justified its deployment. The next line
+            of development will seek to detect, or even anticipate, that deterioration before it
+            translates into significant losses, so exposure can be reduced or withdrawn early
+            enough.
+          </p>
+        </article>
+        <article>
+          <h2>Trigger an emergency measure at the right threshold</h2>
+          <p>
+            A forced move to flat can avoid an event that would destroy the strategy, but it can
+            also cost more than the protection it provides. The work will seek to determine when
+            to trigger that measure and at what threshold its cost exceeds its benefit.
+          </p>
+        </article>
+      </div>
+      <p class="continuity">
+        The deterministic reverse stress already online provides the starting point: it measures
+        what the protection costs when it is triggered.
+      </p>
+    </section>
+
+    <p class="foot">
+      <b>No winning strategy is presented here.</b> The strategy under test is a textbook
+      construction, chosen because it is well known and reproducible. What these pages are about
+      is the instrument that judges it.
+    </p>
+    <div class="contact">
+      <span class="k">Contact</span>
+      <a href="mailto:arnaud.barbier@grenoble-em.com">arnaud.barbier@grenoble-em.com</a>
+      <span class="k">A live walkthrough of the engine is available on request</span>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  var page = document.getElementById("page");
+  var btns = document.querySelectorAll(".topbar button");
+  function set(l){
+    page.setAttribute("data-lang", l);
+    btns.forEach(function(b){ b.setAttribute("aria-pressed", String(b.dataset.set === l)); });
+    try { localStorage.setItem("ab-lang", l); } catch (e) {}
+  }
+  btns.forEach(function(b){ b.addEventListener("click", function(){ set(b.dataset.set); }); });
+  try { var s = localStorage.getItem("ab-lang"); if (s === "fr" || s === "en") set(s); } catch (e) {}
+})();
+</script>
+</body>
+</html>
