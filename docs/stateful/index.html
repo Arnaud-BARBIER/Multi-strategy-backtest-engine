@@ -148,14 +148,26 @@ td:first-child{font-weight:600;white-space:nowrap;padding-right:1.4rem}
 .pagenav [aria-current="page"]{color:var(--ink);font-weight:600}
 .pagenav>a:hover{color:var(--accent)}
 .pagenav>a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.reading-map{margin:0 0 1.8rem;padding:1rem 1.05rem 1.05rem;border-top:3px solid var(--accent);border-bottom:1px solid var(--hair);background:linear-gradient(110deg,var(--accent-well),var(--well))}
+.reading-map .intro{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;margin-bottom:.85rem}
+.reading-map .intro b{font-family:var(--f-sans);font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);white-space:nowrap}
+.reading-map .intro p{margin:0;font-size:.8rem;line-height:1.45;color:var(--sub);max-width:68ch}
+.reading-map ol{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1px;margin:0;padding:0;list-style:none;background:var(--hair)}
+.reading-map li{min-width:0;background:var(--panel)}
+.reading-map a{display:block;height:100%;padding:.68rem .72rem;text-decoration:none;color:var(--ink)}
+.reading-map .n{display:block;font-family:var(--f-sans);font-size:.68rem;font-weight:700;color:var(--accent);margin-bottom:.2rem}
+.reading-map .t{font-family:var(--f-sans);font-size:.76rem;font-weight:600;line-height:1.3}
+.reading-map small{display:block;margin-top:.18rem;font-family:var(--f-serif);font-size:.68rem;font-weight:400;line-height:1.35;color:var(--faint)}
+.reading-map a:hover{background:var(--accent-well)}
+@media (max-width:700px){.reading-map .intro{display:block}.reading-map .intro p{margin-top:.35rem}.reading-map ol{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <div class="topbar">
   <nav class="pagenav" aria-label="Pages">
     <a href="../">Accueil</a>
-    <a href="../validation/">Premiers tests d'allocation</a>
-    <a href="../validation-2/">Tous les tests d'allocation</a>
+    <a href="../validation/">Validation · Optimisation max DDR</a>
+    <a href="../validation-2/">Validation · Optimisation Sharpe</a>
     <a href="../engine/">Mode allocation</a>
     <a href="../costs/">Les coûts</a>
     <span aria-current="page">Replay &amp; resume</span>
@@ -177,6 +189,16 @@ td:first-child{font-weight:600;white-space:nowrap;padding-right:1.4rem}
     logique est écrite serait trop lourd. Le replay, le resume et le watcher préservent cette
     liberté sans payer ce coût.
   </p>
+  <nav class="reading-map" aria-label="Fil de lecture">
+    <div class="intro"><b>Fil de lecture</b><p>Un même problème de décision stateful mène à trois réponses, chacune adaptée à un besoin et à un coût d'exécution différent.</p></div>
+    <ol>
+      <li><a href="#stateful-probleme"><span class="n">01</span><span class="t">Le problème<small>Décider à partir d'un état produit par le run</small></span></a></li>
+      <li><a href="#stateful-replay"><span class="n">02</span><span class="t">Replay<small>Rejouer avec un patch déjà calculé</small></span></a></li>
+      <li><a href="#stateful-resume"><span class="n">03</span><span class="t">Resume<small>Interrompre puis reprendre causalement</small></span></a></li>
+      <li><a href="#stateful-watcher"><span class="n">04</span><span class="t">Watcher<small>Détecter dans le kernel, décider en Python</small></span></a></li>
+      <li><a href="#stateful-choix"><span class="n">05</span><span class="t">Choisir<small>Trois régimes, trois usages</small></span></a></li>
+    </ol>
+  </nav>
   <div class="tickers">
     <div>Replay : rétrospectif</div>
     <div>Resume : causal</div>
@@ -186,7 +208,7 @@ td:first-child{font-weight:600;white-space:nowrap;padding-right:1.4rem}
   </div>
 </header>
 
-<section>
+<section id="stateful-probleme">
   <p class="eyebrow">Le problème</p>
   <h2>L'information dont la décision a besoin n'existe qu'après le run</h2>
   <p>
@@ -216,7 +238,7 @@ td:first-child{font-weight:600;white-space:nowrap;padding-right:1.4rem}
   </p>
 </section>
 
-<section>
+<section id="stateful-replay">
   <p class="eyebrow">Mode 1</p>
   <h2>Replay : le run précédent devient une donnée d'entrée</h2>
   <p>
@@ -311,7 +333,7 @@ td:first-child{font-weight:600;white-space:nowrap;padding-right:1.4rem}
   </div>
 </section>
 
-<section>
+<section id="stateful-resume">
   <p class="eyebrow">Mode 2</p>
   <h2>Resume : le run s'arrête vraiment, et l'état traverse la frontière</h2>
   <p>
@@ -401,7 +423,7 @@ td:first-child{font-weight:600;white-space:nowrap;padding-right:1.4rem}
   </p>
 </section>
 
-<section>
+<section id="stateful-watcher">
   <p class="eyebrow">Mode 3</p>
   <h2>Watcher : séparer la détection, qui est légère, de la décision, qui est lourde</h2>
   <p>
@@ -547,7 +569,7 @@ td:first-child{font-weight:600;white-space:nowrap;padding-right:1.4rem}
 </div>
 </section>
 
-<section>
+<section id="stateful-choix">
   <p class="eyebrow">Récapitulatif</p>
   <h2>Trois régimes, trois usages</h2>
   <div class="tablewrap">
