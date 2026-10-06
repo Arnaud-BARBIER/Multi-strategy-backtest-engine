@@ -2,7 +2,7 @@
 
 [![tests](https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine/actions/workflows/tests.yml/badge.svg)](https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine/actions/workflows/tests.yml)
 
-**A backtesting engine where refuting a result costs one line, which is why it happens.**
+**A backtesting engine where refuting a result costs one line.**
 
 **[arnaud-barbier.github.io/Multi-strategy-backtest-engine](https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/)**
  — the validation note, the engine page, the cost reconciliation, and the numbers below in context.
