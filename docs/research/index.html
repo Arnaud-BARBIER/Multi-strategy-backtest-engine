@@ -18,7 +18,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpolygon points='50,6 90,50 50,94 10,50' fill='%23a85f00'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Tinos:ital,wght@0,400;0,700;1,400;1,700&display=swap">
 <link rel="stylesheet" href="../assets/modes.css">
 <script src="../assets/modes.js" defer></script>
 <link rel="stylesheet" href="../assets/endnav.css">
@@ -175,7 +175,7 @@ cross = research.run_cross_asset(
 <p>Dans l'autre sens, <code>@engine.research_view</code> déclare un graphique avant le run : les bougies, les entrées et les sorties du moteur y sont ajoutées automatiquement, et <code>engine.bind_research_view(study)</code> peut réutiliser la vue d'une étude. Le résultat s'ouvre en lecture seule : rien n'est recalculé, aucun essai n'est compté et le freeze n'est pas modifié.</p>
 </section>
 <aside class="endnav" id="suite-fr" aria-label="Pages du site">
-<div class="en-contact"><span class="en-k">Contact</span><p class="en-q">Une question, un retour, ou l'envie de voir le moteur tourner en direct ? Écrivez-moi.</p><a class="en-mail" href="mailto:arnaud.barbier@grenoble-em.com?subject=Moteur%20de%20backtest"><span class="en-shine" aria-hidden="true"></span>arnaud.barbier@grenoble-em.com<span class="en-arrow" aria-hidden="true">→</span></a><p class="en-sub">Une démonstration du moteur est possible sur place ou en visio. Voir aussi <a href="https://arnaud-barbier.github.io/">mon site principal</a> et <a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine">le code sur GitHub</a>.</p></div>
+<div class="en-contact"><span class="en-k">Contact</span><p class="en-q">Une question, un retour, ou l'envie de voir le moteur tourner en direct ? Écrivez-moi.</p><a class="en-mail" href="mailto:arnaud.barbier@grenoble-em.com?subject=Moteur%20de%20backtest"><span class="en-shine" aria-hidden="true"></span>arnaud.barbier@grenoble-em.com<span class="en-arrow" aria-hidden="true">→</span></a><p class="en-sub">Une démonstration du moteur est possible sur place ou en visio. Le code est sur <a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine">GitHub</a>.</p></div>
 <nav class="en-more" aria-label="Continuer la lecture"><span class="en-k">Continuer la lecture</span>
 <ol>
 <li class="en-next"><a href="../algo/"><span class="en-tag">Suite conseillée · La stratégie</span><b>Mode Algo</b><small>Du signal aux trades gérés, avec frais et sizing.</small><span class="en-go">Lire <i>→</i></span></a></li>
@@ -186,6 +186,7 @@ cross = research.run_cross_asset(
 <li><a href="../costs/"><span class="en-tag">Le rapprochement</span><b>Les coûts</b><small>Chaque coût suivi de sa déclaration jusqu'à son débit dans la NAV.</small><span class="en-go">Lire <i>→</i></span></a></li>
 <li><a href="../stateful/"><span class="en-tag">La mécanique</span><b>Replay &amp; resume</b><small>Comment un kernel compilé décide en fonction de son propre passé.</small><span class="en-go">Lire <i>→</i></span></a></li>
 </ol></nav>
+<a class="en-site" href="https://arnaud-barbier.github.io/"><span class="en-site-arrow" aria-hidden="true">←</span><span><b>Retour sur mon site principal</b><small>arnaud-barbier.github.io · projets, parcours et contact</small></span></a>
 </aside>
 
 <footer><span>Arnaud Barbier · octobre 2026. Les captures servent à montrer le fonctionnement ; aucun résultat de performance n'est revendiqué.</span><a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine">Dépôt public (instantané) →</a></footer>
@@ -335,7 +336,7 @@ cross = research.run_cross_asset(
 <p>In the other direction, <code>@engine.research_view</code> declares a chart before the run: the engine's candles, entries and exits are added automatically, and <code>engine.bind_research_view(study)</code> can reuse a study's view. The result opens read-only: nothing is recomputed, no trial is counted and the freeze is untouched.</p>
 </section>
 <aside class="endnav" id="suite-en" aria-label="Site pages">
-<div class="en-contact"><span class="en-k">Contact</span><p class="en-q">A question, some feedback, or want to see the engine run live? Write to me.</p><a class="en-mail" href="mailto:arnaud.barbier@grenoble-em.com?subject=Backtest%20engine"><span class="en-shine" aria-hidden="true"></span>arnaud.barbier@grenoble-em.com<span class="en-arrow" aria-hidden="true">→</span></a><p class="en-sub">A live demonstration of the engine can be arranged in person or by video call. See also <a href="https://arnaud-barbier.github.io/">my main site</a> and <a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine">the code on GitHub</a>.</p></div>
+<div class="en-contact"><span class="en-k">Contact</span><p class="en-q">A question, some feedback, or want to see the engine run live? Write to me.</p><a class="en-mail" href="mailto:arnaud.barbier@grenoble-em.com?subject=Backtest%20engine"><span class="en-shine" aria-hidden="true"></span>arnaud.barbier@grenoble-em.com<span class="en-arrow" aria-hidden="true">→</span></a><p class="en-sub">A live demonstration of the engine can be arranged in person or by video call. The code is on <a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine">GitHub</a>.</p></div>
 <nav class="en-more" aria-label="Continue reading"><span class="en-k">Continue reading</span>
 <ol>
 <li class="en-next"><a href="../algo/"><span class="en-tag">Suggested next · The strategy</span><b>Algo mode</b><small>From signal to managed trades, with costs and sizing.</small><span class="en-go">Read <i>→</i></span></a></li>
@@ -346,6 +347,7 @@ cross = research.run_cross_asset(
 <li><a href="../costs/"><span class="en-tag">The reconciliation</span><b>Costs</b><small>Every cost traced from its declaration to its debit in NAV (in French).</small><span class="en-go">Read <i>→</i></span></a></li>
 <li><a href="../stateful/"><span class="en-tag">The mechanics</span><b>Replay &amp; resume</b><small>How a compiled kernel makes decisions that depend on its own past (in French).</small><span class="en-go">Read <i>→</i></span></a></li>
 </ol></nav>
+<a class="en-site" href="https://arnaud-barbier.github.io/"><span class="en-site-arrow" aria-hidden="true">←</span><span><b>Back to my main site</b><small>arnaud-barbier.github.io · projects, background and contact</small></span></a>
 </aside>
 
 <footer><span>Arnaud Barbier · October 2026. The screenshots show how the mode works; no performance result is claimed.</span><a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine">Public repository (snapshot) →</a></footer>

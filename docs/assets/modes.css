@@ -1,4 +1,4 @@
-:root{--bg:#fff;--well:#f5f6f7;--hair:#c9ccd1;--hard:#101215;--ink:#101215;--sub:#54585f;--faint:#868b93;--accent:#a85f00;--accent-well:#fdf7ee;--yellow:#EAB308;--screen:#0b0e13;--sans:"Archivo","Helvetica Neue",Arial,sans-serif;--serif:"Times New Roman",Times,serif;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+:root{--bg:#fff;--well:#f5f6f7;--hair:#c9ccd1;--hard:#101215;--ink:#101215;--sub:#54585f;--faint:#868b93;--accent:#a85f00;--accent-well:#fdf7ee;--yellow:#EAB308;--screen:#0b0e13;--sans:"Archivo","Helvetica Neue",Arial,sans-serif;--serif:"Times New Roman",Tinos,Times,serif;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1117;--well:#12171f;--hair:#303740;--hard:#69727d;--ink:#e6edf3;--sub:#a4adb8;--faint:#6e7681;--accent:#f0a93a;--accent-well:#1e1710}}
 :root[data-theme="dark"]{--bg:#0e1117;--well:#12171f;--hair:#303740;--hard:#69727d;--ink:#e6edf3;--sub:#a4adb8;--faint:#6e7681;--accent:#f0a93a;--accent-well:#1e1710}
 *,*::before,*::after{box-sizing:border-box}
