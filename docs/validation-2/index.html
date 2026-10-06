@@ -322,6 +322,8 @@ p code{font-family:var(--f-term);font-size:.88em;color:var(--sub)}
 .test-matrix td:nth-child(2) code{color:var(--ink);font-weight:600}
 .test-matrix td:nth-child(2) a{color:inherit}
 </style>
+<link rel="stylesheet" href="../assets/endnav.css">
+<script src="../assets/endnav.js" defer></script>
 </head>
 <body>
 <div id="page" data-lang="fr">
@@ -709,6 +711,19 @@ raison             seuls 4 essais disposent d'un Sharpe sur ce jeu de données ;
     <p class="small">La première note et celle-ci portent sur deux règles différentes. La première étudiait une optimisation liée à la durée du drawdown ; celle-ci utilise une optimisation du ratio de Sharpe. Les univers testés diffèrent également. Les deux expériences indiquent surtout que l'écart entre une allocation optimisée et une équipondération varie avec les caractéristiques de l'univers et le régime de marché. Cette sensibilité rejoint le problème général étudié dans la littérature sur la comparaison entre allocations optimisées et règles simples d'équipondération. Les expériences présentées ici ne constituent toutefois pas une réplication de ces travaux.</p>
   </section>
 
+<aside class="endnav" id="suite-fr" aria-label="Pages du site">
+<div class="en-contact"><span class="en-k">Contact</span><p class="en-q">Une question, un retour, ou l'envie de voir le moteur tourner en direct ? Écrivez-moi.</p><a class="en-mail" href="mailto:arnaud.barbier@grenoble-em.com?subject=Moteur%20de%20backtest"><span class="en-shine" aria-hidden="true"></span>arnaud.barbier@grenoble-em.com<span class="en-arrow" aria-hidden="true">→</span></a><p class="en-sub">Une démonstration du moteur est possible sur place ou en visio. Voir aussi <a href="https://arnaud-barbier.github.io/">mon site principal</a> et <a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine">le code sur GitHub</a>.</p></div>
+<nav class="en-more" aria-label="Continuer la lecture"><span class="en-k">Continuer la lecture</span>
+<ol>
+<li class="en-next"><a href="../costs/"><span class="en-tag">Suite conseillée · Le rapprochement</span><b>Les coûts</b><small>Chaque coût suivi de sa déclaration jusqu'à son débit dans la NAV.</small><span class="en-go">Lire <i>→</i></span></a></li>
+<li><a href="../"><span class="en-tag">Vue d'ensemble</span><b>Accueil</b><small>Le moteur, ses modes et la couche de validation sur une page.</small><span class="en-go">Revenir à l'accueil <i>→</i></span></a></li>
+<li><a href="../research/"><span class="en-tag">Le signal</span><b>Mode Research</b><small>Développer un indicateur et mesurer ses signaux, sans compilation.</small><span class="en-go">Lire <i>→</i></span></a></li>
+<li><a href="../algo/"><span class="en-tag">La stratégie</span><b>Mode Algo</b><small>Du signal aux trades gérés, avec frais et sizing.</small><span class="en-go">Lire <i>→</i></span></a></li>
+<li><a href="../engine/"><span class="en-tag">Le portefeuille</span><b>Mode allocation</b><small>Quarante lignes pour déclarer un portefeuille, et la sortie réelle du moteur.</small><span class="en-go">Lire <i>→</i></span></a></li>
+<li><a href="../validation/"><span class="en-tag">La mesure</span><b>Validation · Max DDR</b><small>Trois tests de validation appliqués à une optimisation de la durée de drawdown.</small><span class="en-go">Lire <i>→</i></span></a></li>
+<li><a href="../stateful/"><span class="en-tag">La mécanique</span><b>Replay &amp; resume</b><small>Comment un kernel compilé décide en fonction de son propre passé.</small><span class="en-go">Lire <i>→</i></span></a></li>
+</ol></nav>
+</aside>
   <footer>
     <div>Arnaud Barbier · moteur, couche de validation et note de recherche</div>
     <div><a href="../validation/">Lire les premiers tests d'allocation →</a>
@@ -1083,6 +1098,19 @@ why                only 4 trial(s) carry a Sharpe on this dataset; the deflated
     <p class="small">The first note and this one bear on two different rules. The first studied an optimisation tied to drawdown duration; this one uses a Sharpe ratio optimisation. The tested universes also differ. Both experiments mainly indicate that the gap between an optimised allocation and equal weighting varies with the characteristics of the universe and with the market regime. That sensitivity meets the general problem studied in the literature comparing optimised allocations with simple equal-weighting rules. The experiments presented here do not, however, constitute a replication of that work.</p>
   </section>
 
+<aside class="endnav" id="suite-en" aria-label="Site pages">
+<div class="en-contact"><span class="en-k">Contact</span><p class="en-q">A question, some feedback, or want to see the engine run live? Write to me.</p><a class="en-mail" href="mailto:arnaud.barbier@grenoble-em.com?subject=Backtest%20engine"><span class="en-shine" aria-hidden="true"></span>arnaud.barbier@grenoble-em.com<span class="en-arrow" aria-hidden="true">→</span></a><p class="en-sub">A live demonstration of the engine can be arranged in person or by video call. See also <a href="https://arnaud-barbier.github.io/">my main site</a> and <a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine">the code on GitHub</a>.</p></div>
+<nav class="en-more" aria-label="Continue reading"><span class="en-k">Continue reading</span>
+<ol>
+<li class="en-next"><a href="../costs/"><span class="en-tag">Suggested next · The reconciliation</span><b>Costs</b><small>Every cost traced from its declaration to its debit in NAV (in French).</small><span class="en-go">Read <i>→</i></span></a></li>
+<li><a href="../"><span class="en-tag">Overview</span><b>Home</b><small>The engine, its modes and the validation layer on one page.</small><span class="en-go">Back to home <i>→</i></span></a></li>
+<li><a href="../research/"><span class="en-tag">The signal</span><b>Research mode</b><small>Develop an indicator and measure its signals, with no compilation.</small><span class="en-go">Read <i>→</i></span></a></li>
+<li><a href="../algo/"><span class="en-tag">The strategy</span><b>Algo mode</b><small>From signal to managed trades, with costs and sizing.</small><span class="en-go">Read <i>→</i></span></a></li>
+<li><a href="../engine/"><span class="en-tag">The portfolio</span><b>Allocation mode</b><small>Forty lines to declare a portfolio, and the engine's real output.</small><span class="en-go">Read <i>→</i></span></a></li>
+<li><a href="../validation/"><span class="en-tag">The measurement</span><b>Validation · Max drawdown</b><small>Three validation tests applied to a drawdown-duration optimisation.</small><span class="en-go">Read <i>→</i></span></a></li>
+<li><a href="../stateful/"><span class="en-tag">The mechanics</span><b>Replay &amp; resume</b><small>How a compiled kernel makes decisions that depend on its own past (in French).</small><span class="en-go">Read <i>→</i></span></a></li>
+</ol></nav>
+</aside>
   <footer>
     <div>Arnaud Barbier · engine, validation layer and research note</div>
     <div><a href="../validation/">Read the first allocation tests →</a>

@@ -162,6 +162,8 @@ td:first-child{font-weight:600;white-space:nowrap;padding-right:1.4rem}
 .reading-map a:hover,.reading-map a:focus-visible{box-shadow:inset 0 0 0 2px #EAB308;outline:0}
 @media (max-width:700px){.reading-map .intro{display:block}.reading-map .intro p{margin-top:.35rem}.reading-map ol{grid-template-columns:1fr}}
 </style>
+<link rel="stylesheet" href="../assets/endnav.css">
+<script src="../assets/endnav.js" defer></script>
 </head>
 <body>
 <div class="topbar">
@@ -627,6 +629,20 @@ td:first-child{font-weight:600;white-space:nowrap;padding-right:1.4rem}
   Note technique extraite du moteur de backtest multi-stratégies. Les noms de spécifications
   et d'actions cités correspondent à l'API réelle du moteur.
 </p>
+
+<aside class="endnav" id="suite-fr" aria-label="Pages du site">
+<div class="en-contact"><span class="en-k">Contact</span><p class="en-q">Une question, un retour, ou l'envie de voir le moteur tourner en direct ? Écrivez-moi.</p><a class="en-mail" href="mailto:arnaud.barbier@grenoble-em.com?subject=Moteur%20de%20backtest"><span class="en-shine" aria-hidden="true"></span>arnaud.barbier@grenoble-em.com<span class="en-arrow" aria-hidden="true">→</span></a><p class="en-sub">Une démonstration du moteur est possible sur place ou en visio. Voir aussi <a href="https://arnaud-barbier.github.io/">mon site principal</a> et <a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine">le code sur GitHub</a>.</p></div>
+<nav class="en-more" aria-label="Continuer la lecture"><span class="en-k">Continuer la lecture</span>
+<ol>
+<li class="en-next"><a href="../"><span class="en-tag">Suite conseillée · Vue d'ensemble</span><b>Accueil</b><small>Le moteur, ses modes et la couche de validation sur une page.</small><span class="en-go">Revenir à l'accueil <i>→</i></span></a></li>
+<li><a href="../research/"><span class="en-tag">Le signal</span><b>Mode Research</b><small>Développer un indicateur et mesurer ses signaux, sans compilation.</small><span class="en-go">Lire <i>→</i></span></a></li>
+<li><a href="../algo/"><span class="en-tag">La stratégie</span><b>Mode Algo</b><small>Du signal aux trades gérés, avec frais et sizing.</small><span class="en-go">Lire <i>→</i></span></a></li>
+<li><a href="../engine/"><span class="en-tag">Le portefeuille</span><b>Mode allocation</b><small>Quarante lignes pour déclarer un portefeuille, et la sortie réelle du moteur.</small><span class="en-go">Lire <i>→</i></span></a></li>
+<li><a href="../validation/"><span class="en-tag">La mesure</span><b>Validation · Max DDR</b><small>Trois tests de validation appliqués à une optimisation de la durée de drawdown.</small><span class="en-go">Lire <i>→</i></span></a></li>
+<li><a href="../validation-2/"><span class="en-tag">La mesure</span><b>Validation · Sharpe</b><small>Dix contrôles, du hors échantillon jusqu'à 80 univers inédits.</small><span class="en-go">Lire <i>→</i></span></a></li>
+<li><a href="../costs/"><span class="en-tag">Le rapprochement</span><b>Les coûts</b><small>Chaque coût suivi de sa déclaration jusqu'à son débit dans la NAV.</small><span class="en-go">Lire <i>→</i></span></a></li>
+</ol></nav>
+</aside>
 
 </div>
 </body>

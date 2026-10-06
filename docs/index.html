@@ -214,6 +214,8 @@ h1.on .w{opacity:1;transform:none}
   .roadmap article+article{padding:1.2rem 0 0;border-left:0;border-top:1px solid var(--hair)}
 }
 </style>
+<link rel="stylesheet" href="assets/endnav.css">
+<script src="assets/endnav.js" defer></script>
 </head>
 <body>
 <div id="page" data-lang="fr">
@@ -471,11 +473,19 @@ h1.on .w{opacity:1;transform:none}
       construction de manuel, retenue parce qu'elle est connue et reproductible. L'objet de ces
       pages est l'instrument qui la juge.
     </p>
-    <div class="contact">
-      <span class="k">Contact</span>
-      <a href="mailto:arnaud.barbier@grenoble-em.com">arnaud.barbier@grenoble-em.com</a>
-      <span class="k">Une démonstration en direct du moteur est possible sur demande</span>
-    </div>
+<aside class="endnav" id="suite-fr" aria-label="Pages du site">
+<div class="en-contact"><span class="en-k">Contact</span><p class="en-q">Une question, un retour, ou l'envie de voir le moteur tourner en direct ? Écrivez-moi.</p><a class="en-mail" href="mailto:arnaud.barbier@grenoble-em.com?subject=Moteur%20de%20backtest"><span class="en-shine" aria-hidden="true"></span>arnaud.barbier@grenoble-em.com<span class="en-arrow" aria-hidden="true">→</span></a><p class="en-sub">Une démonstration du moteur est possible sur place ou en visio. Voir aussi <a href="https://arnaud-barbier.github.io/">mon site principal</a> et <a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine">le code sur GitHub</a>.</p></div>
+<nav class="en-more" aria-label="Continuer la lecture"><span class="en-k">Continuer la lecture</span>
+<ol>
+<li class="en-next"><a href="research/"><span class="en-tag">Suite conseillée · Le signal</span><b>Mode Research</b><small>Développer un indicateur et mesurer ses signaux, sans compilation.</small><span class="en-go">Lire <i>→</i></span></a></li>
+<li><a href="algo/"><span class="en-tag">La stratégie</span><b>Mode Algo</b><small>Du signal aux trades gérés, avec frais et sizing.</small><span class="en-go">Lire <i>→</i></span></a></li>
+<li><a href="engine/"><span class="en-tag">Le portefeuille</span><b>Mode allocation</b><small>Quarante lignes pour déclarer un portefeuille, et la sortie réelle du moteur.</small><span class="en-go">Lire <i>→</i></span></a></li>
+<li><a href="validation/"><span class="en-tag">La mesure</span><b>Validation · Max DDR</b><small>Trois tests de validation appliqués à une optimisation de la durée de drawdown.</small><span class="en-go">Lire <i>→</i></span></a></li>
+<li><a href="validation-2/"><span class="en-tag">La mesure</span><b>Validation · Sharpe</b><small>Dix contrôles, du hors échantillon jusqu'à 80 univers inédits.</small><span class="en-go">Lire <i>→</i></span></a></li>
+<li><a href="costs/"><span class="en-tag">Le rapprochement</span><b>Les coûts</b><small>Chaque coût suivi de sa déclaration jusqu'à son débit dans la NAV.</small><span class="en-go">Lire <i>→</i></span></a></li>
+<li><a href="stateful/"><span class="en-tag">La mécanique</span><b>Replay &amp; resume</b><small>Comment un kernel compilé décide en fonction de son propre passé.</small><span class="en-go">Lire <i>→</i></span></a></li>
+</ol></nav>
+</aside>
   </div>
 
   <div class="wrap lang-en">
@@ -724,11 +734,19 @@ h1.on .w{opacity:1;transform:none}
       construction, chosen because it is well known and reproducible. What these pages are about
       is the instrument that judges it.
     </p>
-    <div class="contact">
-      <span class="k">Contact</span>
-      <a href="mailto:arnaud.barbier@grenoble-em.com">arnaud.barbier@grenoble-em.com</a>
-      <span class="k">A live walkthrough of the engine is available on request</span>
-    </div>
+<aside class="endnav" id="suite-en" aria-label="Site pages">
+<div class="en-contact"><span class="en-k">Contact</span><p class="en-q">A question, some feedback, or want to see the engine run live? Write to me.</p><a class="en-mail" href="mailto:arnaud.barbier@grenoble-em.com?subject=Backtest%20engine"><span class="en-shine" aria-hidden="true"></span>arnaud.barbier@grenoble-em.com<span class="en-arrow" aria-hidden="true">→</span></a><p class="en-sub">A live demonstration of the engine can be arranged in person or by video call. See also <a href="https://arnaud-barbier.github.io/">my main site</a> and <a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine">the code on GitHub</a>.</p></div>
+<nav class="en-more" aria-label="Continue reading"><span class="en-k">Continue reading</span>
+<ol>
+<li class="en-next"><a href="research/"><span class="en-tag">Suggested next · The signal</span><b>Research mode</b><small>Develop an indicator and measure its signals, with no compilation.</small><span class="en-go">Read <i>→</i></span></a></li>
+<li><a href="algo/"><span class="en-tag">The strategy</span><b>Algo mode</b><small>From signal to managed trades, with costs and sizing.</small><span class="en-go">Read <i>→</i></span></a></li>
+<li><a href="engine/"><span class="en-tag">The portfolio</span><b>Allocation mode</b><small>Forty lines to declare a portfolio, and the engine's real output.</small><span class="en-go">Read <i>→</i></span></a></li>
+<li><a href="validation/"><span class="en-tag">The measurement</span><b>Validation · Max drawdown</b><small>Three validation tests applied to a drawdown-duration optimisation.</small><span class="en-go">Read <i>→</i></span></a></li>
+<li><a href="validation-2/"><span class="en-tag">The measurement</span><b>Validation · Sharpe</b><small>Ten checks, from out of sample to 80 unseen universes.</small><span class="en-go">Read <i>→</i></span></a></li>
+<li><a href="costs/"><span class="en-tag">The reconciliation</span><b>Costs</b><small>Every cost traced from its declaration to its debit in NAV (in French).</small><span class="en-go">Read <i>→</i></span></a></li>
+<li><a href="stateful/"><span class="en-tag">The mechanics</span><b>Replay &amp; resume</b><small>How a compiled kernel makes decisions that depend on its own past (in French).</small><span class="en-go">Read <i>→</i></span></a></li>
+</ol></nav>
+</aside>
   </div>
 </div>
 <script>
