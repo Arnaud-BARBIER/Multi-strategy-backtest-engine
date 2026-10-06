@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mode Research · Arnaud Barbier</title>
+<meta name="description" content="Le mode Research permet de développer un indicateur et de mesurer ce qui suit ses signaux, comparés au hasard et à la version précédente, avant d'en faire une stratégie dans le mode Algo.">
+<meta name="author" content="Arnaud Barbier">
+<link rel="canonical" href="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/research/">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/research/">
+<meta property="og:title" content="Mode Research · Arnaud Barbier">
+<meta property="og:description" content="Développer un indicateur et mesurer ses signaux avant d'en faire une stratégie.">
+<meta property="og:image" content="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/img/research-ema-chart.png">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:locale:alternate" content="en_GB">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpolygon points='50,6 90,50 50,94 10,50' fill='%23a85f00'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="../assets/modes.css">
+<script src="../assets/modes.js" defer></script>
+</head>
+<body>
+<div id="page" data-lang="fr" data-title-fr="Mode Research · Arnaud Barbier" data-title-en="Research mode · Arnaud Barbier">
+<a class="skip" href="#main"><span class="lang-fr">Aller au contenu</span><span class="lang-en">Skip to content</span></a>
+<div class="wrap"><nav class="pagenav" aria-label="Pages"><a href="../"><span class="lang-fr">Accueil</span><span class="lang-en">Home</span></a><span aria-current="page"><span class="lang-fr">Mode Research</span><span class="lang-en">Research mode</span></span><a href="../algo/"><span class="lang-fr">Mode Algo</span><span class="lang-en">Algo mode</span></a><a href="../engine/"><span class="lang-fr">Mode allocation</span><span class="lang-en">Allocation mode</span></a><a href="../validation/"><span class="lang-fr">Validation · Max DDR</span><span class="lang-en">Validation · Max drawdown</span></a><a href="../validation-2/"><span class="lang-fr">Validation · Sharpe</span><span class="lang-en">Validation · Sharpe</span></a><a href="../costs/"><span class="lang-fr">Les coûts</span><span class="lang-en">Costs · FR</span></a><a href="../stateful/"><span class="lang-fr">Replay &amp; resume</span><span class="lang-en">Replay &amp; resume</span></a></nav>
+<div class="langbar"><button type="button" data-set="fr" aria-pressed="true">Français</button><button type="button" data-set="en" aria-pressed="false">English</button></div></div>
+<main id="main" class="wrap" tabindex="-1">
+
+<!-- ======================= FRANÇAIS ======================= -->
+<article class="lang-fr" lang="fr">
+<header class="mast">
+<div class="mast-top"><span>Arnaud Barbier · Moteur de backtest</span><span>Mode Research · octobre 2026</span></div>
+<h1>Mode Research, développer un indicateur et mesurer ses signaux</h1>
+<p class="lede">Le mode Research permet de tester une idée d'entrée avant d'en faire une stratégie. L'utilisateur écrit son indicateur en quelques lignes ; le mode <strong>mesure ce qui se passe réellement après chaque signal</strong>, le compare à des entrées tirées au hasard et à la version précédente, puis affiche le résultat sur un graphique relié au notebook.</p>
+<p class="lede2">À ce stade, aucune gestion de trade, aucun frais et aucune compilation ne sont nécessaires. L'objectif est de savoir rapidement si le signal mérite d'être développé dans le <a href="../algo/">mode Algo</a>.</p>
+<div class="figs">
+<div><span class="v" data-count="0">0</span><span class="n">compilation pour tester une nouvelle variante</span></div>
+<div><span class="v" data-count="2">2</span><span class="n">comparaisons automatiques à chaque run : version précédente et référence</span></div>
+<div><span class="v" data-count="25">25</span><span class="n">mesures par horizon et par sens, face au hasard</span></div>
+<div><span class="v" data-count="4">4</span><span class="n">phases pour entraîner l'œil à l'aveugle</span></div>
+</div>
+</header>
+
+<div class="apercu">
+<div class="ap-head"><span class="eyebrow">Aperçu</span>
+<div class="ap-tabs" role="tablist" aria-label="Aperçu du mode Research">
+<button type="button" role="tab" aria-selected="true"><span>1</span>L'étude<i class="bar"></i></button>
+<button type="button" role="tab" aria-selected="false"><span>2</span>Le graphique<i class="bar"></i></button>
+<button type="button" role="tab" aria-selected="false"><span>3</span>Les cas<i class="bar"></i></button>
+<button type="button" role="tab" aria-selected="false"><span>4</span>L'entraînement<i class="bar"></i></button>
+</div>
+<button type="button" class="ap-pause" data-pause="❚❚ Pause" data-play="▶ Lecture">❚❚ Pause</button></div>
+<div class="ap-stage">
+<figure class="ap-slide is-on" role="tabpanel"><div class="ap-frame"><img src="../img/research-study-code.png" alt="Déclaration d'une étude EMA 50 avec SignalSpec et ForwardEvaluationSpec"><img src="../img/research-view-code.png" alt="Déclaration du graphique de l'étude : EMA et marqueurs long et short"></div><figcaption><b>L'étude.</b> À gauche, une EMA 50 : ses signaux et ce que l'on mesure ensuite (horizons de 3, 6 et 40 barres, en unités ATR). À droite, la déclaration du graphique. Cliquez sur une capture pour l'agrandir.</figcaption></figure>
+<figure class="ap-slide" role="tabpanel"><div class="ap-frame"><img src="../img/research-ema-chart.png" alt="Graphique du serveur Research : bougies, EMA 50 et signaux long et short sur l'or"></div><figcaption><b>Le graphique.</b> Le résultat de cette étude dans le serveur local : signaux long et short sur l'or, EMA 50, et en haut les mesures du rapport (MFE, MAE et retour médians à 40 barres, en ATR).</figcaption></figure>
+<figure class="ap-slide" role="tabpanel"><div class="ap-frame"><img src="../img/research-cases.png" alt="Étude V7_BOXES : parcours des cas actifs et bouton Inspect in notebook"></div><figcaption><b>Les cas.</b> Sur une autre étude en développement, chaque signal se parcourt un par un et s'ouvre dans le notebook. En haut à droite, ITER et DSR indiquent le nombre d'essais déjà comptés.</figcaption></figure>
+<figure class="ap-slide" role="tabpanel"><div class="ap-frame"><img src="../img/research-campaign-setup.png" alt="Paramétrage d'une campagne de replay à l'aveugle en quatre phases"></div><figcaption><b>L'entraînement.</b> Paramétrage d'une campagne de replay à l'aveugle : quatre phases, des fenêtres réservées et des critères fixés avant le lancement.</figcaption></figure>
+</div>
+</div>
+
+<nav class="reading-map" aria-label="Fil de lecture">
+<div class="intro"><span class="eyebrow">Fil de lecture</span><p>Ce que permet le mode Research, dans l'ordre où on l'utilise. Chaque bloc renvoie à sa section.</p></div>
+<ol>
+<li><a href="#research-fr-study"><span class="n">01</span><span class="t">Écrire une étude</span><small>Un indicateur, ses signaux et ce que l'on mesure, en quelques lignes.</small></a></li>
+<li><a href="#research-fr-measure"><span class="n">02</span><span class="t">Mesurer contre le hasard</span><small>Chaque signal est comparé à des entrées aléatoires sur la même période.</small></a></li>
+<li><a href="#research-fr-history"><span class="n">03</span><span class="t">Comparer les versions</span><small>Chaque run retrouve sa version précédente et sa référence.</small></a></li>
+<li><a href="#research-fr-timing"><span class="n">04</span><span class="t">Juger le timing</span><small>Une entrée plus tôt ou plus tard sur le même mouvement est reconnue.</small></a></li>
+<li><a href="#research-fr-workspace"><span class="n">05</span><span class="t">Inspecter et rejouer</span><small>Un graphique relié au notebook, et un replay qui masque le futur.</small></a></li>
+<li><a href="#research-fr-learning"><span class="n">06</span><span class="t">Entraîner l'œil</span><small>Des campagnes à l'aveugle pour mesurer une intuition.</small></a></li>
+<li><a href="#research-fr-validation"><span class="n">07</span><span class="t">Figer et tester ailleurs</span><small>Freeze, hors échantillon, puis un autre actif.</small></a></li>
+<li><a href="#research-fr-bridge"><span class="n">08</span><span class="t">Passer au mode Algo</span><small>Le signal devient une stratégie avec gestion, frais et sizing.</small></a></li>
+</ol>
+</nav>
+
+<section id="research-fr-study" aria-labelledby="research-fr-study-title"><div class="shead"><span>01</span><span>Écrire une étude</span></div>
+<h2 id="research-fr-study-title">Déclarer un indicateur, ses signaux et ce que l'on veut mesurer</h2>
+<p>Une étude est une fonction Python qui reçoit les prix, calcule ses colonnes et renvoie des signaux long et short. Trois déclarations l'accompagnent, afin que chaque choix reste explicite :</p>
+<ul class="list">
+<li><code>SignalSpec</code> indique comment un signal devient un événement : à la première bougie d'une séquence (<code>rising_edge</code>) ou à chaque bougie (<code>every_true_bar</code>), avec un cooldown éventuel ;</li>
+<li><code>ForwardEvaluationSpec</code> fixe ce que l'on mesure ensuite : point d'entrée, horizons et unité ;</li>
+<li>la vue choisit les courbes, les marqueurs et les panneaux affichés sur le graphique.</li>
+</ul>
+<div class="pair pair-wrap">
+<figure class="shot"><img src="../img/research-study-code.png" alt="Code de l'étude ema_cross_50" loading="lazy"><figcaption>L'étude utilisée pour les captures de cette page : une EMA 50, mesurée à 3, 6 et 40 barres en unités ATR, sans TP ni SL.</figcaption></figure>
+<figure class="shot"><img src="../img/research-view-code.png" alt="Code de la vue de l'étude ema_cross_50" loading="lazy"><figcaption>La vue de la même étude : la courbe de l'EMA et le style des marqueurs long et short.</figcaption></figure>
+</div>
+<div class="two">
+<div><h3>Éviter de lire le futur</h3><p>Une bougie ne peut utiliser que son passé. Une fenêtre centrée ou un <code>shift(-1)</code> introduit le futur sans que cela se voie dans le résultat. Pour les données d'une unité de temps supérieure, <code>ctx.causal_feature(...)</code> aligne chaque valeur sur la dernière bougie source clôturée. Les colonnes nommées <code>y_*</code> restent réservées aux labels futurs.</p></div>
+<div><h3>Itérer sans perdre le fil</h3><p>Une étude peut vivre dans le notebook ou dans un fichier Python rechargé à chaque appel. Seuls le calcul, les paramètres et l'évaluation identifient une variante : changer une couleur ne crée pas un nouvel essai. Les filtres de session et de taille de bougie s'appliquent après l'émission, sans créer de nouveau signal.</p></div>
+</div>
+</section>
+
+<section id="research-fr-measure" aria-labelledby="research-fr-measure-title"><div class="shead"><span>02</span><span>Mesurer contre le hasard</span></div>
+<h2 id="research-fr-measure-title">Comparer chaque signal à des entrées tirées au hasard</h2>
+<p>Un signal connu à la clôture d'une bougie est évalué à partir de l'ouverture suivante. Pour chaque horizon, le mode mesure le rendement dans le sens du signal, l'excursion favorable (MFE), l'excursion défavorable (MAE) et le franchissement de barrières. En unités ATR, l'échelle utilisée est celle connue au moment du signal.</p>
+<p>Le même calcul est appliqué à toutes les barres éligibles de la période, avec la même proportion de long et de short. L'écart entre les deux, le lift, est accompagné d'un intervalle de confiance à 95 % obtenu par bootstrap par jour. Chaque ligne reçoit enfin un diagnostic : <code>POSITIVE</code>, <code>NEGATIVE</code>, <code>INCONCLUSIVE</code> ou <code>INSUFFICIENT</code>.</p>
+<figure id="research-fr-predictive" class="predictive-example"><div class="table-wrap" tabindex="0" role="region" aria-label="Signal contre entrées aléatoires, sortie du rapport"><table class="predictive-table"><caption>Signal contre entrées aléatoires, sortie du rapport</caption><thead><tr><th scope="col">Sens</th><th scope="col">Horizon¹</th><th scope="col">Signaux valides</th><th scope="col">Moyenne signal</th><th scope="col">Moyenne hasard</th><th scope="col">Lift moyen</th><th scope="col">IC 95 % du lift</th><th scope="col">Diagnostic</th></tr></thead><tbody><tr><td>ALL</td><td>3</td><td>3307</td><td>-0.011764</td><td>0.001692</td><td>-0.013456</td><td>[-0.053551 ; 0.032919]</td><td>INCONCLUSIVE</td></tr><tr><td>LONG</td><td>3</td><td>1796</td><td>0.017760</td><td>0.019636</td><td>-0.001876</td><td>[-0.063809 ; 0.052811]</td><td>INCONCLUSIVE</td></tr><tr><td>SHORT</td><td>3</td><td>1511</td><td>-0.046856</td><td>-0.019636</td><td>-0.027220</td><td>[-0.091209 ; 0.042453]</td><td>INCONCLUSIVE</td></tr><tr><td>ALL</td><td>6</td><td>3307</td><td>0.024737</td><td>0.003438</td><td>0.021300</td><td>[-0.045838 ; 0.084326]</td><td>INCONCLUSIVE</td></tr><tr class="positive-diagnostic"><td>LONG</td><td>6</td><td>1796</td><td>0.139585</td><td>0.039889</td><td>0.099697</td><td>[0.017798 ; 0.176226]</td><td>POSITIVE</td></tr><tr><td>SHORT</td><td>6</td><td>1511</td><td>-0.111773</td><td>-0.039889</td><td>-0.071884</td><td>[-0.166403 ; 0.016405]</td><td>INCONCLUSIVE</td></tr><tr><td>ALL</td><td>12</td><td>3307</td><td>0.054660</td><td>0.006886</td><td>0.047773</td><td>[-0.036672 ; 0.131722]</td><td>INCONCLUSIVE</td></tr><tr><td>LONG</td><td>12</td><td>1796</td><td>0.193716</td><td>0.079905</td><td>0.113811</td><td>[-0.008983 ; 0.229892]</td><td>INCONCLUSIVE</td></tr><tr><td>SHORT</td><td>12</td><td>1511</td><td>-0.110625</td><td>-0.079905</td><td>-0.030720</td><td>[-0.160339 ; 0.099989]</td><td>INCONCLUSIVE</td></tr></tbody></table></div><figcaption>¹ Horizon en barres. Les valeurs sont reprises telles quelles de <code>research.report().predictive</code>, sans conversion en pourcentage. Le tableau complet, avec ses 25 colonnes, se déplie ci-dessous.</figcaption></figure><p class="small">Lecture de cet exemple : seul LONG à 6 barres porte le diagnostic <code>POSITIVE</code> (lift de 0,099697 ; IC 95 % [0,017798 ; 0,176225]). Les huit autres lignes sont <code>INCONCLUSIVE</code>. Ce résultat décrit le signal évalué, sans établir la rentabilité d’une stratégie après gestion et coûts.</p><details class="predictive-full"><summary>Tableau complet · 25 colonnes</summary><div class="table-wrap" tabindex="0" role="region" aria-label="Tableau complet · 25 colonnes"><table class="predictive-table"><caption><code>research.report().predictive</code></caption><thead><tr><th scope="col">direction</th><th scope="col">horizon</th><th scope="col">signals</th><th scope="col">valid</th><th scope="col">coverage</th><th scope="col">signal_days</th><th scope="col">mean_r</th><th scope="col">mean_r_ci_low</th><th scope="col">mean_r_ci_high</th><th scope="col">median_r</th><th scope="col">positive_rate</th><th scope="col">positive_rate_ci_low</th><th scope="col">positive_rate_ci_high</th><th scope="col">random_bars</th><th scope="col">random_mean_r</th><th scope="col">random_positive_rate</th><th scope="col">lift_mean_r</th><th scope="col">lift_mean_r_ci_low</th><th scope="col">lift_mean_r_ci_high</th><th scope="col">lift_positive_pp</th><th scope="col">lift_positive_pp_ci_low</th><th scope="col">lift_positive_pp_ci_high</th><th scope="col">p_lift_gt_zero</th><th scope="col">standardized_lift</th><th scope="col">edge_status</th></tr></thead><tbody><tr><td>ALL</td><td>3</td><td>3307</td><td>3307</td><td>1.0</td><td>1490</td><td>-0.011764</td><td>-0.051966</td><td>0.034240</td><td>-0.032845</td><td>0.485637</td><td>0.470462</td><td>0.501240</td><td>139945</td><td>0.001692</td><td>0.500209</td><td>-0.013456</td><td>-0.053551</td><td>0.032919</td><td>-1.457246</td><td>-2.987382</td><td>0.125400</td><td>0.26875</td><td>-0.009910</td><td>INCONCLUSIVE</td></tr><tr><td>LONG</td><td>3</td><td>1796</td><td>1796</td><td>1.0</td><td>1203</td><td>0.017760</td><td>-0.042043</td><td>0.075393</td><td>-0.003113</td><td>0.497216</td><td>0.474803</td><td>0.520619</td><td>139945</td><td>0.019636</td><td>0.509472</td><td>-0.001876</td><td>-0.063809</td><td>0.052811</td><td>-1.225554</td><td>-3.533868</td><td>1.077078</td><td>0.47375</td><td>-0.001415</td><td>INCONCLUSIVE</td></tr><tr><td>SHORT</td><td>3</td><td>1511</td><td>1511</td><td>1.0</td><td>1088</td><td>-0.046856</td><td>-0.113508</td><td>0.025539</td><td>-0.068482</td><td>0.471873</td><td>0.448815</td><td>0.495764</td><td>139945</td><td>-0.019636</td><td>0.489199</td><td>-0.027220</td><td>-0.091209</td><td>0.042453</td><td>-1.732640</td><td>-3.972199</td><td>0.541348</td><td>0.19875</td><td>-0.019526</td><td>INCONCLUSIVE</td></tr><tr><td>ALL</td><td>6</td><td>3307</td><td>3307</td><td>1.0</td><td>1490</td><td>0.024737</td><td>-0.042258</td><td>0.087761</td><td>0.037933</td><td>0.508920</td><td>0.492876</td><td>0.525071</td><td>139942</td><td>0.003438</td><td>0.500694</td><td>0.021300</td><td>-0.045838</td><td>0.084326</td><td>0.822662</td><td>-0.794802</td><td>2.427798</td><td>0.74250</td><td>0.011365</td><td>INCONCLUSIVE</td></tr><tr><td>LONG</td><td>6</td><td>1796</td><td>1796</td><td>1.0</td><td>1203</td><td>0.139585</td><td>0.051836</td><td>0.220225</td><td>0.115918</td><td>0.531180</td><td>0.507071</td><td>0.552943</td><td>139942</td><td>0.039889</td><td>0.512484</td><td>0.099697</td><td>0.017798</td><td>0.176226</td><td>1.869666</td><td>-0.364433</td><td>3.946814</td><td>0.99500</td><td>0.055145</td><td>POSITIVE</td></tr><tr><td>SHORT</td><td>6</td><td>1511</td><td>1511</td><td>1.0</td><td>1088</td><td>-0.111773</td><td>-0.206676</td><td>-0.017164</td><td>-0.073033</td><td>0.482462</td><td>0.458492</td><td>0.507810</td><td>139942</td><td>-0.039889</td><td>0.486680</td><td>-0.071884</td><td>-0.166403</td><td>0.016405</td><td>-0.421825</td><td>-2.804725</td><td>1.961648</td><td>0.07000</td><td>-0.037034</td><td>INCONCLUSIVE</td></tr><tr><td>ALL</td><td>12</td><td>3307</td><td>3307</td><td>1.0</td><td>1490</td><td>0.054660</td><td>-0.029237</td><td>0.140344</td><td>0.056953</td><td>0.511037</td><td>0.495103</td><td>0.527579</td><td>139936</td><td>0.006886</td><td>0.501116</td><td>0.047773</td><td>-0.036672</td><td>0.131722</td><td>0.992072</td><td>-0.614970</td><td>2.654518</td><td>0.87000</td><td>0.018348</td><td>INCONCLUSIVE</td></tr><tr><td>LONG</td><td>12</td><td>1796</td><td>1796</td><td>1.0</td><td>1203</td><td>0.193716</td><td>0.070280</td><td>0.313809</td><td>0.190792</td><td>0.535635</td><td>0.513033</td><td>0.559339</td><td>139936</td><td>0.079905</td><td>0.515607</td><td>0.113811</td><td>-0.008983</td><td>0.229892</td><td>2.002761</td><td>-0.180988</td><td>4.093067</td><td>0.96625</td><td>0.043656</td><td>INCONCLUSIVE</td></tr><tr><td>SHORT</td><td>12</td><td>1511</td><td>1511</td><td>1.0</td><td>1088</td><td>-0.110625</td><td>-0.252657</td><td>0.024479</td><td>-0.089458</td><td>0.481800</td><td>0.454480</td><td>0.508412</td><td>139936</td><td>-0.079905</td><td>0.483893</td><td>-0.030720</td><td>-0.160339</td><td>0.099989</td><td>-0.209250</td><td>-2.633276</td><td>2.359780</td><td>0.33500</td><td>-0.011859</td><td>INCONCLUSIVE</td></tr></tbody></table></div></details>
+<p class="small">Dans cet exemple, seul le sens LONG à 6 barres obtient un diagnostic <code>POSITIVE</code> (lift de 0,0997, intervalle à 95 % de 0,0178 à 0,1762). Les huit autres lignes restent <code>INCONCLUSIVE</code>. Le résultat porte sur le signal seul : il ne dit encore rien de la rentabilité d'une stratégie après gestion et frais.</p>
+<aside class="note"><p><strong>Les limites de la mesure restent visibles.</strong> Un horizon qui dépasse la période autorisée est censuré. Si deux barrières sont touchées dans la même bougie, le résultat est noté <code>both_same_bar</code> plutôt que de supposer un ordre à l'intérieur de la bougie. <code>p_lift_gt_zero</code> est la part des tirages bootstrap où le lift est positif, pas une p-value : ce diagnostic ne remplace ni le contrôle des essais multiples, ni le hors échantillon.</p></aside>
+</section>
+
+<section id="research-fr-history" aria-labelledby="research-fr-history-title"><div class="shead"><span>03</span><span>Comparer les versions</span></div>
+<h2 id="research-fr-history-title">Retrouver à chaque modification la version précédente et la référence</h2>
+<p>Chaque run est enregistré puis comparé automatiquement à <strong>la dernière version distincte</strong> et à <strong>la référence de la série</strong>, c'est-à-dire le premier run enregistré tant qu'elle n'est pas déplacée. L'utilisateur voit ainsi immédiatement si sa modification améliore le signal, et s'il s'éloigne de son point de départ.</p>
+<figure><pre tabindex="0"><code>research.run(ema_signal, params={"ema_span": 30})   # A : la référence
+research.run(ema_signal, params={"ema_span": 40})   # B
+research.run(ema_signal, params={"ema_span": 50})   # C
+report = research.report()
+report.comparisons["previous"]   # C contre B
+report.comparisons["baseline"]   # C contre A</code></pre><figcaption>Trois versions du même indicateur dans une même série.</figcaption></figure>
+<p>Le rapport indique quels signaux sont conservés, ajoutés ou retirés, et comment les mesures évoluent. Un changement de données, de période ou d'évaluation ouvre une nouvelle série, afin de ne jamais comparer des expériences différentes.</p>
+<p>L'historique est conservé dans une base SQLite, accompagnée d'un journal Markdown lisible : les rapports restent consultables après un redémarrage. Renommer un notebook conserve son historique ; le copier crée une nouvelle identité qui garde la trace de sa filiation.</p>
+</section>
+
+<section id="research-fr-timing" aria-labelledby="research-fr-timing-title"><div class="shead"><span>04</span><span>Juger le timing</span></div>
+<h2 id="research-fr-timing-title">Reconnaître une entrée plus précoce ou plus tardive sur le même mouvement</h2>
+<p>Lorsqu'une modification avance une entrée de trois bougies, une comparaison classique voit un signal supprimé et un autre ajouté. Le juge de timing rattache plutôt chaque signal au mouvement de prix auquel il appartient, puis compare les deux versions <strong>mouvement par mouvement</strong>. Chaque entrée reçoit l'une des quatre catégories suivantes :</p>
+<figure><ol class="flow"><li><span class="step">01</span><b>Anticipée</b><p>L'entrée précède un mouvement de même sens, dans la fenêtre autorisée.</p></li><li><span class="step">02</span><b>Dans le mouvement</b><p>L'entrée appartient au mouvement, et sa position y est mesurée.</p></li><li><span class="step">03</span><b>Tardive</b><p>Une trop grande part du mouvement est déjà consommée, ou un repli important a déjà eu lieu.</p></li><li><span class="step">04</span><b>Hors mouvement</b><p>Aucun mouvement compatible n'est trouvé.</p></li></ol></figure>
+<aside class="note"><p><strong>Un juge a posteriori, assumé comme tel.</strong> Le découpage des mouvements utilise un oracle qui connaît le futur. Il sert uniquement au diagnostic : ses labels <code>y_move_*</code> ne sont jamais transmis à l'étude.</p></aside>
+<figure><pre tabindex="0"><code>research.set_movement_judge(MovementJudge())
+research.run(study, params=params)
+m = research.report().comparisons["previous"].movements
+m.summary, m.transitions, m.worst(15)</code></pre><figcaption>Le rapport fait ressortir les changements de timing et les mouvements qui méritent d'être inspectés.</figcaption></figure>
+</section>
+
+<section id="research-fr-workspace" aria-labelledby="research-fr-workspace-title"><div class="shead"><span>05</span><span>Inspecter et rejouer</span></div>
+<h2 id="research-fr-workspace-title">Un graphique relié au notebook, et un replay qui masque le futur</h2>
+<p><code>research.serve(run)</code> ouvre un serveur local qui affiche le résultat déjà calculé : consulter le graphique ne relance pas l'étude.</p>
+<figure class="shot"><img src="../img/research-cases.png" alt="Étude V7_BOXES dans le serveur Research : cas actifs, boutons précédent et suivant, Inspect in notebook" loading="lazy"><figcaption>Une étude en développement (split DEV). Chaque cas actif se parcourt avec précédent et suivant, puis s'ouvre dans le notebook avec le contexte choisi : ici 10 barres avant et 10 barres après.</figcaption></figure>
+<div class="two">
+<div><h3>Du graphique vers le notebook</h3><p>Le graphique permet de :</p><ul class="list"><li>sélectionner des zones et les envoyer au notebook, qui met à jour <code>research.query</code> ;</li><li>ouvrir le contexte complet d'un signal avec « Inspect in notebook » ;</li><li>recevoir dans la page les filtres appliqués depuis le notebook.</li></ul><p>Une sélection manuelle de zones est signalée comme discrétionnaire.</p></div>
+<div><h3>Rejouer sans voir la suite</h3><p>Le replay simple démarre en pause, masque la bougie choisie et tout ce qui suit, puis avance signal par signal ou bougie par bougie. Les flèches permettent de naviguer et la barre d'espace lance ou suspend la lecture.</p><p>Modifier un paramètre depuis le panneau Paramètres crée une nouvelle variante en DEV. Cet éditeur est verrouillé en OOS.</p></div>
+</div>
+</section>
+
+<section id="research-fr-learning" aria-labelledby="research-fr-learning-title"><div class="shead"><span>06</span><span>Entraîner l'œil</span></div>
+<h2 id="research-fr-learning-title">Mesurer une intuition avec des campagnes à l'aveugle</h2>
+<p>Un trader discrétionnaire peut avoir le sentiment de savoir reconnaître les bons signaux. Les campagnes permettent de le vérifier : un humain ou un modèle trie des signaux (Prendre ou Rejeter) sans voir la suite, puis sa sélection est comparée à des sélections aléatoires parmi les mêmes candidats.</p>
+<p>Quatre façons de décider sont distinguées : discrétionnaire sans assistance, discrétionnaire aidé par les valeurs connues au moment du signal, filtre quantitatif et annotation rétrospective. Une annotation faite en voyant le futur n'est jamais mélangée aux résultats à l'aveugle.</p>
+<figure class="shot"><img src="../img/research-campaign-setup.png" alt="Panneau Replay / apprentissage : modes de décision, buckets Prendre et Rejeter, validation par défaut et tableau des phases" loading="lazy"><figcaption>Le panneau de campagne : mode de décision, buckets Prendre et Rejeter avec leurs touches, règle de validation par défaut (SL d'une ATR, seuil favorable de deux ATR, horizon de 24 barres) et taille de chaque phase.</figcaption></figure>
+<figure><ol class="flow"><li><span class="step">01</span><b>Mesure initiale</b><p>Des décisions à l'aveugle pour établir le point de départ.</p></li><li><span class="step">02</span><b>Apprentissage exploratoire</b><p>Le résultat est montré après chaque décision, dans l'ordre chronologique.</p></li><li><span class="step">03</span><b>Entraînement stabilisé</b><p>Au moins deux blocs, pour séparer entraînement et validation.</p></li><li><span class="step">04</span><b>Évaluation finale</b><p>À l'aveugle, sur des observations jamais vues.</p></li></ol></figure>
+<div class="pair pair-wrap">
+<figure class="shot"><img src="../img/research-campaign-check.png" alt="Vérification des effectifs : réservation impossible, 340 signaux disponibles sur 400 demandés" loading="lazy"><figcaption>Avant le lancement, le panneau vérifie les effectifs. Ici, la phase d'apprentissage demande 400 signaux alors que 340 seulement restent inédits : <b>la réservation est refusée plutôt que réduite en silence.</b></figcaption></figure>
+<figure class="shot"><img src="../img/research-campaign-report.png" alt="Bilan partiel des quatre phases d'une campagne" loading="lazy"><figcaption>Bilan partiel d'une campagne : les phases 1 et 2 sont terminées, les phases 3 et 4 restent réservées et leurs résultats protégés.</figcaption></figure>
+</div>
+<p>Chaque fenêtre affichée est enregistrée par date, actif et unité de temps. Le replay libre compte aussi : renommer des signaux ne rend pas une fenêtre « jamais vue ». L'export vers le machine learning exclut les phases 1 et 2, et le modèle est figé avant la phase finale.</p>
+</section>
+
+<section id="research-fr-validation" aria-labelledby="research-fr-validation-title"><div class="shead"><span>07</span><span>Figer et tester ailleurs</span></div>
+<h2 id="research-fr-validation-title">Figer la configuration avant d'ouvrir l'échantillon réservé</h2>
+<p>La séparation entre développement (DEV) et hors échantillon (OOS) se déclare dès la création de <code>Research</code>. Le freeze enregistre la configuration et les conclusions avant tout accès à la partie réservée, et le contrôle s'exécute avant le calcul OOS. Les barres antérieures peuvent servir à initialiser les indicateurs, mais seules les observations autorisées sont publiées.</p>
+<figure><pre tabindex="0"><code>research.use_insample()
+run_dev = research.run(study, params=params)
+research.freeze_configuration(conclusions=conclusions)
+research.use_oos()
+run_oos = research.run(study, params=params)
+cross = research.run_cross_asset(
+    study, {"XAGUSD": xag_df}, params=params,
+    public_settings=PUBLIC_SETTINGS,
+)</code></pre><figcaption>Le parcours après création de l'étude : développement, freeze, hors échantillon, puis un autre actif avec les mêmes paramètres.</figcaption></figure>
+<p>Les essais sont comptés dans <strong>le même registre de validation que le mode Algo</strong> : une nouvelle décision compte, un run identique est reconnu, et regarder ou zoomer reste une simple observation. Le test sur un autre actif ne crée pas de nouvel essai, mais chaque lancement est enregistré pour que les répétitions restent visibles.</p>
+<aside class="note"><p><strong>Périmètre actuel.</strong> Research travaille sur un seul actif OHLCV par étude. L'OOS par blocs avec purge et embargo est une proposition, pas encore une fonctionnalité.</p></aside>
+</section>
+
+<section id="research-fr-bridge" aria-labelledby="research-fr-bridge-title"><div class="shead"><span>08</span><span>Passer au mode Algo</span></div>
+<h2 id="research-fr-bridge-title">Du signal mesuré à la stratégie exécutée</h2>
+<div class="bridge"><div class="bridge-grid"><div><h3>Research · le signal</h3><p>Calculer l'indicateur, mesurer ce qui suit ses signaux, comparer les versions.</p></div><span class="arrow" aria-hidden="true">→</span><div><h3>Algo · la stratégie</h3><p>Choisir les entrées, gérer les positions, appliquer les frais et le sizing.</p></div></div><p class="shared">En commun : le graphique, le serveur local, le manifeste de freeze et le registre des essais.</p></div>
+<p>Passer au mode Algo consiste à formaliser les entrées en setups, puis à ajouter la gestion des positions, les frais et le sizing. Les conclusions de Research doivent alors être vérifiées à nouveau : un signal qui précède bien les mouvements ne garantit pas une stratégie rentable.</p>
+<figure class="shot"><img src="../img/algo-trades-chart.png" alt="Backtest du mode Algo affiché dans le serveur Research : régimes H1, entrées et sorties" loading="lazy"><figcaption>Le même serveur affiche ici un backtest du mode Algo : croisement EMA 50/100 avec régime H1, 734 trades. Les zones colorées sont les régimes, les triangles les entrées et les croix les sorties.</figcaption></figure>
+<p>Dans l'autre sens, <code>@engine.research_view</code> déclare un graphique avant le run : les bougies, les entrées et les sorties du moteur y sont ajoutées automatiquement, et <code>engine.bind_research_view(study)</code> peut réutiliser la vue d'une étude. Le résultat s'ouvre en lecture seule : rien n'est recalculé, aucun essai n'est compté et le freeze n'est pas modifié.</p>
+</section>
+<nav class="next" aria-label="Poursuivre la lecture"><a href="../">← Accueil</a><a href="../algo/">Passer à la gestion des trades · Mode Algo →</a></nav>
+<footer><span>Arnaud Barbier · octobre 2026. Les captures servent à montrer le fonctionnement ; aucun résultat de performance n'est revendiqué.</span><a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine">Dépôt public (instantané) →</a></footer>
+</article>
+
+<!-- ======================= ENGLISH ======================= -->
+<article class="lang-en" lang="en">
+<header class="mast">
+<div class="mast-top"><span>Arnaud Barbier · Backtest engine</span><span>Research mode · October 2026</span></div>
+<h1>Research mode, developing an indicator and measuring its signals</h1>
+<p class="lede">Research mode lets you test an entry idea before turning it into a strategy. The user writes the indicator in a few lines; the mode <strong>measures what actually happens after each signal</strong>, compares it with randomly drawn entries and with the previous version, then shows the result on a chart linked to the notebook.</p>
+<p class="lede2">At this stage no trade management, no costs and no compilation are needed. The aim is to find out quickly whether the signal is worth developing in <a href="../algo/">Algo mode</a>.</p>
+<div class="figs">
+<div><span class="v" data-count="0">0</span><span class="n">compilations to test a new variant</span></div>
+<div><span class="v" data-count="2">2</span><span class="n">automatic comparisons on every run: previous version and baseline</span></div>
+<div><span class="v" data-count="25">25</span><span class="n">measures per horizon and direction, against chance</span></div>
+<div><span class="v" data-count="4">4</span><span class="n">phases to train the eye blind</span></div>
+</div>
+</header>
+
+<div class="apercu">
+<div class="ap-head"><span class="eyebrow">Preview</span>
+<div class="ap-tabs" role="tablist" aria-label="Research mode preview">
+<button type="button" role="tab" aria-selected="true"><span>1</span>The study<i class="bar"></i></button>
+<button type="button" role="tab" aria-selected="false"><span>2</span>The chart<i class="bar"></i></button>
+<button type="button" role="tab" aria-selected="false"><span>3</span>The cases<i class="bar"></i></button>
+<button type="button" role="tab" aria-selected="false"><span>4</span>Training<i class="bar"></i></button>
+</div>
+<button type="button" class="ap-pause" data-pause="❚❚ Pause" data-play="▶ Play">❚❚ Pause</button></div>
+<div class="ap-stage">
+<figure class="ap-slide is-on" role="tabpanel"><div class="ap-frame"><img src="../img/research-study-code.png" alt="Declaration of an EMA 50 study with SignalSpec and ForwardEvaluationSpec"><img src="../img/research-view-code.png" alt="Declaration of the study chart: EMA and long and short markers"></div><figcaption><b>The study.</b> Left, an EMA 50: its signals and what is measured afterwards (horizons of 3, 6 and 40 bars, in ATR units). Right, the chart declaration. Click a screenshot to enlarge it.</figcaption></figure>
+<figure class="ap-slide" role="tabpanel"><div class="ap-frame"><img src="../img/research-ema-chart.png" alt="Research server chart: candles, EMA 50 and long and short signals on gold"></div><figcaption><b>The chart.</b> The result of that study in the local server: long and short signals on gold, the EMA 50 and, at the top, the report's measures (median MFE, MAE and return at 40 bars, in ATR).</figcaption></figure>
+<figure class="ap-slide" role="tabpanel"><div class="ap-frame"><img src="../img/research-cases.png" alt="V7_BOXES study: stepping through active cases and the Inspect in notebook button"></div><figcaption><b>The cases.</b> On another study in development, each signal can be stepped through one at a time and opened in the notebook. Top right, ITER and DSR show how many trials have already been counted.</figcaption></figure>
+<figure class="ap-slide" role="tabpanel"><div class="ap-frame"><img src="../img/research-campaign-setup.png" alt="Setting up a four-phase blind replay campaign"></div><figcaption><b>Training.</b> Setting up a blind replay campaign: four phases, reserved windows and criteria fixed before launch.</figcaption></figure>
+</div>
+</div>
+
+<nav class="reading-map" aria-label="Reading guide">
+<div class="intro"><span class="eyebrow">Reading guide</span><p>What Research mode does, in the order you use it. Each block links to its section.</p></div>
+<ol>
+<li><a href="#research-en-study"><span class="n">01</span><span class="t">Write a study</span><small>An indicator, its signals and what to measure, in a few lines.</small></a></li>
+<li><a href="#research-en-measure"><span class="n">02</span><span class="t">Measure against chance</span><small>Each signal is compared with random entries over the same period.</small></a></li>
+<li><a href="#research-en-history"><span class="n">03</span><span class="t">Compare versions</span><small>Every run finds its previous version and its baseline.</small></a></li>
+<li><a href="#research-en-timing"><span class="n">04</span><span class="t">Judge timing</span><small>An earlier or later entry on the same move is recognised.</small></a></li>
+<li><a href="#research-en-workspace"><span class="n">05</span><span class="t">Inspect and replay</span><small>A chart linked to the notebook, and a replay that hides the future.</small></a></li>
+<li><a href="#research-en-learning"><span class="n">06</span><span class="t">Train the eye</span><small>Blind campaigns to measure an intuition.</small></a></li>
+<li><a href="#research-en-validation"><span class="n">07</span><span class="t">Freeze and test elsewhere</span><small>Freeze, out of sample, then another asset.</small></a></li>
+<li><a href="#research-en-bridge"><span class="n">08</span><span class="t">Move into Algo mode</span><small>The signal becomes a strategy with management, costs and sizing.</small></a></li>
+</ol>
+</nav>
+
+<section id="research-en-study" aria-labelledby="research-en-study-title"><div class="shead"><span>01</span><span>Write a study</span></div>
+<h2 id="research-en-study-title">Declaring an indicator, its signals and what you want to measure</h2>
+<p>A study is a Python function that receives prices, computes its columns and returns long and short signals. Three declarations come with it, so that every choice stays explicit:</p>
+<ul class="list">
+<li><code>SignalSpec</code> states how a signal becomes an event: on the first candle of a run (<code>rising_edge</code>) or on every candle (<code>every_true_bar</code>), with an optional cooldown;</li>
+<li><code>ForwardEvaluationSpec</code> sets what is measured next: entry point, horizons and unit;</li>
+<li>the view chooses the curves, markers and panes shown on the chart.</li>
+</ul>
+<div class="pair pair-wrap">
+<figure class="shot"><img src="../img/research-study-code.png" alt="Code of the ema_cross_50 study" loading="lazy"><figcaption>The study used for the screenshots on this page: an EMA 50, measured at 3, 6 and 40 bars in ATR units, with no TP or SL.</figcaption></figure>
+<figure class="shot"><img src="../img/research-view-code.png" alt="Code of the ema_cross_50 study view" loading="lazy"><figcaption>The view of the same study: the EMA line and the style of the long and short markers.</figcaption></figure>
+</div>
+<div class="two">
+<div><h3>Not reading the future</h3><p>A candle may only use its past. A centred window or a <code>shift(-1)</code> brings in the future without it showing in the result. For higher-timeframe data, <code>ctx.causal_feature(...)</code> aligns each value to the last closed source candle. Columns named <code>y_*</code> stay reserved for future labels.</p></div>
+<div><h3>Iterating without losing track</h3><p>A study can live in the notebook or in a Python file reloaded on each call. Only the calculation, the parameters and the evaluation identify a variant: changing a colour does not create a new trial. Session and candle-size filters apply after emission, without creating a new signal.</p></div>
+</div>
+</section>
+
+<section id="research-en-measure" aria-labelledby="research-en-measure-title"><div class="shead"><span>02</span><span>Measure against chance</span></div>
+<h2 id="research-en-measure-title">Comparing each signal with randomly drawn entries</h2>
+<p>A signal known at the close of a candle is evaluated from the next open. For each horizon, the mode measures the return in the signal's direction, the favourable excursion (MFE), the adverse excursion (MAE) and barrier touches. In ATR units, the scale is the one known at the signal.</p>
+<p>The same calculation is applied to every eligible bar in the period, with the same share of longs and shorts. The gap between the two, the lift, comes with a 95% confidence interval bootstrapped by day. Each row then receives a diagnosis: <code>POSITIVE</code>, <code>NEGATIVE</code>, <code>INCONCLUSIVE</code> or <code>INSUFFICIENT</code>.</p>
+<figure id="research-en-predictive" class="predictive-example"><div class="table-wrap" tabindex="0" role="region" aria-label="Signal against random entries, report output"><table class="predictive-table"><caption>Signal against random entries, report output</caption><thead><tr><th scope="col">Direction</th><th scope="col">Horizon¹</th><th scope="col">Valid signals</th><th scope="col">Signal mean</th><th scope="col">Random mean</th><th scope="col">Mean lift</th><th scope="col">Lift 95% CI</th><th scope="col">Diagnosis</th></tr></thead><tbody><tr><td>ALL</td><td>3</td><td>3307</td><td>-0.011764</td><td>0.001692</td><td>-0.013456</td><td>[-0.053551 ; 0.032919]</td><td>INCONCLUSIVE</td></tr><tr><td>LONG</td><td>3</td><td>1796</td><td>0.017760</td><td>0.019636</td><td>-0.001876</td><td>[-0.063809 ; 0.052811]</td><td>INCONCLUSIVE</td></tr><tr><td>SHORT</td><td>3</td><td>1511</td><td>-0.046856</td><td>-0.019636</td><td>-0.027220</td><td>[-0.091209 ; 0.042453]</td><td>INCONCLUSIVE</td></tr><tr><td>ALL</td><td>6</td><td>3307</td><td>0.024737</td><td>0.003438</td><td>0.021300</td><td>[-0.045838 ; 0.084326]</td><td>INCONCLUSIVE</td></tr><tr class="positive-diagnostic"><td>LONG</td><td>6</td><td>1796</td><td>0.139585</td><td>0.039889</td><td>0.099697</td><td>[0.017798 ; 0.176226]</td><td>POSITIVE</td></tr><tr><td>SHORT</td><td>6</td><td>1511</td><td>-0.111773</td><td>-0.039889</td><td>-0.071884</td><td>[-0.166403 ; 0.016405]</td><td>INCONCLUSIVE</td></tr><tr><td>ALL</td><td>12</td><td>3307</td><td>0.054660</td><td>0.006886</td><td>0.047773</td><td>[-0.036672 ; 0.131722]</td><td>INCONCLUSIVE</td></tr><tr><td>LONG</td><td>12</td><td>1796</td><td>0.193716</td><td>0.079905</td><td>0.113811</td><td>[-0.008983 ; 0.229892]</td><td>INCONCLUSIVE</td></tr><tr><td>SHORT</td><td>12</td><td>1511</td><td>-0.110625</td><td>-0.079905</td><td>-0.030720</td><td>[-0.160339 ; 0.099989]</td><td>INCONCLUSIVE</td></tr></tbody></table></div><figcaption>¹ Horizon in bars. Values are taken as they are from <code>research.report().predictive</code>, with no conversion to percentages. The full table, with its 25 columns, unfolds below.</figcaption></figure><p class="small">Reading this example: only LONG at 6 bars is labelled <code>POSITIVE</code> (lift 0.099697; 95% CI [0.017798; 0.176225]). The other eight rows are <code>INCONCLUSIVE</code>. This describes the evaluated signal, without establishing strategy profitability after management and costs.</p><details class="predictive-full"><summary>Full table · 25 columns</summary><div class="table-wrap" tabindex="0" role="region" aria-label="Full table · 25 columns"><table class="predictive-table"><caption><code>research.report().predictive</code></caption><thead><tr><th scope="col">direction</th><th scope="col">horizon</th><th scope="col">signals</th><th scope="col">valid</th><th scope="col">coverage</th><th scope="col">signal_days</th><th scope="col">mean_r</th><th scope="col">mean_r_ci_low</th><th scope="col">mean_r_ci_high</th><th scope="col">median_r</th><th scope="col">positive_rate</th><th scope="col">positive_rate_ci_low</th><th scope="col">positive_rate_ci_high</th><th scope="col">random_bars</th><th scope="col">random_mean_r</th><th scope="col">random_positive_rate</th><th scope="col">lift_mean_r</th><th scope="col">lift_mean_r_ci_low</th><th scope="col">lift_mean_r_ci_high</th><th scope="col">lift_positive_pp</th><th scope="col">lift_positive_pp_ci_low</th><th scope="col">lift_positive_pp_ci_high</th><th scope="col">p_lift_gt_zero</th><th scope="col">standardized_lift</th><th scope="col">edge_status</th></tr></thead><tbody><tr><td>ALL</td><td>3</td><td>3307</td><td>3307</td><td>1.0</td><td>1490</td><td>-0.011764</td><td>-0.051966</td><td>0.034240</td><td>-0.032845</td><td>0.485637</td><td>0.470462</td><td>0.501240</td><td>139945</td><td>0.001692</td><td>0.500209</td><td>-0.013456</td><td>-0.053551</td><td>0.032919</td><td>-1.457246</td><td>-2.987382</td><td>0.125400</td><td>0.26875</td><td>-0.009910</td><td>INCONCLUSIVE</td></tr><tr><td>LONG</td><td>3</td><td>1796</td><td>1796</td><td>1.0</td><td>1203</td><td>0.017760</td><td>-0.042043</td><td>0.075393</td><td>-0.003113</td><td>0.497216</td><td>0.474803</td><td>0.520619</td><td>139945</td><td>0.019636</td><td>0.509472</td><td>-0.001876</td><td>-0.063809</td><td>0.052811</td><td>-1.225554</td><td>-3.533868</td><td>1.077078</td><td>0.47375</td><td>-0.001415</td><td>INCONCLUSIVE</td></tr><tr><td>SHORT</td><td>3</td><td>1511</td><td>1511</td><td>1.0</td><td>1088</td><td>-0.046856</td><td>-0.113508</td><td>0.025539</td><td>-0.068482</td><td>0.471873</td><td>0.448815</td><td>0.495764</td><td>139945</td><td>-0.019636</td><td>0.489199</td><td>-0.027220</td><td>-0.091209</td><td>0.042453</td><td>-1.732640</td><td>-3.972199</td><td>0.541348</td><td>0.19875</td><td>-0.019526</td><td>INCONCLUSIVE</td></tr><tr><td>ALL</td><td>6</td><td>3307</td><td>3307</td><td>1.0</td><td>1490</td><td>0.024737</td><td>-0.042258</td><td>0.087761</td><td>0.037933</td><td>0.508920</td><td>0.492876</td><td>0.525071</td><td>139942</td><td>0.003438</td><td>0.500694</td><td>0.021300</td><td>-0.045838</td><td>0.084326</td><td>0.822662</td><td>-0.794802</td><td>2.427798</td><td>0.74250</td><td>0.011365</td><td>INCONCLUSIVE</td></tr><tr><td>LONG</td><td>6</td><td>1796</td><td>1796</td><td>1.0</td><td>1203</td><td>0.139585</td><td>0.051836</td><td>0.220225</td><td>0.115918</td><td>0.531180</td><td>0.507071</td><td>0.552943</td><td>139942</td><td>0.039889</td><td>0.512484</td><td>0.099697</td><td>0.017798</td><td>0.176226</td><td>1.869666</td><td>-0.364433</td><td>3.946814</td><td>0.99500</td><td>0.055145</td><td>POSITIVE</td></tr><tr><td>SHORT</td><td>6</td><td>1511</td><td>1511</td><td>1.0</td><td>1088</td><td>-0.111773</td><td>-0.206676</td><td>-0.017164</td><td>-0.073033</td><td>0.482462</td><td>0.458492</td><td>0.507810</td><td>139942</td><td>-0.039889</td><td>0.486680</td><td>-0.071884</td><td>-0.166403</td><td>0.016405</td><td>-0.421825</td><td>-2.804725</td><td>1.961648</td><td>0.07000</td><td>-0.037034</td><td>INCONCLUSIVE</td></tr><tr><td>ALL</td><td>12</td><td>3307</td><td>3307</td><td>1.0</td><td>1490</td><td>0.054660</td><td>-0.029237</td><td>0.140344</td><td>0.056953</td><td>0.511037</td><td>0.495103</td><td>0.527579</td><td>139936</td><td>0.006886</td><td>0.501116</td><td>0.047773</td><td>-0.036672</td><td>0.131722</td><td>0.992072</td><td>-0.614970</td><td>2.654518</td><td>0.87000</td><td>0.018348</td><td>INCONCLUSIVE</td></tr><tr><td>LONG</td><td>12</td><td>1796</td><td>1796</td><td>1.0</td><td>1203</td><td>0.193716</td><td>0.070280</td><td>0.313809</td><td>0.190792</td><td>0.535635</td><td>0.513033</td><td>0.559339</td><td>139936</td><td>0.079905</td><td>0.515607</td><td>0.113811</td><td>-0.008983</td><td>0.229892</td><td>2.002761</td><td>-0.180988</td><td>4.093067</td><td>0.96625</td><td>0.043656</td><td>INCONCLUSIVE</td></tr><tr><td>SHORT</td><td>12</td><td>1511</td><td>1511</td><td>1.0</td><td>1088</td><td>-0.110625</td><td>-0.252657</td><td>0.024479</td><td>-0.089458</td><td>0.481800</td><td>0.454480</td><td>0.508412</td><td>139936</td><td>-0.079905</td><td>0.483893</td><td>-0.030720</td><td>-0.160339</td><td>0.099989</td><td>-0.209250</td><td>-2.633276</td><td>2.359780</td><td>0.33500</td><td>-0.011859</td><td>INCONCLUSIVE</td></tr></tbody></table></div></details>
+<p class="small">In this example, only LONG at 6 bars is diagnosed <code>POSITIVE</code> (lift 0.0997, 95% interval from 0.0178 to 0.1762). The other eight rows remain <code>INCONCLUSIVE</code>. The result concerns the signal alone: it says nothing yet about the profitability of a strategy after management and costs.</p>
+<aside class="note"><p><strong>The limits of the measurement stay visible.</strong> A horizon that runs past the authorised period is censored. If two barriers are touched in the same candle, the outcome is recorded as <code>both_same_bar</code> rather than assuming an order inside the candle. <code>p_lift_gt_zero</code> is the share of bootstrap draws with a positive lift, not a p-value: this diagnosis replaces neither multiple-testing control nor out-of-sample testing.</p></aside>
+</section>
+
+<section id="research-en-history" aria-labelledby="research-en-history-title"><div class="shead"><span>03</span><span>Compare versions</span></div>
+<h2 id="research-en-history-title">Finding the previous version and the baseline after every change</h2>
+<p>Every run is recorded and automatically compared with <strong>the last distinct version</strong> and with <strong>the series baseline</strong>, that is the first recorded run until it is moved. The user can see straight away whether a change improves the signal, and whether it drifts from the starting point.</p>
+<figure><pre tabindex="0"><code>research.run(ema_signal, params={"ema_span": 30})   # A: the baseline
+research.run(ema_signal, params={"ema_span": 40})   # B
+research.run(ema_signal, params={"ema_span": 50})   # C
+report = research.report()
+report.comparisons["previous"]   # C against B
+report.comparisons["baseline"]   # C against A</code></pre><figcaption>Three versions of the same indicator in one series.</figcaption></figure>
+<p>The report shows which signals are kept, added or removed, and how the measures move. Changing the data, the period or the evaluation opens a new series, so different experiments are never compared.</p>
+<p>History is stored in a SQLite database with a readable Markdown journal: reports remain available after a restart. Renaming a notebook keeps its history; copying it creates a new identity that records its lineage.</p>
+</section>
+
+<section id="research-en-timing" aria-labelledby="research-en-timing-title"><div class="shead"><span>04</span><span>Judge timing</span></div>
+<h2 id="research-en-timing-title">Recognising an earlier or later entry on the same move</h2>
+<p>When a change brings an entry forward by three candles, a plain comparison sees one signal removed and another added. The timing judge instead attaches each signal to the price move it belongs to, then compares the two versions <strong>move by move</strong>. Each entry falls into one of four categories:</p>
+<figure><ol class="flow"><li><span class="step">01</span><b>Early</b><p>The entry precedes a move in the same direction, within the allowed window.</p></li><li><span class="step">02</span><b>Within the move</b><p>The entry belongs to the move, and its position in it is measured.</p></li><li><span class="step">03</span><b>Late</b><p>Too much of the move is already used up, or a large pullback has already happened.</p></li><li><span class="step">04</span><b>Outside a move</b><p>No compatible move is found.</p></li></ol></figure>
+<aside class="note"><p><strong>A hindsight judge, and stated as such.</strong> Moves are segmented by an oracle that knows the future. It is used for diagnosis only: its <code>y_move_*</code> labels are never passed to the study.</p></aside>
+<figure><pre tabindex="0"><code>research.set_movement_judge(MovementJudge())
+research.run(study, params=params)
+m = research.report().comparisons["previous"].movements
+m.summary, m.transitions, m.worst(15)</code></pre><figcaption>The report highlights timing changes and the moves worth inspecting.</figcaption></figure>
+</section>
+
+<section id="research-en-workspace" aria-labelledby="research-en-workspace-title"><div class="shead"><span>05</span><span>Inspect and replay</span></div>
+<h2 id="research-en-workspace-title">A chart linked to the notebook, and a replay that hides the future</h2>
+<p><code>research.serve(run)</code> opens a local server that displays the result already computed: looking at the chart does not rerun the study.</p>
+<figure class="shot"><img src="../img/research-cases.png" alt="V7_BOXES study in the Research server: active cases, previous and next buttons, Inspect in notebook" loading="lazy"><figcaption>A study in development (DEV split). Each active case can be stepped through with previous and next, then opened in the notebook with the chosen context: here 10 bars before and 10 bars after.</figcaption></figure>
+<div class="two">
+<div><h3>From the chart to the notebook</h3><p>The chart lets you:</p><ul class="list"><li>select zones and send them to the notebook, which updates <code>research.query</code>;</li><li>open the full context of a signal with “Inspect in notebook”;</li><li>receive in the page the filters applied from the notebook.</li></ul><p>A manual zone selection is flagged as discretionary.</p></div>
+<div><h3>Replaying without seeing what comes next</h3><p>Simple replay starts paused, hides the chosen candle and everything after it, then advances signal by signal or candle by candle. Arrow keys navigate and the space bar plays or pauses.</p><p>Changing a parameter from the Settings panel creates a new variant in DEV. That editor is locked in OOS.</p></div>
+</div>
+</section>
+
+<section id="research-en-learning" aria-labelledby="research-en-learning-title"><div class="shead"><span>06</span><span>Train the eye</span></div>
+<h2 id="research-en-learning-title">Measuring an intuition with blind campaigns</h2>
+<p>A discretionary trader may feel able to recognise good signals. Campaigns make it possible to check: a human or a model sorts signals (Take or Reject) without seeing what follows, then the selection is compared with random selections from the same candidates.</p>
+<p>Four ways of deciding are kept apart: unassisted discretion, discretion aided by values known at the signal, quantitative filter and retrospective annotation. An annotation made while seeing the future is never mixed with blind results.</p>
+<figure class="shot"><img src="../img/research-campaign-setup.png" alt="Replay / learning panel: decision modes, Take and Reject buckets, default validation and phase table" loading="lazy"><figcaption>The campaign panel: decision mode, Take and Reject buckets with their keys, default validation rule (SL of one ATR, favourable threshold of two ATR, 24-bar horizon) and the size of each phase.</figcaption></figure>
+<figure><ol class="flow"><li><span class="step">01</span><b>Initial measurement</b><p>Blind decisions to set the starting point.</p></li><li><span class="step">02</span><b>Exploratory learning</b><p>The outcome is shown after each decision, in chronological order.</p></li><li><span class="step">03</span><b>Stabilised training</b><p>At least two blocks, to separate training from validation.</p></li><li><span class="step">04</span><b>Final evaluation</b><p>Blind, on observations never seen.</p></li></ol></figure>
+<div class="pair pair-wrap">
+<figure class="shot"><img src="../img/research-campaign-check.png" alt="Sample check: reservation refused, 340 signals available out of 400 requested" loading="lazy"><figcaption>Before launch, the panel checks sample sizes. Here the learning phase asks for 400 signals while only 340 remain unseen: <b>the reservation is refused rather than silently reduced.</b></figcaption></figure>
+<figure class="shot"><img src="../img/research-campaign-report.png" alt="Partial report of the four phases of a campaign" loading="lazy"><figcaption>Partial report of a campaign: phases 1 and 2 are complete, phases 3 and 4 remain reserved and their results protected.</figcaption></figure>
+</div>
+<p>Every window shown is logged by date, asset and timeframe. Free replay counts too: renaming signals does not make a window “never seen”. The machine-learning export excludes phases 1 and 2, and the model is frozen before the final phase.</p>
+</section>
+
+<section id="research-en-validation" aria-labelledby="research-en-validation-title"><div class="shead"><span>07</span><span>Freeze and test elsewhere</span></div>
+<h2 id="research-en-validation-title">Freezing the configuration before opening the reserved sample</h2>
+<p>The split between development (DEV) and out of sample (OOS) is declared when <code>Research</code> is created. The freeze records the configuration and the conclusions before any access to the reserved part, and the check runs before the OOS calculation. Earlier bars can warm up the indicators, but only authorised observations are published.</p>
+<figure><pre tabindex="0"><code>research.use_insample()
+run_dev = research.run(study, params=params)
+research.freeze_configuration(conclusions=conclusions)
+research.use_oos()
+run_oos = research.run(study, params=params)
+cross = research.run_cross_asset(
+    study, {"XAGUSD": xag_df}, params=params,
+    public_settings=PUBLIC_SETTINGS,
+)</code></pre><figcaption>The workflow once the study exists: development, freeze, out of sample, then another asset with the same parameters.</figcaption></figure>
+<p>Trials are counted in <strong>the same validation registry as Algo mode</strong>: a new decision counts, an identical run is recognised, and looking or zooming remains a plain observation. Testing on another asset does not create a new trial, but each launch is recorded so repetitions stay visible.</p>
+<aside class="note"><p><strong>Current scope.</strong> Research works on a single OHLCV asset per study. Block OOS with purge and embargo is a proposal, not yet a feature.</p></aside>
+</section>
+
+<section id="research-en-bridge" aria-labelledby="research-en-bridge-title"><div class="shead"><span>08</span><span>Move into Algo mode</span></div>
+<h2 id="research-en-bridge-title">From a measured signal to an executed strategy</h2>
+<div class="bridge"><div class="bridge-grid"><div><h3>Research · the signal</h3><p>Compute the indicator, measure what follows its signals, compare versions.</p></div><span class="arrow" aria-hidden="true">→</span><div><h3>Algo · the strategy</h3><p>Choose entries, manage positions, apply costs and sizing.</p></div></div><p class="shared">Shared: the chart, the local server, the freeze manifest and the trial registry.</p></div>
+<p>Moving into Algo mode means turning entries into setups, then adding position management, costs and sizing. Research's conclusions then have to be checked again: a signal that anticipates moves well does not guarantee a profitable strategy.</p>
+<figure class="shot"><img src="../img/algo-trades-chart.png" alt="Algo mode backtest shown in the Research server: H1 regimes, entries and exits" loading="lazy"><figcaption>The same server here shows an Algo mode backtest: EMA 50/100 crossover with an H1 regime, 734 trades. Coloured zones are regimes, triangles are entries and crosses are exits.</figcaption></figure>
+<p>In the other direction, <code>@engine.research_view</code> declares a chart before the run: the engine's candles, entries and exits are added automatically, and <code>engine.bind_research_view(study)</code> can reuse a study's view. The result opens read-only: nothing is recomputed, no trial is counted and the freeze is untouched.</p>
+</section>
+<nav class="next" aria-label="Continue reading"><a href="../">← Home</a><a href="../algo/">Move into trade management · Algo mode →</a></nav>
+<footer><span>Arnaud Barbier · October 2026. The screenshots show how the mode works; no performance result is claimed.</span><a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine">Public repository (snapshot) →</a></footer>
+</article>
+</main></div></body></html>

@@ -247,7 +247,7 @@ footer{
 .langbar button:hover{color:var(--ink)}
 .langbar button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .topbar{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;flex-wrap:wrap}
-.pagenav{display:flex;gap:0;padding:.9rem 0 0}
+.pagenav{display:flex;flex-wrap:wrap;gap:0;padding:.9rem 0 0}
 .pagenav>a,.pagenav>span{
   font-family:var(--f-sans);font-size:.68rem;letter-spacing:.13em;text-transform:uppercase;
   color:var(--faint);border:0;text-decoration:none;
@@ -290,6 +290,28 @@ figcaption b{color:var(--ink);font-weight:600}
 }
 .crosslink p{margin:0 0 .6rem;font-size:.95rem;max-width:66ch}
 .crosslink a{font-weight:600}
+.reading-map{
+  margin:0 0 1.8rem;padding:1rem 1.05rem 1.05rem;
+  border-top:3px solid var(--accent);border-bottom:1px solid var(--hair);
+  background:linear-gradient(110deg,var(--accent-well),var(--well));
+}
+.reading-map .intro{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;margin-bottom:.85rem}
+.reading-map .intro b{font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);white-space:nowrap}
+.reading-map .intro p{margin:0;font-size:.8rem;line-height:1.45;color:var(--sub);max-width:68ch}
+.reading-map ol{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;margin:0;padding:0;list-style:none;background:var(--hair)}
+.reading-map li{min-width:0;background:var(--panel)}
+.reading-map a{display:grid;grid-template-columns:1.6rem minmax(0,1fr);gap:.45rem;height:100%;padding:.62rem .7rem;text-decoration:none;color:var(--ink)}
+.reading-map a{transition:box-shadow .18s ease}
+.reading-map a:hover,.reading-map a:focus-visible{box-shadow:inset 0 0 0 2px #EAB308;outline:0}
+.reading-map .n{font-size:.68rem;font-weight:700;color:var(--accent);padding-top:.08rem}
+.reading-map .t{font-size:.78rem;font-weight:600;line-height:1.25}
+.reading-map small{display:block;margin-top:.18rem;font-family:var(--f-serif);font-size:.68rem;font-weight:400;line-height:1.35;color:var(--faint)}
+@media (max-width:700px){
+  .reading-map .intro{display:block}
+  .reading-map .intro p{margin-top:.35rem}
+  .reading-map ol{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:430px){.reading-map ol{grid-template-columns:1fr}}
 </style>
 
 
@@ -323,8 +345,10 @@ button{font:inherit}
   <div class="wrap topbar">
     <nav class="pagenav" aria-label="Pages">
       <a href="../"><span class="lang-fr">Accueil</span><span class="lang-en">Home</span></a>
-      <a href="../validation/"><span class="lang-fr">Premiers tests d'allocation</span><span class="lang-en">First allocation tests</span></a>
-      <a href="../validation-2/"><span class="lang-fr">Tous les tests d'allocation</span><span class="lang-en">All the allocation tests</span></a>
+      <a href="../research/"><span class="lang-fr">Mode Research</span><span class="lang-en">Research mode</span></a>
+      <a href="../algo/"><span class="lang-fr">Mode Algo</span><span class="lang-en">Algo mode</span></a>
+      <a href="../validation/"><span class="lang-fr">Validation · Optimisation max DDR</span><span class="lang-en">Validation · Max drawdown optimisation</span></a>
+      <a href="../validation-2/"><span class="lang-fr">Validation · Optimisation Sharpe</span><span class="lang-en">Validation · Sharpe optimisation</span></a>
       <span aria-current="page"><span class="lang-fr">Mode allocation</span><span class="lang-en">Allocation mode</span></span>
       <a href="../costs/"><span class="lang-fr">Les coûts</span><span class="lang-en">Costs · FR</span></a>
       <a href="../stateful/"><span class="lang-fr">Replay &amp; resume</span><span class="lang-en">Replay &amp; resume</span></a>
@@ -354,6 +378,18 @@ button{font:inherit}
       bas.
     </p>
 
+    <nav class="reading-map" aria-label="Fil de lecture">
+      <div class="intro"><b>Fil de lecture</b><p>De la déclaration du portefeuille jusqu'au verdict, la page suit ce que le moteur reçoit, exécute, contrôle et restitue.</p></div>
+      <ol>
+        <li><a href="#engine-fr-declaration"><span class="n">01</span><span class="t">Déclarer<small>Trésorerie, dette, frais et devises</small></span></a></li>
+        <li><a href="#engine-fr-decision"><span class="n">02</span><span class="t">Décider<small>Calendrier et interruptions du run</small></span></a></li>
+        <li><a href="#engine-fr-integrite"><span class="n">03</span><span class="t">Contrôler<small>Garde-fous et registre comptable</small></span></a></li>
+        <li><a href="#execution-costs"><span class="n">04</span><span class="t">Attribuer<small>Coûts rapprochés par actif</small></span></a></li>
+        <li><a href="#engine-fr-verdict"><span class="n">05</span><span class="t">Lire le résultat<small>Performance, risque et financement</small></span></a></li>
+        <li><a href="#engine-fr-validation"><span class="n">06</span><span class="t">Réfuter<small>Baselines, nulls et périmètre</small></span></a></li>
+      </ol>
+    </nav>
+
     <div class="metric-row">
       <div class="metric">
         <div class="k">Identité comptable</div>
@@ -378,7 +414,7 @@ button{font:inherit}
     </div>
   </header>
 
-  <section>
+  <section id="engine-fr-declaration">
     <div class="shead"><span class="snum">01</span><span class="stitle">Déclarer un portefeuille</span></div>
     <h2>Tout ce qui suit est écrit une fois, et le moteur s'occupe du reste</h2>
     <p>
@@ -431,7 +467,7 @@ button{font:inherit}
     </figure>
   </section>
 
-  <section>
+  <section id="engine-fr-decision">
     <div class="shead"><span class="snum">02</span><span class="stitle">Décider, et être interrompu</span></div>
     <h2>Un calendrier, et ce qui a le droit de l'interrompre</h2>
     <p>
@@ -484,7 +520,7 @@ button{font:inherit}
     </p>
   </section>
 
-  <section>
+  <section id="engine-fr-integrite">
     <div class="shead"><span class="snum">03</span><span class="stitle">Ce qui empêche de tricher</span></div>
     <h2>Les garanties qui rendent l'interruption honnête</h2>
     <div class="refs">
@@ -496,7 +532,7 @@ button{font:inherit}
     </div>
   </section>
 
-  <section>
+  <section id="engine-fr-registre">
     <div class="shead"><span class="snum">04</span><span class="stitle">Le registre</span></div>
     <h2>Chaque euro emprunté est attribuable à sa barre</h2>
     <p>
@@ -589,7 +625,7 @@ button{font:inherit}
     </div>
   </section>
 
-  <section>
+  <section id="engine-fr-verdict">
     <div class="shead"><span class="snum">06</span><span class="stitle">Le verdict de ce run</span></div>
     <h2>Le verdict du moteur sur ce run</h2>
     <figure>
@@ -630,7 +666,7 @@ button{font:inherit}
     </figure>
   </section>
 
-  <section>
+  <section id="engine-fr-validation">
     <div class="shead"><span class="snum">07</span><span class="stitle">La couche de validation</span></div>
     <h2>Les baselines ne sont pas calculées à côté, elles sont rejouées dans le moteur</h2>
     <p>
@@ -711,7 +747,7 @@ button{font:inherit}
     </div>
   </section>
 
-  <section>
+  <section id="engine-fr-perimetre">
     <div class="shead"><span class="snum">08</span><span class="stitle">Périmètre</span></div>
     <h2>Ce qui est publié, et ce qui ne l'est pas</h2>
     <p class="small">
@@ -758,6 +794,18 @@ button{font:inherit}
       engine ships with a validation layer, and an example of it in use appears further down.
     </p>
 
+    <nav class="reading-map" aria-label="Reading guide">
+      <div class="intro"><b>Reading guide</b><p>From portfolio declaration to verdict, the page follows what the engine receives, executes, checks and returns.</p></div>
+      <ol>
+        <li><a href="#engine-en-declaration"><span class="n">01</span><span class="t">Declare<small>Cash, debt, fees and currencies</small></span></a></li>
+        <li><a href="#engine-en-decision"><span class="n">02</span><span class="t">Decide<small>Calendar and run interruptions</small></span></a></li>
+        <li><a href="#engine-en-integrity"><span class="n">03</span><span class="t">Control<small>Guardrails and accounting ledger</small></span></a></li>
+        <li><a href="#execution-costs-en"><span class="n">04</span><span class="t">Attribute<small>Costs reconciled by asset</small></span></a></li>
+        <li><a href="#engine-en-verdict"><span class="n">05</span><span class="t">Read the result<small>Performance, risk and funding</small></span></a></li>
+        <li><a href="#engine-en-validation"><span class="n">06</span><span class="t">Refute<small>Baselines, nulls and scope</small></span></a></li>
+      </ol>
+    </nav>
+
     <div class="metric-row">
       <div class="metric">
         <div class="k">Accounting identity</div>
@@ -782,7 +830,7 @@ button{font:inherit}
     </div>
   </header>
 
-  <section>
+  <section id="engine-en-declaration">
     <div class="shead"><span class="snum">01</span><span class="stitle">Declaring a portfolio</span></div>
     <h2>All of this is written once, and the engine handles the rest</h2>
     <p>
@@ -833,7 +881,7 @@ button{font:inherit}
     </figure>
   </section>
 
-  <section>
+  <section id="engine-en-decision">
     <div class="shead"><span class="snum">02</span><span class="stitle">Deciding, and being interrupted</span></div>
     <h2>A schedule, and what is allowed to interrupt it</h2>
     <p>
@@ -883,7 +931,7 @@ button{font:inherit}
     </p>
   </section>
 
-  <section>
+  <section id="engine-en-integrity">
     <div class="shead"><span class="snum">03</span><span class="stitle">What stops this from cheating</span></div>
     <h2>The guarantees that keep the interruption honest</h2>
     <div class="refs">
@@ -895,7 +943,7 @@ button{font:inherit}
     </div>
   </section>
 
-  <section>
+  <section id="engine-en-ledger">
     <div class="shead"><span class="snum">04</span><span class="stitle">The ledger</span></div>
     <h2>Every borrowed euro is attributable to its bar</h2>
     <p>
@@ -985,7 +1033,7 @@ button{font:inherit}
     </div>
   </section>
 
-  <section>
+  <section id="engine-en-verdict">
     <div class="shead"><span class="snum">06</span><span class="stitle">This run's verdict</span></div>
     <h2>What the engine reports on this run</h2>
     <figure>
@@ -1024,7 +1072,7 @@ button{font:inherit}
     </figure>
   </section>
 
-  <section>
+  <section id="engine-en-validation">
     <div class="shead"><span class="snum">07</span><span class="stitle">The validation layer</span></div>
     <h2>The baselines are not computed alongside, they are replayed through the engine</h2>
     <p>
@@ -1102,7 +1150,7 @@ button{font:inherit}
     </div>
   </section>
 
-  <section>
+  <section id="engine-en-scope">
     <div class="shead"><span class="snum">08</span><span class="stitle">Scope</span></div>
     <h2>What is published, and what is not</h2>
     <p class="small">

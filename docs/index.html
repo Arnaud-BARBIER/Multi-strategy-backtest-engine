@@ -150,6 +150,9 @@ h1{
 }
 .card h2{font-size:1.16rem;font-weight:600;letter-spacing:-.02em;line-height:1.25}
 .card p{font-size:.885rem;color:var(--sub);line-height:1.55;flex:1}
+.card .tests{font-family:var(--f-sans);font-size:.72rem;line-height:1.55;color:var(--faint)}
+.card .tests b{color:var(--ink);font-weight:600}
+.card .tests code{font-family:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;color:var(--sub)}
 .card .go{font-family:var(--f-sans);font-size:.83rem;font-weight:600;color:var(--accent)}
 
 .foot{
@@ -176,6 +179,33 @@ h1{
 .roadmap h2{font-size:1.12rem;font-weight:600;letter-spacing:-.02em;line-height:1.28;margin-bottom:.55rem}
 .roadmap p{font-size:.9rem;color:var(--sub);line-height:1.58}
 .roadmap .continuity{margin-top:1.35rem;padding-top:1rem;border-top:1px solid var(--hair);max-width:78ch}
+
+.tn-r{fill:var(--accent-well);stroke:var(--accent);stroke-width:1.6;stroke-dasharray:5 3}
+.tl-r{fill:none;stroke:var(--accent);stroke-width:1.7;stroke-dasharray:5 5;animation:dash 1.1s linear infinite}
+.tree .tlink{cursor:pointer}
+.tree .tlink rect{transition:stroke .2s}
+.tree .tlink:hover rect,.tree .tlink:focus-visible rect{stroke:#EAB308}
+.tree .tlink:focus{outline:none}
+.tree.anim .tg{opacity:0;transform:translateY(8px);transition:opacity .7s ease var(--d,0s),transform .7s cubic-bezier(.2,.7,.2,1) var(--d,0s)}
+.tree.anim.in .tg{opacity:1;transform:none}
+.tree.anim .tl,.tree.anim .tl-i{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1s cubic-bezier(.3,.7,.2,1) var(--d,0s)}
+.tree.anim.in .tl,.tree.anim.in .tl-i{stroke-dashoffset:0}
+.mast-top{animation:drawbg 1.1s .3s cubic-bezier(.3,.7,.2,1) both}
+h1 .w{display:inline-block;opacity:0;transform:translateY(.4em);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
+h1.on .w{opacity:1;transform:none}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .8s ease,transform .8s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
+.cards .card.reveal:nth-child(3n+2),.figs .fig.reveal:nth-child(2),.modes .mode.reveal:nth-child(2){transition-delay:.1s}
+.cards .card.reveal:nth-child(3n+3),.figs .fig.reveal:nth-child(3),.modes .mode.reveal:nth-child(3){transition-delay:.2s}
+.figs .fig.reveal:nth-child(4){transition-delay:.3s}
+.card .shot img{transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+.card:hover .shot img{transform:scale(1.04)}
+@keyframes dash{to{stroke-dashoffset:-20}}
+@keyframes drawbg{from{background-size:0 2px}to{background-size:100% 2px}}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;animation-delay:0s!important;transition-duration:.001ms!important;transition-delay:0s!important}
+  .reveal,h1 .w{opacity:1;transform:none}
+}
 
 @media (max-width:760px){
   .tree{display:none}
@@ -248,33 +278,53 @@ h1{
       mesure, pas l'utilisateur.</b>
     </p>
     <div class="tree">
-      <svg viewBox="0 0 900 430" role="img" aria-label="Arbre des modes : le kernel Numba se sépare en algorithmique et allocation, qui se rejoignent pour former le mode investissement">
-        <path class="tl" d="M450,372 L450,346"/>
-        <path class="tl" d="M450,346 C450,320 350,300 292,290"/>
-        <path class="tl" d="M450,346 C450,320 550,300 608,290"/>
-        <path class="tl-i" d="M165,238 C165,195 250,165 348,124"/>
-        <path class="tl-i" d="M735,238 C735,195 650,165 552,124"/>
+      <svg viewBox="0 0 900 430" role="img" aria-label="Arbre des modes : le kernel Numba se sépare en algorithmique et allocation, qui se rejoignent pour former le mode investissement. Au centre, le mode Research, relié au mode algorithmique.">
+        <path class="tl" pathLength="1" style="--d:.25s" d="M450,372 L450,346"/>
+        <path class="tl" pathLength="1" style="--d:.45s" d="M450,346 C450,320 350,300 292,290"/>
+        <path class="tl" pathLength="1" style="--d:.45s" d="M450,346 C450,320 550,300 608,290"/>
+        <path class="tl-i" pathLength="1" style="--d:1.05s" d="M165,238 C165,195 250,165 348,124"/>
+        <path class="tl-i" pathLength="1" style="--d:1.05s" d="M735,238 C735,195 650,165 552,124"/>
 
+        <g class="tg" style="--d:0s">
         <rect class="tn" x="300" y="372" width="300" height="48" rx="1"/>
         <text class="tk" x="450" y="394" text-anchor="middle">KERNEL NUMBA</text>
         <text class="t2" x="450" y="412" text-anchor="middle">lecture des barres, une seule fois</text>
+        </g>
 
+        <a href="algo/" class="tlink"><g class="tg" style="--d:.75s">
         <rect class="tn" x="40" y="240" width="250" height="68" rx="1"/>
         <text class="t1" x="62" y="272">Algorithmique</text>
         <text class="t2" x="62" y="294">une règle a-t-elle un edge ?</text>
+        </g></a>
 
+        <g class="tg" style="--d:.75s">
         <rect class="tn" x="610" y="240" width="250" height="68" rx="1"/>
         <text class="t1" x="632" y="272">Allocation</text>
         <text class="t2" x="632" y="294">une pondération bat-elle 1/N ?</text>
+        </g>
 
+        <g class="tg" style="--d:1.4s">
         <rect class="tn-i" x="305" y="44" width="290" height="76" rx="1"/>
         <text class="t1" x="327" y="80">Investissement</text>
         <text class="t2" x="327" y="104">qu'a vécu un compte réel ?</text>
-
         <rect class="tchip" x="136" y="164" width="168" height="32" rx="1"/>
         <text class="t2" x="220" y="185" text-anchor="middle">couche de sizing</text>
+        </g>
+
+        <a href="research/" class="tlink"><g class="tg" style="--d:1.75s">
+        <path class="tl-r" d="M290,262 C322,262 322,229 350,229"/>
+        <text class="tk" x="450" y="188" text-anchor="middle">PYTHON · SANS COMPILATION</text>
+        <rect class="tn-r" x="350" y="196" width="200" height="66" rx="1"/>
+        <text class="t1" x="370" y="226">Research</text>
+        <text class="t2" x="370" y="248">que suit un signal ?</text>
+        </g></a>
       </svg>
     </div>
+    <p class="tcap">
+      Au centre du schéma, le <a href="research/">mode Research</a> permet de développer un indicateur et
+      de mesurer ce qui suit ses signaux, sans compilation. Il est pour l'instant relié au
+      <a href="algo/">mode algorithmique</a> : les deux partagent le même graphique et le même registre de validation.
+    </p>
     <div class="modes">
       <div class="mode">
         <h3>Algorithmique</h3>
@@ -313,27 +363,36 @@ h1{
       </div>
     </div>
 
-    <div class="lbl">Six entrées</div>
+        <div class="lbl">Huit entrées</div>
     <div class="cards">
+      <a class="card" href="research/">
+        <div class="shot"><img src="img/research-ema-chart.png" alt="Graphique du mode Research : signaux long et short et EMA 50" loading="lazy"></div>
+        <div class="tag"><span>L'étude du signal</span><span>6 octobre 2026</span></div>
+        <h2>Mode Research</h2>
+        <p>Développer un indicateur et mesurer ce qui suit ses signaux, comparés à des entrées au hasard et à la version précédente. Le résultat s'affiche sur un graphique relié au notebook, jusqu'au freeze et au hors échantillon.</p>
+        <div class="tests"><b>Le lien avec Algo :</b> le même graphique et le même registre de validation.</div>
+        <div class="go">Explorer le mode Research →</div>
+      </a>
+      <a class="card" href="algo/">
+        <div class="shot"><img src="img/algo-trades-chart.png" alt="Backtest du mode Algo : régimes, entrées et sorties" loading="lazy"></div>
+        <div class="tag"><span>La gestion des trades</span><span>6 octobre 2026</span></div>
+        <h2>Mode Algo</h2>
+        <p>Transformer un signal en stratégie : choix des entrées, gestion des positions à quatre niveaux, frais d'exécution et sizing. Chaque trade reste inspectable, du prix visé au prix exécuté.</p>
+        <div class="tests"><b>Le lien avec Research :</b> le backtest affiché dans le graphique du mode Research.</div>
+        <div class="go">Explorer le mode Algo →</div>
+      </a>
       <a class="card" href="validation/">
         <div class="shot"><img src="img/thumb-validation.png" alt="Courbes de la stratégie et des deux baselines" loading="lazy"></div>
         <div class="tag"><span>La mesure</span><span>6 min · 26 août 2026</span></div>
-        <h2>Premiers tests d'allocation</h2>
-        <p>
-          Ce que la couche a renvoyé lorsqu'elle a été pointée sur la stratégie. Trois tests, trois
-          verdicts, les sorties brutes, et l'énoncé de ce qu'ils ne permettent
-          pas de conclure.
-        </p>
+        <h2>Validation · Optimisation max DDR duration</h2>
+        <div class="tests"><b>Tests montrés :</b> <code>validation_baseline</code>, <code>validation_null_sizing</code>, <code>validation_null_leverage</code>.</div>
         <div class="go">Lire la note →</div>
       </a>
       <a class="card" href="validation-2/">
         <div class="shot"><img src="img/thumb-validation-2.png" alt="Courbes de la stratégie et des deux baselines" loading="lazy"></div>
         <div class="tag"><span>La mesure</span><span>7 min · 4 septembre 2026</span></div>
-        <h2>Tous les tests d'allocation</h2>
-        <p>
-          La même couche, une autre règle de pondération. Elle bat l'équipondération et généralise
-          sur 80 univers inédits ; le panier sur lequel elle tourne ne valait pas d'être détenu.
-        </p>
+        <h2>Validation · Optimisation Sharpe</h2>
+        <div class="tests"><b>Tests montrés :</b> <code>validation_baseline</code>, <code>validation_purchasing_power</code>, <code>validation_oos_retention</code>, <code>validation_null_leverage</code>, <code>validation_cross_asset</code>, <code>validation_mc</code>, <code>validation_edge_concentration</code>, <code>validation_dsr</code>, <code>trial_counter_status</code> et <code>freeze_configuration</code>.</div>
         <div class="go">Lire la note →</div>
       </a>
       <a class="card" href="engine/">
@@ -475,33 +534,53 @@ h1{
       not the user.</b>
     </p>
     <div class="tree">
-      <svg viewBox="0 0 900 430" role="img" aria-label="Mode tree: the Numba kernel splits into algorithmic and allocation, which rejoin to form investment mode">
-        <path class="tl" d="M450,372 L450,346"/>
-        <path class="tl" d="M450,346 C450,320 350,300 292,290"/>
-        <path class="tl" d="M450,346 C450,320 550,300 608,290"/>
-        <path class="tl-i" d="M165,238 C165,195 250,165 348,124"/>
-        <path class="tl-i" d="M735,238 C735,195 650,165 552,124"/>
+      <svg viewBox="0 0 900 430" role="img" aria-label="Mode tree: the Numba kernel splits into algorithmic and allocation, which rejoin to form investment mode. In the centre, Research mode, linked to algorithmic mode.">
+        <path class="tl" pathLength="1" style="--d:.25s" d="M450,372 L450,346"/>
+        <path class="tl" pathLength="1" style="--d:.45s" d="M450,346 C450,320 350,300 292,290"/>
+        <path class="tl" pathLength="1" style="--d:.45s" d="M450,346 C450,320 550,300 608,290"/>
+        <path class="tl-i" pathLength="1" style="--d:1.05s" d="M165,238 C165,195 250,165 348,124"/>
+        <path class="tl-i" pathLength="1" style="--d:1.05s" d="M735,238 C735,195 650,165 552,124"/>
 
+        <g class="tg" style="--d:0s">
         <rect class="tn" x="300" y="372" width="300" height="48" rx="1"/>
         <text class="tk" x="450" y="394" text-anchor="middle">NUMBA KERNEL</text>
         <text class="t2" x="450" y="412" text-anchor="middle">bars read once</text>
+        </g>
 
+        <a href="algo/" class="tlink"><g class="tg" style="--d:.75s">
         <rect class="tn" x="40" y="240" width="250" height="68" rx="1"/>
         <text class="t1" x="62" y="272">Algorithmic</text>
         <text class="t2" x="62" y="294">does a rule have an edge?</text>
+        </g></a>
 
+        <g class="tg" style="--d:.75s">
         <rect class="tn" x="610" y="240" width="250" height="68" rx="1"/>
         <text class="t1" x="632" y="272">Allocation</text>
         <text class="t2" x="632" y="294">does a weighting beat 1/N?</text>
+        </g>
 
+        <g class="tg" style="--d:1.4s">
         <rect class="tn-i" x="305" y="44" width="290" height="76" rx="1"/>
         <text class="t1" x="327" y="80">Investment</text>
         <text class="t2" x="327" y="104">what did a real account live?</text>
-
         <rect class="tchip" x="136" y="164" width="168" height="32" rx="1"/>
         <text class="t2" x="220" y="185" text-anchor="middle">sizing layer</text>
+        </g>
+
+        <a href="research/" class="tlink"><g class="tg" style="--d:1.75s">
+        <path class="tl-r" d="M290,262 C322,262 322,229 350,229"/>
+        <text class="tk" x="450" y="188" text-anchor="middle">PYTHON · NO COMPILE STEP</text>
+        <rect class="tn-r" x="350" y="196" width="200" height="66" rx="1"/>
+        <text class="t1" x="370" y="226">Research</text>
+        <text class="t2" x="370" y="248">what follows a signal?</text>
+        </g></a>
       </svg>
     </div>
+    <p class="tcap">
+      In the centre of the diagram, <a href="research/">Research mode</a> lets you develop an indicator and
+      measure what follows its signals, with no compilation. For now it is linked to
+      <a href="algo/">algorithmic mode</a>: both share the same chart and the same validation registry.
+    </p>
     <div class="modes">
       <div class="mode">
         <h3>Algorithmic</h3>
@@ -537,26 +616,36 @@ h1{
       </div>
     </div>
 
-    <div class="lbl">Five ways in</div>
+        <div class="lbl">Eight ways in</div>
     <div class="cards">
+      <a class="card" href="research/">
+        <div class="shot"><img src="img/research-ema-chart.png" alt="Research mode chart: long and short signals and EMA 50" loading="lazy"></div>
+        <div class="tag"><span>Signal research</span><span>6 October 2026</span></div>
+        <h2>Research mode</h2>
+        <p>Develop an indicator and measure what follows its signals, compared with random entries and with the previous version. The result appears on a chart linked to the notebook, all the way to the freeze and out-of-sample test.</p>
+        <div class="tests"><b>The Algo connection:</b> the same chart and the same validation registry.</div>
+        <div class="go">Explore Research mode →</div>
+      </a>
+      <a class="card" href="algo/">
+        <div class="shot"><img src="img/algo-trades-chart.png" alt="Algo mode backtest: regimes, entries and exits" loading="lazy"></div>
+        <div class="tag"><span>Trade management</span><span>6 October 2026</span></div>
+        <h2>Algo mode</h2>
+        <p>Turn a signal into a strategy: entry selection, four levels of position management, execution costs and sizing. Every trade stays inspectable, from target price to executed price.</p>
+        <div class="tests"><b>The Research connection:</b> the backtest shown in Research mode's chart.</div>
+        <div class="go">Explore Algo mode →</div>
+      </a>
       <a class="card" href="validation/">
         <div class="shot"><img src="img/thumb-validation.png" alt="Courbes de la stratégie et des deux baselines" loading="lazy"></div>
         <div class="tag"><span>The measurement</span><span>6 min · 26 August 2026</span></div>
-        <h2>First allocation tests</h2>
-        <p>
-          What the layer returned when it was pointed at the strategy. Three tests, three
-          verdicts, the raw output, and a statement of what they do not establish.
-        </p>
+        <h2>Validation · max drawdown duration optimisation</h2>
+        <div class="tests"><b>Tests shown:</b> <code>validation_baseline</code>, <code>validation_null_sizing</code>, <code>validation_null_leverage</code>.</div>
         <div class="go">Read the note →</div>
       </a>
     <a class="card" href="validation-2/">
-        <div class="shot"><img src="img/thumb-validation-2.png"g" alt="Strategy and both baselines" loading="lazy"></div>
+        <div class="shot"><img src="img/thumb-validation-2.png" alt="Strategy and both baselines" loading="lazy"></div>
         <div class="tag"><span>The measurement</span><span>7 min · 4 September 2026</span></div>
-        <h2>All the allocation tests</h2>
-        <p>
-          The same layer, a different weighting rule. It beats equal weighting and generalises
-          across 80 unseen universes; the basket it runs on was not worth holding.
-        </p>
+        <h2>Validation · Sharpe optimisation</h2>
+        <div class="tests"><b>Tests shown:</b> <code>validation_baseline</code>, <code>validation_purchasing_power</code>, <code>validation_oos_retention</code>, <code>validation_null_leverage</code>, <code>validation_cross_asset</code>, <code>validation_mc</code>, <code>validation_edge_concentration</code>, <code>validation_dsr</code>, <code>trial_counter_status</code> and <code>freeze_configuration</code>.</div>
         <div class="go">Read the note →</div>
       </a>
       <a class="card" href="engine/">
@@ -653,6 +742,32 @@ h1{
   }
   btns.forEach(function(b){ b.addEventListener("click", function(){ set(b.dataset.set); }); });
   try { var s = localStorage.getItem("ab-lang"); if (s === "fr" || s === "en") set(s); } catch (e) {}
+})();
+
+(function(){
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var hasIO = "IntersectionObserver" in window;
+  /* titre : apparition mot par mot */
+  document.querySelectorAll("h1").forEach(function(h){
+    if (reduce) return;
+    var txt = h.textContent.trim();
+    h.setAttribute("aria-label", txt);
+    h.innerHTML = txt.split(/\s+/).map(function(w, k){
+      return '<span class="w" aria-hidden="true" style="transition-delay:' + (0.05 + k * 0.045).toFixed(3) + 's">' + w + '</span>';
+    }).join(" ");
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ h.classList.add("on"); }); });
+  });
+  if (!hasIO || reduce) return;
+  /* schéma des modes : tracé des branches puis apparition des nœuds */
+  var to = new IntersectionObserver(function(es){
+    es.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add("in"); to.unobserve(e.target); } });
+  }, {threshold:.35});
+  document.querySelectorAll(".tree").forEach(function(t){ t.classList.add("anim"); to.observe(t); });
+  /* apparition au défilement */
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); } });
+  }, {rootMargin:"0px 0px -6% 0px"});
+  document.querySelectorAll(".fig, .mode, .band, .card, .roadmap article").forEach(function(el){ el.classList.add("reveal"); io.observe(el); });
 })();
 </script>
 </body>

@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Premiers tests d'allocation · Arnaud Barbier</title>
-<meta name="description" content="Un moteur de backtest multi-actifs et la couche de validation qui a écarté la stratégie d'allocation tournant dessus. Résultat mesuré, hypothèses nulles, limites.">
+<title>Validation d'une optimisation de la durée maximale du drawdown · Arnaud Barbier</title>
+<meta name="description" content="Une optimisation de la durée maximale du drawdown soumise à trois tests de validation : baseline, null sizing et null leverage.">
 <meta name="author" content="Arnaud Barbier">
 <link rel="canonical" href="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/validation/">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/validation/">
-<meta property="og:title" content="Multi-Strategy Backtest Engine · Arnaud Barbier">
-<meta property="og:description" content="Un moteur de backtest multi-actifs et la couche de validation qui a écarté la stratégie d'allocation tournant dessus. Résultat mesuré, hypothèses nulles, limites.">
+<meta property="og:title" content="Validation d'une optimisation de la durée maximale du drawdown · Arnaud Barbier">
+<meta property="og:description" content="Une optimisation de la durée maximale du drawdown soumise à trois tests de validation : baseline, null sizing et null leverage.">
 <meta property="og:locale" content="fr_FR">
 <meta property="og:locale:alternate" content="en_GB">
 <meta property="og:image" content="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/img/og-validation.png">
@@ -19,8 +19,8 @@
 <meta property="og:image:alt" content="Ce que la couche de validation a renvoyé sur la stratégie qui tourne sur le moteur.">
 <meta name="twitter:image" content="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/img/og-validation.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Multi-Strategy Backtest Engine · Arnaud Barbier">
-<meta name="twitter:description" content="Un moteur de backtest multi-actifs et la couche de validation qui a écarté la stratégie d'allocation tournant dessus. Résultat mesuré, hypothèses nulles, limites.">
+<meta name="twitter:title" content="Validation d'une optimisation de la durée maximale du drawdown · Arnaud Barbier">
+<meta name="twitter:description" content="Une optimisation de la durée maximale du drawdown soumise à trois tests de validation : baseline, null sizing et null leverage.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpolygon points='50,92 90,32 10,32' fill='%2358a6ff'/%3E%3C/svg%3E">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -111,6 +111,34 @@ h1{
 }
 .subject p{font-size:.92rem;margin:0 0 .8rem;max-width:none}
 .subject p:last-child{margin-bottom:0;color:var(--sub)}
+.reading-map{
+  margin:-.5rem 0 1.8rem;padding:1rem 1.05rem 1.05rem;
+  border-top:3px solid var(--accent);border-bottom:1px solid var(--hair);
+  background:linear-gradient(110deg,var(--accent-well),var(--well));
+}
+.reading-map .intro{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;margin-bottom:.85rem}
+.reading-map .intro b{
+  font-family:var(--f-sans);font-size:.68rem;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--accent);white-space:nowrap;
+}
+.reading-map .intro p{margin:0;font-size:.8rem;line-height:1.45;color:var(--sub);max-width:66ch}
+.reading-map ol{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;margin:0;padding:0;list-style:none;background:var(--hair)}
+.reading-map li{min-width:0;background:var(--panel)}
+.reading-map a{
+  display:grid;grid-template-columns:1.6rem minmax(0,1fr);gap:.45rem;
+  height:100%;padding:.62rem .7rem;text-decoration:none;color:var(--ink);
+}
+.reading-map a{transition:box-shadow .18s ease}
+.reading-map a:hover,.reading-map a:focus-visible{box-shadow:inset 0 0 0 2px #EAB308;outline:0}
+.reading-map .n{font-family:var(--f-sans);font-size:.68rem;font-weight:700;color:var(--accent);padding-top:.08rem}
+.reading-map .t{font-family:var(--f-sans);font-size:.78rem;font-weight:600;line-height:1.25}
+.reading-map small{display:block;margin-top:.18rem;font-size:.68rem;font-weight:400;line-height:1.35;color:var(--faint)}
+@media (max-width:700px){
+  .reading-map .intro{display:block}
+  .reading-map .intro p{margin-top:.35rem}
+  .reading-map ol{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:430px){.reading-map ol{grid-template-columns:1fr}}
 
 .units{
   font-family:var(--f-sans);font-variant-numeric:tabular-nums;font-size:.71rem;line-height:1.65;color:var(--faint);
@@ -183,6 +211,32 @@ a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
   font-size:.78rem;color:var(--sub);line-height:1.5;padding:.72rem 0 0;
 }
 .plot .cap b{color:var(--ink);font-weight:600}
+.chart-key{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));
+  gap:.55rem 1.2rem;margin:.85rem 0 0;padding:.9rem 1rem;
+  border:1px solid var(--hard);background:var(--well);
+}
+.chart-key .item{
+  display:flex;align-items:center;gap:.7rem;min-width:0;
+  font-family:var(--f-sans);font-size:.72rem;line-height:1.25;color:var(--sub);
+}
+.chart-key .swatch{width:42px;height:0;flex:0 0 42px;border-top:3px solid currentColor}
+.chart-key .nav{color:#22a85a}
+.chart-key .cash-value{color:#c6912e;border-top-style:dotted}
+.chart-key .cash-released{color:#c4a04d;border-top-style:dashed}
+.chart-key .cash-fixed{color:#a87320;border-top-style:dashed}
+.chart-key .cash-dynamic{color:#a87320}
+.chart-key .earned{color:#28a65c;border-top-style:dotted}
+.chart-key .invested{color:#4c98d0;border-top-style:dotted}
+.chart-key .rebalance{
+  width:10px;height:10px;flex:0 0 10px;margin:0 16px;
+  border:0;background:#a96df2;transform:rotate(45deg);
+}
+.chart-key .drawdown{color:#a9353e;border-top-width:6px}
+.plot-notes{margin:.8rem 0 0;padding-left:1.1rem}
+.plot-notes li{font-size:.78rem;line-height:1.5;color:var(--sub);margin:.35rem 0;max-width:78ch}
+.plot-notes li::marker{color:var(--accent)}
+.plot-notes b{color:var(--ink);font-weight:600}
 
 /* ---------- tables ---------- */
 .tw{overflow-x:auto;margin:0 0 1.35rem;border-top:2px solid var(--hard);border-bottom:1px solid var(--hair)}
@@ -256,7 +310,7 @@ footer{
 .langbar button:hover{color:var(--ink)}
 .langbar button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .topbar{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;flex-wrap:wrap}
-.pagenav{display:flex;gap:0;padding:.9rem 0 0}
+.pagenav{display:flex;flex-wrap:wrap;gap:0;padding:.9rem 0 0}
 .pagenav>a,.pagenav>span{
   font-family:var(--f-sans);font-size:.68rem;letter-spacing:.13em;text-transform:uppercase;
   color:var(--faint);border:0;text-decoration:none;
@@ -285,8 +339,10 @@ button{font:inherit}
   <div class="wrap topbar">
     <nav class="pagenav" aria-label="Pages">
       <a href="../"><span class="lang-fr">Accueil</span><span class="lang-en">Home</span></a>
-      <span aria-current="page"><span class="lang-fr">Premiers tests d'allocation</span><span class="lang-en">First allocation tests</span></span>
-      <a href="../validation-2/"><span class="lang-fr">Tous les tests d'allocation</span><span class="lang-en">All the allocation tests</span></a>
+      <a href="../research/"><span class="lang-fr">Mode Research</span><span class="lang-en">Research mode</span></a>
+      <a href="../algo/"><span class="lang-fr">Mode Algo</span><span class="lang-en">Algo mode</span></a>
+      <span aria-current="page"><span class="lang-fr">Validation · Optimisation max DDR</span><span class="lang-en">Validation · Max drawdown optimisation</span></span>
+      <a href="../validation-2/"><span class="lang-fr">Validation · Optimisation Sharpe</span><span class="lang-en">Validation · Sharpe optimisation</span></a>
       <a href="../engine/"><span class="lang-fr">Mode allocation</span><span class="lang-en">Allocation mode</span></a>
       <a href="../costs/"><span class="lang-fr">Les coûts</span><span class="lang-en">Costs · FR</span></a>
       <a href="../stateful/"><span class="lang-fr">Replay &amp; resume</span><span class="lang-en">Replay &amp; resume</span></a>
@@ -304,7 +360,7 @@ button{font:inherit}
       <div>Moteur de backtest multi-actifs · 26 août 2026</div>
     </div>
 
-    <h1>Le moteur de backtest est complété par une couche de validation destinée à tester la robustesse des résultats qu'il produit.</h1>
+    <h1>Validation d'une optimisation de la durée maximale du drawdown</h1>
 
     <p class="lede">
       Cette note présente son application à la stratégie d'allocation exécutée sur le moteur.
@@ -312,8 +368,22 @@ button{font:inherit}
       limites de ce qu'il permet de conclure.
     </p>
 
+    <nav class="reading-map" aria-label="Fil de lecture">
+      <div class="intro">
+        <b>Fil de lecture</b>
+        <p>Le run est posé, comparé au 1/N, puis l'écart est démonté avant de préciser ce que les données permettent réellement de conclure.</p>
+      </div>
+      <ol>
+        <li><a href="#fr-sujet"><span class="n">01</span><span class="t">Le run<small>Règle, portefeuille et données</small></span></a></li>
+        <li><a href="#fr-resultat"><span class="n">02</span><span class="t">Le verdict<small>Comparaison nette avec le 1/N</small></span></a></li>
+        <li><a href="#fr-decomposition"><span class="n">03</span><span class="t">L'écart<small>Ce qui vient réellement des poids</small></span></a></li>
+        <li><a href="#fr-refutations"><span class="n">04</span><span class="t">Les réfutations<small>Cash et exposition au marché</small></span></a></li>
+        <li><a href="#fr-audit"><span class="n">05</span><span class="t">La fiabilité<small>Refus, rejouabilité et registre</small></span></a></li>
+        <li><a href="#fr-limites"><span class="n">06</span><span class="t">Les limites<small>Ce que le run ne démontre pas</small></span></a></li>
+      </ol>
+    </nav>
 
-    <div class="subject">
+    <div class="subject" id="fr-sujet">
       <div class="lbl">Ce qui a été testé</div>
       <p>
         Une optimisation de portefeuille glissante, long-only, plafonnée à 35 % par nom. La
@@ -341,24 +411,24 @@ button{font:inherit}
     <div class="plot">
       <div class="lbl"><span>Graphique · plot_results_alloc</span></div>
       <img src="../img/v0-run-tested.png" alt="Courbe d'equity du run testé" loading="lazy">
-      <div class="cap">
-        <b>Le run soumis aux tests, avec sa mécanique apparente.</b> Les losanges violets sont
-        les 46 décisions de rebalancement, régulièrement espacées parce que la règle est
-        calendaire : toutes les 50 barres, sans condition. <b>Les traits verticaux ne sont pas
-        des repères ajoutés au dessin : ce sont les rebalancements eux-mêmes.</b> La politique
-        aplatit le portefeuille avant de réallouer, donc la valeur investie repasse entièrement
-        par la trésorerie puis est redistribuée sur les nouveaux poids dans la même barre. Le
-        trait est ce passage. Elle revient dans la trésorerie générale, pas dans le cash gagné :
-        la politique est en mode <b>géométrique</b>, où les poids s'appliquent au NAV courant,
-        donc les gains font partie de la base redéployée. Le compartiment de cash gagné est la
-        mécanique du mode arithmétique, où les poids s'appliquent au capital initial et où le
-        surplus doit bien aller quelque part. La bande entre la NAV et la valeur investie est la trésorerie, et
-        elle est décomposée : la réserve fixe, la réserve dynamique qui suit l'equity, et le
-        cash gagné.
-        C'est cette décomposition qui rend le test de baseline possible, puisque
-        <code>absolute</code> consiste précisément à retirer ces deux réserves. Le panneau du bas
-        est le drawdown, plancher à −24,76 % sur 898 barres.
+      <div class="chart-key" aria-label="Légende du graphique">
+        <div class="item"><span class="swatch nav"></span><span>NAV du portefeuille</span></div>
+        <div class="item"><span class="swatch cash-value"></span><span>Trésorerie totale</span></div>
+        <div class="item"><span class="swatch cash-released"></span><span>Trésorerie libérée puis investie</span></div>
+        <div class="item"><span class="swatch cash-fixed"></span><span>Réserve fixe</span></div>
+        <div class="item"><span class="swatch cash-dynamic"></span><span>Réserve dynamique</span></div>
+        <div class="item"><span class="swatch earned"></span><span>Cash gagné</span></div>
+        <div class="item"><span class="swatch invested"></span><span>Valeur investie</span></div>
+        <div class="item"><span class="rebalance"></span><span>Rebalancements</span></div>
+        <div class="item"><span class="swatch drawdown"></span><span>Drawdown</span></div>
       </div>
+      <ul class="plot-notes">
+        <li><b>46 losanges violets :</b> les décisions de rebalancement, déclenchées toutes les 50 barres.</li>
+        <li><b>Traits verticaux :</b> le passage intégral par la trésorerie avant la réallocation dans la même barre.</li>
+        <li><b>Mode géométrique :</b> les poids s'appliquent à la NAV courante et les gains sont redéployés. Le cash gagné appartient au mode arithmétique.</li>
+        <li><b>Écart entre NAV et valeur investie :</b> trésorerie décomposée en réserve fixe, réserve dynamique et cash gagné. Cette décomposition permet la baseline <code>absolute</code>.</li>
+        <li><b>Panneau inférieur :</b> drawdown, avec un plancher à −24,76 % sur 898 barres.</li>
+      </ul>
     </div>
 
     <div class="tickers">
@@ -390,7 +460,7 @@ button{font:inherit}
     </p>
   </header>
 
-  <section>
+  <section id="fr-cadre">
     <div class="shead"><span class="snum">01</span><span class="stitle">De quoi il s'agit</span></div>
     <div class="two">
       <div>
@@ -429,7 +499,7 @@ button{font:inherit}
     </div>
   </section>
 
-  <section>
+  <section id="fr-resultat">
     <div class="shead"><span class="snum">02</span><span class="stitle">Le résultat</span></div>
     <h2>Contre l'équipondération, net de frais, sur neuf ans</h2>
     <p class="small">
@@ -454,14 +524,15 @@ button{font:inherit}
 
     <div class="raw">
       <div class="lbl"><span>Sortie brute · validation_baseline</span></div>
-<pre>absolute    : stripped reserve_cash_pct, fixed_cash_reserve · keeps execution
-              costs, management fee, performance fee, currencies
-matched     : every piece of machinery kept, only the weighting rule swapped
-carrier     : portfolio_equity(nav-borrowed) · basis D
+<pre>absolu      : reserve_cash_pct et fixed_cash_reserve retirés · conserve coûts
+              d'exécution, frais de gestion, surperformance et devises
+apparié     : toute la machinerie est conservée, seule la règle de pondération change
+porteur     : portfolio_equity(nav-borrowed) · base D
 
-<i>VERDICT   ADDS_NOTHING</i> — certainty equivalent lower by -0.96%/y at γ=3
-          — equal_weight absolute does better for a risk-averse investor
-<b>no p-value: the allocation baseline is deterministic. This is a gap, not a test.</b></pre>
+<i>VERDICT   N'APPORTE_RIEN</i> · équivalent certain inférieur de -0,96 %/an à γ=3
+          · le 1/N absolu fait mieux pour un investisseur averse au risque
+<b>pas de p-value : la baseline d'allocation est déterministe. Il s'agit d'un écart,
+pas d'un test statistique.</b></pre>
     </div>
 
     <div class="plot">
@@ -503,9 +574,9 @@ carrier     : portfolio_equity(nav-borrowed) · basis D
     </div>
   </section>
 
-  <section>
+  <section id="fr-decomposition">
     <div class="shead"><span class="snum">03</span><span class="stitle">Où passe l'écart</span></div>
-    <h2>La partie qui contient les mathématiques est celle qui bouge le moins</h2>
+    <h2>Null sizing : isoler l'effet des poids</h2>
     <p>
       Garder le panier que la stratégie a choisi et remplacer ses poids par des poids égaux à
       l'intérieur de ce panier détruit la sortie de l'optimiseur et rien d'autre : mêmes
@@ -526,13 +597,13 @@ carrier     : portfolio_equity(nav-borrowed) · basis D
 
     <div class="raw">
       <div class="lbl"><span>Sortie brute · validation_null_sizing</span></div>
-<pre><b>N_eff = 46 decisions -> nothing finer than p ≈ 0.02 is resolvable here</b>
+<pre><b>N_eff = 46 décisions : rien de plus fin que p ≈ 0,02 n'est résolvable ici</b>
 
-<i>VERDICT   SIZING: NO DETECTABLE EFFECT</i> — -0.84 pt on 46 decisions (t = -0.63)
-          — inside sampling noise. Read it as 'no detectable effect', not as
-          a measured gain.
-          SELECTION is not detectable either: -1.02 pt, t = -1.37 — it would
-          take about 99 decisions to settle at this effect size.</pre>
+<i>VERDICT   SIZING : AUCUN EFFET DÉTECTABLE</i> · -0,84 pt sur 46 décisions (t = -0,63)
+          · dans le bruit d'échantillonnage. À lire comme « aucun effet détectable »,
+          et non comme un gain mesuré.
+          La SÉLECTION n'est pas détectable non plus : -1,02 pt, t = -1,37.
+          Environ 99 décisions seraient nécessaires pour trancher à cette taille d'effet.</pre>
     </div>
 
     <div class="plot">
@@ -576,7 +647,7 @@ carrier     : portfolio_equity(nav-borrowed) · basis D
     </div>
   </section>
 
-  <section>
+  <section id="fr-refutations">
     <div class="shead"><span class="snum">04</span><span class="stitle">Deux autres tests</span></div>
     <div class="two">
       <div>
@@ -628,12 +699,12 @@ carrier     : portfolio_equity(nav-borrowed) · basis D
         <div class="verdict"><div class="bar"></div><div class="txt">Verdict : dominé</div></div>
         <div class="raw">
           <div class="lbl"><span>Sortie brute · validation_null_leverage</span></div>
-<pre><i>VERDICT   DOMINATED</i> — below the capital market
-line at every assumed risk-free rate
-(-1.42 to -0.74 pt). The same risk was
-available with more return by simply
-holding less of the benchmark
--- no model required.</pre>
+<pre><i>VERDICT   DOMINÉ</i> · sous la droite du marché des capitaux
+pour chaque taux sans risque supposé
+(-1,42 à -0,74 pt). Le même niveau de risque
+était disponible avec davantage de rendement
+en réduisant simplement l'exposition au benchmark.
+Aucun modèle nécessaire.</pre>
         </div>
       </div>
     </div>
@@ -662,7 +733,7 @@ holding less of the benchmark
     </div>
   </section>
 
-  <section>
+  <section id="fr-audit">
     <div class="shead"><span class="snum">05</span><span class="stitle">Refus</span></div>
     <h2>Ce que l'outil refuse de faire</h2>
     <p>L'essentiel du travail d'ingénierie porte sur les cas où la sortie correcte est une erreur, pas un chiffre.</p>
@@ -677,7 +748,7 @@ holding less of the benchmark
     </div>
   </section>
 
-  <section>
+  <section id="fr-reproductibilite">
     <div class="shead"><span class="snum">06</span><span class="stitle">Reproductibilité</span></div>
     <h2>Rejouer un chiffre six mois plus tard, à l'identique</h2>
     <div class="two">
@@ -725,7 +796,7 @@ holding less of the benchmark
     </div>
   </section>
 
-  <section>
+  <section id="fr-registre">
     <div class="shead"><span class="snum">07</span><span class="stitle">Le registre</span></div>
     <div class="two">
       <div>
@@ -766,42 +837,8 @@ holding less of the benchmark
     </div>
   </section>
 
-  <section>
-    <div class="shead"><span class="snum">08</span><span class="stitle">Trois modes</span></div>
-    <h2>Un kernel, trois questions</h2>
-    <p>
-      Les modes partagent le registre mais pas la question à laquelle ils répondent, ni la
-      série qui porte leur performance. Se tromper de série produit des chiffres faux sans en
-      avoir l'air : c'est pourquoi le mode la détermine, et non l'appelant.
-    </p>
-    <div class="modes">
-      <div class="mode">
-        <div class="t">Algorithmique</div>
-        <p>Signaux, setups, routage par régime, entrées et sorties sous une exécution réaliste à la barre. Une règle a-t-elle un edge ?</p>
-        <p>Une position ouverte porte son P&amp;L latent sous forme de drift weight ; c'est la clôture du trade qui le réalise dans le registre, d'où une performance lue à la clôture : prix d'entrée contre prix de sortie, à l'échelle de l'exposition.</p>
-        <div class="c">porteur : trades clos</div>
-      </div>
-      <div class="mode">
-        <div class="t">Allocation</div>
-        <p>Poids cibles, calendriers de rebalancement, paliers de trésorerie, emprunt et frais. Une règle de pondération bat-elle la détention équipondérée ?</p>
-        <div class="c">porteur : NAV nette de l'emprunt</div>
-      </div>
-      <div class="mode">
-        <div class="t">Investissement</div>
-        <p>Apports et retraits, high-water marks, gates de drawdown, restauration du capital. Qu'a réellement vécu un compte ?</p>
-        <div class="c">porteur : rendement pondéré par le temps</div>
-      </div>
-    </div>
-    <p class="small" style="margin-top:1.3rem">
-      Le mode investissement rend compte sur une base pondérée par le temps parce que c'est ce
-      qu'exigent les standards de reporting : elle neutralise les apports et les retraits, sur
-      lesquels le gérant n'a pas la main. Ce n'est pas une préférence, c'est la seule mesure
-      défendable dès qu'il y a des flux.
-    </p>
-  </section>
-
-  <section>
-    <div class="shead"><span class="snum">09</span><span class="stitle">Limites</span></div>
+  <section id="fr-limites">
+    <div class="shead"><span class="snum">08</span><span class="stitle">Limites</span></div>
     <h2>Écrites délibérément, parce que les limites énoncées sont le propos</h2>
     <ul class="plain">
       <li><strong>46 décisions, c'est la taille d'échantillon.</strong> Des effets inférieurs à environ deux points de rendement annuel ne sont établissables ici par aucune méthode, et le rapport le dit au lieu de les rapporter.</li>
@@ -860,7 +897,7 @@ holding less of the benchmark
       <div>Multi-asset backtest engine · 26 August 2026</div>
     </div>
 
-    <h1>The backtesting engine is complemented by a validation layer designed to test the robustness of its results.</h1>
+    <h1>Validation of a maximum drawdown duration optimisation</h1>
 
     <p class="lede">
       This note presents its application to the allocation strategy run on the engine. Three
@@ -868,8 +905,22 @@ holding less of the benchmark
       be concluded from it.
     </p>
 
+    <nav class="reading-map" aria-label="Reading guide">
+      <div class="intro">
+        <b>Reading guide</b>
+        <p>The run is defined, compared with 1/N, and then decomposed before the evidence limits are stated.</p>
+      </div>
+      <ol>
+        <li><a href="#en-subject"><span class="n">01</span><span class="t">The run<small>Rule, portfolio and data</small></span></a></li>
+        <li><a href="#en-result"><span class="n">02</span><span class="t">The verdict<small>Net comparison with 1/N</small></span></a></li>
+        <li><a href="#en-decomposition"><span class="n">03</span><span class="t">The gap<small>What actually comes from weights</small></span></a></li>
+        <li><a href="#en-refutations"><span class="n">04</span><span class="t">The refutations<small>Cash and market exposure</small></span></a></li>
+        <li><a href="#en-audit"><span class="n">05</span><span class="t">Reliability<small>Refusals, replay and ledger</small></span></a></li>
+        <li><a href="#en-limits"><span class="n">06</span><span class="t">The limits<small>What the run does not establish</small></span></a></li>
+      </ol>
+    </nav>
 
-    <div class="subject">
+    <div class="subject" id="en-subject">
       <div class="lbl">What was tested</div>
       <p>
         A rolling portfolio optimisation, long-only, capped at 35 % per name. The construction
@@ -943,7 +994,7 @@ holding less of the benchmark
   </header>
 
   <!-- 01 -->
-  <section>
+  <section id="en-frame">
     <div class="shead"><span class="snum">01</span><span class="stitle">What this is</span></div>
     <div class="two">
       <div>
@@ -980,7 +1031,7 @@ holding less of the benchmark
   </section>
 
   <!-- 02 -->
-  <section>
+  <section id="en-result">
     <div class="shead"><span class="snum">02</span><span class="stitle">The result</span></div>
     <h2>Against equal weighting, after fees, over nine years</h2>
     <p class="small">
@@ -1052,7 +1103,7 @@ carrier     : portfolio_equity(nav-borrowed) · basis D
   </section>
 
   <!-- 03 -->
-  <section>
+  <section id="en-decomposition">
     <div class="shead"><span class="snum">03</span><span class="stitle">Where it goes</span></div>
     <h2>The part with the mathematics in it moves the result least</h2>
     <p>
@@ -1125,7 +1176,7 @@ carrier     : portfolio_equity(nav-borrowed) · basis D
   </section>
 
   <!-- 04 -->
-  <section>
+  <section id="en-refutations">
     <div class="shead"><span class="snum">04</span><span class="stitle">Two more tests</span></div>
     <div class="two">
       <div>
@@ -1211,7 +1262,7 @@ holding less of the benchmark
   </section>
 
   <!-- 05 -->
-  <section>
+  <section id="en-audit">
     <div class="shead"><span class="snum">05</span><span class="stitle">Refusals</span></div>
     <h2>What the tool will not do</h2>
     <p>Most of the engineering went into the cases where the correct output is an error rather than a number.</p>
@@ -1227,7 +1278,7 @@ holding less of the benchmark
   </section>
 
   <!-- 06 -->
-  <section>
+  <section id="en-reproducibility">
     <div class="shead"><span class="snum">06</span><span class="stitle">Reproducibility</span></div>
     <h2>Replaying a number six months later, identically</h2>
     <div class="two">
@@ -1274,7 +1325,7 @@ holding less of the benchmark
     </div>
   </section>
 
-  <section>
+  <section id="en-ledger">
     <div class="shead"><span class="snum">07</span><span class="stitle">The ledger</span></div>
     <div class="two">
       <div>
@@ -1314,43 +1365,8 @@ holding less of the benchmark
     </div>
   </section>
 
-  <!-- 07 -->
-  <section>
-    <div class="shead"><span class="snum">08</span><span class="stitle">Three modes</span></div>
-    <h2>One kernel, three questions</h2>
-    <p>
-      The modes share the ledger but not the question they answer, and not the series that
-      carries their performance. Getting that series wrong produces numbers that are wrong
-      without looking wrong, which is why the mode resolves it rather than the caller.
-    </p>
-    <div class="modes">
-      <div class="mode">
-        <div class="t">Algorithmic</div>
-        <p>Signals, setups, regime routing, entries and exits under realistic bar-level execution. Does a rule have an edge?</p>
-        <p>An open position holds its unrealised P&amp;L as a drift weight; the trade's close is what realises it into the ledger, which is why performance is read at close: entry against exit, scaled by exposure.</p>
-        <div class="c">carrier : closed trades</div>
-      </div>
-      <div class="mode">
-        <div class="t">Allocation</div>
-        <p>Target weights, rebalance calendars, cash tiers, borrowing and fees. Does a weighting rule beat holding everything equally?</p>
-        <div class="c">carrier : NAV net of borrowing</div>
-      </div>
-      <div class="mode">
-        <div class="t">Investment</div>
-        <p>Contributions and withdrawals, high-water marks, drawdown gates, capital restoration. What did a real account experience?</p>
-        <div class="c">carrier : time-weighted return</div>
-      </div>
-    </div>
-    <p class="small" style="margin-top:1.3rem">
-      Investment mode reports on a time-weighted basis because that is what industry reporting
-      standards require: it neutralises contributions and withdrawals, which the manager does
-      not control. Not a preference. It is the only defensible measure once there are flows.
-    </p>
-  </section>
-
-  <!-- 08 -->
-  <section>
-    <div class="shead"><span class="snum">09</span><span class="stitle">Limits</span></div>
+  <section id="en-limits">
+    <div class="shead"><span class="snum">08</span><span class="stitle">Limits</span></div>
     <h2>Written deliberately, because stated limits are the point</h2>
     <ul class="plain">
       <li><strong>46 decisions is the sample size.</strong> Effects smaller than roughly two points of annual return are not establishable here by any method, and the report says so rather than reporting them.</li>

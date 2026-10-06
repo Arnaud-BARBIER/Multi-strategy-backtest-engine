@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mode Algo · Arnaud Barbier</title>
+<meta name="description" content="Le mode Algo transforme un signal en stratégie complète : choix des entrées, gestion des positions, frais d'exécution et sizing, avec un journal où chaque trade reste inspectable.">
+<meta name="author" content="Arnaud Barbier">
+<link rel="canonical" href="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/algo/">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/algo/">
+<meta property="og:title" content="Mode Algo · Arnaud Barbier">
+<meta property="og:description" content="Du signal aux trades gérés, avec frais et sizing.">
+<meta property="og:image" content="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/img/algo-trades-chart.png">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:locale:alternate" content="en_GB">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpolygon points='50,6 90,50 50,94 10,50' fill='%23a85f00'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="../assets/modes.css">
+<script src="../assets/modes.js" defer></script>
+</head>
+<body>
+<div id="page" data-lang="fr" data-title-fr="Mode Algo · Arnaud Barbier" data-title-en="Algo mode · Arnaud Barbier">
+<a class="skip" href="#main"><span class="lang-fr">Aller au contenu</span><span class="lang-en">Skip to content</span></a>
+<div class="wrap"><nav class="pagenav" aria-label="Pages"><a href="../"><span class="lang-fr">Accueil</span><span class="lang-en">Home</span></a><a href="../research/"><span class="lang-fr">Mode Research</span><span class="lang-en">Research mode</span></a><span aria-current="page"><span class="lang-fr">Mode Algo</span><span class="lang-en">Algo mode</span></span><a href="../engine/"><span class="lang-fr">Mode allocation</span><span class="lang-en">Allocation mode</span></a><a href="../validation/"><span class="lang-fr">Validation · Max DDR</span><span class="lang-en">Validation · Max drawdown</span></a><a href="../validation-2/"><span class="lang-fr">Validation · Sharpe</span><span class="lang-en">Validation · Sharpe</span></a><a href="../costs/"><span class="lang-fr">Les coûts</span><span class="lang-en">Costs · FR</span></a><a href="../stateful/"><span class="lang-fr">Replay &amp; resume</span><span class="lang-en">Replay &amp; resume</span></a></nav>
+<div class="langbar"><button type="button" data-set="fr" aria-pressed="true">Français</button><button type="button" data-set="en" aria-pressed="false">English</button></div></div>
+<main id="main" class="wrap" tabindex="-1">
+
+<!-- ======================= FRANÇAIS ======================= -->
+<article class="lang-fr" lang="fr">
+<header class="mast">
+<div class="mast-top"><span>Arnaud Barbier · Moteur de backtest</span><span>Mode Algo · octobre 2026</span></div>
+<h1>Mode Algo, du signal aux trades gérés, avec frais et sizing</h1>
+<p class="lede">Le mode Algo transforme un signal en stratégie complète. L'utilisateur choisit ses entrées, décrit la gestion de chaque position et configure les frais et la taille des positions ; le moteur, compilé avec Numba, exécute le backtest et <strong>restitue chaque trade avec son prix visé, son prix exécuté et la raison de sa sortie</strong>.</p>
+<p class="lede2">La gestion se décrit à quatre niveaux, du simple réglage d'un TP et d'un SL jusqu'à une fonction compilée. Le sizing, lui, peut être modifié sans relancer le backtest. Le signal peut être étudié en amont dans le <a href="../research/">mode Research</a>.</p>
+<div class="figs">
+<div><span class="v" data-count="4">4</span><span class="n">niveaux pour décrire la gestion des positions</span></div>
+<div><span class="v" data-count="17">17</span><span class="n">codes de sortie, chacun tracé dans le journal des trades</span></div>
+<div><span class="v" data-count="2714">2 714</span><span class="n">trades redimensionnés depuis la tape, sans relancer le noyau</span></div>
+<div><span class="v">1 %</span><span class="n">de l'equity risqué par trade dans l'exemple de sizing</span></div>
+</div>
+</header>
+
+<div class="apercu">
+<div class="ap-head"><span class="eyebrow">Aperçu</span>
+<div class="ap-tabs" role="tablist" aria-label="Aperçu du mode Algo">
+<button type="button" role="tab" aria-selected="true"><span>1</span>Les profils<i class="bar"></i></button>
+<button type="button" role="tab" aria-selected="false"><span>2</span>Les trades<i class="bar"></i></button>
+<button type="button" role="tab" aria-selected="false"><span>3</span>Le journal<i class="bar"></i></button>
+<button type="button" role="tab" aria-selected="false"><span>4</span>Le sizing<i class="bar"></i></button>
+</div>
+<button type="button" class="ap-pause" data-pause="❚❚ Pause" data-play="▶ Lecture">❚❚ Pause</button></div>
+<div class="ap-stage">
+<figure class="ap-slide is-on" role="tabpanel"><div class="ap-frame"><img src="../img/algo-exit-profiles.png" alt="Déclaration de deux profils de sortie, trend_profile et fast_profile"></div><figcaption><b>Les profils.</b> Deux profils de sortie, l'un pour suivre la tendance, l'autre plus rapide. Ils sont compilés une fois, puis attribués par setup ou par régime. Cliquez sur une capture pour l'agrandir.</figcaption></figure>
+<figure class="ap-slide" role="tabpanel"><div class="ap-frame"><img src="../img/algo-trades-chart.png" alt="Backtest EMA 50/100 avec régime H1 affiché dans le graphique Research"></div><figcaption><b>Les trades.</b> Le backtest affiché dans le graphique du mode Research : régimes H1 en zones colorées, entrées en triangles, sorties en croix.</figcaption></figure>
+<figure class="ap-slide" role="tabpanel"><div class="ap-frame"><img src="../img/algo-trades-df.png" alt="Tableau metrics trades_df : dates, prix d'entrée et de sortie, rendement brut et net, commission"></div><figcaption><b>Le journal.</b> <code>metrics["trades_df"]</code> : une ligne par sortie, avec les prix d'entrée et de sortie, le rendement brut et net, la commission et le spread.</figcaption></figure>
+<figure class="ap-slide" role="tabpanel"><div class="ap-frame"><img src="../img/algo-sizing-curve.png" alt="Courbe d'equity en dollars et risque par trade constant à 1 %"></div><figcaption><b>Le sizing.</b> La même tape de trades redimensionnée à 1 % de risque par trade : courbe d'equity en dollars et risque engagé à chaque trade.</figcaption></figure>
+</div>
+</div>
+
+<nav class="reading-map" aria-label="Fil de lecture">
+<div class="intro"><span class="eyebrow">Fil de lecture</span><p>Ce que permet le mode Algo, dans l'ordre du backtest. Chaque bloc renvoie à sa section.</p></div>
+<ol>
+<li><a href="#algo-fr-pipeline"><span class="n">01</span><span class="t">Du signal au trade</span><small>Ce que l'utilisateur décrit et ce que le moteur prend en charge.</small></a></li>
+<li><a href="#algo-fr-features"><span class="n">02</span><span class="t">Indicateurs et causalité</span><small>Une donnée H1 utilisée seulement après la clôture de sa bougie.</small></a></li>
+<li><a href="#algo-fr-management"><span class="n">03</span><span class="t">Quatre niveaux de gestion</span><small>Du TP et SL simples aux phases, règles et fonctions compilées.</small></a></li>
+<li><a href="#algo-fr-execution"><span class="n">04</span><span class="t">Frais et sizing</span><small>Spread, commission, slippage, puis un risque fixe par trade.</small></a></li>
+<li><a href="#algo-fr-audit"><span class="n">05</span><span class="t">Lire les trades</span><small>Chaque sortie garde sa raison, ses prix et ses coûts.</small></a></li>
+<li><a href="#algo-fr-validation"><span class="n">06</span><span class="t">Mettre à l'épreuve</span><small>Des entrées au hasard avec la même gestion, puis la validation.</small></a></li>
+<li><a href="#algo-fr-bridge"><span class="n">07</span><span class="t">Le lien avec Research</span><small>Le même graphique, avec les trades réels du backtest.</small></a></li>
+<li><a href="#algo-fr-limits"><span class="n">08</span><span class="t">Compilation et limites</span><small>Ce qui demande une recompilation, et ce qui reste à vérifier.</small></a></li>
+</ol>
+</nav>
+
+<section id="algo-fr-pipeline" aria-labelledby="algo-fr-pipeline-title"><div class="shead"><span>01</span><span>Du signal au trade</span></div>
+<h2 id="algo-fr-pipeline-title">Ce que l'utilisateur décrit et ce que le moteur prend en charge</h2>
+<p>Le mode Algo prend en charge tout le backtest d'une stratégie sur un actif. L'utilisateur décrit sa logique : indicateurs, conditions d'entrée et règles de gestion. Le moteur applique le modèle d'exécution, puis renvoie les rendements, les métriques et le journal des trades.</p>
+<figure><ol class="flow"><li><span class="step">01</span><b>Features</b><p>Indicateurs et données d'unités de temps supérieures, alignés sur la série principale.</p></li><li><span class="step">02</span><b>Setups</b><p>Scores long et short, choix d'une entrée et prise en compte du régime.</p></li><li><span class="step">03</span><b>Exécution</b><p>Timing, profils de sortie, règles de gestion et frais.</p></li><li><span class="step">04</span><b>Résultat</b><p>Journal des trades, tape pour le sizing, graphique et tests de validation.</p></li></ol><figcaption>Le parcours d'un backtest mono-stratégie. Les modes allocation et investissement sont présentés sur leurs propres pages.</figcaption></figure>
+<div class="two">
+<div><h3>Choisir entre plusieurs setups</h3><p>Chaque setup produit cinq colonnes : scores long et short, états actifs et identifiant. <code>DecisionConfig</code> retient le meilleur score et tranche les égalités selon la règle choisie. L'identifiant du setup suit ensuite le trade et peut désigner son profil de sortie.</p></div>
+<div><h3>S'adapter au régime de marché</h3><p>Un régime peut bloquer ou pondérer une entrée, puis changer son profil ou sa stratégie de sortie. Il est fourni sous forme d'identifiants bruts : le moteur applique lui-même la disponibilité et le délai d'action, sans décalage manuel.</p></div>
+</div>
+</section>
+
+<section id="algo-fr-features" aria-labelledby="algo-fr-features-title"><div class="shead"><span>02</span><span>Indicateurs et causalité</span></div>
+<h2 id="algo-fr-features-title">Utiliser une donnée H1 seulement après la clôture de sa bougie</h2>
+<p>Une feature est une fonction qui lit les colonnes du moteur, par exemple <code>f.col("Close")</code>, et renvoie une ou plusieurs séries. Les colonnes calculées rejoignent ensuite le moteur, et les règles de sortie peuvent les utiliser par leur nom.</p>
+<div class="timeline"><div><span class="eyebrow">10:00 → 11:00</span><b>Bougie H1 en formation</b><p>Sa valeur finale ne peut pas servir aux décisions M15 prises avant sa clôture.</p></div><div><span class="eyebrow">À partir de 11:00</span><b>Valeur H1 disponible</b><p><code>bar_close</code> aligne la valeur au bon moment ; <code>max_age</code> écarte une valeur trop ancienne.</p></div></div>
+<figure><pre tabindex="0"><code>feature.add(
+    my_indicator, "h1_trend",
+    on_ohlcv_matrix="algo_h1", matrix_asset="XAUUSD",
+    align_to="main", availability="bar_close",
+    source_tf="H1", max_age="2h",
+)</code></pre><figcaption>Déclaration d'une feature H1 sur une série M15. Un simple forward-fill depuis 10:00 donnerait la valeur finale une heure trop tôt.</figcaption></figure>
+<p><code>BacktestConfig</code> fixe ensuite le timing, les sessions, les filtres de bougies, le nombre maximal d'entrées, le cooldown et les sorties par défaut. Avec <code>entry_delay=1</code>, l'entrée se fait à l'ouverture de la bougie suivante ; une exécution sur la bougie du signal serait souvent trop optimiste.</p>
+</section>
+
+<section id="algo-fr-management" aria-labelledby="algo-fr-management-title"><div class="shead"><span>03</span><span>Quatre niveaux de gestion</span></div>
+<h2 id="algo-fr-management-title">Décrire la gestion des positions, du réglage simple à la fonction compilée</h2>
+<p>Deux stratégies qui partagent le même signal peuvent obtenir des résultats très différents selon la façon dont leurs positions sont gérées. Le moteur permet de décrire cette gestion à quatre niveaux, chacun plus précis que le précédent :</p>
+<div class="table-wrap" tabindex="0"><table><thead><tr><th scope="col">Niveau</th><th scope="col">Ce que l'on déclare</th><th scope="col">Coût d'une modification</th></tr></thead><tbody><tr><td>01 · Configuration</td><td>TP, SL, break-even, trailing, durée maximale et passage à plat, dans <code>BacktestConfig</code>.</td><td>Aucune recompilation</td></tr><tr><td>02 · Profils</td><td>Un <code>ExitProfileSpec</code> nommé, choisi par setup ou par régime. Les champs non renseignés reprennent la configuration.</td><td>Aucune recompilation</td></tr><tr><td>03 · Phases et règles</td><td>Des <code>PhaseSpec</code> contenant des <code>PositionRule</code> : déclencheurs, sorties partielles, renforts, déplacement du stop.</td><td>Aucune recompilation</td></tr><tr><td>04 · Stratégie njit</td><td>Une fonction personnalisée via <code>ExitStrategySpec</code>, avec un état local ou global.</td><td>Recompilation lorsque le code change</td></tr></tbody></table></div>
+<figure class="shot"><img src="../img/algo-exit-profiles.png" alt="Code : deux ExitProfileSpec, trend_profile et fast_profile, et leur correspondance avec un identifiant" loading="lazy"><figcaption>Les deux profils de l'exemple EMA : <b>trend_profile</b> (TP 1 %, SL 0,1 %) et <b>fast_profile</b> (TP 0,4 %, SL 0,1 %). Le setup 0 utilise trend_profile par défaut ; le régime peut le remplacer.</figcaption></figure>
+<p>Avec les phases, une position commence en phase 0. Une règle peut se déclencher sur une excursion, un multiple du risque, un nombre de barres, une feature ou une combinaison de conditions. Elle peut alors prendre un bénéfice partiel, déplacer le stop, changer l'objectif, renforcer la position ou passer à la phase suivante.</p>
+<figure><ol class="flow"><li><span class="step">01</span><b>Entrer</b><p>Le setup choisit le profil et le risque initial.</p></li><li><span class="step">02</span><b>Déclencher</b><p>Une règle de la phase en cours observe sa condition.</p></li><li><span class="step">03</span><b>Agir</b><p>Prendre une partie, protéger le stop ou renforcer.</p></li><li><span class="step">04</span><b>Changer de phase</b><p>Appliquer les règles prévues pour la suite du trade.</p></li></ol><figcaption>Exemple de logique déclarative.</figcaption></figure>
+<p><code>PartialConfig</code>, <code>PyramidConfig</code> et <code>AveragingConfig</code> décrivent respectivement les sorties échelonnées, les ajouts aux positions gagnantes et les ajouts aux positions perdantes. Un état global peut aussi limiter le nombre de positions simultanées ou imposer une pause après plusieurs stops consécutifs.</p>
+<aside class="note"><p><strong>Un point encore à vérifier.</strong> Certaines règles lisent les features ou l'excursion de la bougie en cours alors qu'une sortie partielle peut être exécutée à son ouverture. Ce risque d'anticipation doit être contrôlé sur un cas synthétique avant d'interpréter un résultat qui en dépend. <a href="#algo-fr-limits">Voir les limites connues</a>.</p></aside>
+</section>
+
+<section id="algo-fr-execution" aria-labelledby="algo-fr-execution-title"><div class="shead"><span>04</span><span>Frais et sizing</span></div>
+<h2 id="algo-fr-execution-title">Passer du prix théorique au prix exécuté, puis à la taille de position</h2>
+<div class="two">
+<div><h3>Appliquer les frais</h3><p><code>ExecutionCostSpec</code> décrit le contrat, la taille des lots, le spread, les commissions et le slippage. En mono-actif, ces paramètres se déclarent à la racine de la spec.</p><p>Le slippage est toujours défavorable et dépend de l'amplitude de la bougie précédente, avec une pénalité plus forte sur les stops. Si le prix ouvre au-delà du stop, la sortie se fait au prix d'ouverture.</p></div>
+<div><h3>Dimensionner sans relancer le backtest</h3><p>Avec <code>return_tape=True</code>, le run produit une tape de trades. <code>engine.run_sizing(...)</code> recalcule leurs tailles sans relancer le noyau : on peut ainsi comparer plusieurs règles de sizing en quelques secondes.</p><p>Une modification des entrées ou de leur gestion demande en revanche un nouveau backtest.</p></div>
+</div>
+<figure><pre tabindex="0"><code>execution_costs = ExecutionCostSpec(
+    enabled=True, product_type="cfd",
+    contract_spec=ContractSpec(instrument_id="XAUUSD",
+                               contract_size=100.0, quote_currency="USD"),
+    spread_points=0.02,                      # écart de prix, pas un %
+    commission_per_lot_round_turn_usd=3.0,   # entrée + sortie
+    slippage=SlippageSpec(enabled=True, adverse_only=True,
+                          model="simple_range", simple_range_frac=0.0025,
+                          stop_market_mult=1.25),
+)
+
+rets, metrics, tape = engine.run(..., execution_costs=execution_costs,
+                                 return_tape=True)
+sized = engine.run_sizing(tape=tape, sizing=sizing,
+                          execution_costs=execution_costs,
+                          strict_tape_context=True)</code></pre><figcaption>Une déclaration de frais pour l'or, puis le sizing appliqué à la tape du run. Le contexte strict vérifie que la tape correspond bien au run.</figcaption></figure>
+<div class="pair pair-wrap">
+<figure class="shot"><img src="../img/algo-sizing-curve.png" alt="Courbe d'equity en dollars de juillet 2023 à 2026 et risque par trade constant à 1 %" loading="lazy"><figcaption>La tape de l'exemple EMA redimensionnée à <b>1 % de risque par trade</b>. En bas, le risque engagé reste constant sur toute la période : c'est la taille de position qui varie, pas le risque.</figcaption></figure>
+<figure><div class="table-wrap" tabindex="0" role="region" aria-label="Synthèse du sizing" style="margin:0"><table class="summary-table"><caption>Synthèse renvoyée par <code>run_sizing</code></caption><tbody>
+<tr><td>Trades</td><td>2 714</td></tr>
+<tr><td>Taux de gain</td><td>17,2 %</td></tr>
+<tr><td>Somme des rendements</td><td>+429,25 %</td></tr>
+<tr><td>Rendement cumulé</td><td>+1 905,21 %</td></tr>
+<tr><td>Rendement annualisé</td><td>+189,52 %</td></tr>
+<tr><td>Drawdown maximal</td><td>−56,05 %</td></tr>
+<tr><td>Sharpe</td><td>2,772</td></tr>
+<tr><td>Profit factor</td><td>1,140</td></tr>
+<tr><td>Calmar</td><td>3,381</td></tr>
+<tr><td>Gain moyen / perte moyenne</td><td>+5,917 % / −1,042 %</td></tr>
+</tbody></table></div><figcaption>Une perte moyenne de 1,04 % correspond au risque de 1 % plus les frais.</figcaption></figure>
+</div>
+<aside class="note"><p><strong>Ces chiffres ne sont pas un résultat.</strong> Il s'agit d'une stratégie de démonstration, mesurée sur toute la période et sans validation. Elle sert à montrer le passage du rendement par trade au rendement dimensionné. Avec un stop à 0,1 % et 1 % de risque par trade, chaque position représente environ dix fois l'equity : le drawdown de 56 % en est la conséquence directe.</p></aside>
+<figure class="shot"><img src="../img/algo-sizing-trades.png" alt="Tableau des trades après sizing : prix visé, prix exécuté et écart" loading="lazy"><figcaption>Après sizing, chaque trade conserve son prix visé, son prix exécuté et l'écart entre les deux.</figcaption></figure>
+<p class="small">Le break-even est armé sur une bougie et devient actif à la suivante ; sa sortie porte le libellé BE. Un mode optionnel traite la cible comme un ordre limite, avec un état d'attente et des événements de non-exécution.</p>
+</section>
+
+<section id="algo-fr-audit" aria-labelledby="algo-fr-audit-title"><div class="shead"><span>05</span><span>Lire les trades</span></div>
+<h2 id="algo-fr-audit-title">Retrouver pour chaque sortie sa raison, ses prix et ses coûts</h2>
+<p><code>metrics["trades_df"]</code> rassemble pour chaque trade le sens, les bougies d'entrée et de sortie, les prix visés et exécutés, le rendement brut et net, les excursions, le setup, le profil et la phase. Les colonnes de coûts permettent de revenir sur chaque exécution.</p>
+<figure class="shot"><img src="../img/algo-trades-df.png" alt="metrics trades_df de l'exemple EMA : entry_time, exit_time, entry, exit, side, return, raw_return, commission_cost" loading="lazy"><figcaption>Le journal de l'exemple EMA. Sur les premières lignes, le rendement brut d'environ −0,100 % correspond au SL de 0,1 % ; le rendement net ajoute la commission et le spread.</figcaption></figure>
+<div class="table-wrap" tabindex="0"><table><thead><tr><th scope="col">Code</th><th scope="col">Sortie</th><th scope="col">Code</th><th scope="col">Sortie</th></tr></thead><tbody><tr><td>1</td><td>SL</td><td>10</td><td>Passage à plat forcé</td></tr><tr><td>2</td><td>TP</td><td>11</td><td>Sortie forcée par la stratégie</td></tr><tr><td>3</td><td>Break-even</td><td>12</td><td>Durée maximale</td></tr><tr><td>4 à 6</td><td>TP sur EMA ou croisement</td><td>13</td><td>TP partiel</td></tr><tr><td>7</td><td>Stop du trailing</td><td>14</td><td>Stop de groupe</td></tr><tr><td>8</td><td>Signal de sortie</td><td>15</td><td>Invalidation</td></tr><tr><td>9</td><td>Retournement</td><td>16 et 17</td><td>Action locale, appel de marge</td></tr></tbody></table></div>
+<p><strong>Une sortie partielle forme une ligne distincte</strong>, avec le même <code>trade_uid</code> que le trade d'origine. Compter les lignes ne suffit donc pas à compter les positions.</p>
+</section>
+
+<section id="algo-fr-validation" aria-labelledby="algo-fr-validation-title"><div class="shead"><span>06</span><span>Mettre à l'épreuve</span></div>
+<h2 id="algo-fr-validation-title">Vérifier que le signal apporte quelque chose, à gestion identique</h2>
+<p>Pour tester une idée de gestion, il suffit de conserver les entrées et de ne changer que le profil de sortie. Comparer les rendements en multiples du risque, le drawdown et le temps de récupération année par année permet ensuite de situer l'effet dans le temps.</p>
+<p>Pour tester le signal lui-même, la référence aléatoire doit poser la même question. <code>random_entry_keep_exit_logic</code> relance le moteur avec des entrées tirées au hasard et <strong>la même logique de sortie</strong>. Une référence à durée de détention fixe, qui ignore stops et objectifs, ne répond pas à cette question.</p>
+<figure><pre tabindex="0"><code>engine.report_random_baseline(
+    metrics=metrics,
+    null_model="random_entry_keep_exit_logic",
+    n_sim=20,
+)</code></pre><figcaption>Vingt simulations suffisent pour une première lecture. Chaque simulation est un run complet ; ce nombre n'est pas un seuil statistique.</figcaption></figure>
+<p>La validation se déclare dans le constructeur, avant les premiers essais : compteur d'essais, freeze, hors échantillon sur l'actif, puis cross-asset. DSR, Monte-Carlo, rétention hors échantillon, concentration de l'edge et dépendance aux valeurs extrêmes apportent des lectures complémentaires.</p>
+<p><a href="../validation-2/">Voir un parcours de validation complet, publié sur le mode allocation →</a></p>
+</section>
+
+<section id="algo-fr-bridge" aria-labelledby="algo-fr-bridge-title"><div class="shead"><span>07</span><span>Le lien avec Research</span></div>
+<h2 id="algo-fr-bridge-title">Afficher le backtest dans le graphique du mode Research</h2>
+<div class="bridge"><div class="bridge-grid"><div><h3>Research · le signal</h3><p>Calculer l'indicateur, mesurer ce qui suit ses signaux, comparer les versions.</p></div><span class="arrow" aria-hidden="true">→</span><div><h3>Algo · la stratégie</h3><p>Choisir les entrées, gérer les positions, appliquer les frais et le sizing.</p></div></div><p class="shared">En commun : le graphique, le serveur local, le manifeste de freeze et le registre des essais.</p></div>
+<p>Research sert en amont à écrire et examiner l'indicateur. Algo ajoute les règles d'entrée, la gestion, l'exécution et le risque. Ces choix doivent être formalisés : partager la vue ne transforme pas automatiquement une étude en stratégie.</p>
+<figure><pre tabindex="0"><code>@engine.research_view(name="Showcase · EMA 50/100 · régime H1",
+                      asset="XAUUSD", pip_size=0.01)
+def plot_showcase(plot, c):
+    price = plot.price()
+    price.line(c.ema1, name="EMA 50", stroke=Stroke(color="#FFB74D", width=1.5))
+    price.line(c.ema2, name="EMA 100", stroke=Stroke(color="#64B5F6", width=1.5))
+    price.regime(c.regime, mode="box", bounds="segment_ohlc", styles=regime_styles)
+    # bougies, entrées et sorties exécutées ajoutées automatiquement</code></pre><figcaption>La vue déclarée avant le run. Les colonnes EMA sont ajoutées pour l'affichage avec <code>engine.bind_features</code>, sans modifier les entrées du moteur.</figcaption></figure>
+<figure class="shot"><img src="../img/algo-trades-zoom.png" alt="Trades du backtest EMA 50/100 sur le graphique Research, zones de régime et sorties" loading="lazy"><figcaption>Le résultat : chaque entrée (triangle) et chaque sortie (croix) correspond à un trade exécuté par le moteur. L'affichage ne compte aucun essai et ne touche pas au freeze.</figcaption></figure>
+</section>
+
+<section id="algo-fr-limits" aria-labelledby="algo-fr-limits-title"><div class="shead"><span>08</span><span>Compilation et limites</span></div>
+<h2 id="algo-fr-limits-title">Savoir ce qui demande une recompilation, et ce qui reste à vérifier</h2>
+<p>Les profils et les règles sont transformés en matrices de paramètres : les modifier ne demande pas de recompiler un noyau déjà chargé. Modifier une fonction <code>@njit</code> du package invalide en revanche son cache.</p>
+<div class="table-wrap" tabindex="0"><table><thead><tr><th scope="col">Chemin</th><th scope="col">Ordre de grandeur de la première compilation</th></tr></thead><tbody><tr><td>Sans système de sorties ni régime</td><td>Noyau spécialisé : environ 10 minutes.</td></tr><tr><td>Avec système de sorties ou régime</td><td>Noyau complet : 20 à 35 minutes.</td></tr><tr><td>Runs suivants dans la même session</td><td>Le noyau compilé est réutilisé ; changer un paramètre reste instantané.</td></tr></tbody></table></div>
+<p class="small">Ces durées sont mesurées sur l'environnement de développement et ne constituent pas un benchmark. C'est aussi pour éviter ce coût que le mode Research étudie un signal sans compilation.</p>
+<h3>Limites connues</h3>
+<details open><summary>Timing des règles de sortie</summary><p>Les features et excursions de la bougie en cours peuvent être lues avant une sortie partielle valorisée à son ouverture. Le comportement du drapeau <code>sl_tp_be_priority</code> reste lui aussi à vérifier. Ces chemins demandent une validation dédiée.</p></details>
+<details><summary>Conditions et sens du trade</summary><p><code>OnFeature</code> compare une valeur brute sans tenir compte du sens long ou short : il faut donc déclarer les règles par côté. Un opérateur inconnu, par exemple <code>eq</code>, est actuellement converti sans avertissement en <code>gt</code>.</p></details>
+<details><summary>Backend et frais en mono-actif</summary><p>Le backend Python des stratégies de sortie est accepté mais pas exécuté : les stratégies personnalisées passent par Numba. En mono-actif, <code>ExecutionCostSpec(assets={...})</code> est ignoré ; les frais se déclarent à la racine.</p></details>
+<details><summary>Ordres en attente et code publié</summary><p>Un chemin <code>run_orders</code> existe pour les ordres en attente ; il n'a pas encore été audité. Le dépôt public est un instantané du moteur Algo d'avril 2026 : toutes les fonctions décrites ici n'y figurent pas encore.</p></details>
+</section>
+<nav class="next" aria-label="Poursuivre la lecture"><a href="../">← Accueil</a><a href="../research/">Revenir à l'étude du signal · Mode Research →</a></nav>
+<footer><span>Arnaud Barbier · octobre 2026. Les captures servent à montrer le fonctionnement ; aucun résultat de performance n'est revendiqué.</span><a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine">Dépôt public (instantané) →</a></footer>
+</article>
+
+<!-- ======================= ENGLISH ======================= -->
+<article class="lang-en" lang="en">
+<header class="mast">
+<div class="mast-top"><span>Arnaud Barbier · Backtest engine</span><span>Algo mode · October 2026</span></div>
+<h1>Algo mode, from signal to managed trades, with costs and sizing</h1>
+<p class="lede">Algo mode turns a signal into a complete strategy. The user chooses the entries, describes how each position is managed and sets up costs and position size; the engine, compiled with Numba, runs the backtest and <strong>returns every trade with its target price, its executed price and the reason it closed</strong>.</p>
+<p class="lede2">Management is described on four levels, from a simple TP and SL up to a compiled function. Sizing can be changed without rerunning the backtest. The signal itself can be studied first in <a href="../research/">Research mode</a>.</p>
+<div class="figs">
+<div><span class="v" data-count="4">4</span><span class="n">levels to describe position management</span></div>
+<div><span class="v" data-count="17">17</span><span class="n">exit codes, each recorded in the trade log</span></div>
+<div><span class="v" data-count="2714">2,714</span><span class="n">trades resized from the tape, without rerunning the kernel</span></div>
+<div><span class="v">1%</span><span class="n">of equity risked per trade in the sizing example</span></div>
+</div>
+</header>
+
+<div class="apercu">
+<div class="ap-head"><span class="eyebrow">Preview</span>
+<div class="ap-tabs" role="tablist" aria-label="Algo mode preview">
+<button type="button" role="tab" aria-selected="true"><span>1</span>Profiles<i class="bar"></i></button>
+<button type="button" role="tab" aria-selected="false"><span>2</span>Trades<i class="bar"></i></button>
+<button type="button" role="tab" aria-selected="false"><span>3</span>The log<i class="bar"></i></button>
+<button type="button" role="tab" aria-selected="false"><span>4</span>Sizing<i class="bar"></i></button>
+</div>
+<button type="button" class="ap-pause" data-pause="❚❚ Pause" data-play="▶ Play">❚❚ Pause</button></div>
+<div class="ap-stage">
+<figure class="ap-slide is-on" role="tabpanel"><div class="ap-frame"><img src="../img/algo-exit-profiles.png" alt="Declaration of two exit profiles, trend_profile and fast_profile"></div><figcaption><b>Profiles.</b> Two exit profiles, one to follow the trend, the other faster. They are compiled once, then assigned by setup or by regime. Click a screenshot to enlarge it.</figcaption></figure>
+<figure class="ap-slide" role="tabpanel"><div class="ap-frame"><img src="../img/algo-trades-chart.png" alt="EMA 50/100 backtest with an H1 regime shown in the Research chart"></div><figcaption><b>Trades.</b> The backtest shown in the Research mode chart: H1 regimes as coloured zones, entries as triangles, exits as crosses.</figcaption></figure>
+<figure class="ap-slide" role="tabpanel"><div class="ap-frame"><img src="../img/algo-trades-df.png" alt="metrics trades_df table: dates, entry and exit prices, gross and net return, commission"></div><figcaption><b>The log.</b> <code>metrics["trades_df"]</code>: one row per exit, with entry and exit prices, gross and net return, commission and spread.</figcaption></figure>
+<figure class="ap-slide" role="tabpanel"><div class="ap-frame"><img src="../img/algo-sizing-curve.png" alt="Equity curve in dollars and risk per trade held at 1%"></div><figcaption><b>Sizing.</b> The same trade tape resized at 1% risk per trade: equity curve in dollars and the risk taken on each trade.</figcaption></figure>
+</div>
+</div>
+
+<nav class="reading-map" aria-label="Reading guide">
+<div class="intro"><span class="eyebrow">Reading guide</span><p>What Algo mode does, in backtest order. Each block links to its section.</p></div>
+<ol>
+<li><a href="#algo-en-pipeline"><span class="n">01</span><span class="t">From signal to trade</span><small>What the user describes and what the engine handles.</small></a></li>
+<li><a href="#algo-en-features"><span class="n">02</span><span class="t">Indicators and causality</span><small>H1 data used only once its candle has closed.</small></a></li>
+<li><a href="#algo-en-management"><span class="n">03</span><span class="t">Four levels of management</span><small>From a simple TP and SL to phases, rules and compiled functions.</small></a></li>
+<li><a href="#algo-en-execution"><span class="n">04</span><span class="t">Costs and sizing</span><small>Spread, commission, slippage, then a fixed risk per trade.</small></a></li>
+<li><a href="#algo-en-audit"><span class="n">05</span><span class="t">Reading the trades</span><small>Every exit keeps its reason, its prices and its costs.</small></a></li>
+<li><a href="#algo-en-validation"><span class="n">06</span><span class="t">Stress-testing</span><small>Random entries with the same management, then validation.</small></a></li>
+<li><a href="#algo-en-bridge"><span class="n">07</span><span class="t">The link with Research</span><small>The same chart, with the backtest's real trades.</small></a></li>
+<li><a href="#algo-en-limits"><span class="n">08</span><span class="t">Compilation and limits</span><small>What needs recompiling, and what still needs checking.</small></a></li>
+</ol>
+</nav>
+
+<section id="algo-en-pipeline" aria-labelledby="algo-en-pipeline-title"><div class="shead"><span>01</span><span>From signal to trade</span></div>
+<h2 id="algo-en-pipeline-title">What the user describes and what the engine handles</h2>
+<p>Algo mode handles the whole backtest of a single-asset strategy. The user describes the logic: indicators, entry conditions and management rules. The engine applies the execution model, then returns returns, metrics and the trade log.</p>
+<figure><ol class="flow"><li><span class="step">01</span><b>Features</b><p>Indicators and higher-timeframe data, aligned on the main series.</p></li><li><span class="step">02</span><b>Setups</b><p>Long and short scores, choice of an entry and the regime.</p></li><li><span class="step">03</span><b>Execution</b><p>Timing, exit profiles, management rules and costs.</p></li><li><span class="step">04</span><b>Result</b><p>Trade log, tape for sizing, chart and validation tests.</p></li></ol><figcaption>The path of a single-strategy backtest. Allocation and investment modes are covered on their own pages.</figcaption></figure>
+<div class="two">
+<div><h3>Choosing between several setups</h3><p>Each setup produces five columns: long and short scores, active states and an identifier. <code>DecisionConfig</code> keeps the best score and breaks ties with the chosen rule. The setup identifier then follows the trade and can select its exit profile.</p></div>
+<div><h3>Adapting to the market regime</h3><p>A regime can block or weight an entry, then change its exit profile or strategy. It is supplied as raw identifiers: the engine applies availability and action delay itself, with no manual shift.</p></div>
+</div>
+</section>
+
+<section id="algo-en-features" aria-labelledby="algo-en-features-title"><div class="shead"><span>02</span><span>Indicators and causality</span></div>
+<h2 id="algo-en-features-title">Using H1 data only once its candle has closed</h2>
+<p>A feature is a function that reads the engine's columns, for example <code>f.col("Close")</code>, and returns one or several series. The computed columns then join the engine, and exit rules can use them by name.</p>
+<div class="timeline"><div><span class="eyebrow">10:00 → 11:00</span><b>H1 candle forming</b><p>Its final value cannot feed M15 decisions taken before it closes.</p></div><div><span class="eyebrow">From 11:00</span><b>H1 value available</b><p><code>bar_close</code> aligns the value at the right time; <code>max_age</code> discards a value that is too old.</p></div></div>
+<figure><pre tabindex="0"><code>feature.add(
+    my_indicator, "h1_trend",
+    on_ohlcv_matrix="algo_h1", matrix_asset="XAUUSD",
+    align_to="main", availability="bar_close",
+    source_tf="H1", max_age="2h",
+)</code></pre><figcaption>Declaring an H1 feature on an M15 series. A plain forward-fill from 10:00 would hand over the final value an hour too early.</figcaption></figure>
+<p><code>BacktestConfig</code> then sets timing, sessions, candle filters, the maximum number of entries, the cooldown and default exits. With <code>entry_delay=1</code>, the entry happens at the next candle's open; executing on the signal candle would often be too optimistic.</p>
+</section>
+
+<section id="algo-en-management" aria-labelledby="algo-en-management-title"><div class="shead"><span>03</span><span>Four levels of management</span></div>
+<h2 id="algo-en-management-title">Describing position management, from a simple setting to a compiled function</h2>
+<p>Two strategies sharing the same signal can end up far apart depending on how their positions are managed. The engine lets you describe that management on four levels, each more precise than the last:</p>
+<div class="table-wrap" tabindex="0"><table><thead><tr><th scope="col">Level</th><th scope="col">What you declare</th><th scope="col">Cost of a change</th></tr></thead><tbody><tr><td>01 · Configuration</td><td>TP, SL, break-even, trailing, maximum duration and flattening, in <code>BacktestConfig</code>.</td><td>No recompilation</td></tr><tr><td>02 · Profiles</td><td>A named <code>ExitProfileSpec</code>, chosen by setup or regime. Fields left empty fall back to the configuration.</td><td>No recompilation</td></tr><tr><td>03 · Phases and rules</td><td><code>PhaseSpec</code> objects holding <code>PositionRule</code> entries: triggers, partial exits, adds, stop moves.</td><td>No recompilation</td></tr><tr><td>04 · njit strategy</td><td>A custom function through <code>ExitStrategySpec</code>, with local or global state.</td><td>Recompilation when the code changes</td></tr></tbody></table></div>
+<figure class="shot"><img src="../img/algo-exit-profiles.png" alt="Code: two ExitProfileSpec objects, trend_profile and fast_profile, and their mapping to an identifier" loading="lazy"><figcaption>The two profiles of the EMA example: <b>trend_profile</b> (TP 1%, SL 0.1%) and <b>fast_profile</b> (TP 0.4%, SL 0.1%). Setup 0 uses trend_profile by default; the regime can override it.</figcaption></figure>
+<p>With phases, a position starts in phase 0. A rule can trigger on an excursion, a multiple of risk, a bar count, a feature or a combination of conditions. It can then take partial profit, move the stop, change the target, add to the position or move to the next phase.</p>
+<figure><ol class="flow"><li><span class="step">01</span><b>Enter</b><p>The setup picks the profile and the initial risk.</p></li><li><span class="step">02</span><b>Trigger</b><p>A rule in the current phase watches its condition.</p></li><li><span class="step">03</span><b>Act</b><p>Take a part, protect the stop or add.</p></li><li><span class="step">04</span><b>Change phase</b><p>Apply the rules planned for the rest of the trade.</p></li></ol><figcaption>An example of declarative logic.</figcaption></figure>
+<p><code>PartialConfig</code>, <code>PyramidConfig</code> and <code>AveragingConfig</code> describe scaled exits, adds to winning positions and adds to losing positions. A global state can also cap simultaneous positions or impose a pause after several consecutive stops.</p>
+<aside class="note"><p><strong>One point still to check.</strong> Some rules read the features or excursion of the current candle while a partial exit can be filled at its open. That look-ahead risk should be checked on a synthetic case before reading a result that depends on it. <a href="#algo-en-limits">See known limits</a>.</p></aside>
+</section>
+
+<section id="algo-en-execution" aria-labelledby="algo-en-execution-title"><div class="shead"><span>04</span><span>Costs and sizing</span></div>
+<h2 id="algo-en-execution-title">From theoretical price to executed price, then to position size</h2>
+<div class="two">
+<div><h3>Applying costs</h3><p><code>ExecutionCostSpec</code> describes the contract, lot size, spread, commissions and slippage. For a single asset, these settings are declared at the root of the spec.</p><p>Slippage is always adverse and depends on the previous candle's range, with a heavier penalty on stops. If the price opens beyond the stop, the exit fills at the open.</p></div>
+<div><h3>Sizing without rerunning the backtest</h3><p>With <code>return_tape=True</code>, the run produces a trade tape. <code>engine.run_sizing(...)</code> recomputes sizes without rerunning the kernel, so several sizing rules can be compared in seconds.</p><p>Changing the entries or their management, on the other hand, needs a new backtest.</p></div>
+</div>
+<figure><pre tabindex="0"><code>execution_costs = ExecutionCostSpec(
+    enabled=True, product_type="cfd",
+    contract_spec=ContractSpec(instrument_id="XAUUSD",
+                               contract_size=100.0, quote_currency="USD"),
+    spread_points=0.02,                      # price gap, not a %
+    commission_per_lot_round_turn_usd=3.0,   # entry + exit
+    slippage=SlippageSpec(enabled=True, adverse_only=True,
+                          model="simple_range", simple_range_frac=0.0025,
+                          stop_market_mult=1.25),
+)
+
+rets, metrics, tape = engine.run(..., execution_costs=execution_costs,
+                                 return_tape=True)
+sized = engine.run_sizing(tape=tape, sizing=sizing,
+                          execution_costs=execution_costs,
+                          strict_tape_context=True)</code></pre><figcaption>A cost declaration for gold, then sizing applied to the run's tape. The strict context checks that the tape matches the run.</figcaption></figure>
+<div class="pair pair-wrap">
+<figure class="shot"><img src="../img/algo-sizing-curve.png" alt="Equity curve in dollars from July 2023 to 2026 and risk per trade held at 1%" loading="lazy"><figcaption>The EMA example's tape resized at <b>1% risk per trade</b>. Below, the risk taken stays constant over the whole period: position size varies, not risk.</figcaption></figure>
+<figure><div class="table-wrap" tabindex="0" role="region" aria-label="Sizing summary" style="margin:0"><table class="summary-table"><caption>Summary returned by <code>run_sizing</code></caption><tbody>
+<tr><td>Trades</td><td>2,714</td></tr>
+<tr><td>Win rate</td><td>17.2%</td></tr>
+<tr><td>Sum of returns</td><td>+429.25%</td></tr>
+<tr><td>Cumulative return</td><td>+1,905.21%</td></tr>
+<tr><td>Annualised return</td><td>+189.52%</td></tr>
+<tr><td>Maximum drawdown</td><td>−56.05%</td></tr>
+<tr><td>Sharpe</td><td>2.772</td></tr>
+<tr><td>Profit factor</td><td>1.140</td></tr>
+<tr><td>Calmar</td><td>3.381</td></tr>
+<tr><td>Average win / average loss</td><td>+5.917% / −1.042%</td></tr>
+</tbody></table></div><figcaption>An average loss of 1.04% is the 1% risk plus costs.</figcaption></figure>
+</div>
+<aside class="note"><p><strong>These figures are not a result.</strong> This is a demonstration strategy, measured over the whole period and not validated. It is there to show the step from per-trade return to sized return. With a 0.1% stop and 1% risk per trade, each position is worth about ten times equity: the 56% drawdown follows directly from that.</p></aside>
+<figure class="shot"><img src="../img/algo-sizing-trades.png" alt="Trade table after sizing: target price, executed price and the gap" loading="lazy"><figcaption>After sizing, each trade keeps its target price, its executed price and the gap between them.</figcaption></figure>
+<p class="small">Break-even is armed on one candle and becomes active on the next; its exit is labelled BE. An optional mode treats the target as a limit order, with a pending state and non-fill events.</p>
+</section>
+
+<section id="algo-en-audit" aria-labelledby="algo-en-audit-title"><div class="shead"><span>05</span><span>Reading the trades</span></div>
+<h2 id="algo-en-audit-title">Finding, for each exit, its reason, its prices and its costs</h2>
+<p><code>metrics["trades_df"]</code> gathers for each trade the direction, entry and exit candles, target and executed prices, gross and net return, excursions, setup, profile and phase. The cost columns let you go back over every fill.</p>
+<figure class="shot"><img src="../img/algo-trades-df.png" alt="metrics trades_df of the EMA example: entry_time, exit_time, entry, exit, side, return, raw_return, commission_cost" loading="lazy"><figcaption>The EMA example's log. On the first rows, the gross return of about −0.100% is the 0.1% SL; the net return adds commission and spread.</figcaption></figure>
+<div class="table-wrap" tabindex="0"><table><thead><tr><th scope="col">Code</th><th scope="col">Exit</th><th scope="col">Code</th><th scope="col">Exit</th></tr></thead><tbody><tr><td>1</td><td>SL</td><td>10</td><td>Forced flatten</td></tr><tr><td>2</td><td>TP</td><td>11</td><td>Forced exit by the strategy</td></tr><tr><td>3</td><td>Break-even</td><td>12</td><td>Maximum duration</td></tr><tr><td>4 to 6</td><td>TP on EMA or crossover</td><td>13</td><td>Partial TP</td></tr><tr><td>7</td><td>Trailing stop</td><td>14</td><td>Group stop</td></tr><tr><td>8</td><td>Exit signal</td><td>15</td><td>Invalidation</td></tr><tr><td>9</td><td>Reversal</td><td>16 and 17</td><td>Local action, margin call</td></tr></tbody></table></div>
+<p><strong>A partial exit is a separate row</strong>, with the same <code>trade_uid</code> as the original trade. Counting rows is therefore not the same as counting positions.</p>
+</section>
+
+<section id="algo-en-validation" aria-labelledby="algo-en-validation-title"><div class="shead"><span>06</span><span>Stress-testing</span></div>
+<h2 id="algo-en-validation-title">Checking that the signal adds something, with identical management</h2>
+<p>To test a management idea, keep the entries and change only the exit profile. Comparing returns in multiples of risk, drawdown and recovery time year by year then places the effect in time.</p>
+<p>To test the signal itself, the random reference has to ask the same question. <code>random_entry_keep_exit_logic</code> reruns the engine with randomly drawn entries and <strong>the same exit logic</strong>. A fixed-holding reference, which ignores stops and targets, does not answer that question.</p>
+<figure><pre tabindex="0"><code>engine.report_random_baseline(
+    metrics=metrics,
+    null_model="random_entry_keep_exit_logic",
+    n_sim=20,
+)</code></pre><figcaption>Twenty simulations are enough for a first look. Each simulation is a full run; this number is not a statistical threshold.</figcaption></figure>
+<p>Validation is declared in the constructor, before the first trials: trial counter, freeze, out of sample on the asset, then cross-asset. DSR, Monte Carlo, out-of-sample retention, edge concentration and dependence on extreme values add further readings.</p>
+<p><a href="../validation-2/">See a complete validation run, published on allocation mode →</a></p>
+</section>
+
+<section id="algo-en-bridge" aria-labelledby="algo-en-bridge-title"><div class="shead"><span>07</span><span>The link with Research</span></div>
+<h2 id="algo-en-bridge-title">Showing the backtest in the Research mode chart</h2>
+<div class="bridge"><div class="bridge-grid"><div><h3>Research · the signal</h3><p>Compute the indicator, measure what follows its signals, compare versions.</p></div><span class="arrow" aria-hidden="true">→</span><div><h3>Algo · the strategy</h3><p>Choose entries, manage positions, apply costs and sizing.</p></div></div><p class="shared">Shared: the chart, the local server, the freeze manifest and the trial registry.</p></div>
+<p>Research is used upstream to write and examine the indicator. Algo adds entry rules, management, execution and risk. Those choices have to be made explicit: sharing the view does not turn a study into a strategy on its own.</p>
+<figure><pre tabindex="0"><code>@engine.research_view(name="Showcase · EMA 50/100 · H1 regime",
+                      asset="XAUUSD", pip_size=0.01)
+def plot_showcase(plot, c):
+    price = plot.price()
+    price.line(c.ema1, name="EMA 50", stroke=Stroke(color="#FFB74D", width=1.5))
+    price.line(c.ema2, name="EMA 100", stroke=Stroke(color="#64B5F6", width=1.5))
+    price.regime(c.regime, mode="box", bounds="segment_ohlc", styles=regime_styles)
+    # candles, executed entries and exits are added automatically</code></pre><figcaption>The view declared before the run. The EMA columns are added for display with <code>engine.bind_features</code>, without changing the engine's inputs.</figcaption></figure>
+<figure class="shot"><img src="../img/algo-trades-zoom.png" alt="Trades of the EMA 50/100 backtest on the Research chart, regime zones and exits" loading="lazy"><figcaption>The result: each entry (triangle) and each exit (cross) is a trade executed by the engine. Displaying it counts no trial and leaves the freeze untouched.</figcaption></figure>
+</section>
+
+<section id="algo-en-limits" aria-labelledby="algo-en-limits-title"><div class="shead"><span>08</span><span>Compilation and limits</span></div>
+<h2 id="algo-en-limits-title">Knowing what needs recompiling, and what still needs checking</h2>
+<p>Profiles and rules are turned into parameter matrices: changing them does not recompile a kernel that is already loaded. Changing an <code>@njit</code> function in the package, however, invalidates its cache.</p>
+<div class="table-wrap" tabindex="0"><table><thead><tr><th scope="col">Path</th><th scope="col">Order of magnitude of the first compilation</th></tr></thead><tbody><tr><td>No exit system and no regime</td><td>Specialised kernel: about 10 minutes.</td></tr><tr><td>With an exit system or regime</td><td>Full kernel: 20 to 35 minutes.</td></tr><tr><td>Later runs in the same session</td><td>The compiled kernel is reused; changing a parameter stays instant.</td></tr></tbody></table></div>
+<p class="small">These durations come from the development environment and are not a benchmark. Avoiding this cost is also why Research mode studies a signal without compilation.</p>
+<h3>Known limits</h3>
+<details open><summary>Exit-rule timing</summary><p>The current candle's features and excursions can be read before a partial exit valued at its open. The behaviour of the <code>sl_tp_be_priority</code> flag also remains to be checked. These paths need dedicated validation.</p></details>
+<details><summary>Conditions and trade direction</summary><p><code>OnFeature</code> compares a raw value without regard to long or short, so rules have to be declared per side. An unknown operator, for example <code>eq</code>, is currently converted to <code>gt</code> without warning.</p></details>
+<details><summary>Backend and single-asset costs</summary><p>The Python backend for exit strategies is accepted but not executed: custom strategies go through Numba. For a single asset, <code>ExecutionCostSpec(assets={...})</code> is ignored; costs are declared at the root.</p></details>
+<details><summary>Pending orders and published code</summary><p>A <code>run_orders</code> path exists for pending orders; it has not been audited yet. The public repository is an April 2026 snapshot of the Algo engine: not every feature described here is in it yet.</p></details>
+</section>
+<nav class="next" aria-label="Continue reading"><a href="../">← Home</a><a href="../research/">Back to signal research · Research mode →</a></nav>
+<footer><span>Arnaud Barbier · October 2026. The screenshots show how the mode works; no performance result is claimed.</span><a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine">Public repository (snapshot) →</a></footer>
+</article>
+</main></div></body></html>
