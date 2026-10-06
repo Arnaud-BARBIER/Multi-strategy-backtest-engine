@@ -2,33 +2,26 @@
 
 [![tests](https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine/actions/workflows/tests.yml/badge.svg)](https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine/actions/workflows/tests.yml)
 
-**A backtesting engine where refuting a result costs one line, which is why it happens.**
+**A backtesting engine where refuting a result costs one line.**
 
 **[arnaud-barbier.github.io/Multi-strategy-backtest-engine](https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/)**
  — the validation note, the engine page, the cost reconciliation, and the numbers below in context.
 
 ---
 
-## What this is
+## What it is
 
-Two halves that are only worth anything together.
+The engine has two complementary layers.
 
-**An accounting core.** A Numba-compiled multi-asset kernel over a ledger that closes:
-cash tiers, borrow tranches with overnight carry, multi-currency, accrued fees,
-dividends. Its job is to make a number *real*, to ensure that the return being measured
-is one an account could actually have earned, after financing, fees and currency.
+**An accounting core.** A Numba-compiled multi-asset kernel runs over a ledger that closes: cash tiers, borrow tranches with overnight carry, multiple currencies, accrued fees and dividends. Its role is to ensure that the return being measured is one the account could actually have earned after financing, fees and currency effects.
 
-**A validation layer.** Baselines, nulls, sample-size accounting, carrier resolution. Its
-job is to say when that number *means nothing*.
+**A validation layer.** Baselines, null models, sample-size accounting and carrier resolution test whether that return contains useful information.
 
-The design constraint is the cost of the second half. Refuting a result properly, a
-volatility-matched baseline, a sizing null, a reachable frontier, in/out-of-sample
-discipline, normally takes longer than producing the result in the first place, which is
-why it is usually skipped, and why it stays an intention rather than a practice. Here a
-run records itself, and each refutation is a single call against that record.
+The main design constraint is the cost of validation. Producing a result is usually cheaper than testing the assumptions behind it. A volatility-matched baseline, a sizing null, a reachable frontier or a proper in/out-of-sample split each require additional work and are therefore easy to postpone or omit.
 
-That is the whole point, and it is the reason for the result below. The strategy was not
-refuted out of virtue. It was refuted because refuting was the cheapest thing to do.
+Here, each run records the information required by the validation layer. The corresponding tests can then be applied directly to that record, without rebuilding the experiment.
+
+The result below is an example. The strategy produces a measurable result under the accounting model, but the validation layer does not retain it.
 
 ---
 
