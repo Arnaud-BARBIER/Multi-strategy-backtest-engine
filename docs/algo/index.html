@@ -37,7 +37,7 @@
 <div class="mast-top"><span>Arnaud Barbier · Moteur de backtest</span><span>Mode Algo · octobre 2026</span></div>
 <h1>Mode Algo, du signal aux trades gérés, avec frais et sizing</h1>
 <p class="lede">Le mode Algo transforme un signal en stratégie complète. L'utilisateur choisit ses entrées, décrit la gestion de chaque position et configure les frais et la taille des positions ; le moteur, compilé avec Numba, exécute le backtest et <strong>restitue chaque trade avec son prix visé, son prix exécuté et la raison de sa sortie</strong>.</p>
-<p class="lede2">La gestion se décrit à quatre niveaux, du simple réglage d'un TP et d'un SL jusqu'à une fonction compilée. Le sizing, lui, peut être modifié sans relancer le backtest. Le signal peut être étudié en amont dans le <a href="../research/">mode Research</a>.</p>
+<p class="lede2">Deux stratégies au même signal peuvent diverger fortement par la seule gestion de leurs positions, et c'est la partie que l'on teste le moins. Le mode Algo permet donc de décrire cette gestion à quatre niveaux, du simple réglage d'un TP et d'un SL jusqu'à une fonction compilée, et de la tester à part : on garde les entrées et on ne change que la sortie, ou l'on tire les entrées au hasard en gardant la même logique de sortie. Le sizing, lui, peut être modifié sans relancer le backtest. Le signal peut être étudié en amont dans le <a href="../research/">mode Research</a>.</p>
 <div class="figs">
 <div><span class="v" data-count="4">4</span><span class="n">niveaux pour décrire la gestion des positions</span></div>
 <div><span class="v" data-count="17">17</span><span class="n">codes de sortie, chacun tracé dans le journal des trades</span></div>
@@ -133,9 +133,10 @@ rets, metrics, tape = engine.run(..., execution_costs=execution_costs,
 sized = engine.run_sizing(tape=tape, sizing=sizing,
                           execution_costs=execution_costs,
                           strict_tape_context=True)</code></pre><figcaption>Une déclaration de frais pour l'or, puis le sizing appliqué à la tape du run. Le contexte strict vérifie que la tape correspond bien au run.</figcaption></figure>
+<aside class="note"><p><strong>Ces chiffres ne sont pas un résultat.</strong> Il s'agit d'une stratégie de démonstration, mesurée sur toute la période et sans validation. Elle sert à montrer le passage du rendement par trade au rendement dimensionné. Avec un stop à 0,1 % et 1 % de risque par trade, chaque position représente environ dix fois l'equity : le drawdown de 56 % en est la conséquence directe.</p></aside>
 <div class="pair pair-wrap">
 <figure class="shot"><img src="../img/algo-sizing-curve.png" alt="Courbe d'equity en dollars de juillet 2023 à 2026 et risque par trade constant à 1 %" loading="lazy"><figcaption>La tape de l'exemple EMA redimensionnée à <b>1 % de risque par trade</b>. En bas, le risque engagé reste constant sur toute la période : c'est la taille de position qui varie, pas le risque.</figcaption></figure>
-<figure><div class="table-wrap" tabindex="0" role="region" aria-label="Synthèse du sizing" style="margin:0"><table class="summary-table"><caption>Synthèse renvoyée par <code>run_sizing</code></caption><tbody>
+<figure><div class="table-wrap" tabindex="0" role="region" aria-label="Synthèse du sizing" style="margin:0"><table class="summary-table"><caption>Synthèse renvoyée par <code>run_sizing</code>, stratégie de démonstration non validée</caption><tbody>
 <tr><td>Trades</td><td>2 714</td></tr>
 <tr><td>Taux de gain</td><td>17,2 %</td></tr>
 <tr><td>Somme des rendements</td><td>+429,25 %</td></tr>
@@ -148,7 +149,6 @@ sized = engine.run_sizing(tape=tape, sizing=sizing,
 <tr><td>Gain moyen / perte moyenne</td><td>+5,917 % / −1,042 %</td></tr>
 </tbody></table></div><figcaption>Une perte moyenne de 1,04 % correspond au risque de 1 % plus les frais.</figcaption></figure>
 </div>
-<aside class="note"><p><strong>Ces chiffres ne sont pas un résultat.</strong> Il s'agit d'une stratégie de démonstration, mesurée sur toute la période et sans validation. Elle sert à montrer le passage du rendement par trade au rendement dimensionné. Avec un stop à 0,1 % et 1 % de risque par trade, chaque position représente environ dix fois l'equity : le drawdown de 56 % en est la conséquence directe.</p></aside>
 <figure class="shot"><img src="../img/algo-sizing-trades.png" alt="Tableau des trades après sizing : prix visé, prix exécuté et écart" loading="lazy"><figcaption>Après sizing, chaque trade conserve son prix visé, son prix exécuté et l'écart entre les deux.</figcaption></figure>
 <p class="small">Le break-even est armé sur une bougie et devient actif à la suivante ; sa sortie porte le libellé BE. Un mode optionnel traite la cible comme un ordre limite, avec un état d'attente et des événements de non-exécution.</p>
 </section>
@@ -224,7 +224,7 @@ def plot_showcase(plot, c):
 <div class="mast-top"><span>Arnaud Barbier · Backtest engine</span><span>Algo mode · October 2026</span></div>
 <h1>Algo mode, from signal to managed trades, with costs and sizing</h1>
 <p class="lede">Algo mode turns a signal into a complete strategy. The user chooses the entries, describes how each position is managed and sets up costs and position size; the engine, compiled with Numba, runs the backtest and <strong>returns every trade with its target price, its executed price and the reason it closed</strong>.</p>
-<p class="lede2">Management is described on four levels, from a simple TP and SL up to a compiled function. Sizing can be changed without rerunning the backtest. The signal itself can be studied first in <a href="../research/">Research mode</a>.</p>
+<p class="lede2">Two strategies sharing the same signal can end up far apart through position management alone, and management is the part that gets tested least. Algo mode therefore describes it on four levels, from a simple TP and SL up to a compiled function, and tests it on its own: keep the entries and change only the exit, or draw the entries at random and keep the same exit logic. Sizing can be changed without rerunning the backtest. The signal itself can be studied first in <a href="../research/">Research mode</a>.</p>
 <div class="figs">
 <div><span class="v" data-count="4">4</span><span class="n">levels to describe position management</span></div>
 <div><span class="v" data-count="17">17</span><span class="n">exit codes, each recorded in the trade log</span></div>
@@ -320,9 +320,10 @@ rets, metrics, tape = engine.run(..., execution_costs=execution_costs,
 sized = engine.run_sizing(tape=tape, sizing=sizing,
                           execution_costs=execution_costs,
                           strict_tape_context=True)</code></pre><figcaption>A cost declaration for gold, then sizing applied to the run's tape. The strict context checks that the tape matches the run.</figcaption></figure>
+<aside class="note"><p><strong>These figures are not a result.</strong> This is a demonstration strategy, measured over the whole period and not validated. It is there to show the step from per-trade return to sized return. With a 0.1% stop and 1% risk per trade, each position is worth about ten times equity: the 56% drawdown follows directly from that.</p></aside>
 <div class="pair pair-wrap">
 <figure class="shot"><img src="../img/algo-sizing-curve.png" alt="Equity curve in dollars from July 2023 to 2026 and risk per trade held at 1%" loading="lazy"><figcaption>The EMA example's tape resized at <b>1% risk per trade</b>. Below, the risk taken stays constant over the whole period: position size varies, not risk.</figcaption></figure>
-<figure><div class="table-wrap" tabindex="0" role="region" aria-label="Sizing summary" style="margin:0"><table class="summary-table"><caption>Summary returned by <code>run_sizing</code></caption><tbody>
+<figure><div class="table-wrap" tabindex="0" role="region" aria-label="Sizing summary" style="margin:0"><table class="summary-table"><caption>Summary returned by <code>run_sizing</code>, unvalidated demonstration strategy</caption><tbody>
 <tr><td>Trades</td><td>2,714</td></tr>
 <tr><td>Win rate</td><td>17.2%</td></tr>
 <tr><td>Sum of returns</td><td>+429.25%</td></tr>
@@ -335,7 +336,6 @@ sized = engine.run_sizing(tape=tape, sizing=sizing,
 <tr><td>Average win / average loss</td><td>+5.917% / −1.042%</td></tr>
 </tbody></table></div><figcaption>An average loss of 1.04% is the 1% risk plus costs.</figcaption></figure>
 </div>
-<aside class="note"><p><strong>These figures are not a result.</strong> This is a demonstration strategy, measured over the whole period and not validated. It is there to show the step from per-trade return to sized return. With a 0.1% stop and 1% risk per trade, each position is worth about ten times equity: the 56% drawdown follows directly from that.</p></aside>
 <figure class="shot"><img src="../img/algo-sizing-trades.png" alt="Trade table after sizing: target price, executed price and the gap" loading="lazy"><figcaption>After sizing, each trade keeps its target price, its executed price and the gap between them.</figcaption></figure>
 <p class="small">Break-even is armed on one candle and becomes active on the next; its exit is labelled BE. An optional mode treats the target as a limit order, with a pending state and non-fill events.</p>
 </section>

@@ -81,6 +81,7 @@ h1{
   margin:2.25rem 0 0;max-width:24ch;
 }
 .lede{font-size:1.06rem;color:var(--sub);max-width:60ch;margin:1.35rem 0 2.25rem;}
+.lede-note{font-size:1rem;color:var(--ink);max-width:60ch;margin:-1.1rem 0 2.25rem;padding-left:.85rem;border-left:3px solid var(--accent);}
 .tickers{
   display:flex;flex-wrap:wrap;gap:0;margin:0 0 2.25rem;
   border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);
@@ -368,16 +369,22 @@ button{font:inherit}
       <div>Allocation multi-actifs · 26 août 2026</div>
     </div>
 
-    <h1>Une politique comptable complète se déclare en quarante lignes.</h1>
+    <h1>Mode allocation, backtester un portefeuille multi-actifs et réfuter son résultat</h1>
 
     <p class="lede">
-      Cette page montre ce qu'il en coûte de se servir de l'outil : le code réel que
-      l'utilisateur écrit, et la sortie réelle que le moteur
-      renvoie. Tout ce qui suit vient du <b>mode allocation</b>, celui qui gère un portefeuille,
-      sa trésorerie et sa dette. Le mode investissement reprend cette comptabilité ; le mode
-      algorithmique n'y accède que par la couche de sizing.
-      Le moteur est livré avec une couche de validation, et un exemple de son usage figure plus
-      bas.
+      Le mode allocation permet de backtester un portefeuille multi-actifs avec <b>une
+      comptabilité complète de la trésorerie, de la dette, des frais et des devises</b>, puis de
+      soumettre le résultat à une couche de validation qui cherche à montrer que la stratégie
+      n'apporte rien. Toute cette politique comptable se déclare en quarante lignes ; la page
+      montre le code réel que l'utilisateur écrit et la sortie réelle que le moteur renvoie.
+      Le mode investissement reprend cette comptabilité ; le mode algorithmique n'y accède que
+      par la couche de sizing.
+    </p>
+
+    <p class="lede-note">
+      <b>Le run présenté ici est un run qui échoue</b> : +0,42 % par an, un drawdown de
+      −43,43 % et un verdict sous le taux sans risque. C'est volontaire, car l'objet de la page
+      est la mesure, pas la stratégie.
     </p>
 
     <nav class="reading-map" aria-label="Fil de lecture">
@@ -800,14 +807,21 @@ button{font:inherit}
       <div>Multi-asset allocation · 26 August 2026</div>
     </div>
 
-    <h1>A complete accounting policy is declared in forty lines.</h1>
+    <h1>Allocation mode, backtesting a multi-asset portfolio and refuting its result</h1>
 
     <p class="lede">
-      This page shows what the tool costs to use: the real code that is written, and the real
-      output it returns. Everything below comes from <b>allocation mode</b>, the one that runs a
-      portfolio, its cash and its debt. Investment mode takes that accounting over; algorithmic
-      mode only reaches it through the sizing layer. The
-      engine ships with a validation layer, and an example of it in use appears further down.
+      Allocation mode backtests a multi-asset portfolio with <b>full cash, debt, fee and
+      currency accounting</b>, then hands the result to a validation layer that tries to show
+      the strategy adds nothing. The whole accounting policy is declared in forty lines; the
+      page shows the real code that is written and the real output the engine returns.
+      Investment mode takes that accounting over; algorithmic mode only reaches it through the
+      sizing layer.
+    </p>
+
+    <p class="lede-note">
+      <b>The run shown here is a failing one</b>: +0.42 % a year, a −43.43 % drawdown and a
+      verdict below the risk-free rate. That is deliberate, because the point of the page is
+      the measurement, not the strategy.
     </p>
 
     <nav class="reading-map" aria-label="Reading guide">
