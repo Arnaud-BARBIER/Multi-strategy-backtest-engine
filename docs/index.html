@@ -476,8 +476,8 @@ h1.on .w{opacity:1;transform:none}
         <li><span class="step-no">02</span><b>Lancer le test</b><p>Trésorerie, frais, devises et conditions d'exécution entrent dans le calcul.</p></li>
         <li><span class="step-no">03</span><b>Lire le verdict</b><p>Performance et drawdown, puis des tests statistiques : le résultat tient-il, ou relève-t-il du hasard ?</p></li>
       </ol>
-      <figure class="demo-result"><img src="img/band-equity.png" alt="Résultat d'un test d'allocation : courbe de NAV, réserves de trésorerie, décisions de rebalancement et drawdown" loading="lazy">
-        <figcaption>Sortie du mode Allocation : évolution de la NAV, réserves de trésorerie, rebalancements et drawdown.</figcaption></figure>
+      <figure class="demo-result"><img src="img/band-equity.png" alt="Sortie du mode Allocation : évolution de la Net Asset Value, réserves de trésorerie, rebalancements et drawdown" loading="lazy">
+        <figcaption>Sortie du mode Allocation : évolution de la Net Asset Value, réserves de trésorerie, rebalancements et drawdown.</figcaption></figure>
       <div class="demo-films">
         <div class="demo-films-head"><p class="demo-films-k">Exemple d'utilisation</p><p class="demo-films-meta">(moins d'une minute de vidéo)</p></div>
         <div class="demo-story" data-carousel-lang="fr" role="region" aria-label="Exemple d'utilisation en vidéo">
@@ -572,7 +572,7 @@ h1.on .w{opacity:1;transform:none}
         <div class="lbl" id="tech-fr-title">Repères techniques</div>
         <p class="tech-lede">Un noyau compilé en Numba tient la comptabilité du portefeuille à chaque barre : paliers de trésorerie, tranches d'emprunt indexées sur un taux de marché réel, plusieurs devises, frais provisionnés sur une horloge et payés sur une autre.</p>
         <p class="tech-scope">Trois modes d'exécution partagent ce kernel : signaux algorithmiques, allocation de portefeuille et suivi d'un compte réel. La comptabilité de portefeuille appartient aux deux derniers.</p>
-        <p class="tech-note">Contrairement à Nautilus Trader ou QuantConnect, ce moteur est conçu pour la recherche — itérations rapides et validation statistique —, pas pour l'exécution en direct.</p>
+        <p class="tech-note">Contrairement à Nautilus Trader ou QuantConnect, ce moteur est conçu pour la recherche (itérations rapides et validation statistique), pas pour l'exécution en direct.</p>
       </div>
       <div class="figs">
         <div class="fig"><div class="k">Déclarer un portefeuille</div><div class="v">40 lignes</div><div class="n">réserves, emprunt, frais, devises</div></div>
@@ -746,8 +746,8 @@ h1.on .w{opacity:1;transform:none}
         <li><span class="step-no">02</span><b>Run the test</b><p>Cash, costs, currencies and execution conditions enter the calculation.</p></li>
         <li><span class="step-no">03</span><b>Read the verdict</b><p>Performance and drawdown, then statistical tests: does the result hold up, or could it be chance?</p></li>
       </ol>
-      <figure class="demo-result"><img src="img/band-equity.png" alt="Allocation test result: NAV curve, cash reserves, rebalance decisions and drawdown" loading="lazy">
-        <figcaption>Allocation mode output: NAV, cash reserves, rebalancing and drawdown.</figcaption></figure>
+      <figure class="demo-result"><img src="img/band-equity.png" alt="Allocation mode output: Net Asset Value evolution, cash reserves, rebalancing and drawdown" loading="lazy">
+        <figcaption>Allocation mode output: Net Asset Value evolution, cash reserves, rebalancing and drawdown.</figcaption></figure>
       <div class="demo-films">
         <div class="demo-films-head"><p class="demo-films-k">Example of use</p><p class="demo-films-meta">(less than one minute of video)</p></div>
         <div class="demo-story" data-carousel-lang="en" role="region" aria-label="Example of use in video">
@@ -842,7 +842,7 @@ h1.on .w{opacity:1;transform:none}
         <div class="lbl" id="tech-en-title">Technical markers</div>
         <p class="tech-lede">A Numba-compiled core keeps the portfolio's books on every bar: cash tiers, borrow tranches indexed on a real market rate, several currencies, and fees accrued on one clock and paid on another.</p>
         <p class="tech-scope">Three execution modes share that kernel: algorithmic signals, portfolio allocation, and tracking a real account. Portfolio accounting belongs to the last two.</p>
-        <p class="tech-note">Unlike Nautilus Trader or QuantConnect, this engine is designed for research—fast iteration and statistical validation—not live execution.</p>
+        <p class="tech-note">Unlike Nautilus Trader or QuantConnect, this engine is designed for research (fast iteration and statistical validation), not live execution.</p>
       </div>
       <div class="figs">
         <div class="fig"><div class="k">Declaring a portfolio</div><div class="v">40 lines</div><div class="n">reserves, borrowing, fees, currencies</div></div>
