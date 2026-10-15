@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Arnaud Barbier · Moteur de backtest multi-stratégie et couche de validation</title>
-<meta name="description" content="Réduire le temps entre une hypothèse d'investissement, son test et sa validation. Noyau comptable compilé en Numba, trois modes d'exécution, et la couche qui juge le résultat.">
+<meta name="description" content="Tester une stratégie ou une pondération dans un portefeuille qui tient compte de la trésorerie, des frais, des devises et de la validation statistique.">
 <meta name="author" content="Arnaud Barbier">
 <link rel="canonical" href="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/">
 <meta property="og:title" content="Arnaud Barbier · Moteur de backtest multi-stratégie et couche de validation">
-<meta property="og:description" content="Réduire le temps entre une hypothèse d'investissement, son test et sa validation.">
+<meta property="og:description" content="Tester une stratégie ou une pondération dans un portefeuille qui tient compte des frais, du cash et des devises.">
 <meta property="og:locale" content="fr_FR">
 <meta property="og:locale:alternate" content="en_GB">
 <meta property="og:image" content="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/img/og-home-v3.png">
@@ -25,20 +25,12 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Tinos:ital,wght@0,400;0,700;1,400;1,700&display=swap">
 <style>
 :root{
-  --bg:#FFFFFF; --well:#F5F6F7;
-  --hair:#C9CCD1; --hard:#101215;
-  --ink:#101215; --sub:#54585F; --faint:#868B93;
-  --accent:#A85F00; --accent-well:#FDF7EE;
+  --bg:#0e1117; --well:#12171f;
+  --hair:#21262d; --hard:#3d444d;
+  --ink:#e6edf3; --sub:#8b949e; --faint:#6e7681;
+  --accent:#F0A93A; --accent-well:#1E1710;
   --f-sans:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;
-  --f-serif:"Times New Roman",Tinos,Times,"Liberation Serif",serif;
-}
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){
-    --bg:#0e1117; --well:#12171f;
-    --hair:#21262d; --hard:#3d444d;
-    --ink:#e6edf3; --sub:#8b949e; --faint:#6e7681;
-    --accent:#F0A93A; --accent-well:#1E1710;
-  }
+  --f-serif:Tinos,"Times New Roman",Times,"Liberation Serif",serif;
 }
 :root[data-theme="dark"]{
   --bg:#0e1117; --well:#12171f;
@@ -79,7 +71,7 @@ a{color:var(--accent)}
   background-repeat:no-repeat;background-size:100% 2px;background-position:0 100%;
 }
 h1{
-  font-size:clamp(1.75rem,3.4vw,2.35rem);font-weight:700;line-height:1.05;
+  font-family:var(--f-serif);font-size:clamp(1.75rem,3.4vw,2.35rem);font-weight:400;line-height:1.05;
   letter-spacing:-.005em;text-wrap:balance;max-width:24ch;margin:2.4rem 0 0;
 }
 .lede{font-size:1.06rem;color:var(--sub);max-width:62ch;margin:1.5rem 0 0}
@@ -87,17 +79,63 @@ h1{
 .lede2{font-size:.95rem;color:var(--sub);max-width:64ch;margin:1.05rem 0 0}
 .lede2 b{color:var(--ink);font-weight:600}
 
+.hero{
+  position:relative;margin:1.8rem 0 0;padding:0 0 1.2rem;
+}
+.hero .mast-top{margin:0;padding:.6rem 0 .72rem;font-size:.72rem;letter-spacing:.15em}
+.hero h1{font-size:clamp(2.15rem,4.5vw,3.25rem);max-width:27ch;margin:2rem 0 1.1rem;line-height:1.04;letter-spacing:-.02em}
+.hero-copy{font-size:1.06rem;line-height:1.55;max-width:66ch;color:var(--ink)}
+.hero-copy p{margin:0 0 .25rem}
+.hero-sub{font-family:var(--f-sans);font-size:1.12rem;line-height:1.5;color:var(--sub);max-width:52ch;margin:.75rem 0 0}
+.hero-proof{display:grid;grid-template-columns:1fr 1.35fr 1fr;gap:0;margin:1.75rem 0 0;border:0;background:none;align-items:stretch}
+.hero-proof-2{grid-template-columns:1fr 1.15fr}
+.hero-proof .fig{padding:1rem 1.2rem 1rem 0;margin-right:1.2rem;border-right:1px solid var(--hair);background:none}
+.fig-flow{font-size:.95rem;line-height:1.5;color:var(--ink);margin:.4rem 0 .6rem}
+.flow-arrow{color:var(--accent);font-weight:700;margin:0 .15rem}
+.hero-proof .fig-featured{border:1px solid var(--accent);background:var(--accent-well);border-radius:2px;padding:1.1rem 1.3rem;margin-right:1.2rem}
+.hero-proof .fig-featured .k{font-size:.9rem;letter-spacing:.04em;text-transform:none;color:var(--accent);font-weight:700;margin-bottom:.65rem}
+.fig-list{list-style:none;margin:0 0 .75rem;padding:0;display:flex;flex-direction:column;gap:.65rem}
+.fig-list li{position:relative;padding-left:1.2rem;font-size:1.12rem;line-height:1.48;color:var(--ink)}
+.fig-list li::before{content:"";position:absolute;left:0;top:.62em;width:.42rem;height:.42rem;border-radius:50%;background:var(--accent);box-shadow:0 0 6px 0 rgba(240,169,58,.7)}
+.fig-list b{font-family:var(--f-sans);font-weight:700;color:#fff}
+.hero-proof .fig-featured .n{font-size:.92rem;line-height:1.5;color:var(--sub);margin-top:0}
+.hero .hero-proof .fig .k{font-family:var(--f-sans);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);font-weight:600}
+.hero-proof .fig .v{font-size:clamp(1.35rem,2.4vw,1.8rem);line-height:1.12;letter-spacing:-.025em;margin-top:.45rem}
+.hero .hero-proof .fig .n{font-size:1rem;line-height:1.5;margin-top:.5rem;color:var(--sub)}
+.hero .hero-proof .fig .n b{color:var(--ink);font-weight:600}
+.hero-proof .fig:last-child:not(.fig-featured){border-right:0;margin-right:0}
+.hero-proof .fig-featured:last-child{
+  margin-right:0;border-right:0;position:relative;overflow:hidden;
+  animation:proof-in .68s .12s cubic-bezier(.2,.7,.2,1) both;
+}
+.hero-proof>.fig:not(.fig-featured){animation:proof-in .68s .04s cubic-bezier(.2,.7,.2,1) both}
+.hero-proof>.fig:not(.fig-featured) .fig-list li{animation:proof-line-in .5s cubic-bezier(.2,.7,.2,1) both}
+.hero-proof>.fig:not(.fig-featured) .fig-list li:nth-child(1){animation-delay:.2s}
+.hero-proof>.fig:not(.fig-featured) .fig-list li:nth-child(2){animation-delay:.32s}
+.hero-proof>.fig:not(.fig-featured) .fig-list li:nth-child(3){animation-delay:.44s}
+.hero-proof .fig-featured:last-child::after{
+  content:"";position:absolute;z-index:2;top:0;right:0;bottom:0;width:1px;
+  background:var(--accent);transform:scaleY(0);transform-origin:top;
+  animation:proof-edge-draw .48s .42s cubic-bezier(.2,.7,.2,1) both;pointer-events:none;
+}
+.hero-proof .fig-featured>.k{animation:proof-line-in .5s .3s cubic-bezier(.2,.7,.2,1) both}
+.hero-proof .fig-featured .fig-list li{animation:proof-line-in .5s cubic-bezier(.2,.7,.2,1) both}
+.hero-proof .fig-featured .fig-list li:nth-child(1){animation-delay:.42s}
+.hero-proof .fig-featured .fig-list li:nth-child(2){animation-delay:.54s}
+.hero-proof .fig-featured>.n{animation:proof-line-in .5s .66s cubic-bezier(.2,.7,.2,1) both}
+.hero-note{font-size:1.06rem;line-height:1.5;color:var(--sub);margin:1rem 0 0}
+.hero-note b{color:var(--ink);font-weight:600}
+
 .figs{
   display:grid;grid-template-columns:repeat(auto-fit,minmax(158px,1fr));gap:0;
-  border-top:0;background-image:linear-gradient(90deg,var(--accent) 0%,var(--hard) 30%,var(--hair) 74%);background-repeat:no-repeat;background-size:100% 2px;background-position:0 0;border-bottom:1px solid var(--hair);
-  margin:2.6rem 0 0;
+  border:0;background:none;margin:2.6rem 0 0;
 }
 .fig{padding:1rem 1.2rem 1.05rem 0;margin-right:1.2rem;border-right:1px solid var(--hair)}
 .fig:last-child{border-right:none;margin-right:0}
-.fig .k{font-family:var(--f-sans);font-size:.63rem;letter-spacing:.13em;text-transform:uppercase;color:var(--faint)}
+.fig .k{font-family:var(--f-sans);font-size:.72rem;letter-spacing:.11em;text-transform:uppercase;color:var(--faint)}
 .fig .v{font-family:var(--f-sans);font-size:1.85rem;font-weight:700;letter-spacing:-.035em;margin-top:.4rem;
         font-variant-numeric:tabular-nums;line-height:1}
-.fig .n{font-family:var(--f-sans);font-size:.78rem;color:var(--sub);margin-top:.4rem;line-height:1.42}
+.fig .n{font-family:var(--f-sans);font-size:.85rem;color:var(--sub);margin-top:.4rem;line-height:1.48}
 .neg{color:var(--accent)}
 
 .tree{margin:1.6rem 0 0;border:0;padding:.6rem 0 0;background:none}
@@ -186,10 +224,10 @@ h1{
 .tree .tlink rect{transition:stroke .2s}
 .tree .tlink:hover rect,.tree .tlink:focus-visible rect{stroke:#EAB308}
 .tree .tlink:focus{outline:none}
-.tree.anim .tg{opacity:0;transform:translateY(8px);transition:opacity .7s ease var(--d,0s),transform .7s cubic-bezier(.2,.7,.2,1) var(--d,0s)}
-.tree.anim.in .tg{opacity:1;transform:none}
-.tree.anim .tl,.tree.anim .tl-i{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1s cubic-bezier(.3,.7,.2,1) var(--d,0s)}
-.tree.anim.in .tl,.tree.anim.in .tl-i{stroke-dashoffset:0}
+.tree.anim .tg,.mode-diagram.anim .tg{opacity:0;transform:translateY(8px);transition:opacity .7s ease var(--d,0s),transform .7s cubic-bezier(.2,.7,.2,1) var(--d,0s)}
+.tree.anim.in .tg,.mode-diagram.anim.in .tg{opacity:1;transform:none}
+.tree.anim .tl,.tree.anim .tl-i,.mode-diagram.anim .tl,.mode-diagram.anim .tl-i{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1s cubic-bezier(.3,.7,.2,1) var(--d,0s)}
+.tree.anim.in .tl,.tree.anim.in .tl-i,.mode-diagram.anim.in .tl,.mode-diagram.anim.in .tl-i{stroke-dashoffset:0}
 .mast-top{animation:drawbg 1.1s .3s cubic-bezier(.3,.7,.2,1) both}
 h1 .w{display:inline-block;opacity:0;transform:translateY(.4em);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
 h1.on .w{opacity:1;transform:none}
@@ -198,10 +236,130 @@ h1.on .w{opacity:1;transform:none}
 .cards .card.reveal:nth-child(3n+2),.figs .fig.reveal:nth-child(2),.modes .mode.reveal:nth-child(2){transition-delay:.1s}
 .cards .card.reveal:nth-child(3n+3),.figs .fig.reveal:nth-child(3),.modes .mode.reveal:nth-child(3){transition-delay:.2s}
 .figs .fig.reveal:nth-child(4){transition-delay:.3s}
+.demo{margin:3.2rem 0 0;padding:1.4rem 0 1.6rem;border-top:2px solid var(--hard);border-bottom:1px solid var(--hair)}
+.demo-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(240px,.78fr);gap:1.5rem;align-items:end}
+.demo .lbl{margin:0 0 .75rem}
+.demo h2{font-size:clamp(1.55rem,3vw,2.15rem);line-height:1.12;letter-spacing:-.025em;margin:0;max-width:22ch}
+.demo-intro{font-size:.92rem;line-height:1.55;color:var(--sub);margin:0}
+.demo-intro em{color:var(--ink)}
+.demo-body{display:grid;grid-template-columns:minmax(230px,.76fr) minmax(0,1.24fr);gap:2rem;align-items:center;margin-top:1.5rem}
+.demo-steps{list-style:none;padding:0;margin:0;counter-reset:demo}
+.demo-steps li{position:relative;padding:0 0 1rem 2.7rem;margin:0 0 1rem;border-bottom:1px solid var(--hair);counter-increment:demo}
+.demo-steps li:last-child{margin-bottom:0}
+.demo-steps li::before{content:"0" counter(demo);position:absolute;left:0;top:.05rem;font-family:var(--f-sans);font-size:.72rem;font-weight:700;letter-spacing:.08em;color:var(--accent)}
+.demo-steps b{font-family:var(--f-sans);font-size:.86rem;font-weight:600;display:block;margin-bottom:.15rem}
+.demo-steps span{font-size:.82rem;line-height:1.45;color:var(--sub);display:block}
+.demo-visual{margin:0;min-width:0}
+.demo-visual img{display:block;width:100%;height:auto;padding:8px;background:#0e1117;border:1px solid var(--hair)}
+.demo-visual figcaption{font-size:.73rem;line-height:1.45;color:var(--faint);margin-top:.5rem}
+.demo-films{margin-top:2rem;padding-top:1.2rem;border-top:1px solid var(--hair)}
+.demo-films-head{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;margin-bottom:.8rem}
+.demo-films-head p{margin:0}
+.demo-films-k{font-family:var(--f-sans);font-size:.68rem;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--accent)}
+.demo-films-meta{font-family:var(--f-sans);font-size:.72rem;color:var(--faint)}
+.demo-videos{display:grid;grid-template-columns:1fr}
+.demo-video{margin:0;padding:1.25rem 0 1.5rem;border-top:1px solid var(--hair)}
+.demo-video figcaption{display:flex;gap:.9rem;align-items:baseline;max-width:70ch;margin-bottom:.8rem}
+.demo-video-num{font-family:var(--f-sans);font-size:1.55rem;font-weight:700;line-height:1;color:var(--accent);font-variant-numeric:tabular-nums;flex:none}
+.demo-video-copy{display:grid;gap:.25rem}
+.demo-video-copy b{font-family:var(--f-sans);font-size:.9rem;font-weight:600;color:var(--ink)}
+.demo-video-copy span{font-size:.82rem;line-height:1.48;color:var(--sub)}
+.demo-video video{display:block;width:100%;aspect-ratio:1600/1004;object-fit:contain;background:#0e1117;border:1px solid var(--hair)}
+.demo-cta{display:inline-block;margin:1.15rem 0 0;font-family:var(--f-sans);font-size:.78rem;font-weight:600;color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent);padding-bottom:.12rem}
+.tech-facts{margin:2.5rem 0 0}
+.tech-facts .lbl{margin-top:0}
+.tech-note{font-size:.82rem;color:var(--sub);margin:1rem 0 0;max-width:80ch}
+.tech-note b{color:var(--ink);font-weight:600}
+.modes-section{margin-top:2.65rem}
+.modes-heading{display:block;margin-bottom:1.2rem}
+.modes-heading p{margin-top:.5rem}
+.modes-heading h2{font-family:var(--f-sans);font-size:clamp(1.7rem,3vw,2.2rem);line-height:1.1;letter-spacing:-.03em;margin:0}
+.modes-heading p{font-size:1.06rem;line-height:1.5;color:var(--sub);max-width:43ch;margin:0}
+.mode-diagram{margin:1.3rem 0 .65rem}
+.mode-diagram svg{display:block;width:100%;height:auto;overflow:visible;font-family:var(--f-sans)}
+.mode-diagram .tlink:hover rect,.mode-diagram .tlink:focus-visible rect{stroke:#EAB308}
+.mode-diagram .tlink:focus{outline:none}
+.mode-mobile-diagram{display:none;flex-direction:column;gap:.65rem;margin:1.2rem 0 .4rem}
+.mtd-node{border:1px solid var(--hard);background:var(--well);border-radius:2px;padding:.8rem .95rem;display:flex;flex-direction:column;gap:.25rem}
+.mtd-connector{display:flex;align-items:center;justify-content:center;gap:.4rem;padding:.1rem 0;font-family:var(--f-sans);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
+.mtd-connector::before,.mtd-connector::after{content:"";flex:none;width:1px;height:.6rem;background:var(--hair)}
+.mtd-connector span{color:var(--accent);font-size:1rem;line-height:1}
+.mtd-connector.dashed{color:var(--accent)}
+.mtd-connector.dashed::before,.mtd-connector.dashed::after{background-image:linear-gradient(var(--accent) 60%,transparent 0);background-size:1px 4px;background-color:transparent}
+.mtd-row{display:grid;grid-template-columns:1fr 1fr;gap:.65rem}
+.mtd-row .mtd-node{padding:.7rem .85rem}
+.mtd-core{background:none;text-align:center;align-items:center}
+.mtd-k{font-family:var(--f-sans);font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+.mtd-n{font-size:.88rem;color:var(--sub)}
+.mtd-t1{font-family:var(--f-sans);font-weight:600;font-size:1.05rem;color:var(--ink)}
+.mtd-t2{font-size:.88rem;color:var(--sub)}
+.mtd-research{border-style:dashed;border-color:var(--accent);background:var(--accent-well)}
+.mtd-tag{font-family:var(--f-sans);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-bottom:.1rem}
+.mtd-invest{border-color:var(--accent);background:var(--accent-well)}
+.mtd-chip{align-self:flex-start;margin-top:.5rem;font-family:var(--f-sans);font-size:.72rem;letter-spacing:.07em;text-transform:uppercase;border:1px dashed var(--hair);padding:.3rem .55rem;border-radius:2px;color:var(--sub)}
+.modes-section .modes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border:0;margin:.55rem 0 0}
+.modes-section .mode{padding:1rem 1.2rem 0 0;margin:0 1.2rem 0 0;border-right:1px solid var(--hair);min-width:0}
+.modes-section .mode:last-child{padding-right:0;margin-right:0;border-right:0}
+.modes-section .mode h3{font-family:var(--f-sans);font-size:1.3rem;line-height:1.25;font-weight:600;letter-spacing:-.02em;margin:0 0 .55rem}
+.modes-section .mode h3 a{color:inherit;text-decoration:none}
+.modes-section .mode h3 a:hover{color:var(--accent)}
+.modes-section .mode p{font-size:1.06rem;line-height:1.55;color:var(--sub);margin:0}
+.modes-section .mode .c{font-family:var(--f-sans);font-size:.76rem;letter-spacing:.09em;line-height:1.4;color:var(--accent);margin-top:.75rem;font-weight:600}
+.modes-section .mode-status{display:block;color:var(--accent);font-size:1rem;font-weight:500;letter-spacing:.02em}
+.modes-transition{font-family:var(--f-sans);font-size:1rem;line-height:1.5;color:var(--faint);text-align:center;margin:2rem 0 0;padding-top:1.4rem;border-top:1px solid var(--hair)}
+.questions-banner{position:relative;isolation:isolate;overflow:hidden;width:100vw;margin:1.4rem 0 0 calc(50% - 50vw);padding:2.4rem max(1.4rem,calc((100vw - 980px)/2));border:0;border-block:1px solid var(--hard);background:#12171f}
+.questions-banner::before{content:"";position:absolute;inset:0;z-index:-1;background-image:linear-gradient(90deg,rgba(18,23,31,.89),rgba(18,23,31,.67) 52%,rgba(18,23,31,.86)),url("img/band-equity.png");background-repeat:no-repeat;background-size:cover,130% auto;background-position:center,0 54%;opacity:.48;filter:saturate(.6)}
+.questions-banner blockquote{font-family:var(--f-serif);font-weight:400;font-size:clamp(1.35rem,2.55vw,2rem);line-height:1.28;letter-spacing:-.02em;max-width:41ch;margin:0 0 1rem;color:var(--ink)}
+.questions-banner blockquote:last-of-type{margin-bottom:1.35rem}
+.questions-banner .question-close{font-size:1.06rem;line-height:1.5;color:var(--accent);font-weight:600;margin:0}
+.answer{margin:2.7rem 0 0}
+.answer>h2{font-family:var(--f-sans);font-size:clamp(1.8rem,3.4vw,2.5rem);line-height:1.1;letter-spacing:-.03em;margin:0 0 1.4rem}
+.answer-timeline{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;list-style:none;padding:0;margin:0;border-top:1px solid var(--hard);border-bottom:1px solid var(--hair)}
+.answer-timeline li{position:relative;padding:1.1rem 1.25rem 1.2rem 0;margin-right:1.25rem;min-width:0}
+.answer-timeline li:not(:last-child)::before{content:"";position:absolute;top:0;right:0;height:100%;border-right:1px solid var(--hair)}
+.answer-timeline li:not(:last-child)::after{content:"→";position:absolute;top:50%;right:-.68rem;transform:translateY(-50%);z-index:1;font-family:var(--f-sans);font-size:1.15rem;font-weight:700;color:var(--accent);background:var(--bg);line-height:1;padding:.2rem 0}
+.answer-timeline .step-no{display:block;font-family:var(--f-sans);font-size:1.05rem;font-weight:700;color:var(--accent);margin-bottom:.45rem}
+.answer-timeline b{display:block;font-family:var(--f-sans);font-size:1.05rem;line-height:1.3;margin-bottom:.35rem}
+.answer-timeline p{font-size:1rem;line-height:1.5;color:var(--sub);margin:0}
+.demo-result{margin:1.5rem 0 0}
+.demo-result img{display:block;width:100%;height:auto;padding:8px;background:var(--well);border:1px solid var(--hair)}
+.demo-result figcaption{font-size:1rem;line-height:1.5;color:var(--sub);margin-top:.65rem}
+.demo-films{margin-top:2rem;padding-top:1.2rem;border-top:1px solid var(--hair)}
+.demo-films-head{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;margin-bottom:1rem}
+.demo-films-head p{margin:0}
+.demo-films-k{font-family:var(--f-sans);font-size:1.35rem;font-weight:600;letter-spacing:-.02em;color:var(--ink)}
+.demo-films-meta{font-family:var(--f-sans);font-size:1rem;color:var(--sub)}
+.demo-story{display:grid;grid-template-columns:minmax(0,.5fr) minmax(0,1.5fr);gap:0 2.5rem;margin-top:1.2rem;align-items:start}
+.demo-steps{padding-bottom:18vh}
+.demo-step{min-height:50vh;padding:1.4rem 1rem 1.5rem 1.35rem;border-left:2px solid var(--hair);opacity:.38;transition:opacity .45s ease,border-color .45s ease;display:flex;flex-direction:column;justify-content:center}
+.demo-step:first-child{min-height:40vh;justify-content:flex-start;padding-top:.6rem}
+.demo-step.is-current{opacity:1;border-left-color:var(--accent)}
+.demo-step .step-no{font-family:var(--f-sans);font-size:1rem;line-height:1.3;color:var(--accent);margin-bottom:.45rem;font-variant-numeric:tabular-nums}
+.demo-step h3{font-family:var(--f-sans);font-size:1.3rem;line-height:1.25;letter-spacing:-.02em;margin:0 0 .55rem}
+.demo-step p{font-size:1.06rem;line-height:1.55;color:var(--sub);margin:0;max-width:44ch}
+.demo-mobile-video{display:none}
+.demo-stage-wrap{position:sticky;top:9vh;align-self:start;margin-top:.6rem}
+.demo-stage-bar{display:flex;align-items:center;gap:1rem;font-family:var(--f-sans);font-size:1rem;line-height:1.3;color:var(--sub);margin-bottom:.7rem;font-variant-numeric:tabular-nums}
+.demo-stage-bar .track{flex:1;height:3px;background:var(--hair);overflow:hidden}
+.demo-stage-bar .track i{display:block;width:25%;height:100%;background:var(--accent);transition:width .45s cubic-bezier(.2,.7,.2,1)}
+.demo-stage{position:relative;isolation:isolate;overflow:hidden;aspect-ratio:1600/1004;background:#0e1117;border:1px solid var(--hair)}
+.demo-slide{position:absolute;inset:0;z-index:0;visibility:hidden;opacity:0;transform:translateX(104%);transition:transform .66s cubic-bezier(.2,.7,.2,1),visibility 0s .66s;margin:0;pointer-events:none}
+.demo-slide.is-under{z-index:1;visibility:visible;opacity:1;transform:translateX(0);transition:none}
+.demo-slide.is-active{z-index:2;visibility:visible;opacity:1;transform:translateX(0);transition-delay:0s;pointer-events:auto}
+.demo-slide.is-entering{z-index:2;visibility:visible;opacity:1;transform:translateX(104%);transition:none}
+.demo-slide.is-entering.from-left{transform:translateX(-104%)}
+.video-num{font-family:var(--f-sans);font-size:1.35rem;font-weight:700;line-height:1;color:var(--accent);font-variant-numeric:tabular-nums;flex:none}
+.demo-slide video{display:block;width:100%;height:100%;object-fit:contain;background:#0e1117}
+.demo-stage-caption{font-size:1rem;line-height:1.5;color:var(--sub);margin:.65rem 0 0}
+.demo-mobile-video video{display:block;width:100%;aspect-ratio:16/10;object-fit:contain;background:#0e1117;border:1px solid var(--hair);margin-top:1rem}
+.demo-cta{font-size:1rem}
 .card .shot img{transition:transform .5s cubic-bezier(.2,.7,.2,1)}
 .card:hover .shot img{transform:scale(1.04)}
 @keyframes dash{to{stroke-dashoffset:-20}}
 @keyframes drawbg{from{background-size:0 2px}to{background-size:100% 2px}}
+@keyframes proof-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes proof-line-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes proof-edge-draw{from{transform:scaleY(0)}to{transform:scaleY(1)}}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;animation-delay:0s!important;transition-duration:.001ms!important;transition-delay:0s!important}
   .reveal,h1 .w{opacity:1;transform:none}
@@ -212,7 +370,31 @@ h1.on .w{opacity:1;transform:none}
   .roadmap-grid{grid-template-columns:1fr}
   .roadmap article{padding:0 0 1.2rem}
   .roadmap article+article{padding:1.2rem 0 0;border-left:0;border-top:1px solid var(--hair)}
+  .hero-proof{grid-template-columns:1fr;margin-top:1rem;gap:.9rem}
+  .hero-proof .fig,.hero-proof .fig:last-child{padding:1rem 0;margin:0;border-right:0;border-bottom:1px solid var(--hair)}
+  .hero-proof .fig:last-child{border-bottom:0}
+  .hero-proof .fig.fig-featured,.hero-proof .fig.fig-featured:last-child{border:1px solid var(--accent);background:var(--accent-well);border-radius:2px;padding:1.1rem 1.3rem;margin:0}
+  .hero-proof .fig-featured:last-child::after{display:none}
+  .modes-heading{display:block}
+  .modes-heading p{margin-top:.7rem}
+  .mode-diagram svg{display:none}
+  .mode-mobile-diagram{display:flex}
+  .modes-section .modes{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:1.2rem}
+  .modes-section .mode:nth-child(2){border-right:0;margin-right:0;padding-right:0}
+  .modes-section .mode:nth-child(3){border-right:1px solid var(--hair)}
+  .demo-story{grid-template-columns:minmax(0,1fr);gap:0}
+  .demo-steps{padding-bottom:0}
+  .demo-step,.demo-step:first-child{min-height:0;opacity:1;padding:1.2rem 0 1.4rem 1.1rem;border-left-color:var(--accent)}
+  .demo-mobile-video{display:block}
+  .demo-stage-wrap{display:none}
+  .answer-timeline{grid-template-columns:1fr}
+  .answer-timeline li{padding:1rem 0;margin:0;border-bottom:0}
+  .answer-timeline li:not(:last-child)::before{display:none}
+  .answer-timeline li:not(:last-child)::after{content:"↓";top:auto;bottom:-.95rem;right:50%;left:auto;transform:translateX(50%);padding:0 .3rem}
+  .demo-films-head{display:block}
+  .demo-films-meta{margin-top:.35rem!important}
 }
+@media (max-width:520px){.hero{padding:0 0 1rem}.hero .mast-top{padding:.6rem 0 .72rem;font-size:.7rem}.hero h1{font-size:2.15rem;margin-top:1.55rem}.modes-section .modes{grid-template-columns:1fr;row-gap:0}.modes-section .mode,.modes-section .mode:nth-child(2),.modes-section .mode:nth-child(3){padding:1.1rem 0;margin:0;border-right:0;border-bottom:1px solid var(--hair)}.modes-section .mode:last-child{border-bottom:0}.mtd-row{grid-template-columns:1fr;gap:.55rem}.questions-banner{padding:1.5rem 1.4rem}.questions-banner::before{background-size:cover,auto 100%;background-position:center,54% center}.questions-banner blockquote{font-size:1.35rem}.demo-stage{aspect-ratio:4/3}}
 </style>
 <link rel="stylesheet" href="assets/endnav.css?v=3">
 <script src="assets/endnav.js?v=3" defer></script>
@@ -225,147 +407,145 @@ h1.on .w{opacity:1;transform:none}
   </div>
 
   <div class="wrap lang-fr">
-    <div class="mast-top">
-      <div>Arnaud Barbier</div>
-      <div>Signaux · Portefeuilles · Comptes</div>
-    </div>
-
-    <h1>Moteur de backtest multi-stratégie, et couche de validation.</h1>
-
-    <p class="lede">
-      L'objectif du projet : <b>réduire le temps entre une hypothèse d'investissement, son test
-      et sa validation</b>. L'utilisateur écrit la logique de sa stratégie et configure
-      directement la trésorerie, l'emprunt, les frais et les devises du portefeuille. Le moteur
-      prend entièrement en charge l'exécution. Une couche de validation met ensuite le résultat
-      à l'épreuve. Elle peut aussi évaluer une stratégie déjà rentable afin d'estimer dans quelle
-      mesure ses performances peuvent se reproduire.
-    </p>
-
-    <p class="lede2">
-      Un noyau compilé en Numba tient la comptabilité du portefeuille à chaque barre :
-      paliers de trésorerie, tranches d'emprunt indexées sur un taux de marché réel, plusieurs
-      devises, frais provisionnés sur une horloge et payés sur une autre. Trois modes
-      d'exécution partagent ce kernel : signaux algorithmiques, allocation de portefeuille,
-      et suivi d'un compte réel. La comptabilité de portefeuille appartient aux deux derniers.
-    </p>
-
-    <div class="figs">
-      <div class="fig">
-        <div class="k">Déclarer un portefeuille</div>
-        <div class="v">40 lignes</div>
-        <div class="n">réserves, emprunt, frais, devises</div>
+    <section class="hero" aria-labelledby="hero-fr">
+      <div class="mast-top"><div>Arnaud Barbier</div><div>Signaux · Portefeuilles · Comptes</div></div>
+      <h1 id="hero-fr">Framework de recherche Python pour modéliser, améliorer et créer vos stratégies</h1>
+      <p class="hero-sub">Transformez une idée ou une intuition en résultat testé, de la façon la plus simple et fiable possible.</p>
+      <div class="hero-proof hero-proof-2">
+        <div class="fig">
+          <ul class="fig-list">
+            <li><b>Prend en charge</b> toute idée de stratégie d'<a href="#modes-fr-title">allocation</a> ou de gestion possible</li>
+            <li><b>Permet de reproduire</b> vos stratégies existantes pour les étudier et les améliorer</li>
+            <li><b>Toute votre attention</b> va à votre stratégie, pas à ce qui la teste</li>
+          </ul>
+        </div>
+        <div class="fig fig-featured">
+          <div class="k">Environnement simple d'utilisation</div>
+          <ul class="fig-list">
+            <li><b>Moins d'1 minute</b> pour configurer un backtest complexe</li>
+            <li><b>Moins d'une seconde</b> pour un run réaliste et dense</li>
+          </ul>
+          <div class="n">Analyse des résultats grâce à une multitude de tests de validation intégrés.</div>
+        </div>
       </div>
-      <div class="fig">
-        <div class="k">Coût d'une réfutation</div>
-        <div class="v">3 lignes</div>
-        <div class="n">trois appels, trois verdicts</div>
+    </section>
+
+    <aside class="questions-banner" aria-label="Questions concrètes d'un gestionnaire">
+      <blockquote>« Qu'aurait donné ce fonds, cette pondération ou cette stratégie dans mon allocation ? »</blockquote>
+      <blockquote>« Qu'aurait vraiment donné cette logique de gestion que j'ai entendue et qui me paraît intéressante ? »</blockquote>
+      <p class="question-close">Ce qui manque, c'est l'outil pour y répondre vite. Pas la compétence.</p>
+    </aside>
+
+    <section class="answer" aria-labelledby="answer-fr-title">
+      <h2 id="answer-fr-title">Obtenez la réponse en 1 minute</h2>
+      <ol class="answer-timeline">
+        <li><span class="step-no">01</span><b>Décrire l'idée</b><p>Une stratégie, une pondération ou un fonds à tester dans une allocation.</p></li>
+        <li><span class="step-no">02</span><b>Lancer le test</b><p>Trésorerie, frais, devises et conditions d'exécution entrent dans le calcul.</p></li>
+        <li><span class="step-no">03</span><b>Lire le verdict</b><p>Performance et drawdown, puis des tests statistiques : le résultat tient-il, ou relève-t-il du hasard ?</p></li>
+      </ol>
+      <figure class="demo-result"><img src="img/band-equity.png" alt="Résultat d'un test d'allocation : courbe de NAV, réserves de trésorerie, décisions de rebalancement et drawdown" loading="lazy">
+        <figcaption>Sortie du mode Allocation : évolution de la NAV, réserves de trésorerie, rebalancements et drawdown.</figcaption></figure>
+      <div class="demo-films">
+        <div class="demo-films-head"><p class="demo-films-k">Exemple d'utilisation</p><p class="demo-films-meta">(moins d'une minute de vidéo)</p></div>
+        <div class="demo-story" data-carousel-lang="fr" role="region" aria-label="Exemple d'utilisation en vidéo">
+          <div class="demo-steps">
+            <article class="demo-step is-current" data-demo-step="0"><span class="step-no">01 / 04</span><h3>Préparer l'étude</h3><p>Le travail se fait dans un notebook préconfigurable, avec une API simple : vous configurez l'emprunt, la gestion du cash, et plus encore.</p><div class="demo-mobile-video"><video muted controls playsinline preload="none" poster="https://arnaud-barbier.github.io/img/studio-1-poster.jpg" title="Préparer une étude de backtest"><source src="https://arnaud-barbier.github.io/video/studio-1-creer-notebook.mp4" type="video/mp4"></video></div></article>
+            <article class="demo-step" data-demo-step="1"><span class="step-no">02 / 04</span><h3>Brancher la logique</h3><p>Tout est déjà branché, il ne reste plus qu'à insérer votre stratégie dans le cadre prévu.</p><div class="demo-mobile-video"><video muted controls playsinline preload="none" poster="https://arnaud-barbier.github.io/img/studio-2-poster.jpg" title="Brancher la logique de stratégie"><source src="https://arnaud-barbier.github.io/video/studio-2-importer-logique.mp4" type="video/mp4"></video></div></article>
+            <article class="demo-step" data-demo-step="2"><span class="step-no">03 / 04</span><h3>Lire les paramètres</h3><p>Chaque paramètre est documenté, facile d'accès et d'import au moment où l'étude se configure.</p><div class="demo-mobile-video"><video muted controls playsinline preload="none" poster="https://arnaud-barbier.github.io/img/studio-3-poster.jpg" title="Consulter la documentation des paramètres"><source src="https://arnaud-barbier.github.io/video/studio-3-documentation-active.mp4" type="video/mp4"></video></div></article>
+            <article class="demo-step" data-demo-step="3"><span class="step-no">04 / 04</span><h3>Lancer et consulter</h3><p>Via le panneau de navigation du notebook, à gauche, un clic lance le backtest et affiche les premiers résultats.</p><div class="demo-mobile-video"><video muted controls playsinline preload="none" poster="https://arnaud-barbier.github.io/img/studio-4-poster.jpg" title="Lancer le backtest et consulter les résultats"><source src="https://arnaud-barbier.github.io/video/studio-4-lancer-resultats.mp4" type="video/mp4"></video></div></article>
+          </div>
+          <div class="demo-stage-wrap">
+            <div class="demo-stage-bar"><span data-stage-label>Étape 1 sur 4</span><span class="track"><i data-stage-fill></i></span></div>
+            <div class="demo-stage">
+              <figure class="demo-slide is-active" data-slide="0" aria-hidden="false"><video autoplay muted controls playsinline preload="none" poster="https://arnaud-barbier.github.io/img/studio-1-poster.jpg" title="Préparer une étude de backtest"><source src="https://arnaud-barbier.github.io/video/studio-1-creer-notebook.mp4" type="video/mp4">Votre navigateur ne prend pas en charge la vidéo.</video></figure>
+              <figure class="demo-slide" data-slide="1" aria-hidden="true"><video muted controls playsinline preload="none" poster="https://arnaud-barbier.github.io/img/studio-2-poster.jpg" title="Brancher la logique de stratégie"><source src="https://arnaud-barbier.github.io/video/studio-2-importer-logique.mp4" type="video/mp4">Votre navigateur ne prend pas en charge la vidéo.</video></figure>
+              <figure class="demo-slide" data-slide="2" aria-hidden="true"><video muted controls playsinline preload="none" poster="https://arnaud-barbier.github.io/img/studio-3-poster.jpg" title="Consulter la documentation des paramètres"><source src="https://arnaud-barbier.github.io/video/studio-3-documentation-active.mp4" type="video/mp4">Votre navigateur ne prend pas en charge la vidéo.</video></figure>
+              <figure class="demo-slide" data-slide="3" aria-hidden="true"><video muted controls playsinline preload="none" poster="https://arnaud-barbier.github.io/img/studio-4-poster.jpg" title="Lancer le backtest et consulter les résultats"><source src="https://arnaud-barbier.github.io/video/studio-4-lancer-resultats.mp4" type="video/mp4">Votre navigateur ne prend pas en charge la vidéo.</video></figure>
+            </div>
+            <p class="demo-stage-caption" data-stage-caption>Le travail se fait dans un notebook préconfigurable, avec une API simple : vous configurez l'emprunt, la gestion du cash, et plus encore.</p>
+          </div>
+        </div>
       </div>
-      <div class="fig">
-        <div class="k">Identité comptable</div>
-        <div class="v">4,44 e−16</div>
-        <div class="n">résidu maximal, neuf ans de barres journalières</div>
+      <a class="demo-cta" href="mailto:arnaud.barbier@grenoble-em.com?subject=D%C3%A9monstration%20du%20moteur">Démonstration en direct sur demande →</a>
+    </section>
+    <section class="modes-section" aria-labelledby="modes-fr-title">
+      <div class="modes-heading"><h2 id="modes-fr-title">Un noyau, quatre modes</h2><p>Un noyau partagé pour concevoir, tester et suivre une stratégie.</p></div>
+      <figure class="mode-diagram">
+        <svg viewBox="0 0 900 430" role="img" aria-label="Arbre des modes : le kernel Numba se sépare en algorithmique et allocation, qui se rejoignent pour former le mode investissement. Au centre, le mode Research, relié au mode algorithmique.">
+          <path class="tl" pathLength="1" style="--d:.25s" d="M450,372 L450,346"/>
+          <path class="tl" pathLength="1" style="--d:.45s" d="M450,346 C450,320 350,300 292,290"/>
+          <path class="tl" pathLength="1" style="--d:.45s" d="M450,346 C450,320 550,300 608,290"/>
+          <path class="tl-i" pathLength="1" style="--d:1.05s" d="M165,238 C165,195 250,165 348,124"/>
+          <path class="tl-i" pathLength="1" style="--d:1.05s" d="M735,238 C735,195 650,165 552,124"/>
+
+          <g class="tg" style="--d:0s">
+          <rect class="tn" x="270" y="372" width="360" height="48" rx="1"/>
+          <text class="tk" x="450" y="394" text-anchor="middle">KERNEL NUMBA</text>
+          <text class="t2" x="450" y="412" text-anchor="middle">lecture des barres, exécution de l'order book</text>
+          </g>
+
+          <a href="algo/" class="tlink"><g class="tg" style="--d:.75s">
+          <rect class="tn" x="40" y="240" width="250" height="68" rx="1"/>
+          <text class="t1" x="62" y="272">Algorithmique</text>
+          <text class="t2" x="62" y="294">une règle a-t-elle un edge ?</text>
+          </g></a>
+
+          <g class="tg" style="--d:.75s">
+          <rect class="tn" x="610" y="240" width="250" height="68" rx="1"/>
+          <text class="t1" x="632" y="272">Allocation</text>
+          <text class="t2" x="632" y="294">une pondération bat-elle 1/N ?</text>
+          </g>
+
+          <g class="tg" style="--d:1.4s">
+          <rect class="tn-i" x="305" y="44" width="290" height="76" rx="1"/>
+          <text class="t1" x="327" y="80">Investissement</text>
+          <text class="t2" x="327" y="104">qu'a vécu un compte réel ?</text>
+          <rect class="tchip" x="136" y="164" width="168" height="32" rx="1"/>
+          <text class="t2" x="220" y="185" text-anchor="middle">couche de sizing</text>
+          </g>
+
+          <a href="research/" class="tlink"><g class="tg" style="--d:1.75s">
+          <path class="tl-r" d="M290,262 C322,262 322,229 350,229"/>
+          <text class="tk" x="450" y="188" text-anchor="middle">PYTHON · SANS COMPILATION</text>
+          <rect class="tn-r" x="350" y="196" width="200" height="66" rx="1"/>
+          <text class="t1" x="370" y="226">Research</text>
+          <text class="t2" x="370" y="248">que suit un signal ?</text>
+          </g></a>
+        </svg>
+        <div class="mode-mobile-diagram" aria-hidden="true">
+          <div class="mtd-node mtd-core"><span class="mtd-k">Kernel Numba</span><span class="mtd-n">lecture des barres, exécution de l'order book</span></div>
+          <div class="mtd-connector"><span>↓</span></div>
+          <div class="mtd-row">
+            <div class="mtd-node"><span class="mtd-t1">Algorithmique</span><span class="mtd-t2">une règle a-t-elle un edge ?</span><span class="mtd-chip">couche de sizing</span></div>
+            <div class="mtd-node"><span class="mtd-t1">Allocation</span><span class="mtd-t2">une pondération bat-elle 1/N ?</span></div>
+          </div>
+          <div class="mtd-connector dashed"><span>↓</span> relié à Algorithmique</div>
+          <div class="mtd-node mtd-research"><span class="mtd-tag">Python · sans compilation</span><span class="mtd-t1">Research</span><span class="mtd-t2">que suit un signal ?</span></div>
+          <div class="mtd-connector"><span>↓</span></div>
+          <div class="mtd-node mtd-invest"><span class="mtd-t1">Investissement</span><span class="mtd-t2">qu'a vécu un compte réel ?</span></div>
+        </div>
+      </figure>
+      <div class="modes">
+        <article class="mode"><h3><a href="algo/">Algorithmique</a></h3><p>Le mode algorithmique permet de tester et d'évaluer des stratégies systématiques, avec leur propre logique de signal, de sizing et de gestion du risque.</p><div class="c">porteur : trades clos</div></article>
+        <article class="mode"><h3>Allocation</h3><p>Prend en charge la construction et le suivi de portefeuilles multi-actifs et, à terme, multi-produits, avec des règles de pondération, une comptabilité de portefeuille avancée et personnalisable, et un rebalancement intégré au mode, configurable.</p><div class="c">porteur : Net Asset Value (NAV) nette de l'emprunt</div></article>
+        <article class="mode"><h3><a href="research/">Research</a></h3><p>Facilite la recherche et la création de tout type d'indicateur, avec leur visualisation façon plateforme de trading. À terme, permet de projeter des graphiques en tout genre liés à l'évolution des prix, dans l'esprit d'outils comme Quantower.</p><div class="c">porteur : signal, relié au mode Algo</div></article>
+        <article class="mode"><h3>Investissement, <span class="mode-status">en développement</span></h3><p>Permet de tester des stratégies systématiques à faible volume de transaction, pour un montant investi au comptant. Bénéficie de la comptabilité du mode Allocation, sans le système de levier du mode Algorithmique.</p><div class="c">porteur : rendement pondéré par le temps</div></article>
       </div>
-      <div class="fig">
-        <div class="k">Hors échantillon</div>
-        <div class="v">jamais ouvert</div>
-        <div class="n">30 % de l'historique scellé</div>
+    </section>
+
+
+    <section class="tech-facts" aria-labelledby="tech-fr-title"><div class="lbl" id="tech-fr-title">Repères techniques</div>
+      <p class="lede2">Un noyau compilé en Numba tient la comptabilité du portefeuille à chaque barre : paliers de trésorerie, tranches d'emprunt indexées sur un taux de marché réel, plusieurs devises, frais provisionnés sur une horloge et payés sur une autre. Trois modes d'exécution partagent ce kernel : signaux algorithmiques, allocation de portefeuille, et suivi d'un compte réel. La comptabilité de portefeuille appartient aux deux derniers.</p>
+      <p class="tcap">Cette « assetification » des stratégies permet de faire remonter la couche de sizing de la branche algorithmique jusqu'au niveau du portefeuille d'investissement.</p>
+      <div class="figs">
+        <div class="fig"><div class="k">Déclarer un portefeuille</div><div class="v">40 lignes</div><div class="n">réserves, emprunt, frais, devises</div></div>
+        <div class="fig"><div class="k">Coût d'une réfutation</div><div class="v">3 lignes</div><div class="n">trois appels, trois verdicts</div></div>
+        <div class="fig"><div class="k">Identité comptable</div><div class="v">4,44 e−16</div><div class="n">résidu maximal, neuf ans de barres journalières</div></div>
+        <div class="fig"><div class="k">Hors échantillon</div><div class="v">jamais ouvert</div><div class="n">30 % de l'historique scellé</div></div>
       </div>
-    </div>
-
-
-    <div class="lbl">Un noyau, trois questions</div>
-    <p class="lede" style="margin-top:-.4rem">
-      Le moteur s'organise autour de trois modes complémentaires. Chacun répond à une question
-      différente et se mesure donc différemment. <b>C'est le moteur qui applique la bonne
-      mesure, pas l'utilisateur.</b>
-    </p>
-    <div class="tree">
-      <svg viewBox="0 0 900 430" role="img" aria-label="Arbre des modes : le kernel Numba se sépare en algorithmique et allocation, qui se rejoignent pour former le mode investissement. Au centre, le mode Research, relié au mode algorithmique.">
-        <path class="tl" pathLength="1" style="--d:.25s" d="M450,372 L450,346"/>
-        <path class="tl" pathLength="1" style="--d:.45s" d="M450,346 C450,320 350,300 292,290"/>
-        <path class="tl" pathLength="1" style="--d:.45s" d="M450,346 C450,320 550,300 608,290"/>
-        <path class="tl-i" pathLength="1" style="--d:1.05s" d="M165,238 C165,195 250,165 348,124"/>
-        <path class="tl-i" pathLength="1" style="--d:1.05s" d="M735,238 C735,195 650,165 552,124"/>
-
-        <g class="tg" style="--d:0s">
-        <rect class="tn" x="300" y="372" width="300" height="48" rx="1"/>
-        <text class="tk" x="450" y="394" text-anchor="middle">KERNEL NUMBA</text>
-        <text class="t2" x="450" y="412" text-anchor="middle">lecture des barres, une seule fois</text>
-        </g>
-
-        <a href="algo/" class="tlink"><g class="tg" style="--d:.75s">
-        <rect class="tn" x="40" y="240" width="250" height="68" rx="1"/>
-        <text class="t1" x="62" y="272">Algorithmique</text>
-        <text class="t2" x="62" y="294">une règle a-t-elle un edge ?</text>
-        </g></a>
-
-        <g class="tg" style="--d:.75s">
-        <rect class="tn" x="610" y="240" width="250" height="68" rx="1"/>
-        <text class="t1" x="632" y="272">Allocation</text>
-        <text class="t2" x="632" y="294">une pondération bat-elle 1/N ?</text>
-        </g>
-
-        <g class="tg" style="--d:1.4s">
-        <rect class="tn-i" x="305" y="44" width="290" height="76" rx="1"/>
-        <text class="t1" x="327" y="80">Investissement</text>
-        <text class="t2" x="327" y="104">qu'a vécu un compte réel ?</text>
-        <rect class="tchip" x="136" y="164" width="168" height="32" rx="1"/>
-        <text class="t2" x="220" y="185" text-anchor="middle">couche de sizing</text>
-        </g>
-
-        <a href="research/" class="tlink"><g class="tg" style="--d:1.75s">
-        <path class="tl-r" d="M290,262 C322,262 322,229 350,229"/>
-        <text class="tk" x="450" y="188" text-anchor="middle">PYTHON · SANS COMPILATION</text>
-        <rect class="tn-r" x="350" y="196" width="200" height="66" rx="1"/>
-        <text class="t1" x="370" y="226">Research</text>
-        <text class="t2" x="370" y="248">que suit un signal ?</text>
-        </g></a>
-      </svg>
-    </div>
-    <p class="tcap">
-      Au centre du schéma, le <a href="research/">mode Research</a> permet de développer un indicateur et
-      de mesurer ce qui suit ses signaux, sans compilation. Il est pour l'instant relié au
-      <a href="algo/">mode algorithmique</a> : les deux partagent le même graphique et le même registre de validation.
-    </p>
-    <div class="modes">
-      <div class="mode">
-        <h3>Algorithmique</h3>
-        <p>Le mode algorithmique permet de tester et d'évaluer des stratégies systématiques,
-           avec leur propre logique de signal, de sizing et de gestion du risque.</p>
-        <div class="c">porteur : trades clos</div>
-      </div>
-      <div class="mode">
-        <h3>Allocation</h3>
-        <p>Le mode allocation applique cette architecture à la construction et au suivi de
-           portefeuilles multi-actifs, avec des règles de pondération et de rebalancement
-           configurables.</p>
-        <div class="c">porteur : NAV nette de l'emprunt</div>
-      </div>
-      <div class="mode">
-        <h3>Investissement, en développement</h3>
-        <p>Le mode investissement prolonge cette logique en traitant chaque stratégie
-           algorithmique comme une ligne de portefeuille à part entière. Chaque stratégie
-           conserve sa propre gestion du risque et son accès à la trésorerie. Les contraintes de
-           rebalancement peuvent également y être appliquées de manière optionnelle, notamment
-           pour piloter l'utilisation du cash. L'investissement est traité au comptant.</p>
-        <div class="c">porteur : rendement pondéré par le temps</div>
-      </div>
-    </div>
-    <p class="tcap">
-      Cette « assetification » des stratégies permet de faire remonter la couche de sizing de la
-      branche algorithmique jusqu'au niveau du portefeuille d'investissement.
-    </p>
-
-    <div class="band">
-      <img src="img/band-equity.png" alt="Sortie du moteur : NAV, paliers de trésorerie, rebalancements, drawdown" loading="lazy">
-      <div class="cap">
-        Mode allocation, sortie brute. La courbe verte est la NAV, les losanges violets les
-        décisions de rebalancement, les lignes basses les paliers de trésorerie, le panneau du
-        bas le drawdown.
-      </div>
-    </div>
-
-        <div class="lbl">Huit entrées</div>
+      <p class="tech-note">Contrairement à Nautilus Trader ou QuantConnect, ce moteur est conçu pour la recherche — itérations rapides et validation statistique —, pas pour l'exécution en direct.</p>
+    </section>
+    <div class="lbl">Huit entrées</div>
     <div class="cards">
       <a class="card" href="research/">
         <div class="shot"><img src="img/research-ema-chart.png" alt="Graphique du mode Research : signaux long et short et EMA 50" loading="lazy"></div>
@@ -490,144 +670,145 @@ h1.on .w{opacity:1;transform:none}
   </div>
 
   <div class="wrap lang-en">
-    <div class="mast-top">
-      <div>Arnaud Barbier</div>
-      <div>Signals · Portfolios · Accounts</div>
-    </div>
-
-    <h1>Multi-strategy backtesting engine, and validation layer.</h1>
-
-    <p class="lede">
-      The point of the project: <b>cut the time between an investment hypothesis, its test and
-      its validation</b>. The user writes the strategy logic and directly configures the
-      portfolio's cash, borrowing, fees and currencies. The engine handles the entire execution
-      process. A validation layer then puts the result to the test. It can also evaluate an
-      already profitable strategy to estimate the extent to which its performance can be
-      reproduced.
-    </p>
-
-    <p class="lede2">
-      A Numba-compiled core keeps the portfolio's books on every bar: cash tiers, borrow
-      tranches indexed on a real market rate, several currencies, fees that accrue on one clock
-      and are paid on another. Three execution modes share that kernel: algorithmic signals,
-      portfolio allocation, and tracking a real account. The portfolio accounting belongs to the
-      last two.
-    </p>
-
-    <div class="figs">
-      <div class="fig">
-        <div class="k">Declaring a portfolio</div>
-        <div class="v">40 lines</div>
-        <div class="n">reserves, borrowing, fees, currencies</div>
+    <section class="hero" aria-labelledby="hero-en">
+      <div class="mast-top"><div>Arnaud Barbier</div><div>Signals · Portfolios · Accounts</div></div>
+      <h1 id="hero-en">A Python research framework to model, improve and create your strategies</h1>
+      <p class="hero-sub">Turn an idea or a hunch into a tested result, as simply and reliably as possible.</p>
+      <div class="hero-proof hero-proof-2">
+        <div class="fig">
+          <ul class="fig-list">
+            <li><b>Supports</b> any <a href="#modes-en-title">allocation</a> or management strategy idea possible</li>
+            <li><b>Lets you recreate</b> existing strategies to study and improve them</li>
+            <li><b>Your attention</b> stays on the strategy, not on what tests it</li>
+          </ul>
+        </div>
+        <div class="fig fig-featured">
+          <div class="k">A simple environment</div>
+          <ul class="fig-list">
+            <li><b>Under 1 minute</b> to configure a complex backtest</li>
+            <li><b>Under 1 second</b> for a realistic, dense run</li>
+          </ul>
+          <div class="n">Results analysis draws on a broad set of built-in validation tests.</div>
+        </div>
       </div>
-      <div class="fig">
-        <div class="k">Cost of a refutation</div>
-        <div class="v">3 lines</div>
-        <div class="n">three calls, three verdicts</div>
+    </section>
+
+    <aside class="questions-banner" aria-label="Questions a portfolio manager might ask">
+      <blockquote>“What would this fund, weighting or strategy have done in my allocation?”</blockquote>
+      <blockquote>“What would that management approach I heard about, and find interesting, really have done?”</blockquote>
+      <p class="question-close">What is missing is the tool to answer quickly. Not the expertise.</p>
+    </aside>
+
+    <section class="answer" aria-labelledby="answer-en-title">
+      <h2 id="answer-en-title">Get the answer in 1 minute</h2>
+      <ol class="answer-timeline">
+        <li><span class="step-no">01</span><b>Describe the idea</b><p>A strategy, weighting or fund to test in an allocation.</p></li>
+        <li><span class="step-no">02</span><b>Run the test</b><p>Cash, costs, currencies and execution conditions enter the calculation.</p></li>
+        <li><span class="step-no">03</span><b>Read the verdict</b><p>Performance and drawdown, then statistical tests: does the result hold up, or could it be chance?</p></li>
+      </ol>
+      <figure class="demo-result"><img src="img/band-equity.png" alt="Allocation test result: NAV curve, cash reserves, rebalance decisions and drawdown" loading="lazy">
+        <figcaption>Allocation mode output: NAV, cash reserves, rebalancing and drawdown.</figcaption></figure>
+      <div class="demo-films">
+        <div class="demo-films-head"><p class="demo-films-k">Example of use</p><p class="demo-films-meta">(less than one minute of video)</p></div>
+        <div class="demo-story" data-carousel-lang="en" role="region" aria-label="Example of use in video">
+          <div class="demo-steps">
+            <article class="demo-step is-current" data-demo-step="0"><span class="step-no">01 / 04</span><h3>Prepare the study</h3><p>Work takes place in a preconfigured notebook with a simple API: configure borrowing, cash management and more.</p><div class="demo-mobile-video"><video muted controls playsinline preload="none" poster="https://arnaud-barbier.github.io/img/studio-1-poster.jpg" title="Prepare a backtest study"><source src="https://arnaud-barbier.github.io/video/studio-1-creer-notebook.mp4" type="video/mp4"></video></div></article>
+            <article class="demo-step" data-demo-step="1"><span class="step-no">02 / 04</span><h3>Connect the logic</h3><p>Everything is already connected. Add your strategy to the prepared framework.</p><div class="demo-mobile-video"><video muted controls playsinline preload="none" poster="https://arnaud-barbier.github.io/img/studio-2-poster.jpg" title="Connect the strategy logic"><source src="https://arnaud-barbier.github.io/video/studio-2-importer-logique.mp4" type="video/mp4"></video></div></article>
+            <article class="demo-step" data-demo-step="2"><span class="step-no">03 / 04</span><h3>Read the parameters</h3><p>Each parameter is documented, easy to access and import while the study is configured.</p><div class="demo-mobile-video"><video muted controls playsinline preload="none" poster="https://arnaud-barbier.github.io/img/studio-3-poster.jpg" title="Consult parameter documentation"><source src="https://arnaud-barbier.github.io/video/studio-3-documentation-active.mp4" type="video/mp4"></video></div></article>
+            <article class="demo-step" data-demo-step="3"><span class="step-no">04 / 04</span><h3>Run and review</h3><p>One click in the notebook's left navigation panel launches the backtest and displays the first results.</p><div class="demo-mobile-video"><video muted controls playsinline preload="none" poster="https://arnaud-barbier.github.io/img/studio-4-poster.jpg" title="Run the backtest and review the results"><source src="https://arnaud-barbier.github.io/video/studio-4-lancer-resultats.mp4" type="video/mp4"></video></div></article>
+          </div>
+          <div class="demo-stage-wrap">
+            <div class="demo-stage-bar"><span data-stage-label>Step 1 of 4</span><span class="track"><i data-stage-fill></i></span></div>
+            <div class="demo-stage">
+              <figure class="demo-slide is-active" data-slide="0" aria-hidden="false"><video autoplay muted controls playsinline preload="none" poster="https://arnaud-barbier.github.io/img/studio-1-poster.jpg" title="Prepare a backtest study"><source src="https://arnaud-barbier.github.io/video/studio-1-creer-notebook.mp4" type="video/mp4">Your browser does not support video playback.</video></figure>
+              <figure class="demo-slide" data-slide="1" aria-hidden="true"><video muted controls playsinline preload="none" poster="https://arnaud-barbier.github.io/img/studio-2-poster.jpg" title="Connect the strategy logic"><source src="https://arnaud-barbier.github.io/video/studio-2-importer-logique.mp4" type="video/mp4">Your browser does not support video playback.</video></figure>
+              <figure class="demo-slide" data-slide="2" aria-hidden="true"><video muted controls playsinline preload="none" poster="https://arnaud-barbier.github.io/img/studio-3-poster.jpg" title="Consult parameter documentation"><source src="https://arnaud-barbier.github.io/video/studio-3-documentation-active.mp4" type="video/mp4">Your browser does not support video playback.</video></figure>
+              <figure class="demo-slide" data-slide="3" aria-hidden="true"><video muted controls playsinline preload="none" poster="https://arnaud-barbier.github.io/img/studio-4-poster.jpg" title="Run the backtest and review the results"><source src="https://arnaud-barbier.github.io/video/studio-4-lancer-resultats.mp4" type="video/mp4">Your browser does not support video playback.</video></figure>
+            </div>
+            <p class="demo-stage-caption" data-stage-caption>Work takes place in a preconfigured notebook with a simple API: configure borrowing, cash management and more.</p>
+          </div>
+        </div>
       </div>
-      <div class="fig">
-        <div class="k">Accounting identity</div>
-        <div class="v">4.44 e−16</div>
-        <div class="n">worst residual, nine years of daily bars</div>
+      <a class="demo-cta" href="mailto:arnaud.barbier@grenoble-em.com?subject=Backtest%20engine%20demonstration">Live demonstration on request →</a>
+    </section>
+    <section class="modes-section" aria-labelledby="modes-en-title">
+      <div class="modes-heading"><h2 id="modes-en-title">One core, four modes</h2><p>One shared core for designing, testing and monitoring a strategy.</p></div>
+      <figure class="mode-diagram">
+        <svg viewBox="0 0 900 430" role="img" aria-label="Mode tree: the Numba kernel splits into algorithmic and allocation, which rejoin to form investment mode. In the centre, Research mode, linked to algorithmic mode.">
+          <path class="tl" pathLength="1" style="--d:.25s" d="M450,372 L450,346"/>
+          <path class="tl" pathLength="1" style="--d:.45s" d="M450,346 C450,320 350,300 292,290"/>
+          <path class="tl" pathLength="1" style="--d:.45s" d="M450,346 C450,320 550,300 608,290"/>
+          <path class="tl-i" pathLength="1" style="--d:1.05s" d="M165,238 C165,195 250,165 348,124"/>
+          <path class="tl-i" pathLength="1" style="--d:1.05s" d="M735,238 C735,195 650,165 552,124"/>
+
+          <g class="tg" style="--d:0s">
+          <rect class="tn" x="270" y="372" width="360" height="48" rx="1"/>
+          <text class="tk" x="450" y="394" text-anchor="middle">NUMBA KERNEL</text>
+          <text class="t2" x="450" y="412" text-anchor="middle">reads bars, executes your order book</text>
+          </g>
+
+          <a href="algo/" class="tlink"><g class="tg" style="--d:.75s">
+          <rect class="tn" x="40" y="240" width="250" height="68" rx="1"/>
+          <text class="t1" x="62" y="272">Algorithmic</text>
+          <text class="t2" x="62" y="294">does a rule have an edge?</text>
+          </g></a>
+
+          <g class="tg" style="--d:.75s">
+          <rect class="tn" x="610" y="240" width="250" height="68" rx="1"/>
+          <text class="t1" x="632" y="272">Allocation</text>
+          <text class="t2" x="632" y="294">does a weighting beat 1/N?</text>
+          </g>
+
+          <g class="tg" style="--d:1.4s">
+          <rect class="tn-i" x="305" y="44" width="290" height="76" rx="1"/>
+          <text class="t1" x="327" y="80">Investment</text>
+          <text class="t2" x="327" y="104">what did a real account live?</text>
+          <rect class="tchip" x="136" y="164" width="168" height="32" rx="1"/>
+          <text class="t2" x="220" y="185" text-anchor="middle">sizing layer</text>
+          </g>
+
+          <a href="research/" class="tlink"><g class="tg" style="--d:1.75s">
+          <path class="tl-r" d="M290,262 C322,262 322,229 350,229"/>
+          <text class="tk" x="450" y="188" text-anchor="middle">PYTHON · NO COMPILATION</text>
+          <rect class="tn-r" x="350" y="196" width="200" height="66" rx="1"/>
+          <text class="t1" x="370" y="226">Research</text>
+          <text class="t2" x="370" y="248">what follows a signal?</text>
+          </g></a>
+        </svg>
+        <div class="mode-mobile-diagram" aria-hidden="true">
+          <div class="mtd-node mtd-core"><span class="mtd-k">Numba Kernel</span><span class="mtd-n">reads bars, executes your order book</span></div>
+          <div class="mtd-connector"><span>↓</span></div>
+          <div class="mtd-row">
+            <div class="mtd-node"><span class="mtd-t1">Algorithmic</span><span class="mtd-t2">does a rule have an edge?</span><span class="mtd-chip">sizing layer</span></div>
+            <div class="mtd-node"><span class="mtd-t1">Allocation</span><span class="mtd-t2">does a weighting beat 1/N?</span></div>
+          </div>
+          <div class="mtd-connector dashed"><span>↓</span> linked to Algorithmic</div>
+          <div class="mtd-node mtd-research"><span class="mtd-tag">Python · no compilation</span><span class="mtd-t1">Research</span><span class="mtd-t2">what follows a signal?</span></div>
+          <div class="mtd-connector"><span>↓</span></div>
+          <div class="mtd-node mtd-invest"><span class="mtd-t1">Investment</span><span class="mtd-t2">what did a real account live?</span></div>
+        </div>
+      </figure>
+      <div class="modes">
+        <article class="mode"><h3><a href="algo/">Algorithmic</a></h3><p>Algorithmic mode tests and evaluates systematic strategies, each with its own signal logic, sizing and risk management.</p><div class="c">carrier: closed trades</div></article>
+        <article class="mode"><h3>Allocation</h3><p>Builds and monitors multi-asset and, over time, multi-product portfolios, with weighting rules, advanced and customizable portfolio accounting, and rebalancing built into the mode and configurable.</p><div class="c">carrier: Net Asset Value (NAV) net of borrowing</div></article>
+        <article class="mode"><h3><a href="research/">Research</a></h3><p>Enables research and creation of all kinds of indicators, with trading-platform-style visualisation. Over time, it will project charts of price evolution in the spirit of tools such as Quantower.</p><div class="c">carrier: signal, linked to Algo mode</div></article>
+        <article class="mode"><h3>Investment, <span class="mode-status">in development</span></h3><p>Tests systematic strategies with low transaction volume and a cash investment. It uses Allocation's accounting without Algorithmic mode's leverage system.</p><div class="c">carrier: time-weighted return</div></article>
       </div>
-      <div class="fig">
-        <div class="k">Out of sample</div>
-        <div class="v">never opened</div>
-        <div class="n">30 % of the history sealed</div>
+    </section>
+
+
+    <section class="tech-facts" aria-labelledby="tech-en-title"><div class="lbl" id="tech-en-title">Technical markers</div>
+      <p class="lede2">A Numba-compiled core keeps the portfolio's books on every bar: cash tiers, borrow tranches indexed on a real market rate, several currencies, fees that accrue on one clock and are paid on another. Three execution modes share that kernel: algorithmic signals, portfolio allocation, and tracking a real account. Portfolio accounting belongs to the last two.</p>
+      <p class="tcap">This assetification of strategies carries the sizing layer from the algorithmic branch up to the investment-portfolio level.</p>
+      <div class="figs">
+        <div class="fig"><div class="k">Declaring a portfolio</div><div class="v">40 lines</div><div class="n">reserves, borrowing, fees, currencies</div></div>
+        <div class="fig"><div class="k">Cost of a refutation</div><div class="v">3 lines</div><div class="n">three calls, three verdicts</div></div>
+        <div class="fig"><div class="k">Accounting identity</div><div class="v">4.44 e−16</div><div class="n">worst residual, nine years of daily bars</div></div>
+        <div class="fig"><div class="k">Out of sample</div><div class="v">never opened</div><div class="n">30 % of the history sealed</div></div>
       </div>
-    </div>
-
-
-    <div class="lbl">One core, three questions</div>
-    <p class="lede" style="margin-top:-.4rem">
-      The engine is organised around three complementary modes. Each answers a different
-      question and is therefore measured differently. <b>The engine applies the right measure,
-      not the user.</b>
-    </p>
-    <div class="tree">
-      <svg viewBox="0 0 900 430" role="img" aria-label="Mode tree: the Numba kernel splits into algorithmic and allocation, which rejoin to form investment mode. In the centre, Research mode, linked to algorithmic mode.">
-        <path class="tl" pathLength="1" style="--d:.25s" d="M450,372 L450,346"/>
-        <path class="tl" pathLength="1" style="--d:.45s" d="M450,346 C450,320 350,300 292,290"/>
-        <path class="tl" pathLength="1" style="--d:.45s" d="M450,346 C450,320 550,300 608,290"/>
-        <path class="tl-i" pathLength="1" style="--d:1.05s" d="M165,238 C165,195 250,165 348,124"/>
-        <path class="tl-i" pathLength="1" style="--d:1.05s" d="M735,238 C735,195 650,165 552,124"/>
-
-        <g class="tg" style="--d:0s">
-        <rect class="tn" x="300" y="372" width="300" height="48" rx="1"/>
-        <text class="tk" x="450" y="394" text-anchor="middle">NUMBA KERNEL</text>
-        <text class="t2" x="450" y="412" text-anchor="middle">bars read once</text>
-        </g>
-
-        <a href="algo/" class="tlink"><g class="tg" style="--d:.75s">
-        <rect class="tn" x="40" y="240" width="250" height="68" rx="1"/>
-        <text class="t1" x="62" y="272">Algorithmic</text>
-        <text class="t2" x="62" y="294">does a rule have an edge?</text>
-        </g></a>
-
-        <g class="tg" style="--d:.75s">
-        <rect class="tn" x="610" y="240" width="250" height="68" rx="1"/>
-        <text class="t1" x="632" y="272">Allocation</text>
-        <text class="t2" x="632" y="294">does a weighting beat 1/N?</text>
-        </g>
-
-        <g class="tg" style="--d:1.4s">
-        <rect class="tn-i" x="305" y="44" width="290" height="76" rx="1"/>
-        <text class="t1" x="327" y="80">Investment</text>
-        <text class="t2" x="327" y="104">what did a real account live?</text>
-        <rect class="tchip" x="136" y="164" width="168" height="32" rx="1"/>
-        <text class="t2" x="220" y="185" text-anchor="middle">sizing layer</text>
-        </g>
-
-        <a href="research/" class="tlink"><g class="tg" style="--d:1.75s">
-        <path class="tl-r" d="M290,262 C322,262 322,229 350,229"/>
-        <text class="tk" x="450" y="188" text-anchor="middle">PYTHON · NO COMPILE STEP</text>
-        <rect class="tn-r" x="350" y="196" width="200" height="66" rx="1"/>
-        <text class="t1" x="370" y="226">Research</text>
-        <text class="t2" x="370" y="248">what follows a signal?</text>
-        </g></a>
-      </svg>
-    </div>
-    <p class="tcap">
-      In the centre of the diagram, <a href="research/">Research mode</a> lets you develop an indicator and
-      measure what follows its signals, with no compilation. For now it is linked to
-      <a href="algo/">algorithmic mode</a>: both share the same chart and the same validation registry.
-    </p>
-    <div class="modes">
-      <div class="mode">
-        <h3>Algorithmic</h3>
-        <p>Algorithmic mode tests and evaluates systematic strategies, each with its own signal
-           logic, sizing and risk management.</p>
-        <div class="c">carrier: closed trades</div>
-      </div>
-      <div class="mode">
-        <h3>Allocation</h3>
-        <p>Allocation mode applies this architecture to building and monitoring multi-asset
-           portfolios, with configurable weighting and rebalancing rules.</p>
-        <div class="c">carrier: NAV net of borrowing</div>
-      </div>
-      <div class="mode">
-        <h3>Investment, in development</h3>
-        <p>Investment mode extends this logic by treating each algorithmic strategy as a
-           portfolio line in its own right. Each strategy retains its own risk management and
-           access to cash. Rebalancing constraints can also be applied optionally, notably to
-           manage the use of cash. Investment is handled on a spot basis.</p>
-        <div class="c">carrier: time-weighted return</div>
-      </div>
-    </div>
-    <p class="tcap">
-      This assetification of strategies carries the sizing layer from the algorithmic branch up
-      to the investment-portfolio level.
-    </p>
-
-    <div class="band">
-      <img src="img/band-equity.png" alt="Engine output: NAV, cash tiers, rebalances, drawdown" loading="lazy">
-      <div class="cap">
-        Allocation mode, raw output. The green line is NAV, the purple diamonds are
-        rebalance decisions, the lower lines are the cash tiers, the bottom panel is drawdown.
-      </div>
-    </div>
-
-        <div class="lbl">Eight ways in</div>
+      <p class="tech-note">Unlike Nautilus Trader or QuantConnect, this engine is built for research—fast iteration and statistical validation—not live execution.</p>
+    </section>
+    <div class="lbl">Eight ways in</div>
     <div class="cards">
       <a class="card" href="research/">
         <div class="shot"><img src="img/research-ema-chart.png" alt="Research mode chart: long and short signals and EMA 50" loading="lazy"></div>
@@ -759,6 +940,7 @@ h1.on .w{opacity:1;transform:none}
     page.setAttribute("data-lang", l);
     btns.forEach(function(b){ b.setAttribute("aria-pressed", String(b.dataset.set === l)); });
     try { localStorage.setItem("ab-lang", l); } catch (e) {}
+    window.dispatchEvent(new CustomEvent("page-language-change", {detail:{lang:l}}));
   }
   btns.forEach(function(b){ b.addEventListener("click", function(){ set(b.dataset.set); }); });
   try { var s = localStorage.getItem("ab-lang"); if (s === "fr" || s === "en") set(s); } catch (e) {}
@@ -782,12 +964,116 @@ h1.on .w{opacity:1;transform:none}
   var to = new IntersectionObserver(function(es){
     es.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add("in"); to.unobserve(e.target); } });
   }, {threshold:.35});
-  document.querySelectorAll(".tree").forEach(function(t){ t.classList.add("anim"); to.observe(t); });
+  document.querySelectorAll(".tree, .mode-diagram").forEach(function(t){ t.classList.add("anim"); to.observe(t); });
   /* apparition au défilement */
   var io = new IntersectionObserver(function(es){
     es.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); } });
   }, {rootMargin:"0px 0px -6% 0px"});
   document.querySelectorAll(".fig, .mode, .band, .card, .roadmap article").forEach(function(el){ el.classList.add("reveal"); io.observe(el); });
+})();
+
+(function(){
+  var page = document.getElementById("page");
+  var stories = document.querySelectorAll(".demo-story");
+  stories.forEach(function(story){
+    var lang = story.dataset.carouselLang;
+    var steps = Array.prototype.slice.call(story.querySelectorAll("[data-demo-step]"));
+    var slides = Array.prototype.slice.call(story.querySelectorAll(".demo-slide"));
+    var mobileVideos = steps.map(function(step){ return step.querySelector(".demo-mobile-video video"); });
+    var stageLabel = story.querySelector("[data-stage-label]");
+    var stageFill = story.querySelector("[data-stage-fill]");
+    var stageCaption = story.querySelector("[data-stage-caption]");
+    var current = 0, inView = false, finishTimer, scrollTick = false;
+    if (!slides.length || !steps.length) return;
+
+    function pause(video){
+      if (!video || video.paused) return;
+      video.dataset.scriptPaused = "1";
+      video.pause();
+    }
+    function trackUserPause(video){
+      if (!video) return;
+      video.addEventListener("pause", function(){
+        if (video.dataset.scriptPaused) delete video.dataset.scriptPaused;
+        else video.dataset.userPaused = "1";
+      });
+      video.addEventListener("play", function(){ delete video.dataset.userPaused; });
+    }
+    slides.forEach(function(slide){ trackUserPause(slide.querySelector("video")); });
+    mobileVideos.forEach(trackUserPause);
+
+    function syncPlayback(){
+      var mobile = window.matchMedia && window.matchMedia("(max-width:760px)").matches;
+      var shouldPlay = page.dataset.lang === lang && inView && document.visibilityState !== "hidden";
+      slides.forEach(function(slide, index){
+        if (mobile || index !== current || !shouldPlay) pause(slide.querySelector("video"));
+      });
+      mobileVideos.forEach(function(video, index){
+        if (!mobile || index !== current || !shouldPlay) pause(video);
+      });
+      if (!shouldPlay) return;
+      var activeVideo = mobile ? mobileVideos[current] : slides[current].querySelector("video");
+      if (!activeVideo || activeVideo.dataset.userPaused) return;
+      var attempt = activeVideo.play();
+      if (attempt && attempt.catch) attempt.catch(function(){});
+    }
+
+    function show(next){
+      if (next === current) { syncPlayback(); return; }
+      window.clearTimeout(finishTimer);
+      var outgoing = slides[current], incoming = slides[next];
+      slides.forEach(function(slide){ slide.classList.remove("is-under"); });
+      outgoing.classList.remove("is-active");
+      outgoing.classList.add("is-under");
+      outgoing.setAttribute("aria-hidden", "true");
+      incoming.classList.remove("is-under", "is-active", "is-entering", "from-left");
+      if (next < current) incoming.classList.add("from-left");
+      incoming.classList.add("is-entering");
+      incoming.setAttribute("aria-hidden", "false");
+      pause(outgoing.querySelector("video"));
+      pause(mobileVideos[current]);
+      current = next;
+      steps.forEach(function(step, index){ step.classList.toggle("is-current", index === current); });
+      if (stageLabel) stageLabel.textContent = lang === "fr" ? "Étape " + (current + 1) + " sur " + steps.length : "Step " + (current + 1) + " of " + steps.length;
+      if (stageFill) stageFill.style.width = ((current + 1) / steps.length * 100) + "%";
+      if (stageCaption) stageCaption.textContent = steps[current].querySelector("p").textContent;
+      try { incoming.querySelector("video").currentTime = 0; } catch (_) {}
+      try { mobileVideos[current].currentTime = 0; } catch (_) {}
+      requestAnimationFrame(function(){
+        incoming.classList.remove("is-entering", "from-left");
+        incoming.classList.add("is-active");
+      });
+      function finish(event){
+        if (event && (event.target !== incoming || event.propertyName !== "transform")) return;
+        incoming.removeEventListener("transitionend", finish);
+        window.clearTimeout(finishTimer);
+        outgoing.classList.remove("is-under");
+        finishTimer = null;
+        syncPlayback();
+      }
+      incoming.addEventListener("transitionend", finish);
+      finishTimer = window.setTimeout(function(){ finish(); }, 720);
+    }
+
+    function updateFromScroll(){
+      scrollTick = false;
+      if (page.dataset.lang !== lang) return;
+      var vh = window.innerHeight, selected = 0;
+      steps.forEach(function(step, index){ if (step.getBoundingClientRect().top < vh * .55) selected = index; });
+      if (selected !== current) show(selected);
+      var rect = story.getBoundingClientRect();
+      inView = rect.bottom > 0 && rect.top < vh;
+      syncPlayback();
+    }
+    function requestScrollUpdate(){
+      if (!scrollTick){ scrollTick = true; requestAnimationFrame(updateFromScroll); }
+    }
+    window.addEventListener("scroll", requestScrollUpdate, {passive:true});
+    window.addEventListener("resize", requestScrollUpdate);
+    window.addEventListener("page-language-change", function(){ syncPlayback(); requestScrollUpdate(); });
+    document.addEventListener("visibilitychange", syncPlayback);
+    requestScrollUpdate();
+  });
 })();
 </script>
 </body>
