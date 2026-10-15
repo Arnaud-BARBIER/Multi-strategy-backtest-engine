@@ -432,6 +432,11 @@ h1.on .w{opacity:1;transform:none}
 #page .hero .hero-proof .fig-featured .n{font-size:1.12rem;line-height:1.48}
 </style>
 <script src="assets/endnav.js?v=3" defer></script>
+
+<style id="homepage-card-title-hierarchy">
+#page .entries-section .card h2{font-family:"Times New Roman",Tinos,Times,serif;font-size:1.05rem;font-weight:700;letter-spacing:-.01em;line-height:1.25;color:#fff}
+#page .entries-section .card .tag{font-family:var(--f-sans);font-size:.95rem;letter-spacing:0;text-transform:none;color:#fff}
+</style>
 </head>
 <body>
 <div id="page" data-lang="fr">
@@ -452,14 +457,14 @@ h1.on .w{opacity:1;transform:none}
           <ul class="fig-list">
             <li><b>Prend en charge</b> toute idée de stratégie d'<a href="#modes-fr-title">allocation</a> ou de gestion possible</li>
             <li><b>Permet de reproduire</b> vos stratégies existantes pour les étudier et les améliorer</li>
-            <li><b>Toute votre attention</b> va à votre stratégie, pas à ce qui la teste</li>
+            <li><b>Toute votre attention</b> est dédiée à votre stratégie, pas à ce qui la teste</li>
           </ul>
         </div>
         <div class="fig fig-featured">
           <div class="k">Environnement simple d'utilisation</div>
           <ul class="fig-list">
             <li><b>Moins d'1 minute</b> pour configurer un backtest complexe</li>
-            <li><b>Moins d'une seconde</b> pour un run réaliste et dense</li>
+            <li><b>Moins d'une seconde</b> pour un run dense et réaliste</li>
           </ul>
           <div class="n">Analyse des résultats prise en charge par les tests de validation du framework.</div>
         </div>
@@ -563,9 +568,9 @@ h1.on .w{opacity:1;transform:none}
       </figure>
       <div class="modes">
         <article class="mode"><h3><a href="algo/">Algorithmique</a></h3><p>Le mode algorithmique permet de tester et d'évaluer des stratégies systématiques, avec leur propre logique de signal, de sizing et de gestion du risque.</p><div class="c">porteur : trades clos</div></article>
-        <article class="mode"><h3>Allocation</h3><p>Prend en charge la construction et le suivi de portefeuilles multi-actifs et, à terme, multi-produits, avec des règles de pondération, une comptabilité de portefeuille avancée et personnalisable, et un rebalancement intégré au mode, configurable.</p><div class="c">porteur : Net Asset Value (NAV)</div></article>
+        <article class="mode"><h3>Allocation</h3><p>Le mode allocation applique cette architecture à la construction et au suivi de portefeuilles multi-actifs, avec des règles de pondération et de rebalancement configurables.</p><div class="c">porteur : Net Asset Value (NAV) nette de l'emprunt</div></article>
         <article class="mode"><h3><a href="research/">Research</a></h3><p>Facilite la recherche et la création de tout type d'indicateur, avec leur visualisation façon plateforme de trading. À terme, permet de projeter des graphiques en tout genre liés à l'évolution des prix, dans l'esprit d'outils comme Quantower.</p><div class="c">porteur : signal, relié au mode Algo</div></article>
-        <article class="mode"><h3>Investissement, <span class="mode-status">en développement</span></h3><p>Permet de tester des stratégies systématiques à faible volume de transaction, pour un montant investi au comptant. Bénéficie de la comptabilité du mode Allocation, sans le système de levier du mode Algorithmique.</p><div class="c">porteur : rendement pondéré par le temps</div></article>
+        <article class="mode"><h3>Investissement, <span class="mode-status">en développement</span></h3><p>Le mode investissement prolonge cette logique en traitant chaque stratégie algorithmique comme une ligne de portefeuille à part entière. Chaque stratégie conserve sa propre gestion du risque et son accès à la trésorerie. Les positions sont investies au comptant, sans le levier du mode Algorithmique.</p><div class="c">porteur : rendement pondéré par le temps</div></article>
       </div>
     </section>
 
@@ -590,38 +595,38 @@ h1.on .w{opacity:1;transform:none}
     <div class="cards">
       <a class="card" href="research/">
         <div class="shot"><img src="img/research-ema-chart.png" alt="Graphique du mode Research : signaux long et short et EMA 50" loading="lazy"></div>
-        <div class="tag"><span>L'étude du signal</span><span>6 octobre 2026</span></div>
         <h2>Mode Research</h2>
+        <div class="tag"><span>7 min · 6 octobre 2026</span></div>
         <p>Développer un indicateur et mesurer ce qui suit ses signaux, comparés à des entrées au hasard et à la version précédente. Le résultat s'affiche sur un graphique relié au notebook, jusqu'au freeze et au hors échantillon.</p>
         <div class="tests"><b>Le lien avec Algo :</b> le même graphique et le même registre de validation.</div>
         <div class="go">Explorer le mode Research →</div>
       </a>
       <a class="card" href="algo/">
         <div class="shot"><img src="img/algo-trades-chart.png" alt="Backtest du mode Algo : régimes, entrées et sorties" loading="lazy"></div>
-        <div class="tag"><span>La gestion des trades</span><span>6 octobre 2026</span></div>
         <h2>Mode Algo</h2>
+        <div class="tag"><span>7 min · 6 octobre 2026</span></div>
         <p>Transformer un signal en stratégie : choix des entrées, gestion des positions à quatre niveaux, frais d'exécution et sizing. Chaque trade reste inspectable, du prix visé au prix exécuté.</p>
         <div class="tests"><b>Le lien avec Research :</b> le backtest affiché dans le graphique du mode Research.</div>
         <div class="go">Explorer le mode Algo →</div>
       </a>
       <a class="card" href="validation/">
         <div class="shot"><img src="img/thumb-validation.png" alt="Courbes de la stratégie et des deux baselines" loading="lazy"></div>
-        <div class="tag"><span>La mesure</span><span>6 min · 26 août 2026</span></div>
         <h2>Validation · Optimisation max DDR duration</h2>
+        <div class="tag"><span>6 min · 26 août 2026</span></div>
         <div class="tests"><b>Tests montrés :</b> <code>validation_baseline</code>, <code>validation_null_sizing</code>, <code>validation_null_leverage</code>.</div>
         <div class="go">Lire la note →</div>
       </a>
       <a class="card" href="validation-2/">
         <div class="shot"><img src="img/thumb-validation-2.png" alt="Courbes de la stratégie et des deux baselines" loading="lazy"></div>
-        <div class="tag"><span>La mesure</span><span>7 min · 4 septembre 2026</span></div>
         <h2>Validation · Optimisation Sharpe</h2>
+        <div class="tag"><span>7 min · 4 septembre 2026</span></div>
         <div class="tests"><b>Tests montrés :</b> <code>validation_baseline</code>, <code>validation_purchasing_power</code>, <code>validation_oos_retention</code>, <code>validation_null_leverage</code>, <code>validation_cross_asset</code>, <code>validation_mc</code>, <code>validation_edge_concentration</code>, <code>validation_dsr</code>, <code>trial_counter_status</code> et <code>freeze_configuration</code>.</div>
         <div class="go">Lire la note →</div>
       </a>
       <a class="card" href="engine/">
         <div class="shot"><img src="img/thumb-engine.png" alt="Bloc AllocationSpec" loading="lazy"></div>
-        <div class="tag"><span>L'instrument</span><span>5 min · 26 août 2026</span></div>
         <h2>Mode allocation</h2>
+        <div class="tag"><span>5 min · 26 août 2026</span></div>
         <p>
           Le code réel que l'utilisateur écrit et la sortie réelle que le moteur renvoie. Quarante lignes déclarent
           les réserves, l'emprunt indexé, les frais à deux horloges et quatre devises. Le bilan
@@ -631,8 +636,8 @@ h1.on .w{opacity:1;transform:none}
       </a>
       <a class="card" href="costs/">
         <div class="shot"><img src="img/costs-cascade.png" alt="NAV nette et courbes reconstituées avant coûts" loading="lazy"></div>
-        <div class="tag"><span>Le rapprochement</span><span>5 min · 1er septembre 2026</span></div>
         <h2>Attribution des coûts et de la performance</h2>
+        <div class="tag"><span>5 min · 1er septembre 2026</span></div>
         <p>
           Spread, commissions, taxes, slippage, carry, frais de gestion et financement :
           comment sont-ils calculés et appliqués pour un backtest réaliste et robuste en mode
@@ -642,8 +647,8 @@ h1.on .w{opacity:1;transform:none}
       </a>
       <a class="card" href="stateful/">
         <div class="shot"><img src="img/thumb-stateful.png" alt="Schéma du mode replay" loading="lazy"></div>
-        <div class="tag"><span>La mécanique</span><span>7 min · 26 août 2026</span></div>
         <h2>Replay, resume, watcher</h2>
+        <div class="tag"><span>7 min · 26 août 2026</span></div>
         <p>
           Comment un kernel compilé prend des décisions qui dépendent de son propre passé.
           Trois régimes, trois schémas, et ce que chacun coûte.
@@ -652,8 +657,8 @@ h1.on .w{opacity:1;transform:none}
       </a>
       <a class="card" href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine">
         <div class="shot"><img src="img/thumb-repo.png" alt="Scanner njit" loading="lazy"></div>
-        <div class="tag"><span>Le code</span><span>MIT</span></div>
         <h2>Le dépôt</h2>
+        <div class="tag"><span>MIT</span></div>
         <p>
           Le moteur algorithmique, publié : de quoi définir un signal, le faire tourner sous un
           modèle d'exécution réaliste, et inspecter les trades produits.
@@ -707,7 +712,7 @@ h1.on .w{opacity:1;transform:none}
 <li><a href="validation-2/"><span class="en-tag">La mesure</span><b>Validation · Sharpe</b><small>Dix contrôles, du hors échantillon jusqu'à 80 univers inédits.</small><span class="en-go">Lire <i>→</i></span></a></li>
 <li><a href="costs/"><span class="en-tag">Le rapprochement</span><b>Les coûts</b><small>Chaque coût suivi de sa déclaration jusqu'à son débit dans la NAV.</small><span class="en-go">Lire <i>→</i></span></a></li>
 <li><a href="stateful/"><span class="en-tag">La mécanique</span><b>Replay &amp; resume</b><small>Comment un kernel compilé décide en fonction de son propre passé.</small><span class="en-go">Lire <i>→</i></span></a></li>
-</ol></nav>
+<li><a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine"><span class="en-tag">Le code</span><b>Le dépôt</b><small>Source publique du moteur, sous licence MIT.</small><span class="en-go">Voir sur GitHub <i>→</i></span></a></li></ol></nav>
 <a class="en-site" href="https://arnaud-barbier.github.io/"><span class="en-site-arrow" aria-hidden="true">←</span><span><b>Retour sur mon site principal</b><small>arnaud-barbier.github.io · projets, parcours et contact</small></span></a>
 </aside>
   </div>
@@ -721,14 +726,14 @@ h1.on .w{opacity:1;transform:none}
           <ul class="fig-list">
             <li><b>Supports</b> any <a href="#modes-en-title">allocation</a> or management strategy idea possible</li>
             <li><b>Lets you recreate</b> existing strategies to study and improve them</li>
-            <li><b>Your attention</b> stays on the strategy, not on what tests it</li>
+            <li><b>Your attention</b> is dedicated to your strategy, not to what tests it</li>
           </ul>
         </div>
         <div class="fig fig-featured">
           <div class="k">A simple environment</div>
           <ul class="fig-list">
             <li><b>Under 1 minute</b> to configure a complex backtest</li>
-            <li><b>Under 1 second</b> for a realistic, dense run</li>
+            <li><b>Under 1 second</b> for a dense, realistic run</li>
           </ul>
           <div class="n">Results analysis is supported by the framework's validation tests.</div>
         </div>
@@ -832,9 +837,9 @@ h1.on .w{opacity:1;transform:none}
       </figure>
       <div class="modes">
         <article class="mode"><h3><a href="algo/">Algorithmic</a></h3><p>Algorithmic mode tests and evaluates systematic strategies, each with its own signal logic, sizing and risk management.</p><div class="c">carrier: closed trades</div></article>
-        <article class="mode"><h3>Allocation</h3><p>Builds and monitors multi-asset and, over time, multi-product portfolios, with weighting rules, advanced and customizable portfolio accounting, and rebalancing built into the mode and configurable.</p><div class="c">carrier: Net Asset Value (NAV)</div></article>
+        <article class="mode"><h3>Allocation</h3><p>Allocation mode applies this architecture to building and monitoring multi-asset portfolios, with configurable weighting and rebalancing rules.</p><div class="c">carrier: Net Asset Value (NAV), net of borrowing</div></article>
         <article class="mode"><h3><a href="research/">Research</a></h3><p>Enables research and creation of all kinds of indicators, with trading-platform-style visualisation. Over time, it will project charts of price evolution in the spirit of tools such as Quantower.</p><div class="c">carrier: signal, linked to Algo mode</div></article>
-        <article class="mode"><h3>Investment, <span class="mode-status">in development</span></h3><p>Tests systematic strategies with low transaction volume and a cash investment. It uses Allocation's accounting without Algorithmic mode's leverage system.</p><div class="c">carrier: time-weighted return</div></article>
+        <article class="mode"><h3>Investment, <span class="mode-status">in development</span></h3><p>Investment mode extends this architecture by treating each algorithmic strategy as a portfolio line of its own. Each strategy keeps its own risk management and access to cash. Positions are held in cash assets, without Algorithmic mode's leverage.</p><div class="c">carrier: time-weighted return</div></article>
       </div>
     </section>
 
@@ -859,38 +864,38 @@ h1.on .w{opacity:1;transform:none}
     <div class="cards">
       <a class="card" href="research/">
         <div class="shot"><img src="img/research-ema-chart.png" alt="Research mode chart: long and short signals and EMA 50" loading="lazy"></div>
-        <div class="tag"><span>Signal research</span><span>6 October 2026</span></div>
         <h2>Research mode</h2>
+          <div class="tag"><span>7 min · 6 October 2026</span></div>
         <p>Develop an indicator and measure what follows its signals, compared with random entries and with the previous version. The result appears on a chart linked to the notebook, all the way to the freeze and out-of-sample test.</p>
         <div class="tests"><b>The Algo connection:</b> the same chart and the same validation registry.</div>
         <div class="go">Explore Research mode →</div>
       </a>
       <a class="card" href="algo/">
         <div class="shot"><img src="img/algo-trades-chart.png" alt="Algo mode backtest: regimes, entries and exits" loading="lazy"></div>
-        <div class="tag"><span>Trade management</span><span>6 October 2026</span></div>
         <h2>Algo mode</h2>
+        <div class="tag"><span>7 min · 6 October 2026</span></div>
         <p>Turn a signal into a strategy: entry selection, four levels of position management, execution costs and sizing. Every trade stays inspectable, from target price to executed price.</p>
         <div class="tests"><b>The Research connection:</b> the backtest shown in Research mode's chart.</div>
         <div class="go">Explore Algo mode →</div>
       </a>
       <a class="card" href="validation/">
         <div class="shot"><img src="img/thumb-validation.png" alt="Courbes de la stratégie et des deux baselines" loading="lazy"></div>
-        <div class="tag"><span>The measurement</span><span>6 min · 26 August 2026</span></div>
         <h2>Validation · max drawdown duration optimisation</h2>
+        <div class="tag"><span>6 min · 26 August 2026</span></div>
         <div class="tests"><b>Tests shown:</b> <code>validation_baseline</code>, <code>validation_null_sizing</code>, <code>validation_null_leverage</code>.</div>
         <div class="go">Read the note →</div>
       </a>
     <a class="card" href="validation-2/">
         <div class="shot"><img src="img/thumb-validation-2.png" alt="Strategy and both baselines" loading="lazy"></div>
-        <div class="tag"><span>The measurement</span><span>7 min · 4 September 2026</span></div>
         <h2>Validation · Sharpe optimisation</h2>
+        <div class="tag"><span>7 min · 4 September 2026</span></div>
         <div class="tests"><b>Tests shown:</b> <code>validation_baseline</code>, <code>validation_purchasing_power</code>, <code>validation_oos_retention</code>, <code>validation_null_leverage</code>, <code>validation_cross_asset</code>, <code>validation_mc</code>, <code>validation_edge_concentration</code>, <code>validation_dsr</code>, <code>trial_counter_status</code> and <code>freeze_configuration</code>.</div>
         <div class="go">Read the note →</div>
       </a>
       <a class="card" href="engine/">
         <div class="shot"><img src="img/thumb-engine.png" alt="Bloc AllocationSpec" loading="lazy"></div>
-        <div class="tag"><span>The instrument</span><span>5 min · 26 August 2026</span></div>
         <h2>Allocation mode</h2>
+        <div class="tag"><span>5 min · 26 August 2026</span></div>
         <p>
           The real code that is written and the real output it returns. Forty lines declare
           the reserves, the indexed borrowing, fees on two clocks and four currencies. The
@@ -900,8 +905,8 @@ h1.on .w{opacity:1;transform:none}
       </a>
       <a class="card" href="costs/">
         <div class="shot"><img src="img/costs-cascade.png" alt="Net NAV and reconstructed pre-cost curves" loading="lazy"></div>
-        <div class="tag"><span>The reconciliation</span><span>5 min · FR · 1 September 2026</span></div>
         <h2>Cost and performance attribution</h2>
+        <div class="tag"><span>5 min · FR · 1 September 2026</span></div>
         <p>
           Spread, commissions, taxes, slippage, carry, portfolio fees and financing: how are
           they calculated and applied to a realistic and robust backtest in spot mode? French
@@ -911,8 +916,8 @@ h1.on .w{opacity:1;transform:none}
       </a>
       <a class="card" href="stateful/">
         <div class="shot"><img src="img/thumb-stateful.png" alt="Replay mode diagram" loading="lazy"></div>
-        <div class="tag"><span>The mechanics</span><span>7 min · FR · 26 August 2026</span></div>
         <h2>Replay, resume, watcher</h2>
+        <div class="tag"><span>7 min · FR · 26 August 2026</span></div>
         <p>
           How a compiled kernel makes decisions that depend on its own past. Three regimes,
           three diagrams, and what each one costs. French only for now.
@@ -921,8 +926,8 @@ h1.on .w{opacity:1;transform:none}
       </a>
       <a class="card" href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine">
         <div class="shot"><img src="img/thumb-repo.png" alt="Scanner njit" loading="lazy"></div>
-        <div class="tag"><span>The code</span><span>MIT</span></div>
         <h2>The repository</h2>
+        <div class="tag"><span>MIT</span></div>
         <p>
           The algorithmic engine, published: enough to define a signal, run it under a realistic
           execution model, and inspect the resulting trades.
@@ -976,7 +981,7 @@ h1.on .w{opacity:1;transform:none}
 <li><a href="validation-2/"><span class="en-tag">The measurement</span><b>Validation · Sharpe</b><small>Ten checks, from out of sample to 80 unseen universes.</small><span class="en-go">Read <i>→</i></span></a></li>
 <li><a href="costs/"><span class="en-tag">The reconciliation</span><b>Costs</b><small>Every cost traced from its declaration to its debit in NAV (in French).</small><span class="en-go">Read <i>→</i></span></a></li>
 <li><a href="stateful/"><span class="en-tag">The mechanics</span><b>Replay &amp; resume</b><small>How a compiled kernel makes decisions that depend on its own past (in French).</small><span class="en-go">Read <i>→</i></span></a></li>
-</ol></nav>
+<li><a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine"><span class="en-tag">The code</span><b>The repository</b><small>Public engine source, released under the MIT licence.</small><span class="en-go">View on GitHub <i>→</i></span></a></li></ol></nav>
 <a class="en-site" href="https://arnaud-barbier.github.io/"><span class="en-site-arrow" aria-hidden="true">←</span><span><b>Back to my main site</b><small>arnaud-barbier.github.io · projects, background and contact</small></span></a>
 </aside>
   </div>

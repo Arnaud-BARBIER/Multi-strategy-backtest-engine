@@ -24,22 +24,15 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Tinos:ital,wght@0,400;0,700;1,400;1,700&display=swap">
 <style>
 :root{
-  --bg:#FFFFFF; --panel:#FFFFFF; --well:#F5F6F7;
-  --hair:#C9CCD1; --hard:#101215; --soft:#E3E5E8;
-  --ink:#101215; --sub:#54585F; --faint:#868B93;
-  --accent:#A85F00; --accent-well:#FDF7EE;
+  --bg:#0e1117; --panel:#161b22; --well:#12171f;
+  --hair:#21262d; --hard:#3d444d; --soft:#1b2028;
+  --ink:#e6edf3; --sub:#8b949e; --faint:#6e7681;
+  --accent:#F0A93A; --accent-well:#1E1710;
   --f-sans:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;
   --f-serif:"Times New Roman",Tinos,Times,"Liberation Serif",serif;
   --f-term:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
 }
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){
-    --bg:#0e1117; --panel:#161b22; --well:#12171f;
-    --hair:#21262d; --hard:#3d444d; --soft:#1b2028;
-    --ink:#e6edf3; --sub:#8b949e; --faint:#6e7681;
-    --accent:#F0A93A; --accent-well:#1E1710;
-  }
-}
+
 :root[data-theme="dark"]{
   --bg:#0e1117; --panel:#161b22; --well:#12171f;
   --hair:#21262d; --hard:#3d444d; --soft:#1b2028;
@@ -164,8 +157,9 @@ td:first-child{font-weight:600;white-space:nowrap;padding-right:1.4rem}
 </style>
 <link rel="stylesheet" href="../assets/endnav.css?v=3">
 <script src="../assets/endnav.js?v=3" defer></script>
+<link rel="stylesheet" href="../assets/readable-pages.css?v=1">
 </head>
-<body>
+<body class="site-readable">
 <div class="topbar">
   <nav class="pagenav" aria-label="Pages">
     <a href="../">Accueil</a>
@@ -176,7 +170,7 @@ td:first-child{font-weight:600;white-space:nowrap;padding-right:1.4rem}
     <a href="../engine/">Mode allocation</a>
     <a href="../costs/">Les coûts</a>
     <span aria-current="page">Replay &amp; resume</span>
-  </nav>
+  <a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine">Dépôt</a></nav>
 </div>
 
 <div class="wrap">
@@ -212,6 +206,8 @@ td:first-child{font-weight:600;white-space:nowrap;padding-right:1.4rem}
     <div>Signaux décalés d'une barre</div>
   </div>
 </header>
+<aside class="site-proof-grid" aria-label="Repères de fonctionnement"><section class="site-proof site-proof--environment"><h2>Environnement simple d’utilisation</h2><ul><li><strong>Moins d’1 minute</strong> pour configurer un backtest complexe</li><li><strong>Moins d’une seconde</strong> pour un run dense et réaliste</li></ul><p>Analyse des résultats prise en charge par les tests de validation du framework.</p></section><section class="site-proof site-proof--technical"><h2>Repères techniques</h2><p>Replay rejoue un run avec un patch calculé, Resume interrompt puis reprend causalement, et Watcher sépare détection compilée et décision Python. Aucun callback utilisateur ne tourne à chaque barre.</p><p>Les trois mécanismes gardent la décision en Python sans quitter le kernel compilé à chaque barre.</p></section></aside>
+
 
 <section id="stateful-probleme">
   <p class="eyebrow">Le problème</p>
@@ -634,17 +630,18 @@ td:first-child{font-weight:600;white-space:nowrap;padding-right:1.4rem}
 <div class="en-contact"><span class="en-k">Contact</span><p class="en-q">Une question, un retour, ou l'envie de voir le moteur tourner en direct ? Écrivez-moi.</p><a class="en-mail" href="mailto:arnaud.barbier@grenoble-em.com?subject=Moteur%20de%20backtest"><span class="en-shine" aria-hidden="true"></span>arnaud.barbier@grenoble-em.com<span class="en-arrow" aria-hidden="true">→</span></a><p class="en-sub">Une démonstration du moteur est possible sur place ou en visio. Le code est sur <a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine">GitHub</a>.</p></div>
 <nav class="en-more" aria-label="Continuer la lecture"><span class="en-k">Continuer la lecture</span>
 <ol>
-<li class="en-next"><a href="../"><span class="en-tag">Suite conseillée · Vue d'ensemble</span><b>Accueil</b><small>Le moteur, ses modes et la couche de validation sur une page.</small><span class="en-go">Revenir à l'accueil <i>→</i></span></a></li>
+
 <li><a href="../research/"><span class="en-tag">Le signal</span><b>Mode Research</b><small>Développer un indicateur et mesurer ses signaux, sans compilation.</small><span class="en-go">Lire <i>→</i></span></a></li>
-<li><a href="../algo/"><span class="en-tag">La stratégie</span><b>Mode Algo</b><small>Du signal aux trades gérés, avec frais et sizing.</small><span class="en-go">Lire <i>→</i></span></a></li>
+<li class="en-next"><a href="../algo/"><span class="en-tag">La stratégie</span><b>Mode Algo</b><small>Du signal aux trades gérés, avec frais et sizing.</small><span class="en-go">Lire <i>→</i></span></a></li>
 <li><a href="../engine/"><span class="en-tag">Le portefeuille</span><b>Mode allocation</b><small>Quarante lignes pour déclarer un portefeuille, et la sortie réelle du moteur.</small><span class="en-go">Lire <i>→</i></span></a></li>
 <li><a href="../validation/"><span class="en-tag">La mesure</span><b>Validation · Max DDR</b><small>Trois tests de validation appliqués à une optimisation de la durée de drawdown.</small><span class="en-go">Lire <i>→</i></span></a></li>
 <li><a href="../validation-2/"><span class="en-tag">La mesure</span><b>Validation · Sharpe</b><small>Dix contrôles, du hors échantillon jusqu'à 80 univers inédits.</small><span class="en-go">Lire <i>→</i></span></a></li>
 <li><a href="../costs/"><span class="en-tag">Le rapprochement</span><b>Les coûts</b><small>Chaque coût suivi de sa déclaration jusqu'à son débit dans la NAV.</small><span class="en-go">Lire <i>→</i></span></a></li>
-</ol></nav>
+<li><a href="../stateful/"><span class="en-tag">La mécanique</span><b>Replay &amp; resume</b><small>Trois mécanismes pour prendre des décisions stateful dans un kernel compilé.</small><span class="en-go">Lire <i>→</i></span></a></li><li><a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine"><span class="en-tag">Le code</span><b>Le dépôt</b><small>Source publique du moteur, sous licence MIT.</small><span class="en-go">Voir sur GitHub <i>→</i></span></a></li></ol></nav>
 <a class="en-site" href="https://arnaud-barbier.github.io/"><span class="en-site-arrow" aria-hidden="true">←</span><span><b>Retour sur mon site principal</b><small>arnaud-barbier.github.io · projets, parcours et contact</small></span></a>
 </aside>
 
 </div>
+<script src="../assets/readable-pages.js?v=1" defer></script>
 </body>
 </html>

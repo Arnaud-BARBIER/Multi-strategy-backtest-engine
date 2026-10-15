@@ -28,22 +28,15 @@
 
 <style>
 :root{
-  --bg:#FFFFFF; --panel:#FFFFFF; --well:#F5F6F7;
-  --hair:#C9CCD1; --hard:#101215; --soft:#E3E5E8;
-  --ink:#101215; --sub:#54585F; --faint:#868B93;
-  --accent:#A85F00; --accent-well:#FDF7EE;
+  --bg:#0e1117; --panel:#161b22; --well:#12171f;
+  --hair:#21262d; --hard:#3d444d; --soft:#1b2028;
+  --ink:#e6edf3; --sub:#8b949e; --faint:#6e7681;
+  --accent:#F0A93A; --accent-well:#1E1710;
   --f-sans:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;
   --f-serif:"Times New Roman",Tinos,Times,"Liberation Serif",serif;
   --f-term:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
 }
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){
-    --bg:#0e1117; --panel:#161b22; --well:#12171f;
-    --hair:#21262d; --hard:#3d444d; --soft:#1b2028;
-    --ink:#e6edf3; --sub:#8b949e; --faint:#6e7681;
-    --accent:#F0A93A; --accent-well:#1E1710;
-  }
-}
+
 :root[data-theme="dark"]{
   --bg:#0e1117; --panel:#161b22; --well:#12171f;
   --hair:#21262d; --hard:#3d444d; --soft:#1b2028;
@@ -342,8 +335,9 @@ button{font:inherit}
 </style>
 <link rel="stylesheet" href="../assets/endnav.css?v=3">
 <script src="../assets/endnav.js?v=3" defer></script>
+<link rel="stylesheet" href="../assets/readable-pages.css?v=1">
 </head>
-<body>
+<body class="site-readable">
 <div id="page" data-lang="fr">
   <div class="wrap topbar">
     <nav class="pagenav" aria-label="Pages">
@@ -355,7 +349,7 @@ button{font:inherit}
       <span aria-current="page"><span class="lang-fr">Mode allocation</span><span class="lang-en">Allocation mode</span></span>
       <a href="../costs/"><span class="lang-fr">Les coûts</span><span class="lang-en">Costs · FR</span></a>
       <a href="../stateful/"><span class="lang-fr">Replay &amp; resume</span><span class="lang-en">Replay &amp; resume</span></a>
-    </nav>
+    <a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine"><span class="lang-fr">Dépôt</span><span class="lang-en">Repository</span></a></nav>
     <div class="langbar">
       <button type="button" data-set="fr" aria-pressed="true">Français</button>
       <button type="button" data-set="en" aria-pressed="false">English</button>
@@ -422,6 +416,8 @@ button{font:inherit}
       </div>
     </div>
   </header>
+<aside class="site-proof-grid" aria-label="Repères de fonctionnement"><section class="site-proof site-proof--environment"><h2>Environnement simple d’utilisation</h2><ul><li><strong>Moins d’1 minute</strong> pour configurer un backtest complexe</li><li><strong>Moins d’une seconde</strong> pour un run dense et réaliste</li></ul><p>Analyse des résultats prise en charge par les tests de validation du framework.</p></section><section class="site-proof site-proof--technical"><h2>Repères techniques</h2><p>Un noyau Numba tient la comptabilité à chaque barre : réserves, emprunt indexé sur un taux de marché, devises multiples et frais provisionnés puis payés selon deux horloges. La sortie suivie est la NAV nette de l’emprunt.</p><p>Le mode Allocation porte les règles de pondération et de rebalancement dans la comptabilité du portefeuille.</p></section></aside>
+
 
   <section id="engine-fr-declaration">
     <div class="shead"><span class="snum">01</span><span class="stitle">Déclarer un portefeuille</span></div>
@@ -784,13 +780,13 @@ button{font:inherit}
 <nav class="en-more" aria-label="Continuer la lecture"><span class="en-k">Continuer la lecture</span>
 <ol>
 <li class="en-next"><a href="../validation/"><span class="en-tag">Suite conseillée · La mesure</span><b>Validation · Max DDR</b><small>Trois tests de validation appliqués à une optimisation de la durée de drawdown.</small><span class="en-go">Lire <i>→</i></span></a></li>
-<li><a href="../"><span class="en-tag">Vue d'ensemble</span><b>Accueil</b><small>Le moteur, ses modes et la couche de validation sur une page.</small><span class="en-go">Revenir à l'accueil <i>→</i></span></a></li>
+
 <li><a href="../research/"><span class="en-tag">Le signal</span><b>Mode Research</b><small>Développer un indicateur et mesurer ses signaux, sans compilation.</small><span class="en-go">Lire <i>→</i></span></a></li>
 <li><a href="../algo/"><span class="en-tag">La stratégie</span><b>Mode Algo</b><small>Du signal aux trades gérés, avec frais et sizing.</small><span class="en-go">Lire <i>→</i></span></a></li>
 <li><a href="../validation-2/"><span class="en-tag">La mesure</span><b>Validation · Sharpe</b><small>Dix contrôles, du hors échantillon jusqu'à 80 univers inédits.</small><span class="en-go">Lire <i>→</i></span></a></li>
 <li><a href="../costs/"><span class="en-tag">Le rapprochement</span><b>Les coûts</b><small>Chaque coût suivi de sa déclaration jusqu'à son débit dans la NAV.</small><span class="en-go">Lire <i>→</i></span></a></li>
 <li><a href="../stateful/"><span class="en-tag">La mécanique</span><b>Replay &amp; resume</b><small>Comment un kernel compilé décide en fonction de son propre passé.</small><span class="en-go">Lire <i>→</i></span></a></li>
-</ol></nav>
+<li><a href="../engine/"><span class="en-tag">Le portefeuille</span><b>Mode allocation</b><small>Quarante lignes pour déclarer un portefeuille et lire sa sortie comptable.</small><span class="en-go">Lire <i>→</i></span></a></li><li><a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine"><span class="en-tag">Le code</span><b>Le dépôt</b><small>Source publique du moteur, sous licence MIT.</small><span class="en-go">Voir sur GitHub <i>→</i></span></a></li></ol></nav>
 <a class="en-site" href="https://arnaud-barbier.github.io/"><span class="en-site-arrow" aria-hidden="true">←</span><span><b>Retour sur mon site principal</b><small>arnaud-barbier.github.io · projets, parcours et contact</small></span></a>
 </aside>
   <footer>
@@ -859,6 +855,8 @@ button{font:inherit}
       </div>
     </div>
   </header>
+<aside class="site-proof-grid" aria-label="How the framework works"><section class="site-proof site-proof--environment"><h2>A simple working environment</h2><ul><li><strong>Under 1 minute</strong> to configure a complex backtest</li><li><strong>Under 1 second</strong> to run a dense, realistic simulation</li></ul><p>Results analysis supported by the framework’s validation tests.</p></section><section class="site-proof site-proof--technical"><h2>Technical markers</h2><p>A Numba kernel keeps the books on every bar: reserves, borrowing indexed to a market rate, multiple currencies, and fees accrued and paid on separate clocks. The reported output is NAV net of borrowing.</p><p>Allocation mode applies weighting and rebalancing rules through portfolio accounting.</p></section></aside>
+
 
   <section id="engine-en-declaration">
     <div class="shead"><span class="snum">01</span><span class="stitle">Declaring a portfolio</span></div>
@@ -1207,13 +1205,13 @@ button{font:inherit}
 <nav class="en-more" aria-label="Continue reading"><span class="en-k">Continue reading</span>
 <ol>
 <li class="en-next"><a href="../validation/"><span class="en-tag">Suggested next · The measurement</span><b>Validation · Max drawdown</b><small>Three validation tests applied to a drawdown-duration optimisation.</small><span class="en-go">Read <i>→</i></span></a></li>
-<li><a href="../"><span class="en-tag">Overview</span><b>Home</b><small>The engine, its modes and the validation layer on one page.</small><span class="en-go">Back to home <i>→</i></span></a></li>
+
 <li><a href="../research/"><span class="en-tag">The signal</span><b>Research mode</b><small>Develop an indicator and measure its signals, with no compilation.</small><span class="en-go">Read <i>→</i></span></a></li>
 <li><a href="../algo/"><span class="en-tag">The strategy</span><b>Algo mode</b><small>From signal to managed trades, with costs and sizing.</small><span class="en-go">Read <i>→</i></span></a></li>
 <li><a href="../validation-2/"><span class="en-tag">The measurement</span><b>Validation · Sharpe</b><small>Ten checks, from out of sample to 80 unseen universes.</small><span class="en-go">Read <i>→</i></span></a></li>
 <li><a href="../costs/"><span class="en-tag">The reconciliation</span><b>Costs</b><small>Every cost traced from its declaration to its debit in NAV (in French).</small><span class="en-go">Read <i>→</i></span></a></li>
 <li><a href="../stateful/"><span class="en-tag">The mechanics</span><b>Replay &amp; resume</b><small>How a compiled kernel makes decisions that depend on its own past (in French).</small><span class="en-go">Read <i>→</i></span></a></li>
-</ol></nav>
+<li><a href="../engine/"><span class="en-tag">The portfolio</span><b>Allocation mode</b><small>Forty lines to declare a portfolio and inspect its accounting output.</small><span class="en-go">Read <i>→</i></span></a></li><li><a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine"><span class="en-tag">The code</span><b>The repository</b><small>Public engine source, released under the MIT licence.</small><span class="en-go">View on GitHub <i>→</i></span></a></li></ol></nav>
 <a class="en-site" href="https://arnaud-barbier.github.io/"><span class="en-site-arrow" aria-hidden="true">←</span><span><b>Back to my main site</b><small>arnaud-barbier.github.io · projects, background and contact</small></span></a>
 </aside>
   <footer>
@@ -1239,5 +1237,6 @@ button{font:inherit}
   });
 })();
 </script>
+<script src="../assets/readable-pages.js?v=1" defer></script>
 </body>
 </html>

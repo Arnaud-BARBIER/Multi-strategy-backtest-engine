@@ -1,0 +1,143 @@
+/* Shared reading scale and callout treatment for the site's long-form pages. */
+body.site-readable {
+  --ink: #fff;
+  --sub: #fff;
+  --faint: #fff;
+  color: #fff;
+  font-size: 18px;
+}
+
+body.site-readable h2 {
+  color: #fff;
+  font-family: var(--f-sans, "Archivo", Arial, sans-serif);
+  font-size: clamp(1.18rem, 1.8vw, 1.38rem);
+  font-weight: 700;
+  letter-spacing: -.01em;
+  line-height: 1.28;
+}
+
+body.site-readable h3 {
+  color: #fff;
+  font-family: var(--f-sans, "Archivo", Arial, sans-serif);
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+body.site-readable :where(
+  .small, small, figcaption, .cap, .units, .note p, .eyebrow, .tag,
+  .mast-top, .pagenav > a, .pagenav > span, .figs .k, .figs .n,
+  .reading-map .n, .reading-map .t, .reading-map small, .snum, .stitle,
+  .tickers > div, .subject .lbl, .lbl, .band .cap
+) {
+  color: #fff;
+  font-size: .96rem;
+  line-height: 1.5;
+}
+
+body.site-readable .pagenav > a,
+body.site-readable .pagenav > span {
+  font-size: .82rem;
+  letter-spacing: .08em;
+}
+
+body.site-readable .mast-top,
+body.site-readable .eyebrow,
+body.site-readable .snum,
+body.site-readable .stitle,
+body.site-readable .subject .lbl,
+body.site-readable .lbl {
+  font-family: var(--f-sans, "Archivo", Arial, sans-serif);
+}
+
+body.site-readable .small,
+body.site-readable small,
+body.site-readable figcaption,
+body.site-readable .cap,
+body.site-readable .units,
+body.site-readable .note p {
+  font-size: .96rem;
+}
+
+body.site-readable .tw th,
+body.site-readable .tw td,
+body.site-readable table th,
+body.site-readable table td {
+  color: #fff;
+  font-size: .92rem;
+}
+
+body.site-readable .site-proof-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .85rem;
+  margin: 1.3rem 0 2rem;
+}
+
+body.site-readable .site-proof {
+  min-width: 0;
+  padding: 1.1rem 1.25rem;
+  border-radius: 2px;
+}
+
+body.site-readable .site-proof h2 {
+  margin: 0 0 .65rem;
+  font-size: .95rem;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+}
+
+body.site-readable .site-proof p,
+body.site-readable .site-proof li {
+  color: #fff;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+body.site-readable .site-proof p + p { margin-top: .55rem; }
+body.site-readable .site-proof ul { margin: 0; padding-left: 1.15rem; }
+body.site-readable .site-proof li + li { margin-top: .45rem; }
+body.site-readable .site-proof strong { color: #fff; font-weight: 700; }
+
+body.site-readable .site-proof--environment {
+  border: 1px solid #eab308;
+  background: linear-gradient(135deg, #1d1811, #171c24 88%);
+  box-shadow: inset 4px 0 0 #eab308;
+}
+
+body.site-readable .site-proof--environment h2 { color: #f0a93a; }
+
+body.site-readable .site-proof--technical {
+  border-left: 4px solid #fff0bb;
+  background: linear-gradient(135deg, #8d6416, #60420d);
+}
+
+body.site-readable .site-proof--technical h2 { color: #fff0bb; }
+
+body.site-readable .scroll-reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity .65s cubic-bezier(.2,.7,.2,1), transform .65s cubic-bezier(.2,.7,.2,1);
+}
+
+body.site-readable .scroll-reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (max-width: 760px) {
+  body.site-readable .site-proof-grid { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.site-readable .scroll-reveal,
+  body.site-readable .scroll-reveal.is-visible {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  body.site-readable *, body.site-readable *::before, body.site-readable *::after {
+    scroll-behavior: auto !important;
+  }
+}

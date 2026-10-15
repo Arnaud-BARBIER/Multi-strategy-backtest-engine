@@ -29,22 +29,15 @@
 
 <style>
 :root{
-  --bg:#FFFFFF; --panel:#FFFFFF; --well:#F5F6F7;
-  --hair:#C9CCD1; --hard:#101215; --soft:#E3E5E8;
-  --ink:#101215; --sub:#54585F; --faint:#868B93;
-  --accent:#A85F00; --accent-well:#FDF7EE;
+  --bg:#0e1117; --panel:#161b22; --well:#12171f;
+  --hair:#21262d; --hard:#3d444d; --soft:#1b2028;
+  --ink:#e6edf3; --sub:#8b949e; --faint:#6e7681;
+  --accent:#F0A93A; --accent-well:#1E1710;
   --f-sans:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;
   --f-serif:"Times New Roman",Tinos,Times,"Liberation Serif",serif;
   --f-term:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
 }
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){
-    --bg:#0e1117; --panel:#161b22; --well:#12171f;
-    --hair:#21262d; --hard:#3d444d; --soft:#1b2028;
-    --ink:#e6edf3; --sub:#8b949e; --faint:#6e7681;
-    --accent:#F0A93A; --accent-well:#1E1710;
-  }
-}
+
 :root[data-theme="dark"]{
   --bg:#0e1117; --panel:#161b22; --well:#12171f;
   --hair:#21262d; --hard:#3d444d; --soft:#1b2028;
@@ -324,8 +317,9 @@ p code{font-family:var(--f-term);font-size:.88em;color:var(--sub)}
 </style>
 <link rel="stylesheet" href="../assets/endnav.css?v=3">
 <script src="../assets/endnav.js?v=3" defer></script>
+<link rel="stylesheet" href="../assets/readable-pages.css?v=1">
 </head>
-<body>
+<body class="site-readable">
 <div id="page" data-lang="fr">
   <div class="wrap topbar">
     <nav class="pagenav" aria-label="Pages">
@@ -337,7 +331,7 @@ p code{font-family:var(--f-term);font-size:.88em;color:var(--sub)}
       <a href="../engine/"><span class="lang-fr">Mode allocation</span><span class="lang-en">Allocation mode</span></a>
       <a href="../costs/"><span class="lang-fr">Les coûts</span><span class="lang-en">Costs · FR</span></a>
       <a href="../stateful/"><span class="lang-fr">Replay &amp; resume</span><span class="lang-en">Replay &amp; resume</span></a>
-    </nav>
+    <a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine"><span class="lang-fr">Dépôt</span><span class="lang-en">Repository</span></a></nav>
     <div class="langbar">
       <button type="button" data-set="fr" aria-pressed="true">Français</button>
       <button type="button" data-set="en" aria-pressed="false">English</button>
@@ -407,6 +401,8 @@ p code{font-family:var(--f-term);font-size:.88em;color:var(--sub)}
       <div class="cap">Le graphique présente la NAV du portefeuille, la valeur investie et les différentes composantes de la trésorerie. Les 22 rebalancements apparaissent sur la courbe. Le panneau inférieur représente le drawdown du portefeuille, dont le point bas atteint −20,47 % en mars 2020.</div>
     </div>
   </header>
+<aside class="site-proof-grid" aria-label="Repères de fonctionnement"><section class="site-proof site-proof--environment"><h2>Environnement simple d’utilisation</h2><ul><li><strong>Moins d’1 minute</strong> pour configurer un backtest complexe</li><li><strong>Moins d’une seconde</strong> pour un run dense et réaliste</li></ul><p>Analyse des résultats prise en charge par les tests de validation du framework.</p></section><section class="site-proof site-proof--technical"><h2>Repères techniques</h2><p>Quatorze contrôles couvrent cinq questions, de l’intégrité des mesures à la gouvernance. La règle est suivie sur l’échantillon initial, les 30 % réservés et 80 univers inédits.</p><p>Les résultats hors échantillon sont présentés séparément des résultats qui ont servi à construire la stratégie.</p></section></aside>
+
 
   <section id="tests">
     <div class="shead"><span class="snum">01</span><span class="stitle">Les tests</span></div>
@@ -716,13 +712,13 @@ raison             seuls 4 essais disposent d'un Sharpe sur ce jeu de données ;
 <nav class="en-more" aria-label="Continuer la lecture"><span class="en-k">Continuer la lecture</span>
 <ol>
 <li class="en-next"><a href="../costs/"><span class="en-tag">Suite conseillée · Le rapprochement</span><b>Les coûts</b><small>Chaque coût suivi de sa déclaration jusqu'à son débit dans la NAV.</small><span class="en-go">Lire <i>→</i></span></a></li>
-<li><a href="../"><span class="en-tag">Vue d'ensemble</span><b>Accueil</b><small>Le moteur, ses modes et la couche de validation sur une page.</small><span class="en-go">Revenir à l'accueil <i>→</i></span></a></li>
+
 <li><a href="../research/"><span class="en-tag">Le signal</span><b>Mode Research</b><small>Développer un indicateur et mesurer ses signaux, sans compilation.</small><span class="en-go">Lire <i>→</i></span></a></li>
 <li><a href="../algo/"><span class="en-tag">La stratégie</span><b>Mode Algo</b><small>Du signal aux trades gérés, avec frais et sizing.</small><span class="en-go">Lire <i>→</i></span></a></li>
 <li><a href="../engine/"><span class="en-tag">Le portefeuille</span><b>Mode allocation</b><small>Quarante lignes pour déclarer un portefeuille, et la sortie réelle du moteur.</small><span class="en-go">Lire <i>→</i></span></a></li>
 <li><a href="../validation/"><span class="en-tag">La mesure</span><b>Validation · Max DDR</b><small>Trois tests de validation appliqués à une optimisation de la durée de drawdown.</small><span class="en-go">Lire <i>→</i></span></a></li>
 <li><a href="../stateful/"><span class="en-tag">La mécanique</span><b>Replay &amp; resume</b><small>Comment un kernel compilé décide en fonction de son propre passé.</small><span class="en-go">Lire <i>→</i></span></a></li>
-</ol></nav>
+<li><a href="../validation-2/"><span class="en-tag">La mesure</span><b>Validation · Optimisation Sharpe</b><small>Dix contrôles documentés, jusqu’à 80 univers inédits.</small><span class="en-go">Lire <i>→</i></span></a></li><li><a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine"><span class="en-tag">Le code</span><b>Le dépôt</b><small>Source publique du moteur, sous licence MIT.</small><span class="en-go">Voir sur GitHub <i>→</i></span></a></li></ol></nav>
 <a class="en-site" href="https://arnaud-barbier.github.io/"><span class="en-site-arrow" aria-hidden="true">←</span><span><b>Retour sur mon site principal</b><small>arnaud-barbier.github.io · projets, parcours et contact</small></span></a>
 </aside>
   <footer>
@@ -797,6 +793,8 @@ raison             seuls 4 essais disposent d'un Sharpe sur ce jeu de données ;
       <div class="cap">The chart shows portfolio NAV, invested value and the separate components of cash. The 22 rebalances appear on the curve. The lower panel shows portfolio drawdown, whose low point reaches −20.47 % in March 2020.</div>
     </div>
   </header>
+<aside class="site-proof-grid" aria-label="How the framework works"><section class="site-proof site-proof--environment"><h2>A simple working environment</h2><ul><li><strong>Under 1 minute</strong> to configure a complex backtest</li><li><strong>Under 1 second</strong> to run a dense, realistic simulation</li></ul><p>Results analysis supported by the framework’s validation tests.</p></section><section class="site-proof site-proof--technical"><h2>Technical markers</h2><p>Fourteen checks cover five questions, from measurement integrity to governance. The rule is followed on the initial sample, the reserved 30%, and 80 unseen universes.</p><p>Out-of-sample results are reported separately from the results used to build the strategy.</p></section></aside>
+
 
   <section id="en-tests">
     <div class="shead"><span class="snum">01</span><span class="stitle">The tests</span></div>
@@ -1104,13 +1102,13 @@ why                only 4 trial(s) carry a Sharpe on this dataset; the deflated
 <nav class="en-more" aria-label="Continue reading"><span class="en-k">Continue reading</span>
 <ol>
 <li class="en-next"><a href="../costs/"><span class="en-tag">Suggested next · The reconciliation</span><b>Costs</b><small>Every cost traced from its declaration to its debit in NAV (in French).</small><span class="en-go">Read <i>→</i></span></a></li>
-<li><a href="../"><span class="en-tag">Overview</span><b>Home</b><small>The engine, its modes and the validation layer on one page.</small><span class="en-go">Back to home <i>→</i></span></a></li>
+
 <li><a href="../research/"><span class="en-tag">The signal</span><b>Research mode</b><small>Develop an indicator and measure its signals, with no compilation.</small><span class="en-go">Read <i>→</i></span></a></li>
 <li><a href="../algo/"><span class="en-tag">The strategy</span><b>Algo mode</b><small>From signal to managed trades, with costs and sizing.</small><span class="en-go">Read <i>→</i></span></a></li>
 <li><a href="../engine/"><span class="en-tag">The portfolio</span><b>Allocation mode</b><small>Forty lines to declare a portfolio, and the engine's real output.</small><span class="en-go">Read <i>→</i></span></a></li>
 <li><a href="../validation/"><span class="en-tag">The measurement</span><b>Validation · Max drawdown</b><small>Three validation tests applied to a drawdown-duration optimisation.</small><span class="en-go">Read <i>→</i></span></a></li>
 <li><a href="../stateful/"><span class="en-tag">The mechanics</span><b>Replay &amp; resume</b><small>How a compiled kernel makes decisions that depend on its own past (in French).</small><span class="en-go">Read <i>→</i></span></a></li>
-</ol></nav>
+<li><a href="../validation-2/"><span class="en-tag">The measurement</span><b>Validation · Sharpe optimisation</b><small>Ten documented checks, including 80 unseen universes.</small><span class="en-go">Read <i>→</i></span></a></li><li><a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine"><span class="en-tag">The code</span><b>The repository</b><small>Public engine source, released under the MIT licence.</small><span class="en-go">View on GitHub <i>→</i></span></a></li></ol></nav>
 <a class="en-site" href="https://arnaud-barbier.github.io/"><span class="en-site-arrow" aria-hidden="true">←</span><span><b>Back to my main site</b><small>arnaud-barbier.github.io · projects, background and contact</small></span></a>
 </aside>
   <footer>
@@ -1139,5 +1137,6 @@ why                only 4 trial(s) carry a Sharpe on this dataset; the deflated
   });
 })();
 </script>
+<script src="../assets/readable-pages.js?v=1" defer></script>
 </body>
 </html>

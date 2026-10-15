@@ -23,11 +23,12 @@
 <script src="../assets/modes.js?v=3" defer></script>
 <link rel="stylesheet" href="../assets/endnav.css?v=3">
 <script src="../assets/endnav.js?v=3" defer></script>
+<link rel="stylesheet" href="../assets/readable-pages.css?v=1">
 </head>
-<body>
+<body class="site-readable">
 <div id="page" data-lang="fr" data-title-fr="Mode Algo · Arnaud Barbier" data-title-en="Algo mode · Arnaud Barbier">
 <a class="skip" href="#main"><span class="lang-fr">Aller au contenu</span><span class="lang-en">Skip to content</span></a>
-<div class="wrap"><nav class="pagenav" aria-label="Pages"><a href="../"><span class="lang-fr">Accueil</span><span class="lang-en">Home</span></a><a href="../research/"><span class="lang-fr">Mode Research</span><span class="lang-en">Research mode</span></a><span aria-current="page"><span class="lang-fr">Mode Algo</span><span class="lang-en">Algo mode</span></span><a href="../engine/"><span class="lang-fr">Mode allocation</span><span class="lang-en">Allocation mode</span></a><a href="../validation/"><span class="lang-fr">Validation · Max DDR</span><span class="lang-en">Validation · Max drawdown</span></a><a href="../validation-2/"><span class="lang-fr">Validation · Sharpe</span><span class="lang-en">Validation · Sharpe</span></a><a href="../costs/"><span class="lang-fr">Les coûts</span><span class="lang-en">Costs · FR</span></a><a href="../stateful/"><span class="lang-fr">Replay &amp; resume</span><span class="lang-en">Replay &amp; resume</span></a></nav>
+<div class="wrap"><nav class="pagenav" aria-label="Pages"><a href="../"><span class="lang-fr">Accueil</span><span class="lang-en">Home</span></a><a href="../research/"><span class="lang-fr">Mode Research</span><span class="lang-en">Research mode</span></a><span aria-current="page"><span class="lang-fr">Mode Algo</span><span class="lang-en">Algo mode</span></span><a href="../engine/"><span class="lang-fr">Mode allocation</span><span class="lang-en">Allocation mode</span></a><a href="../validation/"><span class="lang-fr">Validation · Max DDR</span><span class="lang-en">Validation · Max drawdown</span></a><a href="../validation-2/"><span class="lang-fr">Validation · Sharpe</span><span class="lang-en">Validation · Sharpe</span></a><a href="../costs/"><span class="lang-fr">Les coûts</span><span class="lang-en">Costs · FR</span></a><a href="../stateful/"><span class="lang-fr">Replay &amp; resume</span><span class="lang-en">Replay &amp; resume</span></a><a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine"><span class="lang-fr">Dépôt</span><span class="lang-en">Repository</span></a></nav>
 <div class="langbar"><button type="button" data-set="fr" aria-pressed="true">Français</button><button type="button" data-set="en" aria-pressed="false">English</button></div></div>
 <main id="main" class="wrap" tabindex="-1">
 
@@ -45,6 +46,8 @@
 <div><span class="v">1 %</span><span class="n">de l'equity risqué par trade dans l'exemple de sizing</span></div>
 </div>
 </header>
+<aside class="site-proof-grid" aria-label="Repères de fonctionnement"><section class="site-proof site-proof--environment"><h2>Environnement simple d’utilisation</h2><ul><li><strong>Moins d’1 minute</strong> pour configurer un backtest complexe</li><li><strong>Moins d’une seconde</strong> pour un run dense et réaliste</li></ul><p>Analyse des résultats prise en charge par les tests de validation du framework.</p></section><section class="site-proof site-proof--technical"><h2>Repères techniques</h2><p>Quatre niveaux décrivent la gestion de position, du TP/SL à une fonction compilée. Chaque sortie conserve ses prix, son motif et ses coûts dans le journal des trades.</p><p>Le mode Algo isole le signal, la gestion des positions et le sizing : on peut modifier le risque sans relancer le backtest.</p></section></aside>
+
 
 <div class="apercu">
 <div class="ap-head"><span class="eyebrow">Aperçu</span>
@@ -205,13 +208,13 @@ def plot_showcase(plot, c):
 <nav class="en-more" aria-label="Continuer la lecture"><span class="en-k">Continuer la lecture</span>
 <ol>
 <li class="en-next"><a href="../engine/"><span class="en-tag">Suite conseillée · Le portefeuille</span><b>Mode allocation</b><small>Quarante lignes pour déclarer un portefeuille, et la sortie réelle du moteur.</small><span class="en-go">Lire <i>→</i></span></a></li>
-<li><a href="../"><span class="en-tag">Vue d'ensemble</span><b>Accueil</b><small>Le moteur, ses modes et la couche de validation sur une page.</small><span class="en-go">Revenir à l'accueil <i>→</i></span></a></li>
+
 <li><a href="../research/"><span class="en-tag">Le signal</span><b>Mode Research</b><small>Développer un indicateur et mesurer ses signaux, sans compilation.</small><span class="en-go">Lire <i>→</i></span></a></li>
 <li><a href="../validation/"><span class="en-tag">La mesure</span><b>Validation · Max DDR</b><small>Trois tests de validation appliqués à une optimisation de la durée de drawdown.</small><span class="en-go">Lire <i>→</i></span></a></li>
 <li><a href="../validation-2/"><span class="en-tag">La mesure</span><b>Validation · Sharpe</b><small>Dix contrôles, du hors échantillon jusqu'à 80 univers inédits.</small><span class="en-go">Lire <i>→</i></span></a></li>
 <li><a href="../costs/"><span class="en-tag">Le rapprochement</span><b>Les coûts</b><small>Chaque coût suivi de sa déclaration jusqu'à son débit dans la NAV.</small><span class="en-go">Lire <i>→</i></span></a></li>
 <li><a href="../stateful/"><span class="en-tag">La mécanique</span><b>Replay &amp; resume</b><small>Comment un kernel compilé décide en fonction de son propre passé.</small><span class="en-go">Lire <i>→</i></span></a></li>
-</ol></nav>
+<li><a href="../algo/"><span class="en-tag">La stratégie</span><b>Mode Algo</b><small>Du signal aux trades gérés, avec frais et sizing.</small><span class="en-go">Lire <i>→</i></span></a></li><li><a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine"><span class="en-tag">Le code</span><b>Le dépôt</b><small>Source publique du moteur, sous licence MIT.</small><span class="en-go">Voir sur GitHub <i>→</i></span></a></li></ol></nav>
 <a class="en-site" href="https://arnaud-barbier.github.io/"><span class="en-site-arrow" aria-hidden="true">←</span><span><b>Retour sur mon site principal</b><small>arnaud-barbier.github.io · projets, parcours et contact</small></span></a>
 </aside>
 
@@ -232,6 +235,8 @@ def plot_showcase(plot, c):
 <div><span class="v">1%</span><span class="n">of equity risked per trade in the sizing example</span></div>
 </div>
 </header>
+<aside class="site-proof-grid" aria-label="How the framework works"><section class="site-proof site-proof--environment"><h2>A simple working environment</h2><ul><li><strong>Under 1 minute</strong> to configure a complex backtest</li><li><strong>Under 1 second</strong> to run a dense, realistic simulation</li></ul><p>Results analysis supported by the framework’s validation tests.</p></section><section class="site-proof site-proof--technical"><h2>Technical markers</h2><p>Four levels describe position management, from TP/SL settings to a compiled function. Each exit keeps its prices, reason and costs in the trade log.</p><p>Algo mode separates the signal, position management and sizing: risk can be changed without rerunning the backtest.</p></section></aside>
+
 
 <div class="apercu">
 <div class="ap-head"><span class="eyebrow">Preview</span>
@@ -392,16 +397,17 @@ def plot_showcase(plot, c):
 <nav class="en-more" aria-label="Continue reading"><span class="en-k">Continue reading</span>
 <ol>
 <li class="en-next"><a href="../engine/"><span class="en-tag">Suggested next · The portfolio</span><b>Allocation mode</b><small>Forty lines to declare a portfolio, and the engine's real output.</small><span class="en-go">Read <i>→</i></span></a></li>
-<li><a href="../"><span class="en-tag">Overview</span><b>Home</b><small>The engine, its modes and the validation layer on one page.</small><span class="en-go">Back to home <i>→</i></span></a></li>
+
 <li><a href="../research/"><span class="en-tag">The signal</span><b>Research mode</b><small>Develop an indicator and measure its signals, with no compilation.</small><span class="en-go">Read <i>→</i></span></a></li>
 <li><a href="../validation/"><span class="en-tag">The measurement</span><b>Validation · Max drawdown</b><small>Three validation tests applied to a drawdown-duration optimisation.</small><span class="en-go">Read <i>→</i></span></a></li>
 <li><a href="../validation-2/"><span class="en-tag">The measurement</span><b>Validation · Sharpe</b><small>Ten checks, from out of sample to 80 unseen universes.</small><span class="en-go">Read <i>→</i></span></a></li>
 <li><a href="../costs/"><span class="en-tag">The reconciliation</span><b>Costs</b><small>Every cost traced from its declaration to its debit in NAV (in French).</small><span class="en-go">Read <i>→</i></span></a></li>
 <li><a href="../stateful/"><span class="en-tag">The mechanics</span><b>Replay &amp; resume</b><small>How a compiled kernel makes decisions that depend on its own past (in French).</small><span class="en-go">Read <i>→</i></span></a></li>
-</ol></nav>
+<li><a href="../algo/"><span class="en-tag">The strategy</span><b>Algo mode</b><small>From signal to managed trades, with costs and sizing.</small><span class="en-go">Read <i>→</i></span></a></li><li><a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine"><span class="en-tag">The code</span><b>The repository</b><small>Public engine source, released under the MIT licence.</small><span class="en-go">View on GitHub <i>→</i></span></a></li></ol></nav>
 <a class="en-site" href="https://arnaud-barbier.github.io/"><span class="en-site-arrow" aria-hidden="true">←</span><span><b>Back to my main site</b><small>arnaud-barbier.github.io · projects, background and contact</small></span></a>
 </aside>
 
 <footer><span>Arnaud Barbier · October 2026. The screenshots show how the mode works; no performance result is claimed.</span><a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine">Public repository (snapshot) →</a></footer>
 </article>
-</main></div></body></html>
+</main></div><script src="../assets/readable-pages.js?v=1" defer></script>
+</body></html>
