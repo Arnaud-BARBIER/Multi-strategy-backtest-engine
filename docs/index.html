@@ -26,16 +26,16 @@
 <style>
 :root{
   --bg:#0e1117; --well:#12171f;
-  --hair:#21262d; --hard:#3d444d;
-  --ink:#e6edf3; --sub:#8b949e; --faint:#6e7681;
+  --hair:#3b2d18; --hard:#72531e;
+  --ink:#fff; --sub:#fff; --faint:#fff;
   --accent:#F0A93A; --accent-well:#1E1710;
   --f-sans:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;
   --f-serif:Tinos,"Times New Roman",Times,"Liberation Serif",serif;
 }
 :root[data-theme="dark"]{
   --bg:#0e1117; --well:#12171f;
-  --hair:#21262d; --hard:#3d444d;
-  --ink:#e6edf3; --sub:#8b949e; --faint:#6e7681;
+  --hair:#3b2d18; --hard:#72531e;
+  --ink:#fff; --sub:#fff; --faint:#fff;
   --accent:#F0A93A; --accent-well:#1E1710;
 }
 *,*::before,*::after{box-sizing:border-box}
@@ -43,7 +43,7 @@ html{-webkit-text-size-adjust:100%}
 body,h1,h2,h3,p{margin:0}
 body{
   background:var(--bg);color:var(--ink);font-family:var(--f-serif);
-  font-size:17px;line-height:1.66;-webkit-font-smoothing:antialiased;
+  font-size:18px;line-height:1.66;-webkit-font-smoothing:antialiased;
   padding:0 1.4rem 4rem;
 }
 a{color:var(--accent)}
@@ -82,9 +82,9 @@ h1{
 .hero{
   position:relative;margin:1.8rem 0 0;padding:0 0 1.2rem;
 }
-.hero .mast-top{margin:0;padding:.6rem 0 .72rem;font-size:.72rem;letter-spacing:.15em}
+.hero .mast-top{margin:0;padding:.6rem 0 .72rem;font-size:.95rem;letter-spacing:.12em}
 .hero h1{font-size:clamp(2.15rem,4.5vw,3.25rem);max-width:27ch;margin:2rem 0 1.1rem;line-height:1.04;letter-spacing:-.02em}
-.hero-title-accent{color:var(--accent)}
+.hero-title-accent{color:var(--accent);font-weight:700}
 .hero-copy{font-size:1.06rem;line-height:1.55;max-width:66ch;color:var(--ink)}
 .hero-copy p{margin:0 0 .25rem}
 .hero-sub{font-family:var(--f-sans);font-size:1.12rem;line-height:1.5;color:var(--sub);max-width:52ch;margin:.75rem 0 0}
@@ -147,17 +147,17 @@ h1{
 .tl{fill:none;stroke:var(--hair);stroke-width:1.7}
 .tl-i{fill:none;stroke:var(--accent);stroke-width:1.7}
 .t1{fill:var(--ink);font-size:17px;font-weight:600;letter-spacing:-.01em}
-.t2{fill:var(--sub);font-size:13px}
-.t3{fill:var(--accent);font-size:11px;font-weight:600;letter-spacing:.08em}
-.tk{fill:var(--faint);font-size:12px;letter-spacing:.09em}
+.t2{fill:var(--sub);font-size:14px}
+.t3{fill:var(--accent);font-size:14px;font-weight:600;letter-spacing:.08em}
+.tk{fill:var(--faint);font-size:14px;letter-spacing:.09em}
 .tcap{font-size:.83rem;color:var(--sub);line-height:1.55;margin-top:1rem;max-width:70ch}
 .tcap b{color:var(--ink);font-weight:600}
 .modes{display:grid;grid-template-columns:repeat(auto-fit,minmax(238px,1fr));gap:0;
        border-top:1px solid var(--hair);margin:2.6rem 0 0}
 .mode{padding:1rem 1.3rem 1.1rem 0;margin-right:1.3rem;border-right:1px solid var(--hair)}
 .mode:last-child{border-right:none;margin-right:0}
-.mode h3{font-size:.95rem;font-weight:600;letter-spacing:-.01em;margin:0 0 .4rem}
-.mode p{font-size:.83rem;color:var(--sub);line-height:1.5;margin:0}
+.mode h3{font-size:1rem;font-weight:600;letter-spacing:-.01em;margin:0 0 .4rem}
+.mode p{font-size:.95rem;color:var(--sub);line-height:1.5;margin:0}
 .mode .c{font-family:var(--f-sans);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);
          margin-top:.55rem;font-weight:600}
 .band{border:0;margin:2.6rem 0 0;background:none}
@@ -237,6 +237,15 @@ h1.on .w{opacity:1;transform:none}
 .cards .card.reveal:nth-child(3n+2),.figs .fig.reveal:nth-child(2),.modes .mode.reveal:nth-child(2){transition-delay:.1s}
 .cards .card.reveal:nth-child(3n+3),.figs .fig.reveal:nth-child(3),.modes .mode.reveal:nth-child(3){transition-delay:.2s}
 .figs .fig.reveal:nth-child(4){transition-delay:.3s}
+.questions-banner blockquote.reveal:nth-of-type(2),.questions-banner .question-close.reveal{transition-delay:.14s}
+.answer-timeline li.reveal:nth-child(2){transition-delay:.1s}
+.answer-timeline li.reveal:nth-child(3){transition-delay:.2s}
+.mode-mobile-diagram>.reveal:nth-child(2){transition-delay:.08s}
+.mode-mobile-diagram>.reveal:nth-child(3){transition-delay:.16s}
+.mode-mobile-diagram>.reveal:nth-child(4){transition-delay:.24s}
+.mode-mobile-diagram>.reveal:nth-child(5){transition-delay:.32s}
+.mode-mobile-diagram>.reveal:nth-child(6){transition-delay:.4s}
+.roadmap .continuity.reveal{transition-delay:.12s}
 .demo{margin:3.2rem 0 0;padding:1.4rem 0 1.6rem;border-top:2px solid var(--hard);border-bottom:1px solid var(--hair)}
 .demo-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(240px,.78fr);gap:1.5rem;align-items:end}
 .demo .lbl{margin:0 0 .75rem}
@@ -269,8 +278,20 @@ h1.on .w{opacity:1;transform:none}
 .demo-cta{display:inline-block;margin:1.15rem 0 0;font-family:var(--f-sans);font-size:.78rem;font-weight:600;color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent);padding-bottom:.12rem}
 .tech-facts{margin:2.5rem 0 0}
 .tech-facts .lbl{margin-top:0}
-.tech-note{font-size:.82rem;color:var(--sub);margin:1rem 0 0;max-width:80ch}
-.tech-note b{color:var(--ink);font-weight:600}
+.tech-banner{max-width:900px;margin:0 0 1.2rem;padding:1.25rem 1.45rem;border-left:5px solid #fff0bb;border-radius:2px;background:linear-gradient(135deg,#A77A20 0%,#78520E 100%);color:#fff}
+.tech-banner .lbl{font-size:1rem;color:#fff0bb;margin:0 0 .65rem;letter-spacing:.12em}
+.tech-lede,.tech-scope{font-size:1.12rem;line-height:1.58;color:#fff;margin:0;max-width:86ch}
+.tech-scope{margin-top:.65rem}
+.tech-note{font-size:1.12rem;line-height:1.55;color:#fff;margin:1rem 0 0;max-width:86ch;font-weight:700}
+.tech-facts .figs{margin-top:1.6rem}
+.entries-section{position:relative;isolation:isolate;left:50%;width:100vw;transform:translateX(-50%);margin-top:3rem;padding:2.35rem 0 2.2rem;background:linear-gradient(180deg,#19140d 0%,#141820 100%);overflow:hidden}
+.entries-section::before{content:"";position:absolute;z-index:0;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,var(--accent),rgba(240,169,58,.18) 72%,transparent);transform-origin:left}
+.entries-section.anim::before{transform:scaleX(0);transition:transform .9s cubic-bezier(.2,.7,.2,1)}
+.entries-section.anim.in::before{transform:scaleX(1)}
+.entries-inner{position:relative;z-index:1;width:min(980px,calc(100% - 2.8rem));margin:0 auto}
+.entries-section .lbl{font-size:1rem;margin:0 0 1.25rem;color:var(--accent)}
+.entries-section .cards{gap:1rem;border:0}
+.entries-section .card{padding:1.15rem;background:rgba(14,17,23,.5);border:0}
 .modes-section{margin-top:2.65rem}
 .modes-heading{display:block;margin-bottom:1.2rem}
 .modes-heading p{margin-top:.5rem}
@@ -398,6 +419,17 @@ h1.on .w{opacity:1;transform:none}
 @media (max-width:520px){.hero{padding:0 0 1rem}.hero .mast-top{padding:.6rem 0 .72rem;font-size:.7rem}.hero h1{font-size:2.15rem;margin-top:1.55rem}.modes-section .modes{grid-template-columns:1fr;row-gap:0}.modes-section .mode,.modes-section .mode:nth-child(2),.modes-section .mode:nth-child(3){padding:1.1rem 0;margin:0;border-right:0;border-bottom:1px solid var(--hair)}.modes-section .mode:last-child{border-bottom:0}.mtd-row{grid-template-columns:1fr;gap:.55rem}.questions-banner{padding:1.5rem 1.4rem}.questions-banner::before{background-size:cover,auto 100%;background-position:center,54% center}.questions-banner blockquote{font-size:1.35rem}.demo-stage{aspect-ratio:4/3}}
 </style>
 <link rel="stylesheet" href="assets/endnav.css?v=3">
+<style id="homepage-readable-type">
+#page .topbar button,#page .hero .mast-top,#page .hero-proof .fig .k,#page .fig .k,#page .fig .n,
+#page .tcap,#page .mode .c,#page .band .cap,#page .lbl,#page .card .tag,#page .card p,
+#page .card .tests,#page .card .go,#page .foot,#page .contact .k,#page .demo-steps li::before,
+#page .demo-steps b,#page .demo-steps span,#page .demo-visual figcaption,#page .demo-video-copy span,
+#page .mtd-connector,#page .mtd-k,#page .mtd-n,#page .mtd-t2,#page .mtd-tag,#page .mtd-chip{font-size:.95rem}
+#suite-fr .en-k,#suite-en .en-k,#suite-fr li .en-tag,#suite-en li .en-tag,
+#suite-fr li .en-go,#suite-en li .en-go,#suite-fr .en-sub,#suite-en .en-sub,
+#suite-fr .en-site small,#suite-en .en-site small,#suite-fr li small,#suite-en li small{font-size:.95rem!important}
+#page .hero .hero-proof .fig-featured .n{font-size:1.12rem;line-height:1.48}
+</style>
 <script src="assets/endnav.js?v=3" defer></script>
 </head>
 <body>
@@ -426,7 +458,7 @@ h1.on .w{opacity:1;transform:none}
             <li><b>Moins d'1 minute</b> pour configurer un backtest complexe</li>
             <li><b>Moins d'une seconde</b> pour un run réaliste et dense</li>
           </ul>
-          <div class="n">Analyse des résultats grâce à une multitude de tests de validation intégrés.</div>
+          <div class="n">Analyse des résultats prise en charge par les tests de validation du framework.</div>
         </div>
       </div>
     </section>
@@ -434,7 +466,7 @@ h1.on .w{opacity:1;transform:none}
     <aside class="questions-banner" aria-label="Questions concrètes d'un gestionnaire">
       <blockquote>« Qu'aurait donné ce fonds, cette pondération ou cette stratégie dans mon allocation ? »</blockquote>
       <blockquote>« Qu'aurait vraiment donné cette logique de gestion que j'ai entendue et qui me paraît intéressante ? »</blockquote>
-      <p class="question-close">Ce qui manque, c'est l'outil pour y répondre vite. Pas la compétence.</p>
+      <p class="question-close">Ce qui manque, c'est l'outil pour facilement y répondre. Pas la compétence.</p>
     </aside>
 
     <section class="answer" aria-labelledby="answer-fr-title">
@@ -482,7 +514,7 @@ h1.on .w{opacity:1;transform:none}
           <g class="tg" style="--d:0s">
           <rect class="tn" x="270" y="372" width="360" height="48" rx="1"/>
           <text class="tk" x="450" y="394" text-anchor="middle">KERNEL NUMBA</text>
-          <text class="t2" x="450" y="412" text-anchor="middle">lecture des barres, exécution de l'order book</text>
+          <text class="t2" x="450" y="412" text-anchor="middle">lecture des barres, exécution de votre order book</text>
           </g>
 
           <a href="algo/" class="tlink"><g class="tg" style="--d:.75s">
@@ -514,7 +546,7 @@ h1.on .w{opacity:1;transform:none}
           </g></a>
         </svg>
         <div class="mode-mobile-diagram" aria-hidden="true">
-          <div class="mtd-node mtd-core"><span class="mtd-k">Kernel Numba</span><span class="mtd-n">lecture des barres, exécution de l'order book</span></div>
+          <div class="mtd-node mtd-core"><span class="mtd-k">Kernel Numba</span><span class="mtd-n">lecture des barres, exécution de votre order book</span></div>
           <div class="mtd-connector"><span>↓</span></div>
           <div class="mtd-row">
             <div class="mtd-node"><span class="mtd-t1">Algorithmique</span><span class="mtd-t2">une règle a-t-elle un edge ?</span><span class="mtd-chip">couche de sizing</span></div>
@@ -528,25 +560,30 @@ h1.on .w{opacity:1;transform:none}
       </figure>
       <div class="modes">
         <article class="mode"><h3><a href="algo/">Algorithmique</a></h3><p>Le mode algorithmique permet de tester et d'évaluer des stratégies systématiques, avec leur propre logique de signal, de sizing et de gestion du risque.</p><div class="c">porteur : trades clos</div></article>
-        <article class="mode"><h3>Allocation</h3><p>Prend en charge la construction et le suivi de portefeuilles multi-actifs et, à terme, multi-produits, avec des règles de pondération, une comptabilité de portefeuille avancée et personnalisable, et un rebalancement intégré au mode, configurable.</p><div class="c">porteur : Net Asset Value (NAV) nette de l'emprunt</div></article>
+        <article class="mode"><h3>Allocation</h3><p>Prend en charge la construction et le suivi de portefeuilles multi-actifs et, à terme, multi-produits, avec des règles de pondération, une comptabilité de portefeuille avancée et personnalisable, et un rebalancement intégré au mode, configurable.</p><div class="c">porteur : Net Asset Value (NAV)</div></article>
         <article class="mode"><h3><a href="research/">Research</a></h3><p>Facilite la recherche et la création de tout type d'indicateur, avec leur visualisation façon plateforme de trading. À terme, permet de projeter des graphiques en tout genre liés à l'évolution des prix, dans l'esprit d'outils comme Quantower.</p><div class="c">porteur : signal, relié au mode Algo</div></article>
         <article class="mode"><h3>Investissement, <span class="mode-status">en développement</span></h3><p>Permet de tester des stratégies systématiques à faible volume de transaction, pour un montant investi au comptant. Bénéficie de la comptabilité du mode Allocation, sans le système de levier du mode Algorithmique.</p><div class="c">porteur : rendement pondéré par le temps</div></article>
       </div>
     </section>
 
 
-    <section class="tech-facts" aria-labelledby="tech-fr-title"><div class="lbl" id="tech-fr-title">Repères techniques</div>
-      <p class="lede2">Un noyau compilé en Numba tient la comptabilité du portefeuille à chaque barre : paliers de trésorerie, tranches d'emprunt indexées sur un taux de marché réel, plusieurs devises, frais provisionnés sur une horloge et payés sur une autre. Trois modes d'exécution partagent ce kernel : signaux algorithmiques, allocation de portefeuille, et suivi d'un compte réel. La comptabilité de portefeuille appartient aux deux derniers.</p>
-      <p class="tcap">Cette « assetification » des stratégies permet de faire remonter la couche de sizing de la branche algorithmique jusqu'au niveau du portefeuille d'investissement.</p>
+    <section class="tech-facts" aria-labelledby="tech-fr-title">
+      <div class="tech-banner">
+        <div class="lbl" id="tech-fr-title">Repères techniques</div>
+        <p class="tech-lede">Un noyau compilé en Numba tient la comptabilité du portefeuille à chaque barre : paliers de trésorerie, tranches d'emprunt indexées sur un taux de marché réel, plusieurs devises, frais provisionnés sur une horloge et payés sur une autre.</p>
+        <p class="tech-scope">Trois modes d'exécution partagent ce kernel : signaux algorithmiques, allocation de portefeuille et suivi d'un compte réel. La comptabilité de portefeuille appartient aux deux derniers.</p>
+        <p class="tech-note">Contrairement à Nautilus Trader ou QuantConnect, ce moteur est conçu pour la recherche — itérations rapides et validation statistique —, pas pour l'exécution en direct.</p>
+      </div>
       <div class="figs">
         <div class="fig"><div class="k">Déclarer un portefeuille</div><div class="v">40 lignes</div><div class="n">réserves, emprunt, frais, devises</div></div>
         <div class="fig"><div class="k">Coût d'une réfutation</div><div class="v">3 lignes</div><div class="n">trois appels, trois verdicts</div></div>
         <div class="fig"><div class="k">Identité comptable</div><div class="v">4,44 e−16</div><div class="n">résidu maximal, neuf ans de barres journalières</div></div>
         <div class="fig"><div class="k">Hors échantillon</div><div class="v">jamais ouvert</div><div class="n">30 % de l'historique scellé</div></div>
       </div>
-      <p class="tech-note">Contrairement à Nautilus Trader ou QuantConnect, ce moteur est conçu pour la recherche — itérations rapides et validation statistique —, pas pour l'exécution en direct.</p>
     </section>
-    <div class="lbl">Huit entrées</div>
+    <section class="entries-section" aria-labelledby="entries-fr-title">
+      <div class="entries-inner">
+    <div class="lbl" id="entries-fr-title">Huit entrées</div>
     <div class="cards">
       <a class="card" href="research/">
         <div class="shot"><img src="img/research-ema-chart.png" alt="Graphique du mode Research : signaux long et short et EMA 50" loading="lazy"></div>
@@ -621,6 +658,8 @@ h1.on .w{opacity:1;transform:none}
         <div class="go">Ouvrir sur GitHub →</div>
       </a>
     </div>
+      </div>
+    </section>
 
     <section class="roadmap" aria-labelledby="roadmap-fr">
       <div class="lbl" id="roadmap-fr">Travaux à venir</div>
@@ -673,7 +712,7 @@ h1.on .w{opacity:1;transform:none}
   <div class="wrap lang-en">
     <section class="hero" aria-labelledby="hero-en">
       <div class="mast-top"><div>Arnaud Barbier</div><div>Signals · Portfolios · Accounts</div></div>
-      <h1 id="hero-en">A Python research framework to model, improve and create your strategies</h1>
+      <h1 id="hero-en">A Python research framework to <span class="hero-title-accent">model, improve and create your strategies</span></h1>
       <p class="hero-sub">Turn an idea or a hunch into a tested result, as simply and reliably as possible.</p>
       <div class="hero-proof hero-proof-2">
         <div class="fig">
@@ -689,7 +728,7 @@ h1.on .w{opacity:1;transform:none}
             <li><b>Under 1 minute</b> to configure a complex backtest</li>
             <li><b>Under 1 second</b> for a realistic, dense run</li>
           </ul>
-          <div class="n">Results analysis draws on a broad set of built-in validation tests.</div>
+          <div class="n">Results analysis is supported by the framework's validation tests.</div>
         </div>
       </div>
     </section>
@@ -791,25 +830,30 @@ h1.on .w{opacity:1;transform:none}
       </figure>
       <div class="modes">
         <article class="mode"><h3><a href="algo/">Algorithmic</a></h3><p>Algorithmic mode tests and evaluates systematic strategies, each with its own signal logic, sizing and risk management.</p><div class="c">carrier: closed trades</div></article>
-        <article class="mode"><h3>Allocation</h3><p>Builds and monitors multi-asset and, over time, multi-product portfolios, with weighting rules, advanced and customizable portfolio accounting, and rebalancing built into the mode and configurable.</p><div class="c">carrier: Net Asset Value (NAV) net of borrowing</div></article>
+        <article class="mode"><h3>Allocation</h3><p>Builds and monitors multi-asset and, over time, multi-product portfolios, with weighting rules, advanced and customizable portfolio accounting, and rebalancing built into the mode and configurable.</p><div class="c">carrier: Net Asset Value (NAV)</div></article>
         <article class="mode"><h3><a href="research/">Research</a></h3><p>Enables research and creation of all kinds of indicators, with trading-platform-style visualisation. Over time, it will project charts of price evolution in the spirit of tools such as Quantower.</p><div class="c">carrier: signal, linked to Algo mode</div></article>
         <article class="mode"><h3>Investment, <span class="mode-status">in development</span></h3><p>Tests systematic strategies with low transaction volume and a cash investment. It uses Allocation's accounting without Algorithmic mode's leverage system.</p><div class="c">carrier: time-weighted return</div></article>
       </div>
     </section>
 
 
-    <section class="tech-facts" aria-labelledby="tech-en-title"><div class="lbl" id="tech-en-title">Technical markers</div>
-      <p class="lede2">A Numba-compiled core keeps the portfolio's books on every bar: cash tiers, borrow tranches indexed on a real market rate, several currencies, fees that accrue on one clock and are paid on another. Three execution modes share that kernel: algorithmic signals, portfolio allocation, and tracking a real account. Portfolio accounting belongs to the last two.</p>
-      <p class="tcap">This assetification of strategies carries the sizing layer from the algorithmic branch up to the investment-portfolio level.</p>
+    <section class="tech-facts" aria-labelledby="tech-en-title">
+      <div class="tech-banner">
+        <div class="lbl" id="tech-en-title">Technical markers</div>
+        <p class="tech-lede">A Numba-compiled core keeps the portfolio's books on every bar: cash tiers, borrow tranches indexed on a real market rate, several currencies, and fees accrued on one clock and paid on another.</p>
+        <p class="tech-scope">Three execution modes share that kernel: algorithmic signals, portfolio allocation, and tracking a real account. Portfolio accounting belongs to the last two.</p>
+        <p class="tech-note">Unlike Nautilus Trader or QuantConnect, this engine is designed for research—fast iteration and statistical validation—not live execution.</p>
+      </div>
       <div class="figs">
         <div class="fig"><div class="k">Declaring a portfolio</div><div class="v">40 lines</div><div class="n">reserves, borrowing, fees, currencies</div></div>
         <div class="fig"><div class="k">Cost of a refutation</div><div class="v">3 lines</div><div class="n">three calls, three verdicts</div></div>
         <div class="fig"><div class="k">Accounting identity</div><div class="v">4.44 e−16</div><div class="n">worst residual, nine years of daily bars</div></div>
         <div class="fig"><div class="k">Out of sample</div><div class="v">never opened</div><div class="n">30 % of the history sealed</div></div>
       </div>
-      <p class="tech-note">Unlike Nautilus Trader or QuantConnect, this engine is built for research—fast iteration and statistical validation—not live execution.</p>
     </section>
-    <div class="lbl">Eight ways in</div>
+    <section class="entries-section" aria-labelledby="entries-en-title">
+      <div class="entries-inner">
+    <div class="lbl" id="entries-en-title">Eight ways in</div>
     <div class="cards">
       <a class="card" href="research/">
         <div class="shot"><img src="img/research-ema-chart.png" alt="Research mode chart: long and short signals and EMA 50" loading="lazy"></div>
@@ -884,6 +928,8 @@ h1.on .w{opacity:1;transform:none}
         <div class="go">Open on GitHub →</div>
       </a>
     </div>
+      </div>
+    </section>
 
     <section class="roadmap" aria-labelledby="roadmap-en">
       <div class="lbl" id="roadmap-en">Work ahead</div>
@@ -955,9 +1001,27 @@ h1.on .w{opacity:1;transform:none}
     if (reduce) return;
     var txt = h.textContent.trim();
     h.setAttribute("aria-label", txt);
-    h.innerHTML = txt.split(/\s+/).map(function(w, k){
-      return '<span class="w" aria-hidden="true" style="transition-delay:' + (0.05 + k * 0.045).toFixed(3) + 's">' + w + '</span>';
-    }).join(" ");
+    var walker = document.createTreeWalker(h, NodeFilter.SHOW_TEXT);
+    var nodes = [], textNode, word = 0;
+    while ((textNode = walker.nextNode())) nodes.push(textNode);
+    nodes.forEach(function(node){
+      var parts = node.nodeValue.match(/\s+|[^\s]+/g) || [];
+      var fragment = document.createDocumentFragment();
+      parts.forEach(function(part){
+        if (/^\s+$/.test(part)) {
+          fragment.appendChild(document.createTextNode(part));
+          return;
+        }
+        var span = document.createElement("span");
+        span.className = "w";
+        span.setAttribute("aria-hidden", "true");
+        span.style.transitionDelay = (0.05 + word * 0.045).toFixed(3) + "s";
+        span.textContent = part;
+        fragment.appendChild(span);
+        word += 1;
+      });
+      node.parentNode.replaceChild(fragment, node);
+    });
     requestAnimationFrame(function(){ requestAnimationFrame(function(){ h.classList.add("on"); }); });
   });
   if (!hasIO || reduce) return;
@@ -966,11 +1030,15 @@ h1.on .w{opacity:1;transform:none}
     es.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add("in"); to.unobserve(e.target); } });
   }, {threshold:.35});
   document.querySelectorAll(".tree, .mode-diagram").forEach(function(t){ t.classList.add("anim"); to.observe(t); });
+  var entriesObserver = new IntersectionObserver(function(es){
+    es.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add("anim", "in"); entriesObserver.unobserve(e.target); } });
+  }, {threshold:.02});
+  document.querySelectorAll(".entries-section").forEach(function(t){ entriesObserver.observe(t); });
   /* apparition au défilement */
   var io = new IntersectionObserver(function(es){
     es.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); } });
   }, {rootMargin:"0px 0px -6% 0px"});
-  document.querySelectorAll(".fig, .mode, .band, .card, .roadmap article").forEach(function(el){ el.classList.add("reveal"); io.observe(el); });
+  document.querySelectorAll(".topbar, .hero-sub, .hero-note, .fig, .mode, .band, .card, .questions-banner blockquote, .questions-banner .question-close, .answer>h2, .answer-timeline li, .demo-result, .demo-films-head, .demo-story, .demo-cta, .modes-heading, .mode-mobile-diagram > *, .tech-banner, .entries-inner > .lbl, .roadmap > .lbl, .roadmap article, .roadmap .continuity, .foot").forEach(function(el){ el.classList.add("reveal"); io.observe(el); });
 })();
 
 (function(){
