@@ -1,4 +1,24 @@
 (() => {
+  // Keep the reading guide beside the page introduction on the long-form mode pages.
+  // A few pages place it after their visual carousel in the source; move it into the
+  // masthead so desktop can present it as a right-hand reading rail.
+  document.querySelectorAll("article").forEach((article) => {
+    const mast = article.querySelector(".mast");
+    const map = article.querySelector(":scope > .reading-map");
+    if (mast && map && !mast.contains(map)) mast.insertBefore(map, mast.querySelector(".figs") || null);
+  });
+
+  document.querySelectorAll(".mast").forEach((mast) => {
+    const mastMap = mast.querySelector(":scope > .reading-map");
+    if (!mastMap || mast.querySelector(":scope > .mast-copy")) return;
+
+    const copy = document.createElement("div");
+    copy.className = "mast-copy";
+    mast.insertBefore(copy, mastMap);
+    mast.querySelectorAll(":scope > h1, :scope > .lede, :scope > .lede2, :scope > .lede-note, :scope > .small")
+      .forEach((element) => copy.appendChild(element));
+  });
+
   const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
   if (reduceMotion || !("IntersectionObserver" in window)) return;
 

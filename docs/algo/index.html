@@ -23,19 +23,19 @@
 <script src="../assets/modes.js?v=3" defer></script>
 <link rel="stylesheet" href="../assets/endnav.css?v=3">
 <script src="../assets/endnav.js?v=3" defer></script>
-<link rel="stylesheet" href="../assets/readable-pages.css?v=1">
+<link rel="stylesheet" href="../assets/readable-pages.css?v=2">
 </head>
 <body class="site-readable">
 <div id="page" data-lang="fr" data-title-fr="Mode Algo · Arnaud Barbier" data-title-en="Algo mode · Arnaud Barbier">
 <a class="skip" href="#main"><span class="lang-fr">Aller au contenu</span><span class="lang-en">Skip to content</span></a>
-<div class="wrap"><nav class="pagenav" aria-label="Pages"><a href="../"><span class="lang-fr">Accueil</span><span class="lang-en">Home</span></a><a href="../research/"><span class="lang-fr">Mode Research</span><span class="lang-en">Research mode</span></a><span aria-current="page"><span class="lang-fr">Mode Algo</span><span class="lang-en">Algo mode</span></span><a href="../engine/"><span class="lang-fr">Mode allocation</span><span class="lang-en">Allocation mode</span></a><a href="../validation/"><span class="lang-fr">Validation · Max DDR</span><span class="lang-en">Validation · Max drawdown</span></a><a href="../validation-2/"><span class="lang-fr">Validation · Sharpe</span><span class="lang-en">Validation · Sharpe</span></a><a href="../costs/"><span class="lang-fr">Les coûts</span><span class="lang-en">Costs · FR</span></a><a href="../stateful/"><span class="lang-fr">Replay &amp; resume</span><span class="lang-en">Replay &amp; resume</span></a><a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine"><span class="lang-fr">Dépôt</span><span class="lang-en">Repository</span></a></nav>
+<div class="wrap topbar"><a class="topbar-brand" href="../">Arnaud Barbier</a><nav class="pagenav" aria-label="Pages"><a href="../"><span class="lang-fr">Accueil</span><span class="lang-en">Home</span></a><a href="../research/"><span class="lang-fr">Mode Research</span><span class="lang-en">Research mode</span></a><span aria-current="page"><span class="lang-fr">Mode Algo</span><span class="lang-en">Algo mode</span></span><a href="../engine/"><span class="lang-fr">Mode allocation</span><span class="lang-en">Allocation mode</span></a><a href="../validation/"><span class="lang-fr">Validation · Max DDR</span><span class="lang-en">Validation · Max drawdown</span></a><a href="../validation-2/"><span class="lang-fr">Validation · Sharpe</span><span class="lang-en">Validation · Sharpe</span></a><a href="../costs/"><span class="lang-fr">Les coûts</span><span class="lang-en">Costs · FR</span></a><a href="../stateful/"><span class="lang-fr">Replay &amp; resume</span><span class="lang-en">Replay &amp; resume</span></a><a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine"><span class="lang-fr">Dépôt</span><span class="lang-en">Repository</span></a></nav>
 <div class="langbar"><button type="button" data-set="fr" aria-pressed="true">Français</button><button type="button" data-set="en" aria-pressed="false">English</button></div></div>
 <main id="main" class="wrap" tabindex="-1">
 
 <!-- ======================= FRANÇAIS ======================= -->
 <article class="lang-fr" lang="fr">
 <header class="mast">
-<div class="mast-top"><span>Arnaud Barbier · Moteur de backtest</span><span>Mode Algo · octobre 2026</span></div>
+<div class="mast-top"><span>Moteur de backtest</span><span>Mode Algo · octobre 2026</span></div>
 <h1>Mode Algo, du signal aux trades gérés, avec frais et sizing</h1>
 <p class="lede">Le mode Algo transforme un signal en stratégie complète. L'utilisateur choisit ses entrées, décrit la gestion de chaque position et configure les frais et la taille des positions ; le moteur, compilé avec Numba, exécute le backtest et <strong>restitue chaque trade avec son prix visé, son prix exécuté et la raison de sa sortie</strong>.</p>
 <p class="lede2">Deux stratégies au même signal peuvent diverger fortement par la seule gestion de leurs positions, et c'est la partie que l'on teste le moins. Le mode Algo permet donc de décrire cette gestion à quatre niveaux, du simple réglage d'un TP et d'un SL jusqu'à une fonction compilée, et de la tester à part : on garde les entrées et on ne change que la sortie, ou l'on tire les entrées au hasard en gardant la même logique de sortie. Le sizing, lui, peut être modifié sans relancer le backtest. Le signal peut être étudié en amont dans le <a href="../research/">mode Research</a>.</p>
@@ -224,7 +224,7 @@ def plot_showcase(plot, c):
 <!-- ======================= ENGLISH ======================= -->
 <article class="lang-en" lang="en">
 <header class="mast">
-<div class="mast-top"><span>Arnaud Barbier · Backtest engine</span><span>Algo mode · October 2026</span></div>
+<div class="mast-top"><span>Backtest engine</span><span>Algo mode · October 2026</span></div>
 <h1>Algo mode, from signal to managed trades, with costs and sizing</h1>
 <p class="lede">Algo mode turns a signal into a complete strategy. The user chooses the entries, describes how each position is managed and sets up costs and position size; the engine, compiled with Numba, runs the backtest and <strong>returns every trade with its target price, its executed price and the reason it closed</strong>.</p>
 <p class="lede2">Two strategies sharing the same signal can end up far apart through position management alone, and management is the part that gets tested least. Algo mode therefore describes it on four levels, from a simple TP and SL up to a compiled function, and tests it on its own: keep the entries and change only the exit, or draw the entries at random and keep the same exit logic. Sizing can be changed without rerunning the backtest. The signal itself can be studied first in <a href="../research/">Research mode</a>.</p>
@@ -409,5 +409,5 @@ def plot_showcase(plot, c):
 
 <footer><span>Arnaud Barbier · October 2026. The screenshots show how the mode works; no performance result is claimed.</span><a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine">Public repository (snapshot) →</a></footer>
 </article>
-</main></div><script src="../assets/readable-pages.js?v=1" defer></script>
+</main></div><script src="../assets/readable-pages.js?v=2" defer></script>
 </body></html>

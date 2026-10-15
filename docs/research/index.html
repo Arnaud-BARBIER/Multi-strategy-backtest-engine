@@ -23,19 +23,19 @@
 <script src="../assets/modes.js?v=3" defer></script>
 <link rel="stylesheet" href="../assets/endnav.css?v=3">
 <script src="../assets/endnav.js?v=3" defer></script>
-<link rel="stylesheet" href="../assets/readable-pages.css?v=1">
+<link rel="stylesheet" href="../assets/readable-pages.css?v=2">
 </head>
 <body class="site-readable">
 <div id="page" data-lang="fr" data-title-fr="Mode Research · Arnaud Barbier" data-title-en="Research mode · Arnaud Barbier">
 <a class="skip" href="#main"><span class="lang-fr">Aller au contenu</span><span class="lang-en">Skip to content</span></a>
-<div class="wrap"><nav class="pagenav" aria-label="Pages"><a href="../"><span class="lang-fr">Accueil</span><span class="lang-en">Home</span></a><span aria-current="page"><span class="lang-fr">Mode Research</span><span class="lang-en">Research mode</span></span><a href="../algo/"><span class="lang-fr">Mode Algo</span><span class="lang-en">Algo mode</span></a><a href="../engine/"><span class="lang-fr">Mode allocation</span><span class="lang-en">Allocation mode</span></a><a href="../validation/"><span class="lang-fr">Validation · Max DDR</span><span class="lang-en">Validation · Max drawdown</span></a><a href="../validation-2/"><span class="lang-fr">Validation · Sharpe</span><span class="lang-en">Validation · Sharpe</span></a><a href="../costs/"><span class="lang-fr">Les coûts</span><span class="lang-en">Costs · FR</span></a><a href="../stateful/"><span class="lang-fr">Replay &amp; resume</span><span class="lang-en">Replay &amp; resume</span></a><a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine"><span class="lang-fr">Dépôt</span><span class="lang-en">Repository</span></a></nav>
+<div class="wrap topbar"><a class="topbar-brand" href="../">Arnaud Barbier</a><nav class="pagenav" aria-label="Pages"><a href="../"><span class="lang-fr">Accueil</span><span class="lang-en">Home</span></a><span aria-current="page"><span class="lang-fr">Mode Research</span><span class="lang-en">Research mode</span></span><a href="../algo/"><span class="lang-fr">Mode Algo</span><span class="lang-en">Algo mode</span></a><a href="../engine/"><span class="lang-fr">Mode allocation</span><span class="lang-en">Allocation mode</span></a><a href="../validation/"><span class="lang-fr">Validation · Max DDR</span><span class="lang-en">Validation · Max drawdown</span></a><a href="../validation-2/"><span class="lang-fr">Validation · Sharpe</span><span class="lang-en">Validation · Sharpe</span></a><a href="../costs/"><span class="lang-fr">Les coûts</span><span class="lang-en">Costs · FR</span></a><a href="../stateful/"><span class="lang-fr">Replay &amp; resume</span><span class="lang-en">Replay &amp; resume</span></a><a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine"><span class="lang-fr">Dépôt</span><span class="lang-en">Repository</span></a></nav>
 <div class="langbar"><button type="button" data-set="fr" aria-pressed="true">Français</button><button type="button" data-set="en" aria-pressed="false">English</button></div></div>
 <main id="main" class="wrap" tabindex="-1">
 
 <!-- ======================= FRANÇAIS ======================= -->
 <article class="lang-fr" lang="fr">
 <header class="mast">
-<div class="mast-top"><span>Arnaud Barbier · Moteur de backtest</span><span>Mode Research · octobre 2026</span></div>
+<div class="mast-top"><span>Moteur de backtest</span><span>Mode Research · octobre 2026</span></div>
 <h1>Mode Research, développer un indicateur et mesurer ses signaux</h1>
 <p class="lede">Le mode Research permet de tester une idée d'entrée avant d'en faire une stratégie. L'utilisateur écrit son indicateur en quelques lignes ; le mode <strong>mesure ce qui se passe réellement après chaque signal</strong>, le compare à des entrées tirées au hasard et à la version précédente, puis affiche le résultat sur un graphique relié au notebook.</p>
 <p class="lede2">À ce stade, aucune gestion de trade, aucun frais et aucune compilation ne sont nécessaires. L'objectif est de savoir rapidement si le signal mérite d'être développé dans le <a href="../algo/">mode Algo</a>.</p>
@@ -198,7 +198,7 @@ cross = research.run_cross_asset(
 <!-- ======================= ENGLISH ======================= -->
 <article class="lang-en" lang="en">
 <header class="mast">
-<div class="mast-top"><span>Arnaud Barbier · Backtest engine</span><span>Research mode · October 2026</span></div>
+<div class="mast-top"><span>Backtest engine</span><span>Research mode · October 2026</span></div>
 <h1>Research mode, developing an indicator and measuring its signals</h1>
 <p class="lede">Research mode lets you test an entry idea before turning it into a strategy. The user writes the indicator in a few lines; the mode <strong>measures what actually happens after each signal</strong>, compares it with randomly drawn entries and with the previous version, then shows the result on a chart linked to the notebook.</p>
 <p class="lede2">At this stage no trade management, no costs and no compilation are needed. The aim is to find out quickly whether the signal is worth developing in <a href="../algo/">Algo mode</a>.</p>
@@ -357,5 +357,5 @@ cross = research.run_cross_asset(
 
 <footer><span>Arnaud Barbier · October 2026. The screenshots show how the mode works; no performance result is claimed.</span><a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine">Public repository (snapshot) →</a></footer>
 </article>
-</main></div><script src="../assets/readable-pages.js?v=1" defer></script>
+</main></div><script src="../assets/readable-pages.js?v=2" defer></script>
 </body></html>
