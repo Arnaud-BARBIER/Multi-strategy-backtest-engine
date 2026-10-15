@@ -51,24 +51,26 @@ a{color:var(--accent)}
 #page[data-lang="en"] .lang-fr{display:none}
 .wrap{max-width:980px;margin:0 auto}
 
-.topbar{display:flex;justify-content:flex-end;padding:.9rem 0 0}
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  padding:.65rem 0 .75rem;
+  background-image:linear-gradient(90deg,var(--accent) 0%,var(--hard) 30%,var(--hair) 74%);
+  background-repeat:no-repeat;background-size:0 2px;background-position:0 100%;
+  animation:drawbg 1.1s .3s cubic-bezier(.3,.7,.2,1) both;
+}
+.topbar-controls{display:flex;align-items:center;gap:.85rem;flex:none;white-space:nowrap}
 .topbar button{
   font-family:var(--f-sans);font-size:.68rem;letter-spacing:.13em;text-transform:uppercase;
   background:none;color:var(--faint);border:0;
-  padding:.32rem 0;cursor:pointer;margin-left:1.1rem;
+  padding:.2rem 0;cursor:pointer;margin:0;
 }
-.topbar button:first-child{margin-left:0}
 .topbar button[aria-pressed="true"]{color:var(--accent);border-color:var(--accent);position:relative;z-index:1;font-weight:600}
 .topbar button:hover{color:var(--ink)}
 .topbar button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
 .mast-top{
   font-family:var(--f-sans);
-  display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;
-  font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;color:var(--faint);
-  border-bottom:0;padding:0 0 .7rem;margin:2.2rem 0 0;
-  background-image:linear-gradient(90deg,var(--accent) 0%,var(--hard) 30%,var(--hair) 74%);
-  background-repeat:no-repeat;background-size:100% 2px;background-position:0 100%;
+  font-size:.68rem;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);white-space:nowrap;
 }
 h1{
   font-family:var(--f-serif);font-size:clamp(1.75rem,3.4vw,2.35rem);font-weight:400;line-height:1.05;
@@ -80,10 +82,9 @@ h1{
 .lede2 b{color:var(--ink);font-weight:600}
 
 .hero{
-  position:relative;margin:1.8rem 0 0;padding:0 0 1.2rem;
+  position:relative;margin:.7rem 0 0;padding:0 0 1.2rem;
 }
-.hero .mast-top{margin:0;padding:.6rem 0 .72rem;font-size:.95rem;letter-spacing:.12em}
-.hero h1{font-size:clamp(2.15rem,4.5vw,3.25rem);max-width:27ch;margin:2rem 0 1.1rem;line-height:1.04;letter-spacing:-.02em}
+.hero h1{font-size:clamp(2.15rem,4.5vw,3.25rem);max-width:27ch;margin:1.3rem 0 1.1rem;line-height:1.04;letter-spacing:-.02em}
 .hero-title-accent{color:var(--accent);font-weight:700}
 .hero-copy{font-size:1.06rem;line-height:1.55;max-width:66ch;color:var(--ink)}
 .hero-copy p{margin:0 0 .25rem}
@@ -229,7 +230,6 @@ h1{
 .tree.anim.in .tg,.mode-diagram.anim.in .tg{opacity:1;transform:none}
 .tree.anim .tl,.tree.anim .tl-i,.mode-diagram.anim .tl,.mode-diagram.anim .tl-i{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1s cubic-bezier(.3,.7,.2,1) var(--d,0s)}
 .tree.anim.in .tl,.tree.anim.in .tl-i,.mode-diagram.anim.in .tl,.mode-diagram.anim.in .tl-i{stroke-dashoffset:0}
-.mast-top{animation:drawbg 1.1s .3s cubic-bezier(.3,.7,.2,1) both}
 h1 .w{display:inline-block;opacity:0;transform:translateY(.4em);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
 h1.on .w{opacity:1;transform:none}
 .reveal{opacity:0;transform:translateY(18px);transition:opacity .8s ease,transform .8s cubic-bezier(.2,.7,.2,1)}
@@ -416,11 +416,11 @@ h1.on .w{opacity:1;transform:none}
   .demo-films-head{display:block}
   .demo-films-meta{margin-top:.35rem!important}
 }
-@media (max-width:520px){.hero{padding:0 0 1rem}.hero .mast-top{padding:.6rem 0 .72rem;font-size:.7rem}.hero h1{font-size:2.15rem;margin-top:1.55rem}.modes-section .modes{grid-template-columns:1fr;row-gap:0}.modes-section .mode,.modes-section .mode:nth-child(2),.modes-section .mode:nth-child(3){padding:1.1rem 0;margin:0;border-right:0;border-bottom:1px solid var(--hair)}.modes-section .mode:last-child{border-bottom:0}.mtd-row{grid-template-columns:1fr;gap:.55rem}.questions-banner{padding:1.5rem 1.4rem}.questions-banner::before{background-size:cover,auto 100%;background-position:center,54% center}.questions-banner blockquote{font-size:1.35rem}.demo-stage{aspect-ratio:4/3}}
+@media (max-width:520px){.topbar{gap:.5rem;padding:.55rem 0 .65rem}.topbar-controls{gap:.65rem}.hero{padding:0 0 1rem}.hero h1{font-size:2.15rem;margin-top:1rem}.modes-section .modes{grid-template-columns:1fr;row-gap:0}.modes-section .mode,.modes-section .mode:nth-child(2),.modes-section .mode:nth-child(3){padding:1.1rem 0;margin:0;border-right:0;border-bottom:1px solid var(--hair)}.modes-section .mode:last-child{border-bottom:0}.mtd-row{grid-template-columns:1fr;gap:.55rem}.questions-banner{padding:1.5rem 1.4rem}.questions-banner::before{background-size:cover,auto 100%;background-position:center,54% center}.questions-banner blockquote{font-size:1.35rem}.demo-stage{aspect-ratio:4/3}}
 </style>
 <link rel="stylesheet" href="assets/endnav.css?v=3">
 <style id="homepage-readable-type">
-#page .topbar button,#page .hero-proof .fig .k,#page .fig .k,#page .fig .n,
+#page .hero-proof .fig .k,#page .fig .k,#page .fig .n,
 #page .tcap,#page .mode .c,#page .band .cap,#page .lbl,#page .card .tag,#page .card p,
 #page .card .tests,#page .card .go,#page .foot,#page .contact .k,#page .demo-steps li::before,
 #page .demo-steps b,#page .demo-steps span,#page .demo-visual figcaption,#page .demo-video-copy span,
@@ -428,7 +428,7 @@ h1.on .w{opacity:1;transform:none}
 #suite-fr .en-k,#suite-en .en-k,#suite-fr li .en-tag,#suite-en li .en-tag,
 #suite-fr li .en-go,#suite-en li .en-go,#suite-fr .en-sub,#suite-en .en-sub,
 #suite-fr .en-site small,#suite-en .en-site small,#suite-fr li small,#suite-en li small{font-size:.95rem!important}
-#page .hero .mast-top{font-size:clamp(.76rem,calc(.55rem + .62vw),.95rem);letter-spacing:clamp(.07em,.35vw,.12em)}
+#page .topbar button,#page .topbar .mast-top{font-size:clamp(.64rem,calc(.52rem + .25vw),.72rem);letter-spacing:.09em}
 #page .hero .hero-proof .fig-featured .n{font-size:1.12rem;line-height:1.48}
 </style>
 <script src="assets/endnav.js?v=3" defer></script>
@@ -436,13 +436,15 @@ h1.on .w{opacity:1;transform:none}
 <body>
 <div id="page" data-lang="fr">
   <div class="wrap topbar">
-    <button type="button" data-set="fr" aria-pressed="true">Français</button>
-    <button type="button" data-set="en" aria-pressed="false">English</button>
+    <div class="mast-top"><div>Arnaud Barbier</div></div>
+    <div class="topbar-controls">
+      <button type="button" data-set="fr" aria-pressed="true">Français</button>
+      <button type="button" data-set="en" aria-pressed="false">English</button>
+    </div>
   </div>
 
   <div class="wrap lang-fr">
     <section class="hero" aria-labelledby="hero-fr">
-      <div class="mast-top"><div>Arnaud Barbier</div></div>
       <h1 id="hero-fr">Framework de recherche Python pour <span class="hero-title-accent">modéliser, améliorer et créer vos stratégies</span></h1>
       <p class="hero-sub">Transformez une idée ou une intuition en résultat testé, de la façon la plus simple et fiable possible.</p>
       <div class="hero-proof hero-proof-2">
@@ -712,7 +714,6 @@ h1.on .w{opacity:1;transform:none}
 
   <div class="wrap lang-en">
     <section class="hero" aria-labelledby="hero-en">
-      <div class="mast-top"><div>Arnaud Barbier</div></div>
       <h1 id="hero-en">A Python research framework to <span class="hero-title-accent">model, improve and create your strategies</span></h1>
       <p class="hero-sub">Turn an idea or a hunch into a tested result, as simply and reliably as possible.</p>
       <div class="hero-proof hero-proof-2">
