@@ -9,14 +9,25 @@ body.site-readable {
 
 /* Keep every long-form page on the same compact, horizontally scrollable masthead. */
 body.site-readable .topbar {
+  position: relative;
   display: flex;
   align-items: center;
   gap: .8rem;
   width: min(100%, 1080px);
   min-width: 0;
   margin: 0 auto;
-  padding: .55rem 0 .35rem;
+  padding: .55rem 0 .7rem;
+  margin-bottom: 1rem;
   flex-wrap: nowrap;
+}
+
+body.site-readable .topbar::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 2px;
+  background: linear-gradient(90deg, #f0a93a 0%, #8d6416 32%, #21262d 78%);
+  pointer-events: none;
 }
 
 body.site-readable .topbar-brand {
@@ -65,7 +76,18 @@ body.site-readable .langbar {
   flex: 0 0 auto;
   align-items: center;
   gap: .65rem;
+  padding: 0;
   white-space: nowrap;
+}
+
+body.site-readable .langbar button {
+  margin: 0;
+  line-height: 1.2;
+}
+
+body.site-readable .langbar button[aria-pressed="true"] {
+  color: #f0a93a !important;
+  font-weight: 600;
 }
 
 body.site-readable .mast {
