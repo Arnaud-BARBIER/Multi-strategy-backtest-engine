@@ -277,24 +277,24 @@ h1.on .w{opacity:1;transform:none}
 .demo-video video{display:block;width:100%;aspect-ratio:1600/1004;object-fit:contain;background:#0e1117;border:1px solid var(--hair)}
 .demo-cta{display:inline-block;margin:1.15rem 0 0;font-family:var(--f-sans);font-size:.78rem;font-weight:600;color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent);padding-bottom:.12rem}
 .tech-facts{margin:2.5rem 0 0}
-.tech-facts .lbl{margin-top:0}
-.tech-banner{max-width:900px;margin:0 0 1.2rem;padding:1.25rem 1.45rem;border-left:5px solid #fff0bb;border-radius:2px;background:linear-gradient(135deg,#A77A20 0%,#78520E 100%);color:#fff}
-.tech-banner .lbl{font-size:1rem;color:#fff0bb;margin:0 0 .65rem;letter-spacing:.12em}
+.tech-heading{font-family:var(--f-sans);font-size:.9rem;line-height:1.3;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0 0 1rem}
+.tech-overview{max-width:900px}
 .tech-lede,.tech-scope{font-size:1.12rem;line-height:1.58;color:#fff;margin:0;max-width:86ch}
 .tech-scope{margin-top:.65rem}
-.tech-note{font-size:1.12rem;line-height:1.55;color:#fff;margin:1rem 0 0;max-width:86ch;font-weight:700}
 .tech-rebuild{
-  margin-top:1.15rem;padding:1rem 1.15rem 1.1rem;
-  border:1px solid rgba(255,240,187,.34);border-left:3px solid #fff0bb;border-radius:2px;
-  background:linear-gradient(135deg,#12171f 0%,#0e1117 100%);color:#fff
+  max-width:900px;margin:1.45rem 0 0;padding:1.35rem clamp(1.15rem,2.4vw,1.8rem) 1.4rem;
+  border:0;border-left:5px solid #fff0bb;border-radius:3px;
+  background:linear-gradient(135deg,#A77A20 0%,#78520E 100%);color:#fff
 }
-#page .tech-rebuild .lbl{font-size:.78rem;color:#fff0bb;letter-spacing:.14em;margin:0 0 .65rem}
-.tech-rebuild .tech-scope{margin-top:.65rem}
-.tech-rebuild .tech-scope:first-of-type{margin-top:0}
-.tech-rebuild-list{list-style:disc;margin:.55rem 0 0;padding-left:1.25rem;color:#fff;font-size:1rem;line-height:1.55}
-.tech-rebuild-list li+li{margin-top:.55rem}
-.tech-rebuild-list li::marker{color:#fff0bb}
-.tech-rebuild .tech-rebuild-close{margin-top:.85rem}
+#page .tech-rebuild .tech-rebuild-title{font-family:var(--f-sans);font-size:1.05rem;line-height:1.35;font-weight:700;letter-spacing:.045em;color:#fff;margin:0 0 .8rem}
+.tech-rebuild-intro{font-size:1.06rem;line-height:1.55;color:#fff;margin:0;max-width:78ch}
+.tech-rebuild-lead{font-family:var(--f-sans);font-size:.95rem;line-height:1.4;font-weight:700;color:#fff0bb;margin:1rem 0 .25rem}
+.tech-rebuild-list{list-style:none;counter-reset:tech-point;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 1.6rem;margin:.45rem 0 0;padding:0;color:#fff;font-family:var(--f-sans);font-size:.94rem;line-height:1.48}
+.tech-rebuild-list li{counter-increment:tech-point;display:grid;grid-template-columns:1.6rem minmax(0,1fr);align-items:start;gap:.65rem;min-width:0;padding:.8rem .1rem;border-top:1px solid rgba(255,240,187,.32)}
+.tech-rebuild-list li:last-child{grid-column:1/-1}
+.tech-rebuild-list li::before{content:counter(tech-point,decimal-leading-zero);font-family:var(--f-sans);font-size:.78rem;line-height:1.4;font-weight:700;letter-spacing:.04em;color:#fff0bb;margin-top:.02rem}
+.tech-rebuild-close{font-size:.98rem;line-height:1.45;color:#fff;margin:1rem 0 0;padding-top:.8rem;border-top:1px solid rgba(255,240,187,.36)}
+.tech-note{max-width:900px;margin:1.1rem 0 0;padding:.15rem 0 .15rem 1rem;border-left:2px solid var(--accent);font-family:var(--f-sans);font-size:1.02rem;line-height:1.52;font-weight:600;color:#fff}
 .tech-facts .figs{margin-top:1.6rem}
 .entries-section{position:relative;isolation:isolate;left:50%;width:100vw;transform:translateX(-50%);margin-top:3rem;padding:2.35rem 0 2.2rem;background:linear-gradient(180deg,#19140d 0%,#141820 100%);overflow:hidden}
 .entries-section::before{content:"";position:absolute;z-index:0;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,var(--accent),rgba(240,169,58,.18) 72%,transparent);transform-origin:left}
@@ -427,6 +427,8 @@ h1.on .w{opacity:1;transform:none}
   .answer-timeline li:not(:last-child)::after{content:"↓";top:auto;bottom:-.95rem;right:50%;left:auto;transform:translateX(50%);padding:0 .3rem}
   .demo-films-head{display:block}
   .demo-films-meta{margin-top:.35rem!important}
+  .tech-rebuild-list{grid-template-columns:1fr}
+  .tech-rebuild-list li:last-child{grid-column:auto}
 }
 @media (max-width:520px){.topbar{gap:.5rem;padding:.55rem 0 .65rem}.topbar-controls{gap:.65rem}.hero{padding:0 0 1rem}.hero h1{font-size:2.15rem;margin-top:1rem}.modes-section .modes{grid-template-columns:1fr;row-gap:0}.modes-section .mode,.modes-section .mode:nth-child(2),.modes-section .mode:nth-child(3){padding:1.1rem 0;margin:0;border-right:0;border-bottom:1px solid var(--hair)}.modes-section .mode:last-child{border-bottom:0}.mtd-row{grid-template-columns:1fr;gap:.55rem}.questions-banner{padding:1.5rem 1.4rem}.questions-banner::before{background-size:cover,auto 100%;background-position:center,54% center}.questions-banner blockquote{font-size:1.35rem}.demo-stage{aspect-ratio:4/3}}
 </style>
@@ -588,25 +590,25 @@ h1.on .w{opacity:1;transform:none}
 
 
     <section class="tech-facts" aria-labelledby="tech-fr-title">
-      <div class="tech-banner">
-        <div class="lbl" id="tech-fr-title">Repères techniques</div>
+      <h2 class="tech-heading" id="tech-fr-title">Repères techniques</h2>
+      <div class="tech-overview">
         <p class="tech-lede">Un noyau compilé en Numba tient la comptabilité du portefeuille à chaque barre : paliers de trésorerie, tranches d'emprunt indexées sur un taux de marché réel, plusieurs devises, frais provisionnés sur une horloge et payés sur une autre.</p>
         <p class="tech-scope">Trois modes d'exécution reposent sur ce noyau : signaux algorithmiques, allocation de portefeuille et suivi d'un compte réel. La comptabilité de portefeuille appartient aux deux derniers.</p>
-        <div class="tech-rebuild">
-          <h3 class="lbl" id="tech-rebuild-fr-title">Refonte en cours : un moteur d'exécution commun</h3>
-          <p class="tech-scope">Chaque mode repose aujourd'hui sur sa propre version du noyau, adaptée à ses besoins. La refonte en cours les remplace par une base unique, inspirée de Nautilus Trader : un carnet d'ordres, un compte et une seule passe d'exécution par barre, pour tous les modes. L'allocation devient le mode portefeuille unique : elle reprend le suivi d'un compte réel et accueille des stratégies algorithmiques comme lignes, en spot, CFD ou futures.</p>
-          <p class="tech-scope">Elle permet de :</p>
-          <ul class="tech-rebuild-list">
-            <li>exécuter un ordre de la même façon dans tous les modes, avec le même prix, les mêmes coûts et le même journal ;</li>
-            <li>placer une stratégie dans un portefeuille sans la réécrire, et comparer ses résultats seule ou en portefeuille ;</li>
-            <li>faire lire à une stratégie l'état des autres lignes du portefeuille, par exemple pour une couverture ;</li>
-            <li>relier chaque position à l'ordre qui l'a ouverte et à la stratégie qui la porte ;</li>
-            <li>ne compiler que ce qu'une simulation utilise, pour garder la vitesse sur des centaines de milliers d'ordres.</li>
-          </ul>
-          <p class="tech-scope tech-rebuild-close">Les démonstrations de cette page tournent sur les noyaux actuels.</p>
-        </div>
-        <p class="tech-note">Contrairement à Nautilus Trader ou QuantConnect, ce moteur est conçu pour la recherche : itérations rapides et validation statistique ; pas pour l'exécution en direct.</p>
       </div>
+      <div class="tech-rebuild">
+        <h3 class="tech-rebuild-title" id="tech-rebuild-fr-title">Refonte en cours : un moteur d'exécution commun</h3>
+        <p class="tech-rebuild-intro">Chaque mode repose aujourd'hui sur sa propre version du noyau, adaptée à ses besoins. La refonte en cours les remplace par une base unique, inspirée de Nautilus Trader : un carnet d'ordres, un compte et une seule passe d'exécution par barre, pour tous les modes. L'allocation devient le mode portefeuille unique : elle reprend le suivi d'un compte réel et accueille des stratégies algorithmiques comme lignes, en spot, CFD ou futures.</p>
+        <p class="tech-rebuild-lead">Elle permet de :</p>
+        <ul class="tech-rebuild-list">
+          <li>exécuter un ordre de la même façon dans tous les modes, avec le même prix, les mêmes coûts et le même journal ;</li>
+          <li>placer une stratégie dans un portefeuille sans la réécrire, et comparer ses résultats seule ou en portefeuille ;</li>
+          <li>faire lire à une stratégie l'état des autres lignes du portefeuille, par exemple pour une couverture ;</li>
+          <li>relier chaque position à l'ordre qui l'a ouverte et à la stratégie qui la porte ;</li>
+          <li>ne compiler que ce qu'une simulation utilise, pour garder la vitesse sur des centaines de milliers d'ordres.</li>
+        </ul>
+        <p class="tech-rebuild-close">Les démonstrations de cette page tournent sur les noyaux actuels.</p>
+      </div>
+      <p class="tech-note">Contrairement à Nautilus Trader ou QuantConnect, ce moteur est conçu pour la recherche : itérations rapides et validation statistique ; pas pour l'exécution en direct.</p>
       <div class="figs">
         <div class="fig"><div class="k">Déclarer un portefeuille</div><div class="v">40 lignes</div><div class="n">réserves, emprunt, frais, devises</div></div>
         <div class="fig"><div class="k">Coût d'une réfutation</div><div class="v">3 lignes</div><div class="n">trois appels, trois verdicts</div></div>
@@ -870,25 +872,25 @@ h1.on .w{opacity:1;transform:none}
 
 
     <section class="tech-facts" aria-labelledby="tech-en-title">
-      <div class="tech-banner">
-        <div class="lbl" id="tech-en-title">Technical markers</div>
+      <h2 class="tech-heading" id="tech-en-title">Technical markers</h2>
+      <div class="tech-overview">
         <p class="tech-lede">A Numba-compiled core keeps the portfolio's books on every bar: cash tiers, borrow tranches indexed on a real market rate, several currencies, and fees accrued on one clock and paid on another.</p>
         <p class="tech-scope">Three execution modes run on that core: algorithmic signals, portfolio allocation, and tracking a real account. Portfolio accounting belongs to the last two.</p>
-        <div class="tech-rebuild">
-          <h3 class="lbl" id="tech-rebuild-en-title">Rebuild in progress: one common execution engine</h3>
-          <p class="tech-scope">Each mode currently runs on its own version of the core, tailored to its needs. The rebuild in progress replaces them with a single base, modelled on Nautilus Trader: one order book, one account and a single execution pass per bar, for every mode. Allocation becomes the single portfolio mode: it takes over real-account tracking and accepts algorithmic strategies as lines, in spot, CFDs or futures.</p>
-          <p class="tech-scope">It lets you:</p>
-          <ul class="tech-rebuild-list">
-            <li>execute an order the same way in every mode, with the same price, the same costs and the same journal;</li>
-            <li>put a strategy into a portfolio without rewriting it, and compare its results alone and in the portfolio;</li>
-            <li>let a strategy read the state of the portfolio's other lines, for example to hedge it;</li>
-            <li>trace every position back to the order that opened it and the strategy that holds it;</li>
-            <li>compile only what a simulation uses, to keep the speed on hundreds of thousands of orders.</li>
-          </ul>
-          <p class="tech-scope tech-rebuild-close">The demonstrations on this page run on the current cores.</p>
-        </div>
-        <p class="tech-note">Unlike Nautilus Trader or QuantConnect, this engine is designed for research: fast iteration and statistical validation; not for live execution.</p>
       </div>
+      <div class="tech-rebuild">
+        <h3 class="tech-rebuild-title" id="tech-rebuild-en-title">Rebuild in progress: one common execution engine</h3>
+        <p class="tech-rebuild-intro">Each mode currently runs on its own version of the core, tailored to its needs. The rebuild in progress replaces them with a single base, modelled on Nautilus Trader: one order book, one account and a single execution pass per bar, for every mode. Allocation becomes the single portfolio mode: it takes over real-account tracking and accepts algorithmic strategies as lines, in spot, CFDs or futures.</p>
+        <p class="tech-rebuild-lead">It lets you:</p>
+        <ul class="tech-rebuild-list">
+          <li>execute an order the same way in every mode, with the same price, the same costs and the same journal;</li>
+          <li>put a strategy into a portfolio without rewriting it, and compare its results alone and in the portfolio;</li>
+          <li>let a strategy read the state of the portfolio's other lines, for example to hedge it;</li>
+          <li>trace every position back to the order that opened it and the strategy that holds it;</li>
+          <li>compile only what a simulation uses, to keep the speed on hundreds of thousands of orders.</li>
+        </ul>
+        <p class="tech-rebuild-close">The demonstrations on this page run on the current cores.</p>
+      </div>
+      <p class="tech-note">Unlike Nautilus Trader or QuantConnect, this engine is designed for research: fast iteration and statistical validation; not for live execution.</p>
       <div class="figs">
         <div class="fig"><div class="k">Declaring a portfolio</div><div class="v">40 lines</div><div class="n">reserves, borrowing, fees, currencies</div></div>
         <div class="fig"><div class="k">Cost of a refutation</div><div class="v">3 lines</div><div class="n">three calls, three verdicts</div></div>
@@ -1083,7 +1085,7 @@ h1.on .w{opacity:1;transform:none}
   var io = new IntersectionObserver(function(es){
     es.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); } });
   }, {rootMargin:"0px 0px -6% 0px"});
-  document.querySelectorAll(".topbar, .hero-sub, .hero-note, .fig, .mode, .band, .card, .questions-banner blockquote, .questions-banner .question-close, .answer>h2, .answer-timeline li, .demo-result, .demo-films-head, .demo-story, .demo-cta, .modes-heading, .mode-mobile-diagram > *, .tech-banner, .entries-inner > .lbl, .roadmap > .lbl, .roadmap article, .roadmap .continuity, .foot").forEach(function(el){ el.classList.add("reveal"); io.observe(el); });
+  document.querySelectorAll(".topbar, .hero-sub, .hero-note, .fig, .mode, .band, .card, .questions-banner blockquote, .questions-banner .question-close, .answer>h2, .answer-timeline li, .demo-result, .demo-films-head, .demo-story, .demo-cta, .modes-heading, .mode-mobile-diagram > *, .tech-heading, .tech-rebuild, .tech-note, .entries-inner > .lbl, .roadmap > .lbl, .roadmap article, .roadmap .continuity, .foot").forEach(function(el){ el.classList.add("reveal"); io.observe(el); });
 })();
 
 (function(){
