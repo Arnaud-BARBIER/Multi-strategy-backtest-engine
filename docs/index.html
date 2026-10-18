@@ -283,6 +283,18 @@ h1.on .w{opacity:1;transform:none}
 .tech-lede,.tech-scope{font-size:1.12rem;line-height:1.58;color:#fff;margin:0;max-width:86ch}
 .tech-scope{margin-top:.65rem}
 .tech-note{font-size:1.12rem;line-height:1.55;color:#fff;margin:1rem 0 0;max-width:86ch;font-weight:700}
+.tech-rebuild{
+  margin-top:1.15rem;padding:1rem 1.15rem 1.1rem;
+  border:1px solid rgba(255,240,187,.34);border-left:3px solid #fff0bb;border-radius:2px;
+  background:linear-gradient(135deg,#12171f 0%,#0e1117 100%);color:#fff
+}
+#page .tech-rebuild .lbl{font-size:.78rem;color:#fff0bb;letter-spacing:.14em;margin:0 0 .65rem}
+.tech-rebuild .tech-scope{margin-top:.65rem}
+.tech-rebuild .tech-scope:first-of-type{margin-top:0}
+.tech-rebuild-list{list-style:disc;margin:.55rem 0 0;padding-left:1.25rem;color:#fff;font-size:1rem;line-height:1.55}
+.tech-rebuild-list li+li{margin-top:.55rem}
+.tech-rebuild-list li::marker{color:#fff0bb}
+.tech-rebuild .tech-rebuild-close{margin-top:.85rem}
 .tech-facts .figs{margin-top:1.6rem}
 .entries-section{position:relative;isolation:isolate;left:50%;width:100vw;transform:translateX(-50%);margin-top:3rem;padding:2.35rem 0 2.2rem;background:linear-gradient(180deg,#19140d 0%,#141820 100%);overflow:hidden}
 .entries-section::before{content:"";position:absolute;z-index:0;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,var(--accent),rgba(240,169,58,.18) 72%,transparent);transform-origin:left}
@@ -510,7 +522,7 @@ h1.on .w{opacity:1;transform:none}
       <a class="demo-cta" href="mailto:arnaud.barbier@grenoble-em.com?subject=D%C3%A9monstration%20du%20moteur">Démonstration en direct sur demande →</a>
     </section>
     <section class="modes-section" aria-labelledby="modes-fr-title">
-      <div class="modes-heading"><h2 id="modes-fr-title">Un noyau compilé, quatre modes</h2><p>Une base commune à tous les modes : ordres, exécutions, coûts et comptabilité sont gérés au même endroit. Moins de mécanismes en double, et des résultats comparables d'un mode à l'autre.</p></div>
+      <div class="modes-heading"><h2 id="modes-fr-title">Un noyau compilé, quatre modes</h2><p>Quatre modes sur un noyau Numba compilé, en cours d'unification sur une base d'exécution commune.</p></div>
       <figure class="mode-diagram">
         <svg viewBox="0 0 900 430" role="img" aria-label="Arbre des modes : le kernel Numba se sépare en algorithmique et allocation, qui se rejoignent pour former le mode investissement. Au centre, le mode Research, relié au mode algorithmique.">
           <path class="tl" pathLength="1" style="--d:.25s" d="M450,372 L450,346"/>
@@ -579,7 +591,20 @@ h1.on .w{opacity:1;transform:none}
       <div class="tech-banner">
         <div class="lbl" id="tech-fr-title">Repères techniques</div>
         <p class="tech-lede">Un noyau compilé en Numba tient la comptabilité du portefeuille à chaque barre : paliers de trésorerie, tranches d'emprunt indexées sur un taux de marché réel, plusieurs devises, frais provisionnés sur une horloge et payés sur une autre.</p>
-        <p class="tech-scope">Trois modes d'exécution partagent ce kernel : signaux algorithmiques, allocation de portefeuille et suivi d'un compte réel. La comptabilité de portefeuille appartient aux deux derniers.</p>
+        <p class="tech-scope">Trois modes d'exécution reposent sur ce noyau : signaux algorithmiques, allocation de portefeuille et suivi d'un compte réel. La comptabilité de portefeuille appartient aux deux derniers.</p>
+        <div class="tech-rebuild">
+          <h3 class="lbl" id="tech-rebuild-fr-title">Refonte en cours : un moteur d'exécution commun</h3>
+          <p class="tech-scope">Chaque mode repose aujourd'hui sur sa propre version du noyau, adaptée à ses besoins. La refonte en cours les remplace par une base unique, inspirée de Nautilus Trader : un carnet d'ordres, un compte et une seule passe d'exécution par barre, pour tous les modes. L'allocation devient le mode portefeuille unique : elle reprend le suivi d'un compte réel et accueille des stratégies algorithmiques comme lignes, en spot, CFD ou futures.</p>
+          <p class="tech-scope">Elle permet de :</p>
+          <ul class="tech-rebuild-list">
+            <li>exécuter un ordre de la même façon dans tous les modes, avec le même prix, les mêmes coûts et le même journal ;</li>
+            <li>placer une stratégie dans un portefeuille sans la réécrire, et comparer ses résultats seule ou en portefeuille ;</li>
+            <li>faire lire à une stratégie l'état des autres lignes du portefeuille, par exemple pour une couverture ;</li>
+            <li>relier chaque position à l'ordre qui l'a ouverte et à la stratégie qui la porte ;</li>
+            <li>ne compiler que ce qu'une simulation utilise, pour garder la vitesse sur des centaines de milliers d'ordres.</li>
+          </ul>
+          <p class="tech-scope tech-rebuild-close">Les démonstrations de cette page tournent sur les noyaux actuels.</p>
+        </div>
         <p class="tech-note">Contrairement à Nautilus Trader ou QuantConnect, ce moteur est conçu pour la recherche : itérations rapides et validation statistique ; pas pour l'exécution en direct.</p>
       </div>
       <div class="figs">
@@ -779,7 +804,7 @@ h1.on .w{opacity:1;transform:none}
       <a class="demo-cta" href="mailto:arnaud.barbier@grenoble-em.com?subject=Backtest%20engine%20demonstration">Live demonstration on request →</a>
     </section>
     <section class="modes-section" aria-labelledby="modes-en-title">
-      <div class="modes-heading"><h2 id="modes-en-title">One core, four modes</h2><p>One shared core for designing, testing and monitoring a strategy.</p></div>
+      <div class="modes-heading"><h2 id="modes-en-title">One core, four modes</h2><p>Four modes on a compiled Numba core, being unified on one common execution base.</p></div>
       <figure class="mode-diagram">
         <svg viewBox="0 0 900 430" role="img" aria-label="Mode tree: the Numba kernel splits into algorithmic and allocation, which rejoin to form investment mode. In the centre, Research mode, linked to algorithmic mode.">
           <path class="tl" pathLength="1" style="--d:.25s" d="M450,372 L450,346"/>
@@ -848,7 +873,20 @@ h1.on .w{opacity:1;transform:none}
       <div class="tech-banner">
         <div class="lbl" id="tech-en-title">Technical markers</div>
         <p class="tech-lede">A Numba-compiled core keeps the portfolio's books on every bar: cash tiers, borrow tranches indexed on a real market rate, several currencies, and fees accrued on one clock and paid on another.</p>
-        <p class="tech-scope">Three execution modes share that kernel: algorithmic signals, portfolio allocation, and tracking a real account. Portfolio accounting belongs to the last two.</p>
+        <p class="tech-scope">Three execution modes run on that core: algorithmic signals, portfolio allocation, and tracking a real account. Portfolio accounting belongs to the last two.</p>
+        <div class="tech-rebuild">
+          <h3 class="lbl" id="tech-rebuild-en-title">Rebuild in progress: one common execution engine</h3>
+          <p class="tech-scope">Each mode currently runs on its own version of the core, tailored to its needs. The rebuild in progress replaces them with a single base, modelled on Nautilus Trader: one order book, one account and a single execution pass per bar, for every mode. Allocation becomes the single portfolio mode: it takes over real-account tracking and accepts algorithmic strategies as lines, in spot, CFDs or futures.</p>
+          <p class="tech-scope">It lets you:</p>
+          <ul class="tech-rebuild-list">
+            <li>execute an order the same way in every mode, with the same price, the same costs and the same journal;</li>
+            <li>put a strategy into a portfolio without rewriting it, and compare its results alone and in the portfolio;</li>
+            <li>let a strategy read the state of the portfolio's other lines, for example to hedge it;</li>
+            <li>trace every position back to the order that opened it and the strategy that holds it;</li>
+            <li>compile only what a simulation uses, to keep the speed on hundreds of thousands of orders.</li>
+          </ul>
+          <p class="tech-scope tech-rebuild-close">The demonstrations on this page run on the current cores.</p>
+        </div>
         <p class="tech-note">Unlike Nautilus Trader or QuantConnect, this engine is designed for research: fast iteration and statistical validation; not for live execution.</p>
       </div>
       <div class="figs">
