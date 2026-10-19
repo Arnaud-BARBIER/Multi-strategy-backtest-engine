@@ -3,21 +3,25 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Arnaud Barbier · Moteur de backtest multi-stratégie et couche de validation</title>
-<meta name="description" content="Tester une stratégie ou une pondération dans un portefeuille qui tient compte de la trésorerie, des frais, des devises et de la validation statistique.">
+<title>Créer, modéliser et améliorer vos stratégies · Arnaud Barbier</title>
+<meta name="description" content="Framework de recherche Python pour créer, modéliser et améliorer des stratégies, avec comptabilité de portefeuille et tests de validation intégrés.">
 <meta name="author" content="Arnaud Barbier">
 <link rel="canonical" href="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/">
-<meta property="og:title" content="Arnaud Barbier · Moteur de backtest multi-stratégie et couche de validation">
-<meta property="og:description" content="Tester une stratégie ou une pondération dans un portefeuille qui tient compte des frais, du cash et des devises.">
+<meta property="og:title" content="Créer, modéliser et améliorer vos stratégies · Arnaud Barbier">
+<meta property="og:description" content="Framework de recherche Python pour tester des stratégies et des allocations, avec comptabilité de portefeuille et validation statistique intégrées.">
 <meta property="og:locale" content="fr_FR">
 <meta property="og:locale:alternate" content="en_GB">
-<meta property="og:image" content="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/img/og-home-v3.png">
+<meta property="og:image" content="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/img/og-home-v4.png">
+<meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Moteur de backtest multi-stratégie, et couche de validation. Signaux, portefeuilles, comptes.">
-<meta name="twitter:image" content="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/img/og-home-v3.png">
+<meta property="og:image:alt" content="Créer, modéliser et améliorer vos stratégies : aperçu du framework de recherche Python d'Arnaud Barbier.">
+<meta name="twitter:title" content="Créer, modéliser et améliorer vos stratégies · Arnaud Barbier">
+<meta name="twitter:description" content="Framework de recherche Python pour tester des stratégies et des allocations, avec comptabilité de portefeuille et validation statistique intégrées.">
+<meta name="twitter:image" content="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/img/og-home-v4.png">
+<meta name="twitter:image:alt" content="Créer, modéliser et améliorer vos stratégies : aperçu du framework de recherche Python d'Arnaud Barbier.">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpolygon points='50,6 90,50 50,94 10,50' fill='%23bc8cff'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -746,14 +750,14 @@ h1.on .w{opacity:1;transform:none}
 
   <div class="wrap lang-en">
     <section class="hero" aria-labelledby="hero-en">
-      <h1 id="hero-en">A Python research framework to <span class="hero-title-accent">model, improve and create your strategies</span></h1>
+      <h1 id="hero-en">A Python research framework to <span class="hero-title-accent">create, model and improve your strategies</span></h1>
       <p class="hero-sub">Turn an idea or a hunch into a tested result, as simply and reliably as possible.</p>
       <div class="hero-proof hero-proof-2">
         <div class="fig">
           <ul class="fig-list">
-            <li><b>Supports</b> any <a href="#modes-en-title">allocation</a> or management strategy idea possible</li>
+            <li><b>Supports</b> any <a href="#modes-en-title">allocation</a> or management strategy you have in mind</li>
             <li><b>Lets you recreate</b> existing strategies to study and improve them</li>
-            <li><b>Your attention</b> is dedicated to your strategy, not to what tests it</li>
+            <li><b>Your focus</b> stays on your strategy, not on what tests it</li>
           </ul>
         </div>
         <div class="fig fig-featured">
@@ -770,7 +774,7 @@ h1.on .w{opacity:1;transform:none}
     <aside class="questions-banner" aria-label="Questions a portfolio manager might ask">
       <blockquote>“What would this fund, weighting or strategy have done in my allocation?”</blockquote>
       <blockquote>“What would that management approach I heard about, and find interesting, really have done?”</blockquote>
-      <p class="question-close">What is missing is the tool to answer quickly. Not the expertise.</p>
+      <p class="question-close">What's missing is the tool to answer it easily, not the expertise.</p>
     </aside>
 
     <section class="answer" aria-labelledby="answer-en-title">
@@ -786,7 +790,7 @@ h1.on .w{opacity:1;transform:none}
         <div class="demo-films-head"><p class="demo-films-k">Example of use</p><p class="demo-films-meta">(less than one minute of video)</p></div>
         <div class="demo-story" data-carousel-lang="en" role="region" aria-label="Example of use in video">
           <div class="demo-steps">
-            <article class="demo-step is-current" data-demo-step="0"><span class="step-no">01 / 04</span><h3>Prepare the study</h3><p>Work takes place in a preconfigured notebook with a simple API: configure borrowing, cash management and more.</p><div class="demo-mobile-video"><video muted controls playsinline preload="none" poster="https://arnaud-barbier.github.io/img/studio-1-poster.jpg" title="Prepare a backtest study"><source src="https://arnaud-barbier.github.io/video/studio-1-creer-notebook.mp4" type="video/mp4"></video></div></article>
+            <article class="demo-step is-current" data-demo-step="0"><span class="step-no">01 / 04</span><h3>Prepare the study</h3><p>The backtest runs in a configurable notebook, so you can change its settings through a simple API. Here, we set the out-of-sample (OOS) period.</p><div class="demo-mobile-video"><video muted controls playsinline preload="none" poster="https://arnaud-barbier.github.io/img/studio-1-poster.jpg" title="Prepare a backtest study"><source src="https://arnaud-barbier.github.io/video/studio-1-creer-notebook.mp4" type="video/mp4"></video></div></article>
             <article class="demo-step" data-demo-step="1"><span class="step-no">02 / 04</span><h3>Connect the logic</h3><p>Everything is already connected. Add your strategy to the prepared framework.</p><div class="demo-mobile-video"><video muted controls playsinline preload="none" poster="https://arnaud-barbier.github.io/img/studio-2-poster.jpg" title="Connect the strategy logic"><source src="https://arnaud-barbier.github.io/video/studio-2-importer-logique.mp4" type="video/mp4"></video></div></article>
             <article class="demo-step" data-demo-step="2"><span class="step-no">03 / 04</span><h3>Read the parameters</h3><p>Each parameter is documented, easy to access and import while the study is configured.</p><div class="demo-mobile-video"><video muted controls playsinline preload="none" poster="https://arnaud-barbier.github.io/img/studio-3-poster.jpg" title="Consult parameter documentation"><source src="https://arnaud-barbier.github.io/video/studio-3-documentation-active.mp4" type="video/mp4"></video></div></article>
             <article class="demo-step" data-demo-step="3"><span class="step-no">04 / 04</span><h3>Run and review</h3><p>One click in the notebook's left navigation panel launches the backtest and displays the first results.</p><div class="demo-mobile-video"><video muted controls playsinline preload="none" poster="https://arnaud-barbier.github.io/img/studio-4-poster.jpg" title="Run the backtest and review the results"><source src="https://arnaud-barbier.github.io/video/studio-4-lancer-resultats.mp4" type="video/mp4"></video></div></article>
@@ -799,7 +803,7 @@ h1.on .w{opacity:1;transform:none}
               <figure class="demo-slide" data-slide="2" aria-hidden="true"><video muted controls playsinline preload="none" poster="https://arnaud-barbier.github.io/img/studio-3-poster.jpg" title="Consult parameter documentation"><source src="https://arnaud-barbier.github.io/video/studio-3-documentation-active.mp4" type="video/mp4">Your browser does not support video playback.</video></figure>
               <figure class="demo-slide" data-slide="3" aria-hidden="true"><video muted controls playsinline preload="none" poster="https://arnaud-barbier.github.io/img/studio-4-poster.jpg" title="Run the backtest and review the results"><source src="https://arnaud-barbier.github.io/video/studio-4-lancer-resultats.mp4" type="video/mp4">Your browser does not support video playback.</video></figure>
             </div>
-            <p class="demo-stage-caption" data-stage-caption>Work takes place in a preconfigured notebook with a simple API: configure borrowing, cash management and more.</p>
+            <p class="demo-stage-caption" data-stage-caption>The backtest runs in a configurable notebook, so you can change its settings through a simple API. Here, we set the out-of-sample (OOS) period.</p>
           </div>
         </div>
       </div>
