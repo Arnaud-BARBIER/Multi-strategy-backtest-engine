@@ -510,7 +510,7 @@ h1.on .w{opacity:1;transform:none}
           <div class="demo-steps">
             <article class="demo-step is-current" data-demo-step="0"><span class="step-no">01 / 04</span><h3>Préparer l'étude</h3><p>Le backtest se fait dans un notebook préconfigurable, vous pouvez donc adapter la configuration avec une API simple, ici la periode d'Out of Sample (OOS). </p><div class="demo-mobile-video"><video muted controls playsinline preload="none" poster="https://arnaud-barbier.github.io/img/studio-1-poster.jpg" title="Préparer une étude de backtest"><source src="https://arnaud-barbier.github.io/video/studio-1-creer-notebook.mp4" type="video/mp4"></video></div></article>
             <article class="demo-step" data-demo-step="1"><span class="step-no">02 / 04</span><h3>Brancher la logique</h3><p>Puisque tout est déjà branché grâce à la premiere étape, il ne reste plus qu'à insérer votre stratégie dans le cadre prévu.</p><div class="demo-mobile-video"><video muted controls playsinline preload="none" poster="https://arnaud-barbier.github.io/img/studio-2-poster.jpg" title="Brancher la logique de stratégie"><source src="https://arnaud-barbier.github.io/video/studio-2-importer-logique.mp4" type="video/mp4"></video></div></article>
-            <article class="demo-step" data-demo-step="2"><span class="step-no">03 / 04</span><h3>Lire les paramètres</h3><p>Chaque paramètre est documenté, facile d'accès et d'import au moment où l'étude se configure.</p><div class="demo-mobile-video"><video muted controls playsinline preload="none" poster="https://arnaud-barbier.github.io/img/studio-3-poster.jpg" title="Consulter la documentation des paramètres"><source src="https://arnaud-barbier.github.io/video/studio-3-documentation-active.mp4" type="video/mp4"></video></div></article>
+            <article class="demo-step" data-demo-step="2"><span class="step-no">03 / 04</span><h3>Lire les paramètres</h3><p>Dans votre Notebook, chaque paramètre est documenté, facile d'accès et d'import au moment où l'étude se configure.</p><div class="demo-mobile-video"><video muted controls playsinline preload="none" poster="https://arnaud-barbier.github.io/img/studio-3-poster.jpg" title="Consulter la documentation des paramètres"><source src="https://arnaud-barbier.github.io/video/studio-3-documentation-active.mp4" type="video/mp4"></video></div></article>
             <article class="demo-step" data-demo-step="3"><span class="step-no">04 / 04</span><h3>Lancer et consulter</h3><p>Via le panneau de navigation du notebook, à gauche, un clic lance le backtest et affiche les premiers résultats.</p><div class="demo-mobile-video"><video muted controls playsinline preload="none" poster="https://arnaud-barbier.github.io/img/studio-4-poster.jpg" title="Lancer le backtest et consulter les résultats"><source src="https://arnaud-barbier.github.io/video/studio-4-lancer-resultats.mp4" type="video/mp4"></video></div></article>
           </div>
           <div class="demo-stage-wrap">
@@ -602,13 +602,13 @@ h1.on .w{opacity:1;transform:none}
       <div class="tech-rebuild">
         <h3 class="tech-rebuild-title" id="tech-rebuild-fr-title">Refonte en cours : un moteur d'exécution commun</h3>
         <p class="tech-rebuild-intro">Chaque mode repose aujourd'hui sur sa propre version du noyau, adaptée à ses besoins. La refonte en cours les remplace par une base unique, inspirée de Nautilus Trader : un carnet d'ordres, un compte et une seule passe d'exécution par barre, pour tous les modes. L'allocation devient le mode portefeuille unique : elle reprend le suivi d'un compte réel et accueille des stratégies algorithmiques comme lignes, en spot, CFD ou futures.</p>
-        <p class="tech-rebuild-lead">Elle permet de :</p>
+        <p class="tech-rebuild-lead">Elle permet de : </p>
         <ul class="tech-rebuild-list">
           <li>exécuter un ordre de la même façon dans tous les modes, avec le même prix, les mêmes coûts et le même journal ;</li>
           <li>placer une stratégie dans un portefeuille sans la réécrire, et comparer ses résultats seule ou en portefeuille ;</li>
           <li>faire lire à une stratégie l'état des autres lignes du portefeuille, par exemple pour une couverture ;</li>
-          <li>relier chaque position à l'ordre qui l'a ouverte et à la stratégie qui la porte ;</li>
-          <li>ne compiler que ce qu'une simulation utilise, pour garder la vitesse sur des centaines de milliers d'ordres.</li>
+          <li>obtenir un noyau nettement plus rapide ;</li>
+          <li>coder ses propres règles en Numba, au même niveau que le noyau, avec un contrôle bas niveau et un état conservé d'une barre à l'autre, pour que toute stratégie puisse être réalisée.</li>
         </ul>
         <p class="tech-rebuild-close">Les démonstrations de cette page tournent sur les noyaux actuels.</p>
       </div>
