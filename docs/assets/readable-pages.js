@@ -15,7 +15,7 @@
     const copy = document.createElement("div");
     copy.className = "mast-copy";
     mast.insertBefore(copy, mastMap);
-    mast.querySelectorAll(":scope > h1, :scope > .lede, :scope > .lede2, :scope > .lede-note, :scope > .small")
+    mast.querySelectorAll(":scope > h1, :scope > .lede, :scope > .lede2, :scope > .lede-note, :scope > .small, :scope > .abstract")
       .forEach((element) => copy.appendChild(element));
   });
 

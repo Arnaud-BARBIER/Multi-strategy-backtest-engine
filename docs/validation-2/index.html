@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Validation d'une optimisation du ratio de Sharpe · Arnaud Barbier</title>
+<title>L'optimisation du Sharpe bat-elle l'équipondération ? · Arnaud Barbier</title>
 <meta name="description" content="Une optimisation du ratio de Sharpe soumise à dix contrôles documentés parmi les quatorze que comprend la couche de validation.">
 <meta name="author" content="Arnaud Barbier">
 <link rel="canonical" href="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/validation-2/">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/validation-2/">
-<meta property="og:title" content="Validation d'une optimisation du ratio de Sharpe · Arnaud Barbier">
+<meta property="og:title" content="L'optimisation du Sharpe bat-elle l'équipondération ? · Arnaud Barbier">
 <meta property="og:description" content="Une optimisation du ratio de Sharpe soumise à dix contrôles documentés parmi les quatorze que comprend la couche de validation.">
 <meta property="og:locale" content="fr_FR">
 <meta property="og:locale:alternate" content="en_GB">
@@ -19,7 +19,7 @@
 <meta property="og:image:alt" content="Ce que la couche de validation a renvoyé sur la seconde règle de pondération.">
 <meta name="twitter:image" content="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/img/og-validation.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Validation d'une optimisation du ratio de Sharpe · Arnaud Barbier">
+<meta name="twitter:title" content="L'optimisation du Sharpe bat-elle l'équipondération ? · Arnaud Barbier">
 <meta name="twitter:description" content="Une optimisation du ratio de Sharpe soumise à dix contrôles documentés parmi les quatorze que comprend la couche de validation.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpolygon points='50,92 90,32 10,32' fill='%2358a6ff'/%3E%3C/svg%3E">
 
@@ -74,7 +74,7 @@ h1{
   letter-spacing:-.005em;text-wrap:balance;
   margin:2.25rem 0 0;max-width:24ch;
 }
-.lede{font-size:1.06rem;color:var(--sub);max-width:60ch;margin:1.35rem 0 2.25rem;}
+.lede{font-size:1.12rem;color:var(--sub);max-width:60ch;margin:1.35rem 0 2.25rem;}
 .tickers{
   display:flex;flex-wrap:wrap;gap:0;margin:0 0 2.25rem;
   border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);
@@ -102,7 +102,7 @@ h1{
   font-size:.65rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);
   font-weight:600;margin-bottom:.7rem;
 }
-.subject p{font-size:.92rem;margin:0 0 .8rem;max-width:none}
+.subject p{font-size:1rem;margin:0 0 .8rem;max-width:none}
 .subject p:last-child{margin-bottom:0;color:var(--sub)}
 
 .units{
@@ -130,7 +130,7 @@ h2{
 }
 h3{font-family:var(--f-sans);font-weight:600;font-size:.95rem;margin:1.9rem 0 .85rem;letter-spacing:-.005em}
 p{max-width:64ch;margin:0 0 1.05rem}
-.small{font-size:.87rem;color:var(--sub);max-width:70ch}
+.small{font-size:.98rem;color:var(--sub);max-width:70ch}
 strong{font-weight:600}
 a{color:var(--accent);text-decoration-thickness:1px;text-underline-offset:2px}
 a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
@@ -157,7 +157,7 @@ a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 }
 .raw pre{
   margin:0;padding:.9rem .85rem;overflow-x:auto;
-  font-family:var(--f-term);font-size:.775rem;line-height:1.62;color:var(--sub);
+  font-family:var(--f-term);font-size:.82rem;line-height:1.62;color:var(--sub);
   white-space:pre;
 }
 .raw pre b{color:var(--ink);font-weight:600}
@@ -173,13 +173,13 @@ a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 /* les captures font 965 px : jamais les agrandir, le texte deviendrait flou */
 .plot img{display:block;width:auto;max-width:100%;height:auto;padding:10px;background:var(--well);border:1px solid var(--hard);}
 .plot .cap{
-  font-size:.78rem;color:var(--sub);line-height:1.5;padding:.72rem 0 0;
+  font-size:.9rem;color:var(--sub);line-height:1.5;padding:.72rem 0 0;
 }
 .plot .cap b{color:var(--ink);font-weight:600}
 
 /* ---------- tables ---------- */
 .tw{overflow-x:auto;margin:0 0 1.35rem;border-top:2px solid var(--hard);border-bottom:1px solid var(--hair)}
-table{border-collapse:collapse;width:100%;font-size:.9rem;min-width:470px}
+table{border-collapse:collapse;width:100%;font-size:.95rem;min-width:470px}
 th,td{padding:.62rem .8rem;text-align:right;border-bottom:1px solid var(--soft)}
 th:first-child,td:first-child{text-align:left;padding-left:0}
 th:last-child,td:last-child{padding-right:0}
@@ -187,7 +187,7 @@ thead th{
   font-family:var(--f-sans);font-size:.63rem;letter-spacing:.11em;text-transform:uppercase;
   color:var(--faint);font-weight:500;border-bottom:1px solid var(--hair);white-space:nowrap;
 }
-td{font-variant-numeric:tabular-nums;font-family:var(--f-sans);font-size:.86rem}
+td{font-variant-numeric:tabular-nums;font-family:var(--f-sans);font-size:.93rem}
 td:first-child{font-family:var(--f-sans);font-size:.9rem}
 tbody tr:last-child td{border-bottom:none}
 tr.total td{border-top:1px solid var(--hard);font-weight:600}
@@ -218,10 +218,10 @@ tr.total td{border-top:1px solid var(--hard);font-weight:600}
 .tag{font-family:var(--f-sans);font-size:.71rem;border:0;padding:.26rem .8rem .26rem 0;color:var(--sub)}
 
 .note{border-left:3px solid var(--accent);padding:.1rem 0 .1rem 1rem;margin:0 0 1.35rem}
-.note p{margin:0;color:var(--sub);font-size:.91rem;max-width:62ch}
+.note p{margin:0;color:var(--sub);font-size:1rem;max-width:62ch}
 
 ul.plain{margin:0 0 1.05rem;padding-left:1.1rem;display:flex;flex-direction:column;gap:.55rem}
-ul.plain li{font-size:.93rem;max-width:64ch}
+ul.plain li{font-size:1rem;max-width:64ch}
 ul.plain li::marker{color:var(--accent)}
 
 footer{
@@ -263,13 +263,13 @@ footer{
 .pagenav>a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
 .abstract{border:0;border-left:2px solid var(--accent);padding:.1rem 0 .1rem 1.15rem;margin:0 0 2.25rem;max-width:76ch}
-.abstract .lbl{font-size:.65rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:600;margin:0 0 .95rem}
+.abstract .lbl{font-size:.75rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:600;margin:0 0 .95rem}
 .abstract ol{margin:0;padding-left:1.2rem}
-.abstract li{font-size:.9rem;line-height:1.6;color:var(--sub);margin:0 0 .8rem;padding-left:.2rem}
+.abstract li{font-size:1rem;line-height:1.6;color:var(--sub);margin:0 0 .8rem;padding-left:.2rem}
 .abstract li:last-child{margin-bottom:0}
 .abstract li b{color:var(--ink);font-weight:600;display:block;margin-bottom:.15rem}
 
-.abstract p{font-size:.9rem;line-height:1.6;color:var(--sub);margin:0 0 .7rem;max-width:none}
+.abstract p{font-size:1rem;line-height:1.6;color:var(--sub);margin:0 0 .7rem;max-width:none}
 .abstract ul{margin:0 0 .7rem;padding-left:1.2rem;list-style:none}
 .abstract ul li{position:relative;margin:0 0 .35rem}
 .abstract ul li::before{content:"·";position:absolute;left:-1rem;color:var(--accent);font-weight:700}
@@ -287,7 +287,7 @@ footer{
   display:block;font-family:var(--f-sans);font-size:.68rem;letter-spacing:.15em;
   text-transform:uppercase;color:var(--accent);margin-bottom:.35rem;
 }
-.reading-map .intro p{margin:0;font-size:.82rem;line-height:1.5;color:var(--sub);max-width:none}
+.reading-map .intro p{margin:0;font-size:.92rem;line-height:1.5;color:var(--sub);max-width:none}
 .reading-map .refs{padding-left:1rem;border-left:1px solid var(--hair)}
 .reading-map ol{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;margin:0;padding:0;list-style:none;background:var(--hair)}
 .reading-map li{min-width:0;background:var(--panel)}
@@ -295,8 +295,8 @@ footer{
 .reading-map a{transition:box-shadow .18s ease}
 .reading-map a:hover,.reading-map a:focus-visible{box-shadow:inset 0 0 0 2px #EAB308;outline:0}
 .reading-map .n{font-family:var(--f-sans);font-size:.7rem;font-weight:700;color:var(--accent);padding-top:.08rem}
-.reading-map .t{font-family:var(--f-sans);font-size:.8rem;font-weight:600;line-height:1.3}
-.reading-map small{display:block;margin-top:.24rem;font-family:var(--f-serif);font-size:.75rem;font-weight:400;line-height:1.45;color:var(--sub)}
+.reading-map .t{font-family:var(--f-sans);font-size:.9rem;font-weight:600;line-height:1.3}
+.reading-map small{display:block;margin-top:.24rem;font-family:var(--f-serif);font-size:.86rem;font-weight:400;line-height:1.45;color:var(--sub)}
 @media (max-width:700px){
   .reading-map .intro{grid-template-columns:1fr}
   .reading-map .refs{padding-left:0;border-left:0;border-top:1px solid var(--hair);padding-top:.75rem}
@@ -318,6 +318,17 @@ p code{font-family:var(--f-term);font-size:.88em;color:var(--sub)}
 <link rel="stylesheet" href="../assets/endnav.css?v=3">
 <script src="../assets/endnav.js?v=3" defer></script>
 <link rel="stylesheet" href="../assets/readable-pages.css?v=3">
+<style>
+html{font-size:17.5px}
+body.site-readable{font-size:18.5px}
+.mast .abstract{max-width:none;margin:1.6rem 0 1.5rem;padding:1.15rem 1.3rem 1.2rem;border-left:3px solid var(--accent);background:linear-gradient(110deg,var(--accent-well),var(--well))}
+.mast .abstract .lbl{font-family:var(--f-sans);font-size:.75rem;margin:0 0 .8rem}
+.mast .abstract ul{padding-left:0;margin:0 0 .9rem}
+.mast .abstract ul li{font-size:1.06rem;line-height:1.55;color:var(--sub);margin:0 0 .65rem;padding-left:0}
+.mast .abstract ul li::before{content:none}
+.mast .abstract ul li b{display:inline;font-family:var(--f-sans);font-size:.92rem;font-weight:600;color:var(--ink)}
+.mast .abstract .take{margin:0;padding-top:.8rem;border-top:1px solid var(--hair);font-size:1.06rem;color:var(--ink)}
+</style>
 </head>
 <body class="site-readable">
 <div id="page" data-lang="fr">
@@ -328,7 +339,7 @@ p code{font-family:var(--f-term);font-size:.88em;color:var(--sub)}
       <a href="../research/"><span class="lang-fr">Mode Research</span><span class="lang-en">Research mode</span></a>
       <a href="../algo/"><span class="lang-fr">Mode Algo</span><span class="lang-en">Algo mode</span></a>
       <a href="../validation/"><span class="lang-fr">Validation · Optimisation max DDR</span><span class="lang-en">Validation · Max drawdown optimisation</span></a>
-      <span aria-current="page"><span class="lang-fr">Validation · Optimisation Sharpe</span><span class="lang-en">Validation · Sharpe optimisation</span></span>
+      <span aria-current="page"><span class="lang-fr">Validation · Sharpe</span><span class="lang-en">Validation · Sharpe</span></span>
       <a href="../engine/"><span class="lang-fr">Mode allocation</span><span class="lang-en">Allocation mode</span></a>
       <a href="../costs/"><span class="lang-fr">Les coûts</span><span class="lang-en">Costs · FR</span></a>
       <a href="../stateful/"><span class="lang-fr">Replay &amp; resume</span><span class="lang-en">Replay &amp; resume</span></a>
@@ -345,30 +356,40 @@ p code{font-family:var(--f-term);font-size:.88em;color:var(--sub)}
       <div>Moteur de backtest multi-actifs · 4 septembre 2026</div>
     </div>
 
-    <h1>Validation d'une optimisation du ratio de Sharpe</h1>
+    <h1>L'optimisation du Sharpe bat-elle l'équipondération ?</h1>
 
-    <p class="lede">Cette seconde validation change de règle : elle suit une optimisation du ratio de Sharpe depuis l'échantillon initial jusqu'à 80 univers inédits.</p>
-    <p class="small">Dix contrôles sont documentés ici sur les quatorze que comprend la couche. Cinq prolongent directement la première note : compteur d'essais, Sharpe déflaté, concentration de l'écart, réplication cross-asset et préinscription.</p>
+    <p class="lede">Une règle d'allocation classique, l'optimisation du Sharpe, testée sur cinq actifs : son avantage tient-il hors de l'échantillon qui l'a construite ?</p>
+    <div class="abstract">
+      <div class="lbl">Points clés</div>
+      <ul>
+        <li><b>Sur toute la période.</b> 1,43 % par an contre 1,01 % pour l'équipondération, avec moins de volatilité (8,61 % contre 12,15 %).</li>
+        <li><b>Hors échantillon.</b> Sur les 30 % d'historique mis de côté, l'avantage disparaît : 1,58 % contre 4,02 %.</li>
+        <li><b>À risque égal.</b> Moins de panier équipondéré et le reste en cash fait aussi bien dès que le cash rapporte environ 2 %.</li>
+        <li><b>Sur 80 autres paniers.</b> La règle gagne dans 75 % des cas (écart médian de +2,34 points par an). Le panier d'origine est au 11e percentile.</li>
+        <li><b>Précision.</b> Avec 22 rebalancements, aucun écart n'est statistiquement établi.</li>
+      </ul>
+      <p class="take">En résumé : la règle semble se généraliser, mais 1,43 % par an pour 8,61 % de volatilité reste faible.</p>
+    </div>
 
     <nav class="reading-map" aria-label="Fil de lecture détaillé">
       <div class="intro">
         <div>
           <b>Fil de lecture</b>
-          <p>La page commence par définir les contrôles, mesure l'avantage apparent, cherche ensuite à le réfuter hors échantillon et sur d'autres univers, puis termine par la précision statistique et la gouvernance du run.</p>
+          <p>Mesurer l'avantage, tenter de le réfuter, puis dire ce qui reste incertain. La carte des contrôles est en fin de page.</p>
         </div>
         <div class="refs">
           <b>Deux références</b>
-          <p><strong>1/N absolu</strong> est pleinement équipondéré. <strong>1/N apparié</strong> conserve la même trésorerie, les mêmes frais, les mêmes devises et les mêmes règles comptables que la stratégie.</p>
+          <p><strong>1/N absolu</strong> : équipondération pure. <strong>1/N apparié</strong> : mêmes trésorerie, frais, devises et règles comptables que la stratégie.</p>
         </div>
       </div>
       <ol>
-        <li><a href="#tests"><span class="n">01</span><span class="t">Cartographier les contrôles<small>10 contrôles documentés sur 14. Un prérequis, deux tests non lancés et le reverse stress traité séparément complètent la couche.</small></span></a></li>
-        <li><a href="#en-echantillon"><span class="n">02</span><span class="t">Mesurer l'avantage initial<small>En échantillon, la stratégie améliore le CAGR et réduit le drawdown face aux deux références.</small></span></a></li>
-        <li><a href="#hors-echantillon"><span class="n">03</span><span class="t">Tester sa rétention<small>Hors échantillon, l'avantage disparaît : le CAGR tombe derrière le 1/N absolu et le 1/N apparié.</small></span></a></li>
-        <li><a href="#null-leverage"><span class="n">04</span><span class="t">Écarter le simple désinvestissement<small>À risque comparable, le verdict dépend du rendement attribué au cash et s'inverse autour de 2 %.</small></span></a></li>
-        <li><a href="#cross-asset"><span class="n">05</span><span class="t">Changer complètement d'univers<small>Sur 80 paniers inédits, l'écart médian atteint +2,34 points et reste positif dans 75 % des cas.</small></span></a></li>
-        <li><a href="#tests-non-conclusifs"><span class="n">06</span><span class="t">Mesurer ce qui reste incertain<small>Avec 22 décisions, le bootstrap reste non concluant et l'historique d'essais ne permet pas encore un Sharpe déflaté exploitable.</small></span></a></li>
-      </ol>
+        <li><a href="#en-echantillon"><span class="n">01</span><span class="t">Mesurer l'avantage initial<small>En échantillon, la stratégie améliore le CAGR et réduit le drawdown face aux deux références.</small></span></a></li>
+        <li><a href="#hors-echantillon"><span class="n">02</span><span class="t">Tester sa rétention<small>Hors échantillon, l'avantage disparaît : le CAGR tombe derrière le 1/N absolu et le 1/N apparié.</small></span></a></li>
+        <li><a href="#null-leverage"><span class="n">03</span><span class="t">Écarter le simple désinvestissement<small>À risque comparable, le verdict dépend du rendement attribué au cash et s'inverse autour de 2 %.</small></span></a></li>
+        <li><a href="#cross-asset"><span class="n">04</span><span class="t">Changer complètement d'univers<small>Sur 80 paniers inédits, l'écart médian atteint +2,34 points et reste positif dans 75 % des cas.</small></span></a></li>
+        <li><a href="#tests-non-conclusifs"><span class="n">05</span><span class="t">Mesurer ce qui reste incertain<small>Avec 22 décisions, le bootstrap reste non concluant et l'historique d'essais ne permet pas encore un Sharpe déflaté exploitable.</small></span></a></li>
+        <li><a href="#tests"><span class="n">06</span><span class="t">Cartographier les contrôles<small>10 contrôles documentés sur 14. Un prérequis, deux tests non lancés et le reverse stress traité séparément complètent la couche.</small></span></a></li>
+</ol>
     </nav>
 
     <div class="subject">
@@ -405,35 +426,8 @@ p code{font-family:var(--f-term);font-size:.88em;color:var(--sub)}
 <aside class="site-proof-grid" aria-label="Repères de fonctionnement"><section class="site-proof site-proof--environment"><h2>Environnement simple d’utilisation</h2><ul><li><strong>Moins d’1 minute</strong> pour configurer un backtest complexe</li><li><strong>Moins d’une seconde</strong> pour un run dense et réaliste</li></ul><p>Analyse des résultats prise en charge par les tests de validation du framework.</p></section><section class="site-proof site-proof--technical"><h2>Repères techniques</h2><p>Quatorze contrôles couvrent cinq questions, de l’intégrité des mesures à la gouvernance. La règle est suivie sur l’échantillon initial, les 30 % réservés et 80 univers inédits.</p><p>Les résultats hors échantillon sont présentés séparément des résultats qui ont servi à construire la stratégie.</p></section></aside>
 
 
-  <section id="tests">
-    <div class="shead"><span class="snum">01</span><span class="stitle">Les tests</span></div>
-    <h2>Quatorze contrôles répartis en cinq catégories</h2>
-    <p class="small">La couche de validation comprend quatorze tests regroupés autour de cinq questions : l'intégrité des données et des mesures, l'existence d'un écart par rapport aux références, sa conservation hors de l'échantillon utilisé pour construire la stratégie, le risque de surapprentissage et la traçabilité du processus de validation. Les tableaux reproduits dans cette note correspondent directement aux sorties de l'outil. Certains tests ne sont pas exécutés sur ce run lorsque les données ou les conditions nécessaires ne sont pas réunies. L'ordre d'exécution est également contraint : les contrôles qui peuvent être réalisés sans utiliser l'échantillon réservé sont effectués avant les tests hors échantillon.</p>
-    <div class="tw">
-      <table class="test-matrix">
-        <thead><tr><th>Catégorie</th><th>Test</th><th>Ce qu'il demande</th><th>Sur ce run</th></tr></thead>
-        <tbody>
-          <tr><td>Intégrité</td><td><a href="#tests"><code>validation_triage</code></a></td><td>Quelle série mesure-t-on, et combien d'observations ?</td><td>Prérequis</td></tr>
-          <tr><td></td><td><code>validation_covariance</code></td><td>L'estimateur de covariance prédit-il quelque chose ?</td><td>Non lancé</td></tr>
-          <tr><td>Détection</td><td><a href="#baseline"><code>validation_baseline</code></a></td><td>L'écart existe-t-il contre l'équipondération ?</td><td>En échantillon oui, hors échantillon non</td></tr>
-          <tr><td></td><td><a href="#null-leverage"><code>validation_null_leverage</code></a></td><td>Détenir moins du panier aurait-il suffi ?</td><td>Dépend du taux</td></tr>
-          <tr><td></td><td><code>validation_null_sizing</code></td><td>L'écart vient-il des poids ou du dimensionnement ?</td><td>Non lancé</td></tr>
-          <tr><td></td><td><a href="#pouvoir-achat"><code>validation_purchasing_power</code></a></td><td>L'écart est-il produit là où il sert ?</td><td>Partiel</td></tr>
-          <tr><td></td><td><a href="#monte-carlo"><code>validation_mc</code></a></td><td>Quelle dispersion est compatible avec cet écart ?</td><td>Non concluant</td></tr>
-          <tr><td>Rétention</td><td><a href="#hors-echantillon"><code>validation_oos_retention</code></a></td><td>L'écart survit-il à la période mise de côté ?</td><td>Non retenu</td></tr>
-          <tr><td></td><td><a href="#cross-asset"><code>validation_cross_asset</code></a></td><td>L'écart survit-il à des univers jamais vus ?</td><td class="hl">Généralise</td></tr>
-          <tr><td></td><td><a href="#concentration"><code>validation_edge_concentration</code></a></td><td>L'écart repose-t-il sur quelques fenêtres ?</td><td>Sous le seuil</td></tr>
-          <tr><td>Surapprentissage</td><td><a href="#sharpe-deflate"><code>trial_counter_status</code></a></td><td>Combien de configurations distinctes ont été essayées ?</td><td>4 essais, 1,6 effectifs</td></tr>
-          <tr><td></td><td><a href="#sharpe-deflate"><code>validation_dsr</code></a></td><td>Le Sharpe survit-il au nombre d'essais ?</td><td>Indisponible</td></tr>
-          <tr><td>Gouvernance</td><td><a href="#preinscription"><code>freeze_configuration</code></a></td><td>La configuration est-elle préinscrite avant le holdout ?</td><td>Non exercé</td></tr>
-          <tr class="total"><td></td><td><code>validation_reverse_stress</code></td><td>Quel choc faut-il pour franchir un seuil qui compte ?</td><td>Page dédiée</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
   <section id="en-echantillon">
-    <div class="shead"><span class="snum">02</span><span class="stitle">En échantillon</span></div>
+    <div class="shead"><span class="snum">01</span><span class="stitle">En échantillon</span></div>
     <h2>Comparaison avec les deux références</h2>
     <p class="small">Les deux références sont définies en tête de page. Le tableau ci-dessous les compare à la stratégie sur l'échantillon complet.</p>
     <div class="tw">
@@ -507,7 +501,7 @@ indifférence de Merton &#947; à ce niveau de cash       n/d · le benchmark n'
   </section>
 
   <section id="hors-echantillon">
-    <div class="shead"><span class="snum">03</span><span class="stitle">Hors échantillon</span></div>
+    <div class="shead"><span class="snum">02</span><span class="stitle">Hors échantillon</span></div>
     <h2>Résultats sur la période réservée</h2>
     <p class="small">Les mêmes comparaisons sont ensuite répétées sur les 1 126 barres mises de côté pendant la construction de la stratégie. Cette période présente une dynamique différente : le panier équipondéré progresse davantage que sur l'échantillon précédent.</p>
     <div class="tw">
@@ -544,7 +538,7 @@ pas d'un test statistique.</b></pre>
   </section>
 
   <section id="null-leverage">
-    <div class="shead"><span class="snum">04</span><span class="stitle">Portefeuille partiellement investi</span></div>
+    <div class="shead"><span class="snum">03</span><span class="stitle">Portefeuille partiellement investi</span></div>
     <h2>Une réduction du risque par simple désinvestissement produit-elle le même résultat ?</h2>
     <p class="small">Une stratégie peut afficher simultanément un rendement inférieur à son benchmark et une volatilité plus faible. Dans ce cas, il faut déterminer si cette réduction du risque provient réellement de la règle d'allocation ou si un résultat comparable aurait pu être obtenu simplement en détenant une fraction du benchmark et le reste en liquidités. Le test construit donc plusieurs combinaisons entre le panier équipondéré et le cash, puis compare la stratégie à ces portefeuilles pour un même niveau de volatilité ou de drawdown. Le taux sans risque est testé sur plusieurs valeurs plutôt que fixé à une hypothèse unique.</p>
     <div class="tw">
@@ -575,7 +569,7 @@ pas d'un test statistique.</b></pre>
   </section>
 
   <section id="cross-asset">
-    <div class="shead"><span class="snum">05</span><span class="stitle">Réplication sur 80 univers</span></div>
+    <div class="shead"><span class="snum">04</span><span class="stitle">Réplication sur 80 univers</span></div>
     <h2>Comportement de la même configuration sur des paniers non utilisés auparavant</h2>
     <p class="small">Le test précédent reste limité à un univers de cinq actifs. <code>validation_cross_asset</code> conserve la configuration enregistrée et l'applique sans modification à 80 nouveaux paniers de cinq actifs, tirés dans un pool qui n'a pas servi au développement initial. Le test est réalisé sur la période hors échantillon. Les actifs et la période sont donc tous deux distincts de ceux utilisés pour construire la stratégie. Dix-neuf actifs du pool disposent de données couvrant toute la fenêtre. Un vingtième est exclu en raison d'une discontinuité dans son historique.</p>
     <div class="tw">
@@ -611,7 +605,7 @@ part des univers avec un écart positif   75 %
   </section>
 
   <section id="tests-non-conclusifs">
-    <div class="shead"><span class="snum">06</span><span class="stitle">Tests non conclusifs</span></div>
+    <div class="shead"><span class="snum">05</span><span class="stitle">Tests non conclusifs</span></div>
     <h2>Tests non conclusifs ou non applicables</h2>
     <p class="small">Tous les contrôles ne produisent pas nécessairement une mesure exploitable. La couche de validation distingue un résultat négatif d'un résultat qui ne peut pas être interprété avec les données disponibles. Dans ce second cas, la sortie indique explicitement la raison pour laquelle aucune conclusion n'est produite.</p>
     <h3 id="monte-carlo">Monte-Carlo</h3>
@@ -676,6 +670,33 @@ raison             seuls 4 essais disposent d'un Sharpe sur ce jeu de données ;
     </div>
   </section>
 
+  <section id="tests">
+    <div class="shead"><span class="snum">06</span><span class="stitle">Les tests</span></div>
+    <h2>Quatorze contrôles répartis en cinq catégories</h2>
+    <p class="small">La couche de validation comprend quatorze tests regroupés autour de cinq questions : l'intégrité des données et des mesures, l'existence d'un écart par rapport aux références, sa conservation hors de l'échantillon utilisé pour construire la stratégie, le risque de surapprentissage et la traçabilité du processus de validation. Les tableaux reproduits dans cette note correspondent directement aux sorties de l'outil. Certains tests ne sont pas exécutés sur ce run lorsque les données ou les conditions nécessaires ne sont pas réunies. L'ordre d'exécution est également contraint : les contrôles qui peuvent être réalisés sans utiliser l'échantillon réservé sont effectués avant les tests hors échantillon.</p>
+    <div class="tw">
+      <table class="test-matrix">
+        <thead><tr><th>Catégorie</th><th>Test</th><th>Ce qu'il demande</th><th>Sur ce run</th></tr></thead>
+        <tbody>
+          <tr><td>Intégrité</td><td><a href="#tests"><code>validation_triage</code></a></td><td>Quelle série mesure-t-on, et combien d'observations ?</td><td>Prérequis</td></tr>
+          <tr><td></td><td><code>validation_covariance</code></td><td>L'estimateur de covariance prédit-il quelque chose ?</td><td>Non lancé</td></tr>
+          <tr><td>Détection</td><td><a href="#baseline"><code>validation_baseline</code></a></td><td>L'écart existe-t-il contre l'équipondération ?</td><td>En échantillon oui, hors échantillon non</td></tr>
+          <tr><td></td><td><a href="#null-leverage"><code>validation_null_leverage</code></a></td><td>Détenir moins du panier aurait-il suffi ?</td><td>Dépend du taux</td></tr>
+          <tr><td></td><td><code>validation_null_sizing</code></td><td>L'écart vient-il des poids ou du dimensionnement ?</td><td>Non lancé</td></tr>
+          <tr><td></td><td><a href="#pouvoir-achat"><code>validation_purchasing_power</code></a></td><td>L'écart est-il produit là où il sert ?</td><td>Partiel</td></tr>
+          <tr><td></td><td><a href="#monte-carlo"><code>validation_mc</code></a></td><td>Quelle dispersion est compatible avec cet écart ?</td><td>Non concluant</td></tr>
+          <tr><td>Rétention</td><td><a href="#hors-echantillon"><code>validation_oos_retention</code></a></td><td>L'écart survit-il à la période mise de côté ?</td><td>Non retenu</td></tr>
+          <tr><td></td><td><a href="#cross-asset"><code>validation_cross_asset</code></a></td><td>L'écart survit-il à des univers jamais vus ?</td><td class="hl">Généralise</td></tr>
+          <tr><td></td><td><a href="#concentration"><code>validation_edge_concentration</code></a></td><td>L'écart repose-t-il sur quelques fenêtres ?</td><td>Sous le seuil</td></tr>
+          <tr><td>Surapprentissage</td><td><a href="#sharpe-deflate"><code>trial_counter_status</code></a></td><td>Combien de configurations distinctes ont été essayées ?</td><td>4 essais, 1,6 effectifs</td></tr>
+          <tr><td></td><td><a href="#sharpe-deflate"><code>validation_dsr</code></a></td><td>Le Sharpe survit-il au nombre d'essais ?</td><td>Indisponible</td></tr>
+          <tr><td>Gouvernance</td><td><a href="#preinscription"><code>freeze_configuration</code></a></td><td>La configuration est-elle préinscrite avant le holdout ?</td><td>Non exercé</td></tr>
+          <tr class="total"><td></td><td><code>validation_reverse_stress</code></td><td>Quel choc faut-il pour franchir un seuil qui compte ?</td><td>Page dédiée</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
   <section>
     <div class="shead"><span class="snum">07</span><span class="stitle">Reproductibilité</span></div>
     <h2>Reproductibilité des mesures</h2>
@@ -719,7 +740,7 @@ raison             seuls 4 essais disposent d'un Sharpe sur ce jeu de données ;
 <li><a href="../engine/"><span class="en-tag">Le portefeuille</span><b>Mode allocation</b><small>Quarante lignes pour déclarer un portefeuille, et la sortie réelle du moteur.</small><span class="en-go">Lire <i>→</i></span></a></li>
 <li><a href="../validation/"><span class="en-tag">La mesure</span><b>Validation · Max DDR</b><small>Trois tests de validation appliqués à une optimisation de la durée de drawdown.</small><span class="en-go">Lire <i>→</i></span></a></li>
 <li><a href="../stateful/"><span class="en-tag">La mécanique</span><b>Replay &amp; resume</b><small>Comment un kernel compilé décide en fonction de son propre passé.</small><span class="en-go">Lire <i>→</i></span></a></li>
-<li><a href="../validation-2/"><span class="en-tag">La mesure</span><b>Validation · Optimisation Sharpe</b><small>Dix contrôles documentés, jusqu’à 80 univers inédits.</small><span class="en-go">Lire <i>→</i></span></a></li><li><a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine"><span class="en-tag">Le code</span><b>Le dépôt</b><small>Source publique du moteur, sous licence MIT.</small><span class="en-go">Voir sur GitHub <i>→</i></span></a></li></ol></nav>
+<li><a href="../validation-2/"><span class="en-tag">La mesure</span><b>Validation · Sharpe</b><small>Dix contrôles documentés, jusqu’à 80 univers inédits.</small><span class="en-go">Lire <i>→</i></span></a></li><li><a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine"><span class="en-tag">Le code</span><b>Le dépôt</b><small>Source publique du moteur, sous licence MIT.</small><span class="en-go">Voir sur GitHub <i>→</i></span></a></li></ol></nav>
 <a class="en-site" href="https://arnaud-barbier.github.io/"><span class="en-site-arrow" aria-hidden="true">←</span><span><b>Retour sur mon site principal</b><small>arnaud-barbier.github.io · projets, parcours et contact</small></span></a>
 </aside>
   <footer>
@@ -737,30 +758,40 @@ raison             seuls 4 essais disposent d'un Sharpe sur ce jeu de données ;
       <div>Multi-asset backtest engine · 4 September 2026</div>
     </div>
 
-    <h1>Validation of a Sharpe ratio optimisation</h1>
+    <h1>Does Sharpe optimisation beat equal weighting?</h1>
 
-    <p class="lede">This second validation changes the rule under study: it follows a Sharpe ratio optimisation from the initial sample through to 80 unseen universes.</p>
-    <p class="small">Ten controls are documented here out of the fourteen in the layer. Five directly extend the first note: trial-count tracking, the deflated Sharpe, edge concentration, cross-asset replication and preregistration.</p>
+    <p class="lede">A classic allocation rule, Sharpe optimisation, tested on five assets: does its advantage hold outside the sample that built it?</p>
+    <div class="abstract">
+      <div class="lbl">Key findings</div>
+      <ul>
+        <li><b>Over the full period.</b> 1.43 % a year against 1.01 % for equal weighting, with less volatility (8.61 % against 12.15 %).</li>
+        <li><b>Out of sample.</b> On the 30 % of history kept aside, the advantage disappears: 1.58 % against 4.02 %.</li>
+        <li><b>At equal risk.</b> Less of the equal-weighted basket and the rest in cash does as well once cash earns about 2 %.</li>
+        <li><b>On 80 other baskets.</b> The rule wins in 75 % of cases (median gap of +2.34 points a year). The original basket ranks at the 11th percentile.</li>
+        <li><b>Precision.</b> With 22 rebalancings, no gap is statistically established.</li>
+      </ul>
+      <p class="take">In short: the rule seems to generalise, but 1.43 % a year for 8.61 % volatility remains low.</p>
+    </div>
 
     <nav class="reading-map" aria-label="Detailed reading guide">
       <div class="intro">
         <div>
           <b>Reading guide</b>
-          <p>The page first defines the controls, measures the apparent advantage, tries to refute it out of sample and across other universes, and closes with statistical precision and run governance.</p>
+          <p>Measure the advantage, try to refute it, then state what remains uncertain. The map of controls is at the end.</p>
         </div>
         <div class="refs">
           <b>Two references</b>
-          <p><strong>1/N absolute</strong> is fully equal-weighted. <strong>1/N matched</strong> keeps the same cash policy, fees, currencies and accounting rules as the strategy.</p>
+          <p><strong>1/N absolute</strong>: pure equal weighting. <strong>1/N matched</strong>: same cash, fees, currencies and accounting rules as the strategy.</p>
         </div>
       </div>
       <ol>
-        <li><a href="#en-tests"><span class="n">01</span><span class="t">Map the controls<small>10 controls documented out of 14. One prerequisite, two tests not run and a separate reverse-stress page complete the layer.</small></span></a></li>
-        <li><a href="#en-in-sample"><span class="n">02</span><span class="t">Measure the initial advantage<small>In sample, the strategy improves CAGR and reduces drawdown against both references.</small></span></a></li>
-        <li><a href="#en-out-of-sample"><span class="n">03</span><span class="t">Test its retention<small>Out of sample, the advantage disappears as CAGR falls behind both 1/N absolute and 1/N matched.</small></span></a></li>
-        <li><a href="#en-null-leverage"><span class="n">04</span><span class="t">Rule out simple de-risking<small>At comparable risk, the verdict depends on the return assigned to cash and reverses around 2 %.</small></span></a></li>
-        <li><a href="#en-cross-asset"><span class="n">05</span><span class="t">Change the universe entirely<small>Across 80 unseen baskets, the median edge reaches +2.34 points and stays positive in 75 % of cases.</small></span></a></li>
-        <li><a href="#en-inconclusive"><span class="n">06</span><span class="t">Measure what remains uncertain<small>With 22 decisions, the bootstrap stays inconclusive and the trial history is still too short for a usable deflated Sharpe.</small></span></a></li>
-      </ol>
+        <li><a href="#en-in-sample"><span class="n">01</span><span class="t">Measure the initial advantage<small>In sample, the strategy improves CAGR and reduces drawdown against both references.</small></span></a></li>
+        <li><a href="#en-out-of-sample"><span class="n">02</span><span class="t">Test its retention<small>Out of sample, the advantage disappears as CAGR falls behind both 1/N absolute and 1/N matched.</small></span></a></li>
+        <li><a href="#en-null-leverage"><span class="n">03</span><span class="t">Rule out simple de-risking<small>At comparable risk, the verdict depends on the return assigned to cash and reverses around 2 %.</small></span></a></li>
+        <li><a href="#en-cross-asset"><span class="n">04</span><span class="t">Change the universe entirely<small>Across 80 unseen baskets, the median edge reaches +2.34 points and stays positive in 75 % of cases.</small></span></a></li>
+        <li><a href="#en-inconclusive"><span class="n">05</span><span class="t">Measure what remains uncertain<small>With 22 decisions, the bootstrap stays inconclusive and the trial history is still too short for a usable deflated Sharpe.</small></span></a></li>
+        <li><a href="#en-tests"><span class="n">06</span><span class="t">Map the controls<small>10 controls documented out of 14. One prerequisite, two tests not run and a separate reverse-stress page complete the layer.</small></span></a></li>
+</ol>
     </nav>
 
     <div class="subject">
@@ -797,35 +828,8 @@ raison             seuls 4 essais disposent d'un Sharpe sur ce jeu de données ;
 <aside class="site-proof-grid" aria-label="How the framework works"><section class="site-proof site-proof--environment"><h2>A simple working environment</h2><ul><li><strong>Under 1 minute</strong> to configure a complex backtest</li><li><strong>Under 1 second</strong> to run a dense, realistic simulation</li></ul><p>Results analysis supported by the framework’s validation tests.</p></section><section class="site-proof site-proof--technical"><h2>Technical markers</h2><p>Fourteen checks cover five questions, from measurement integrity to governance. The rule is followed on the initial sample, the reserved 30%, and 80 unseen universes.</p><p>Out-of-sample results are reported separately from the results used to build the strategy.</p></section></aside>
 
 
-  <section id="en-tests">
-    <div class="shead"><span class="snum">01</span><span class="stitle">The tests</span></div>
-    <h2>Fourteen controls across five categories</h2>
-    <p class="small">The validation layer holds fourteen tests grouped around five questions: the integrity of the data and of the measures, the existence of a gap against the references, whether it holds outside the sample used to build the strategy, the risk of overfitting, and the traceability of the validation process. The tables reproduced in this note come directly from the tool's output. Some tests are not run here when the data or the required conditions are not met. The order of execution is constrained too: controls that can be carried out without using the reserved sample are performed before the out-of-sample tests.</p>
-    <div class="tw">
-      <table>
-        <thead><tr><th>Category</th><th>Test</th><th>What it asks</th><th>On this run</th></tr></thead>
-        <tbody>
-          <tr><td>Integrity</td><td><code>validation_triage</code></td><td>Which series is measured, and how many observations?</td><td>Prerequisite</td></tr>
-          <tr><td></td><td><code>validation_covariance</code></td><td>Does the covariance estimator predict anything?</td><td>Not run</td></tr>
-          <tr><td>Detection</td><td><code>validation_baseline</code></td><td>Is there a gap against equal weighting?</td><td>In sample yes, out of sample no</td></tr>
-          <tr><td></td><td><code>validation_null_leverage</code></td><td>Would holding less of the basket have done?</td><td>Depends on the rate</td></tr>
-          <tr><td></td><td><code>validation_null_sizing</code></td><td>Does the gap come from weights or from sizing?</td><td>Not run</td></tr>
-          <tr><td></td><td><code>validation_purchasing_power</code></td><td>Is the gap produced where it helps?</td><td>Partial</td></tr>
-          <tr><td></td><td><code>validation_mc</code></td><td>What dispersion is compatible with this gap?</td><td>Inconclusive</td></tr>
-          <tr><td>Retention</td><td><code>validation_oos_retention</code></td><td>Does the gap survive the held-out period?</td><td>Not retained</td></tr>
-          <tr><td></td><td><code>validation_cross_asset</code></td><td>Does the gap survive universes never seen?</td><td class="hl">Generalises</td></tr>
-          <tr><td></td><td><code>validation_edge_concentration</code></td><td>Does the gap rest on a few windows?</td><td>Below threshold</td></tr>
-          <tr><td>Overfitting</td><td><code>trial_counter_status</code></td><td>How many distinct configurations were tried?</td><td>4 trials, 1.6 effective</td></tr>
-          <tr><td></td><td><code>validation_dsr</code></td><td>Does the Sharpe survive the trial count?</td><td>Unavailable</td></tr>
-          <tr><td>Governance</td><td><code>freeze_configuration</code></td><td>Is the configuration preregistered before the holdout?</td><td>Not exercised</td></tr>
-          <tr class="total"><td></td><td><code>validation_reverse_stress</code></td><td>What shock crosses a threshold that matters?</td><td>Dedicated page</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
   <section id="en-in-sample">
-    <div class="shead"><span class="snum">02</span><span class="stitle">In sample</span></div>
+    <div class="shead"><span class="snum">01</span><span class="stitle">In sample</span></div>
     <h2>Comparison with the two references</h2>
     <p class="small">Both references are defined at the top of the page. The table below compares them with the strategy over the full sample.</p>
     <div class="tw">
@@ -898,7 +902,7 @@ Merton indifference &#947; for this cash level   n/a — the benchmark did not
   </section>
 
   <section id="en-out-of-sample">
-    <div class="shead"><span class="snum">03</span><span class="stitle">Out of sample</span></div>
+    <div class="shead"><span class="snum">02</span><span class="stitle">Out of sample</span></div>
     <h2>Results over the reserved period</h2>
     <p class="small">The same comparisons are then repeated over the 1,126 bars set aside during the construction of the strategy. This period shows a different dynamic: the equal-weighted basket rises more than over the previous sample.</p>
     <div class="tw">
@@ -934,7 +938,7 @@ Merton indifference &#947; for this cash level   n/a — the benchmark did not
   </section>
 
   <section id="en-null-leverage">
-    <div class="shead"><span class="snum">04</span><span class="stitle">Partially invested portfolio</span></div>
+    <div class="shead"><span class="snum">03</span><span class="stitle">Partially invested portfolio</span></div>
     <h2>Does reducing risk by simply holding less produce the same result?</h2>
     <p class="small">A strategy can show both a lower return than its benchmark and a lower volatility. In that case it must be determined whether the reduction in risk really comes from the allocation rule or whether a comparable result could have been obtained by simply holding a fraction of the benchmark and the rest in cash. The test therefore builds several combinations of the equal-weighted basket and cash, then compares the strategy with those portfolios at the same level of volatility or drawdown. The risk-free rate is tested across several values rather than fixed at a single assumption.</p>
     <div class="tw">
@@ -965,7 +969,7 @@ Merton indifference &#947; for this cash level   n/a — the benchmark did not
   </section>
 
   <section id="en-cross-asset">
-    <div class="shead"><span class="snum">05</span><span class="stitle">Replication across 80 universes</span></div>
+    <div class="shead"><span class="snum">04</span><span class="stitle">Replication across 80 universes</span></div>
     <h2>Behaviour of the same configuration on baskets not previously used</h2>
     <p class="small">The previous test remains limited to one universe of five assets. <code>validation_cross_asset</code> keeps the recorded configuration and applies it without modification to 80 new baskets of five assets, drawn from a pool that was not used in the initial development. The test is run over the out-of-sample period. Both the assets and the period are therefore distinct from those used to build the strategy. Nineteen assets in the pool have data covering the whole window. A twentieth is excluded because of a discontinuity in its history.</p>
     <div class="tw">
@@ -1001,7 +1005,7 @@ fraction of universes with a positive edge   75%
   </section>
 
   <section id="en-inconclusive">
-    <div class="shead"><span class="snum">06</span><span class="stitle">Inconclusive tests</span></div>
+    <div class="shead"><span class="snum">05</span><span class="stitle">Inconclusive tests</span></div>
     <h2>Inconclusive or non-applicable tests</h2>
     <p class="small">Not every control necessarily produces a usable measure. The validation layer distinguishes a negative result from a result that cannot be interpreted with the available data. In the second case, the output states explicitly why no conclusion is produced.</p>
     <h3>Monte Carlo</h3>
@@ -1066,6 +1070,33 @@ why                only 4 trial(s) carry a Sharpe on this dataset; the deflated
     </div>
   </section>
 
+  <section id="en-tests">
+    <div class="shead"><span class="snum">06</span><span class="stitle">The tests</span></div>
+    <h2>Fourteen controls across five categories</h2>
+    <p class="small">The validation layer holds fourteen tests grouped around five questions: the integrity of the data and of the measures, the existence of a gap against the references, whether it holds outside the sample used to build the strategy, the risk of overfitting, and the traceability of the validation process. The tables reproduced in this note come directly from the tool's output. Some tests are not run here when the data or the required conditions are not met. The order of execution is constrained too: controls that can be carried out without using the reserved sample are performed before the out-of-sample tests.</p>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Category</th><th>Test</th><th>What it asks</th><th>On this run</th></tr></thead>
+        <tbody>
+          <tr><td>Integrity</td><td><code>validation_triage</code></td><td>Which series is measured, and how many observations?</td><td>Prerequisite</td></tr>
+          <tr><td></td><td><code>validation_covariance</code></td><td>Does the covariance estimator predict anything?</td><td>Not run</td></tr>
+          <tr><td>Detection</td><td><code>validation_baseline</code></td><td>Is there a gap against equal weighting?</td><td>In sample yes, out of sample no</td></tr>
+          <tr><td></td><td><code>validation_null_leverage</code></td><td>Would holding less of the basket have done?</td><td>Depends on the rate</td></tr>
+          <tr><td></td><td><code>validation_null_sizing</code></td><td>Does the gap come from weights or from sizing?</td><td>Not run</td></tr>
+          <tr><td></td><td><code>validation_purchasing_power</code></td><td>Is the gap produced where it helps?</td><td>Partial</td></tr>
+          <tr><td></td><td><code>validation_mc</code></td><td>What dispersion is compatible with this gap?</td><td>Inconclusive</td></tr>
+          <tr><td>Retention</td><td><code>validation_oos_retention</code></td><td>Does the gap survive the held-out period?</td><td>Not retained</td></tr>
+          <tr><td></td><td><code>validation_cross_asset</code></td><td>Does the gap survive universes never seen?</td><td class="hl">Generalises</td></tr>
+          <tr><td></td><td><code>validation_edge_concentration</code></td><td>Does the gap rest on a few windows?</td><td>Below threshold</td></tr>
+          <tr><td>Overfitting</td><td><code>trial_counter_status</code></td><td>How many distinct configurations were tried?</td><td>4 trials, 1.6 effective</td></tr>
+          <tr><td></td><td><code>validation_dsr</code></td><td>Does the Sharpe survive the trial count?</td><td>Unavailable</td></tr>
+          <tr><td>Governance</td><td><code>freeze_configuration</code></td><td>Is the configuration preregistered before the holdout?</td><td>Not exercised</td></tr>
+          <tr class="total"><td></td><td><code>validation_reverse_stress</code></td><td>What shock crosses a threshold that matters?</td><td>Dedicated page</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
   <section>
     <div class="shead"><span class="snum">07</span><span class="stitle">Reproducibility</span></div>
     <h2>Reproducibility of the measures</h2>
@@ -1109,7 +1140,7 @@ why                only 4 trial(s) carry a Sharpe on this dataset; the deflated
 <li><a href="../engine/"><span class="en-tag">The portfolio</span><b>Allocation mode</b><small>Forty lines to declare a portfolio, and the engine's real output.</small><span class="en-go">Read <i>→</i></span></a></li>
 <li><a href="../validation/"><span class="en-tag">The measurement</span><b>Validation · Max drawdown</b><small>Three validation tests applied to a drawdown-duration optimisation.</small><span class="en-go">Read <i>→</i></span></a></li>
 <li><a href="../stateful/"><span class="en-tag">The mechanics</span><b>Replay &amp; resume</b><small>How a compiled kernel makes decisions that depend on its own past (in French).</small><span class="en-go">Read <i>→</i></span></a></li>
-<li><a href="../validation-2/"><span class="en-tag">The measurement</span><b>Validation · Sharpe optimisation</b><small>Ten documented checks, including 80 unseen universes.</small><span class="en-go">Read <i>→</i></span></a></li><li><a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine"><span class="en-tag">The code</span><b>The repository</b><small>Public engine source, released under the MIT licence.</small><span class="en-go">View on GitHub <i>→</i></span></a></li></ol></nav>
+<li><a href="../validation-2/"><span class="en-tag">The measurement</span><b>Validation · Sharpe</b><small>Ten documented checks, including 80 unseen universes.</small><span class="en-go">Read <i>→</i></span></a></li><li><a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine"><span class="en-tag">The code</span><b>The repository</b><small>Public engine source, released under the MIT licence.</small><span class="en-go">View on GitHub <i>→</i></span></a></li></ol></nav>
 <a class="en-site" href="https://arnaud-barbier.github.io/"><span class="en-site-arrow" aria-hidden="true">←</span><span><b>Back to my main site</b><small>arnaud-barbier.github.io · projects, background and contact</small></span></a>
 </aside>
   <footer>
@@ -1138,6 +1169,6 @@ why                only 4 trial(s) carry a Sharpe on this dataset; the deflated
   });
 })();
 </script>
-<script src="../assets/readable-pages.js?v=2" defer></script>
+<script src="../assets/readable-pages.js?v=3" defer></script>
 </body>
 </html>
