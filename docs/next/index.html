@@ -397,38 +397,58 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
 .eng .ml{fill:var(--muted);font:11px var(--mono)}
 .eng .now{stroke:var(--accent);stroke-width:1;vector-effect:non-scaling-stroke}
 @media(max-width:760px){#moteur .pane-h{font-size:11px}.eng .t1{font-size:13px}.eng .tag,.eng .ml{font-size:12px}}
-/* under the hood 2: the strategy's book, split per asset */
-.ob{background:#0b0e14}.ob-in{display:grid;grid-template-columns:minmax(0,.85fr) 40px minmax(0,1.6fr);gap:16px;align-items:center;padding:22px;
-  transform-origin:50% 50%;transition:transform .8s cubic-bezier(.4,0,.2,1),opacity .6s}
-.ob:not(.go) .ob-in{transform:scale(.55);opacity:0}
-.ob-t{margin:0 0 10px;font:500 12px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+/* under the hood 2: M2 emission, our order at the quote, then execution */
+#carnet .ob{position:relative;background:var(--bg);box-shadow:none}
+#carnet .pane-h{font-family:var(--mono);align-items:baseline;flex-wrap:wrap}
+#carnet .pane-h span{display:inline}
+.ob-in{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.9fr);gap:20px;align-items:start;padding:20px}
+.ob-t{margin:0;padding:8px 12px;border:1px solid #243044;border-bottom:0;background:#10161f;
+  font:500 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--text)}
 .m2-l{list-style:none;margin:0;padding:0;border:1px solid #243044}
-.m2-l li{display:grid;grid-template-columns:1fr auto auto;gap:4px 12px;padding:10px 12px;border-bottom:1px solid #1a2230;font:500 13px var(--mono);color:#c3ccdb;
-  opacity:0;transform:translateY(6px);transition:opacity .35s,transform .35s,background .3s}
-.m2-l li:last-child{border-bottom:0}.m2-l li.on{opacity:1;transform:none}.m2-l li.run{background:#12283a}.m2-l li.w.run{background:#262111}
-.m2-l li.ok b::after{content:" ✓";color:var(--accent)}
-.m2-l b{color:var(--text);font-weight:600}.m2-l i{grid-column:1/-1;font:400 12px var(--sans);font-style:normal;color:var(--muted)}
-.m2-l li.w i{color:#d9bf5a}.m2-l .buy{color:var(--up)}.m2-l .sell{color:#c3ccdb}
-.ob-loop{margin:10px 0 0;font:400 12.5px var(--sans);color:var(--muted)}
-.ob-cap{margin:0;padding:12px 22px 16px;min-height:3.2em;border-top:1px solid #1a2230;font:400 14px/1.5 var(--sans);color:#c3ccdb;opacity:0;transition:opacity .25s}.ob-cap.on{opacity:1}
-.ob.fast .book .cdl,.ob.fast .book .fl,.ob.fast .book .ft,.ob.fast .book .cost{transition:none}
-.ob-arr{font:300 34px var(--sans);color:var(--accent);text-align:center}
-.books{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.book{width:100%;height:auto;display:block;border:1px solid #243044;background:#0d121a;font-family:var(--mono);opacity:.35;transition:opacity .4s}
-.book.on{opacity:1}
-.book .h{fill:var(--text);font-size:13px;font-weight:600}.book .hs{fill:var(--muted);font-size:10.5px}
-.book .pl{fill:var(--faint);font-size:10.5px}.book .row{stroke:#1a2230}
-.book .sp{fill:#29c5ff14}.book .spt{fill:var(--accent);font-size:10.5px}
-.book .ch{fill:#12283a;stroke:var(--accent);stroke-width:1.2}.book .cht{fill:var(--text);font-size:11px}
-.book .wk{stroke:#8592a6;stroke-width:1.4}.book .bd{fill:#c3ccdb}
-.book .cdl{transform-box:fill-box;transform-origin:50% 50%;transform:scaleY(0);transition:transform .7s cubic-bezier(.4,0,.2,1)}.book.ex .cdl{transform:none}
-.book .fl{stroke:var(--accent);stroke-width:1.6;opacity:0;transition:opacity .3s .6s}.book.ex .fl{opacity:1}
-.book .ft{fill:var(--accent);font-size:11px;opacity:0;transition:opacity .3s .7s}.book.ex .ft{opacity:1}
-.book .cost{fill:#c3ccdb;font-size:11px;opacity:0;transition:opacity .3s}.book.ex .cost{opacity:1}
-.book .cost.tt{fill:var(--text);font-weight:600}
-.book .csep{stroke:#243044}
-@media (max-width:760px){.ob-in{grid-template-columns:1fr;padding:14px}.ob-arr{transform:rotate(90deg);height:30px}.books{grid-template-columns:1fr}
-  .tk-track span{font-size:10.5px}}
+.m2-l li{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:5px 10px;padding:12px;border-bottom:1px solid #243044;
+  font:13px/1.5 var(--mono);color:#c3ccdb;opacity:0;transition:opacity .3s,transform .3s}
+.m2-l li:last-child{border-bottom:0}.m2-l li.on{opacity:1}
+.m2-l b{color:var(--text);font-weight:500;overflow-wrap:anywhere}
+.m2-l i{grid-column:1/-1;font:13px/1.5 var(--sans);font-style:normal;color:var(--muted)}
+.m2-l .m2-state{grid-column:1/-1;color:var(--muted);font-size:12px}
+.m2-l li.run{border-left:2px solid var(--accent);padding-left:10px}
+.m2-l li.departing{opacity:.35;transform:translateX(8px)}
+.m2-l li.ok .m2-state{color:var(--accent)}
+.m2-l li.w,.m2-l li.w b,.m2-l li.w i,.m2-l li.w .sell,.m2-l li.w.ok .m2-state{color:#d9bf5a}
+.m2-l li.w.run{border-left-color:#d9bf5a}
+.m2-l .buy{color:var(--accent)}.m2-l .sell{color:#c3ccdb}
+.ob-loop{margin:12px 0 0;font:13px/1.5 var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
+.ob-cap{margin:0;padding:12px 20px 16px;min-height:6em;border-top:1px solid #243044;font:14px/1.5 var(--sans);color:#c3ccdb}
+.books{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;min-width:0}
+.book{min-width:0;border:1px solid #243044;background:var(--bg);font:13px/1.5 var(--mono);font-variant-numeric:tabular-nums}
+.book-h{margin:0;padding:8px 10px;background:#10161f;border-bottom:1px solid #243044;font:500 12px/1.5 var(--mono);color:var(--muted)}
+.book-h b{display:block;font-weight:500;font-size:14px;color:var(--text)}
+.book table{width:100%;table-layout:fixed;border-collapse:collapse;text-align:center}
+.book th{padding:9px 3px;font-size:11px;font-weight:500;color:var(--muted);border-bottom:1px solid #243044}
+.book td{height:42px;padding:5px 3px;border-bottom:1px solid #243044;color:#c3ccdb}
+.book .quote-price{white-space:nowrap}
+.book .spread td{height:auto;padding:8px 6px;font-size:12px;color:var(--muted);text-align:left}
+.book .spread span{display:block}.book .spread b{font-weight:500;color:#c3ccdb}
+.book .size{position:relative;min-height:30px;display:flex;align-items:center;justify-content:center;isolation:isolate}
+.book .size-bar{position:absolute;inset:0 auto 0 0;width:0;background:#c3ccdb;opacity:.25;z-index:-1}
+.book .size-text{visibility:hidden}.book.emitted .size-text{visibility:visible}
+.book.buy .size-bar{background:var(--accent)}.book.buy .size-text{color:var(--accent)}
+.book .own-order{margin:0;padding:8px 10px;color:var(--muted);font-size:12px;border-bottom:1px solid #243044}
+.book .fill{margin:0;padding:10px;min-height:6em;color:#c3ccdb;font-size:12px;opacity:0}
+.book .fill b{display:block;font-weight:500;color:var(--text);font-size:13px}
+.book.filled .fill{opacity:1}
+.book .costs{margin:0;padding:0 10px 10px}
+.book .cost-line{display:flex;justify-content:space-between;gap:6px;opacity:0;color:#c3ccdb}
+.book .cost-line.on{opacity:1}.book dt,.book dd{margin:0;font-weight:400}
+.book .cost-line.total{margin-top:6px;padding-top:6px;border-top:1px solid #243044;color:var(--text)}
+.ob-flight{position:absolute;left:0;top:0;z-index:2;padding:7px 9px;background:#10161f;border:1px solid var(--accent);
+  color:var(--text);font:12px var(--mono);pointer-events:none;max-width:calc(100% - 24px)}
+.ob-flight.sell{border-color:#c3ccdb}
+.ob.fast .m2-l li{transition:none}
+@media(max-width:760px){.ob-in{grid-template-columns:1fr;padding:12px;gap:16px}.books{grid-template-columns:1fr}
+  #carnet .pane-h{font-size:11px}#carnet .pane-h span{font-size:11px}.ob-cap{padding:12px;min-height:8em}
+  .book .fill{min-height:5em}.tk-track span{font-size:10.5px}}
+@media(prefers-reduced-motion:reduce){#carnet .m2-l li{transition:none}}
 .end .ctas{justify-content:center}
 @media (max-width:760px){.val{grid-template-columns:1fr;gap:20px}.hood{grid-template-columns:1fr}.after-in{padding-top:40vh}}
 
@@ -616,14 +636,13 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
       <div class="ob-in">
         <div class="m2"><p class="ob-t">Carnet M2 · la stratégie</p>
           <ol class="m2-l" id="m2">
-            <li data-i="0"><b>XAUUSD</b><span class="buy">achat</span><span>7,93 oz</span><i>rebalancement · 14,9 % → 20,0 %</i></li>
-            <li data-i="1"><b>USA500IDXUSD</b><span class="sell">vente</span><span>3,84</span><i>rebalancement · 22,4 % → 17,0 %</i></li>
-            <li data-i="2" class="w"><b>BRENTCMDUSD</b><span class="sell">vente</span><span>12</span><i>watcher · opérations</i></li>
+            <li data-i="0"><b>XAUUSD</b><span class="buy">achat</span><span>7,93 oz</span><i>rebalancement · 14,9 % → 20,0 %</i><span class="m2-state">à émettre</span></li>
+            <li data-i="1"><b>USA500IDXUSD</b><span class="sell">vente</span><span>3,84</span><i>rebalancement · 22,4 % → 17,0 %</i><span class="m2-state">à émettre</span></li>
+            <li data-i="2" class="w"><b>BRENTCMDUSD</b><span class="sell">vente</span><span>12</span><i>watcher · opérations</i><span class="m2-state">à traiter</span></li>
           </ol>
-          <p class="ob-loop" id="ob-loop">3 actifs concernés sur 7 · les 4 autres sont sautés</p></div>
-        <div class="ob-arr" aria-hidden="true">→</div>
-        <div class="books"><svg class="book" id="bk0" viewBox="0 0 320 396"></svg><svg class="book" id="bk1" viewBox="0 0 320 396"></svg></div>
-      </div><p class="ob-cap" id="ob-cap"></p></div>
+          <p class="ob-loop" id="ob-loop">3 actifs concernés sur 7 · 4 autres actifs sautés</p></div>
+        <div class="books" aria-label="Carnets d’ordres par actif"><div class="book buy" id="bk0"></div><div class="book sell" id="bk1"></div></div>
+      </div><p class="ob-cap" id="ob-cap" aria-live="polite">Ralenti · du carnet M2 au carnet d’ordres de chaque actif, puis à l’exécution.</p></div>
   </div>
 
   <div class="blk" id="mesure">
@@ -1482,52 +1501,122 @@ async function autoplay() {
   document.addEventListener('visibilitychange',()=>{ if (visible && !document.hidden) scene.start(); else scene.stop(); });
 })();
 
-// ---------- under the hood 2: the strategy's book, executed asset by asset on the next bar ----------
+// ---------- under the hood 2: only our size, emitted at the quote and drained on execution ----------
 (() => {
-  const ob = $('ob'); if (!ob) return; const ns = 'http://www.w3.org/2000/svg';
-  const fmt = (x, d = 2) => x.toLocaleString('fr-FR', {minimumFractionDigits: d, maximumFractionDigits: d});
-  // Example figures: quantity = weight change × NAV / price; buy at ask + slippage, sell at bid − slippage.
+  const ob = $('ob'); if (!ob) return;
+  const fmt = (value, digits=2) => value.toLocaleString('fr-FR', {minimumFractionDigits:digits,maximumFractionDigits:digits});
+  // Keep the original numerical example. Spread cost is measured from the midpoint, per unit.
   const BK = [
-    {id: 'bk0', a: 'XAUUSD', side: 'buy', q: 7.93, u: ' oz', mid: 1836.40, st: .10, spr: .30, slip: .12, O: 1836.40, H: 1836.85, L: 1836.05, C: 1836.75, comm: 1.46, tax: 0},
-    {id: 'bk1', a: 'USA500IDXUSD', side: 'sell', q: 3.84, u: '', mid: 4012.60, st: .20, spr: .80, slip: .30, O: 4012.60, H: 4013.00, L: 4011.70, C: 4011.90, comm: 1.54, tax: .77}];
-  for (const b of BK) {
-    const svg = $(b.id), el = (tag, a, txt) => { const e = document.createElementNS(ns, tag); for (const k in a) e.setAttribute(k, a[k]); if (txt) e.textContent = txt; svg.append(e); return e; };
-    const top = b.mid + 5 * b.st, Y = p => 52 + (top - p) / b.st * 22;
-    el('text', {class: 'h', x: 14, y: 22}, b.a); el('text', {class: 'hs', x: 14, y: 38}, 'ventes en haut · achats en bas');
-    for (let i = 0; i <= 10; i++) { const p = top - i * b.st; el('line', {class: 'row', x1: 70, x2: 306, y1: Y(p), y2: Y(p)}); el('text', {class: 'pl', x: 14, y: Y(p) + 4}, fmt(p)); }
-    const ask = b.mid + b.spr / 2, bid = b.mid - b.spr / 2;
-    el('rect', {class: 'sp', x: 70, y: Y(ask), width: 236, height: Y(bid) - Y(ask)}); el('text', {class: 'spt', x: 78, y: Y(b.mid) + 4}, `écart ${fmt(b.spr)}`);
-    const cy = b.side === 'buy' ? Y(b.mid - 4 * b.st) : Y(b.mid + 4 * b.st);
-    el('rect', {class: 'ch', x: 78, y: cy - 11, width: 128, height: 22, rx: 2}); el('text', {class: 'cht', x: 86, y: cy + 4}, `${b.side === 'buy' ? 'ACHAT' : 'VENTE'} ${fmt(b.q)}${b.u}`);
-    const g = el('g', {class: 'cdl'}), x = 262;
-    for (const [t, a] of [['line', {class: 'wk', x1: x, x2: x, y1: Y(b.H), y2: Y(b.L)}], ['rect', {class: 'bd', x: x - 7, y: Y(Math.max(b.O, b.C)), width: 14, height: Math.max(2, Math.abs(Y(b.O) - Y(b.C)))}]]) {
-      const e = document.createElementNS(ns, t); for (const k in a) e.setAttribute(k, a[k]); g.append(e); }
-    const fill = b.side === 'buy' ? ask + b.slip : bid - b.slip;
-    el('line', {class: 'fl', x1: 130, x2: 306, y1: Y(fill), y2: Y(fill)}); el('text', {class: 'ft', x: 244, y: Y(fill) + (b.side === 'buy' ? -6 : 14), 'text-anchor': 'end'}, `exécuté ${fmt(fill)}`);
-    const c = [['écart', b.q * b.spr / 2], ['glissement', b.q * b.slip], ['commission', b.comm], ['taxes', b.tax]], tot = c.reduce((s, [, v]) => s + v, 0);
-    c.forEach(([k, v], i) => { el('text', {class: 'cost', x: 14, y: 310 + i * 17}, k); el('text', {class: 'cost', x: 306, y: 310 + i * 17, 'text-anchor': 'end'}, `${fmt(v)} $`); });
-    el('text', {class: 'cost tt', x: 14, y: 385}, 'coût total'); el('text', {class: 'cost tt', x: 306, y: 385, 'text-anchor': 'end'}, `${fmt(tot)} $`);
-  }
-  const li = [...document.querySelectorAll('#m2 li')], bk = BK.map(b => $(b.id));
-  const play = () => {
-    ob.classList.add('go'); if (reduce) { li.forEach(l => l.classList.add('on', 'ok')); bk.forEach(b => b.classList.add('on', 'ex')); return; }
-    // Slow motion first, one caption per stage; then the same loop at full speed.
-    const cap = $('ob-cap'), at = (t, f) => setTimeout(f, t), say = txt => { cap.classList.remove('on'); at(120, () => { cap.textContent = txt; cap.classList.add('on'); }); };
-    at(700, () => say('Ralenti · 1. L’allocateur et le watcher écrivent leurs ordres dans le carnet M2 : quantité = écart de poids × valeur du portefeuille ÷ prix.'));
-    li.forEach((l, i) => at(1300 + i * 500, () => l.classList.add('on')));
-    const ex = (i, t, txt) => { at(t, () => { li.forEach(l => l.classList.remove('run')); li[i].classList.add('run'); if (bk[i]) bk[i].classList.add('on'); say(txt); });
-      at(t + 1600, () => { if (bk[i]) bk[i].classList.add('ex'); }); at(t + 3200, () => li[i].classList.add('ok')); };
-    ex(0, 4200, 'Ralenti · 2. Le moteur visite XAUUSD : l’achat part à l’ouverture de la barre suivante, au prix vendeur plus le glissement. Écart, glissement, commission et taxes sont prélevés.');
-    ex(1, 9000, 'Ralenti · 3. Puis USA500IDXUSD : la vente part au prix acheteur moins le glissement, avec ses propres coûts.');
-    ex(2, 13400, 'Ralenti · 4. Puis l’ordre du watcher sur BRENTCMDUSD. Les 4 autres actifs n’ont rien à faire : ils sont sautés.');
-    at(17400, () => { li.forEach(l => l.classList.remove('run')); say('Vitesse réelle · la même boucle, barre après barre, sur toute la période.'); ob.classList.add('fast');
-      let bar = 1532; const lp = $('ob-loop'), t0 = performance.now();
-      const f = now => { const q = Math.min(1, (now - t0) / 3200); bar = Math.round(1532 + q * 1680); lp.textContent = `barre ${bar.toLocaleString('fr-FR')} · seuls les actifs concernés sont visités`;
-        const k = Math.floor(now / 70) % 3; li.forEach((l, i) => l.classList.toggle('run', i === k)); bk.forEach((b, i) => b.classList.toggle('ex', i !== k || q >= 1));
-        if (q < 1) requestAnimationFrame(f); else { li.forEach(l => l.classList.remove('run')); ob.classList.remove('fast'); } };
-      requestAnimationFrame(f); });
+    {id:'bk0',a:'XAUUSD',side:'buy',q:7.93,u:' oz',mid:1836.40,spr:.30,slip:.12,comm:1.46,tax:0},
+    {id:'bk1',a:'USA500IDXUSD',side:'sell',q:3.84,u:'',mid:4012.60,spr:.80,slip:.30,comm:1.54,tax:.77}
+  ];
+  BK.forEach(b => {
+    b.el=$(b.id); b.ask=b.mid+b.spr/2; b.bid=b.mid-b.spr/2;
+    b.fill=b.side==='buy' ? b.ask+b.slip : b.bid-b.slip;
+    b.costs=[['écart',b.q*b.spr/2],['glissement',b.q*b.slip],['commission',b.comm],['taxes',b.tax]];
+    b.costs.push(['coût total',b.costs.reduce((sum,[,value])=>sum+value,0)]);
+    const size='<div class="size"><span class="size-bar"></span><span class="size-text"></span></div>';
+    b.el.innerHTML=`<h3 class="book-h">CARNET D’ORDRES<b>${b.a}</b></h3>
+      <table aria-label="${b.a} : prix acheteur et vendeur, uniquement notre quantité">
+        <thead><tr><th scope="col">Qté achat</th><th scope="col">Prix</th><th scope="col">Qté vente</th></tr></thead>
+        <tbody><tr class="ask"><td></td><td class="quote-price">${fmt(b.ask)}</td><td>${b.side==='buy' ? size : ''}</td></tr>
+        <tr class="spread"><td colspan="3"><span>acheteur <b>${fmt(b.bid)}</b> / vendeur <b>${fmt(b.ask)}</b></span><span>écart achat/vente <b>${fmt(b.spr)}</b></span></td></tr>
+        <tr class="bid"><td>${b.side==='sell' ? size : ''}</td><td class="quote-price">${fmt(b.bid)}</td><td></td></tr></tbody>
+      </table><p class="own-order">notre ordre · ${b.side==='buy' ? 'achat' : 'vente'} ${fmt(b.q)}${b.u}</p>
+      <p class="fill" aria-hidden="true"><b>exécuté ${fmt(b.fill)}</b>= ${b.side==='buy' ? 'vendeur' : 'acheteur'} ${fmt(b.side==='buy' ? b.ask : b.bid)} ${b.side==='buy' ? '+' : '−'} glissement ${fmt(b.slip)}</p>
+      <dl class="costs">${b.costs.map(([label,value],i)=>`<div class="cost-line${i===4 ? ' total' : ''}" aria-hidden="true"><dt>${label}</dt><dd>${fmt(value)} $</dd></div>`).join('')}</dl>`;
+    b.size=b.el.querySelector('.size'); b.bar=b.el.querySelector('.size-bar'); b.quantity=b.el.querySelector('.size-text');
+    b.fillLabel=b.el.querySelector('.fill'); b.costLines=[...b.el.querySelectorAll('.cost-line')];
+  });
+  const lines=[...document.querySelectorAll('#m2 li')], caption=$('ob-cap'), counter=$('ob-loop');
+  const captions=[
+    'Ralenti · 1. L’allocateur et le watcher écrivent leurs ordres dans le carnet M2 : quantité = écart de poids × valeur du portefeuille ÷ prix.',
+    'Ralenti · 2. XAUUSD quitte M2 et est émis sur son carnet d’ordres, côté vendeur. La quantité est exécutée au prix vendeur plus le glissement ; les coûts apparaissent ensuite.',
+    'Ralenti · 3. Puis USA500IDXUSD : l’ordre est émis sur son carnet d’ordres, côté acheteur. La vente est exécutée au prix acheteur moins le glissement, avec ses propres coûts.',
+    'Ralenti · 4. Puis l’ordre du watcher sur BRENTCMDUSD est traité. Les 4 autres actifs n’ont aucun ordre : ils sont sautés.'
+  ];
+  const setText=(node,text)=>{ if (node.textContent!==text) node.textContent=text; };
+  const state=(i,{shown=true,run=false,departing=false,emitted=false,filled=false,costs=0,remaining=1}={})=>{
+    const line=lines[i];
+    Object.entries({on:shown,run,departing,ok:filled}).forEach(([key,value])=>line.classList.toggle(key,value));
+    setText(line.querySelector('.m2-state'),filled ? 'exécuté ✓' : emitted ? 'émis · carnet d’ordres' : departing ? 'émission en cours' : i===2 ? 'à traiter' : 'à émettre');
+    const b=BK[i]; if (!b) return;
+    b.el.classList.toggle('emitted',emitted); b.el.classList.toggle('filled',filled);
+    const ratio=emitted ? Math.max(0,Math.min(1,remaining)) : 0;
+    b.bar.style.width=`${ratio*100}%`; setText(b.quantity,`${fmt(b.q*ratio)}${b.u}`);
+    b.fillLabel.setAttribute('aria-hidden',String(!filled));
+    b.costLines.forEach((line,index)=>{ const on=index<costs; line.classList.toggle('on',on); line.setAttribute('aria-hidden',String(!on)); });
   };
-  new IntersectionObserver((es, o) => { if (es.some(e => e.isIntersecting)) { play(); o.disconnect(); } }, {threshold: .4}).observe(ob);
+  let flight=null, flightAsset=-1;
+  const clearFlight=()=>{ flight?.remove(); flight=null; flightAsset=-1; };
+  const fly=(i,progress)=>{
+    if (flightAsset!==i) {
+      clearFlight(); flight=document.createElement('div'); flight.className=`ob-flight ${BK[i].side}`;
+      flight.setAttribute('aria-hidden','true'); flight.textContent=`${BK[i].a} · ${BK[i].side==='buy' ? 'ACHAT' : 'VENTE'} ${fmt(BK[i].q)}${BK[i].u}`;
+      ob.append(flight); flightAsset=i;
+    }
+    // Measure at emission time: the same ticket route works when the books stack on a phone.
+    const root=ob.getBoundingClientRect(), from=lines[i].getBoundingClientRect(), to=BK[i].size.getBoundingClientRect();
+    const width=flight.getBoundingClientRect().width, ease=progress*progress*(3-2*progress);
+    const startX=from.left-root.left, endX=Math.max(8,Math.min(root.width-width-8,to.left-root.left));
+    const x=startX+(endX-startX)*ease, y=from.top-root.top+(to.top-from.top)*ease;
+    flight.style.transform=`translate(${x}px, ${y}px)`;
+  };
+  const execution=(i,t,start,fast=false)=>{
+    const emit=fast ? 75 : 1000, wait=fast ? 0 : 1000, drain=fast ? 85 : 1600;
+    const elapsed=t-start, landed=elapsed>=emit, filled=elapsed>=emit+wait+drain;
+    const costs=filled ? Math.min(5,Math.floor((elapsed-emit-wait-drain)/(fast ? 8 : 180))) : 0;
+    state(i,{run:elapsed>=0 && !filled,departing:elapsed>=0 && !landed,emitted:landed,filled,costs,
+      remaining:1-Math.max(0,(elapsed-emit-wait)/drain)});
+    if (elapsed>=0 && !landed) fly(i,elapsed/emit);
+  };
+  const final=()=>{
+    clearFlight(); lines.forEach((_,i)=>state(i,{emitted:i<2,filled:true,costs:5,remaining:0}));
+    setText(counter,'barre 3 212 · 3 actifs concernés · 4 autres actifs sautés'); ob.classList.remove('fast');
+    setText(caption,'Vitesse réelle · la période est parcourue. Chaque ordre est exécuté avec ses coûts ; les 4 autres actifs sont sautés.');
+  };
+  const duration=20600;
+  const render=t=>{
+    const phase=(t-17400)%640;
+    const flying=t<17400 ? (t>=4200 && t<5200 ? 0 : t>=9600 && t<10600 ? 1 : -1)
+      : phase<75 ? 0 : phase>=210 && phase<285 ? 1 : -1;
+    if (flightAsset!==flying) clearFlight();
+    if (t>=duration) { final(); return; }
+    if (t<17400) {
+      lines.forEach((_,i)=>state(i,{shown:t>=1300+i*500}));
+      if (t>=700) setText(caption,captions[t>=15400 ? 3 : t>=9600 ? 2 : t>=4200 ? 1 : 0]);
+      if (t>=4200) execution(0,t,4200);
+      if (t>=9600) execution(1,t,9600);
+      if (t>=15400) state(2,{run:t<16400,filled:t>=16400});
+    } else {
+      ob.classList.add('fast');
+      setText(caption,'Vitesse réelle · la même boucle de carnets d’ordres, barre après barre, sur toute la période.');
+      setText(counter,`barre ${Math.round(1532+(t-17400)/3200*1680).toLocaleString('fr-FR')} · 4 autres actifs sautés`);
+      lines.forEach((_,i)=>state(i)); execution(0,phase,0,true);
+      if (phase>=210) execution(1,phase,210,true);
+      if (phase>=450) state(2,{run:phase<560,filled:phase>=560});
+    }
+  };
+  // One pass; pause the clock outside the viewport and while the tab is hidden.
+  let started=false, visible=false, finished=false, elapsed=0, previous=null, raf=null;
+  const stop=()=>{ if (raf!==null) cancelAnimationFrame(raf); raf=null; previous=null; };
+  const frame=now=>{
+    if (previous!==null) elapsed+=Math.min(now-previous,80); previous=now;
+    render(elapsed);
+    if (elapsed>=duration) { finished=true; stop(); observer.disconnect(); }
+    else raf=requestAnimationFrame(frame);
+  };
+  const resume=()=>{ if (started && visible && !document.hidden && !finished && raf===null) { previous=null; raf=requestAnimationFrame(frame); } };
+  if (reduce) { final(); return; }
+  const observer=new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+      visible=entry.isIntersecting;
+      if (entry.isIntersecting && entry.intersectionRatio>=.4) started=true;
+    });
+    if (visible) resume(); else stop();
+  },{threshold:[0,.4]});
+  observer.observe(ob);
+  document.addEventListener('visibilitychange',()=>{ if (document.hidden) stop(); else resume(); });
 })();
 boot();
 </script>
