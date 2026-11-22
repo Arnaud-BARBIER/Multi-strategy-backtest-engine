@@ -275,7 +275,7 @@ a{color:inherit}
 .joinann .ja-l{stroke:var(--muted)}.joinann .ja-r{stroke:var(--accent);fill:#29c5ff1a}
 .joinann.on .ja-r{animation:jaR 1.1s cubic-bezier(.4,0,.2,1) .25s both}
 @keyframes jaR{from{transform:translateX(26px);opacity:0}to{transform:none;opacity:1}}
-.sch-sub strong{color:var(--text);font-weight:600}
+.sch-sub strong{color:var(--accent);font-weight:600}
 .joinann b{display:block;font:600 16px/1.3 var(--sans);color:var(--text)}
 .joinann span{display:block;margin-top:3px;font:400 14px/1.45 var(--sans);color:#c3ccdb;max-width:520px}
 @media (max-width:760px){.joinann{left:16px;right:16px;bottom:76px;transform:none}.joinann.on{transform:none}.joinann svg{display:none}.joinann b{font-size:14px}.joinann span{font-size:12.5px}}
@@ -369,7 +369,7 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
 @media (max-width:760px){.bench{min-width:0;font-size:13px}.bench th,.bench td{padding:9px 7px}.bench th{font-size:9.5px;letter-spacing:.03em;white-space:normal;vertical-align:bottom}
   .bench td:first-child small{display:none}.bench small{font-size:11px}}
 .end{text-align:left;padding-bottom:40px}
-.after .blk{min-height:100vh;min-height:100svh;box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;padding:84px 0 48px}
+.after .blk{min-height:100vh;min-height:100svh;box-sizing:border-box;display:flex;flex-direction:column;justify-content:flex-start;padding:76px 0 48px}
 #fin .cap{color:var(--accent)}
 .fin-contact{min-width:0}
 .fin-question{margin:0 0 16px;font-size:clamp(17px,1.8vw,22px);color:var(--text);max-width:720px}
@@ -587,10 +587,11 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
     <!-- The validation tests, announced before two of them are shown -->
     <div class="valwin" id="testwin">
       <div class="vw-in"><div class="vw-head ed-head"><p class="sch-cap">Avant le déploiement</p>
-        <h2 class="sch-title">Trouvée ne suffit pas : 12 tests de validation.</h2>
-        <p class="sch-sub">Battre le 1/N sur la période d’étude ne suffit pas. FORGE éprouve chaque stratégie à travers <strong>12 tests de robustesse</strong> : période scellée, autres actifs, Monte-Carlo, stress tests et sensibilité des paramètres.</p>
-        <p class="sch-sub"><strong>Des centaines, voire des milliers de simulations</strong> exécutées en quelques secondes permettent de pousser la validation beaucoup plus loin.</p>
-        <p class="sch-sub">Voici deux de ces tests, appliqués à la stratégie de la démonstration.</p></div></div>
+        <h2 class="sch-title">Une bonne performance ne suffit pas. 12 tests de robustesse.</h2>
+        <p class="sch-sub">Une stratégie performante sur le passé ne l’est pas forcément dans d’autres conditions.</p>
+        <p class="sch-sub">FORGE la soumet à <strong>12 tests de robustesse</strong> : données hors échantillon, autres actifs, Monte-Carlo, stress tests et sensibilité des paramètres.</p>
+        <p class="sch-sub"><strong>Des milliers de simulations en quelques secondes</strong> pour mettre votre stratégie à l’épreuve avant que les marchés ne s’en chargent.</p>
+        <p class="sch-sub">En voici deux :</p></div></div>
     </div>
     <!-- Validation, another test: the same setting on 80 baskets it never saw (the real run, sped up) -->
     <div class="valwin" id="crosswin">
@@ -608,7 +609,8 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
     <div class="valwin" id="edwin">
       <div class="vw-in"><div class="vw-head ed-head"><p class="sch-cap">L’éditeur</p>
         <h2 class="sch-title">Chaque stratégie est du code, lisible et modifiable.</h2>
-        <p class="sch-sub">Ce que votre IA écrit arrive dans l’éditeur de FORGE, <strong>rangé dans un arbre</strong> : indicateurs, allocateur, paramètres, graphiques. Vous pouvez <strong>tout reprendre à la main</strong>, à côté du terminal, et chaque modification est <strong>simulée aussitôt</strong>.</p></div></div>
+        <p class="sch-sub">Ce que votre IA écrit arrive directement dans l’éditeur de FORGE, <strong>organisé dans un arbre</strong> : indicateurs, allocateur, paramètres, graphiques.</p>
+        <p class="sch-sub">Conçu pour faciliter la programmation, cet environnement vous permet de <strong>développer, modifier et tester librement vos idées</strong>, avec une IA ou directement dans le code. Chaque modification peut être <strong>simulée immédiatement</strong>.</p></div></div>
     </div>
     <!-- The end of the demo: the code and the terminal side by side, seen from the left; who made it -->
     <div class="depart-o" id="departo"><div class="dep-in">
@@ -778,8 +780,8 @@ const ALL_STEPS = [
   {state: 'bench', cross: true, label: 'Autres actifs'},
   {state: 'ed_tree', edintro: true, label: 'L’éditeur'},
   {state: 'ed_tree', target: 'alloc', cursor: true, label: 'L’arbre', nx: 'bubble',
-   n: 'L’arbre', h: 'La stratégie, branche par branche', p: 'Chaque branche de l’arbre est une partie du code : indicateurs, allocateur, paramètres, graphiques. Un clic ouvre la branche.'},
-  {state: 'ide_max', code: true, freeb: true, target: 'code', label: 'Le code', nx: 'bubble',
+   n: 'L’arbre', h: 'La stratégie, représentée par un arbre', p: 'Pour vous repérer facilement dans votre stratégie, FORGE organise le code en différentes branches : indicateurs, allocateur, paramètres, graphiques… Chaque branche correspond à une fonctionnalité que vous pouvez ouvrir et modifier indépendamment.'},
+  {state: 'ide_max', code: true, label: 'Le code', nx: 'code',
    n: 'Le code', h: 'Le code de votre IA, ou le vôtre', p: 'Un clic sur l’allocateur ouvre son code, ici le filtre de tendance. Reprenez ce que votre IA a écrit ou codez directement ici : chaque modification est appliquée et simulée aussitôt, et le terminal à droite se met à jour.'},
   {state: 'ide_tree', depart: true, label: 'Contact'},
 ];
@@ -809,8 +811,8 @@ const TOUR = [
   {state: 'bencht', cross: true, label: 'Autres actifs'},
   {state: 'ed_tree', edintro: true, label: 'L’éditeur'},
   {state: 'ed_tree', target: 'alloc', cursor: true, label: 'L’arbre', nx: 'bubble',
-   n: 'L’arbre', h: 'La stratégie, branche par branche', p: 'Chaque branche de l’arbre est une partie du code : indicateurs, allocateur, paramètres, graphiques. Un clic ouvre la branche.'},
-  {state: 'ide_max', code: true, freeb: true, target: 'code', label: 'Le code', nx: 'bubble',
+   n: 'L’arbre', h: 'La stratégie, représentée par un arbre', p: 'Pour vous repérer facilement dans votre stratégie, FORGE organise le code en différentes branches : indicateurs, allocateur, paramètres, graphiques… Chaque branche correspond à une fonctionnalité que vous pouvez ouvrir et modifier indépendamment.'},
+  {state: 'ide_max', code: true, label: 'Le code', nx: 'code',
    n: 'Le code', h: 'Le code de votre IA, ou le vôtre', p: 'Un clic sur l’allocateur ouvre son code, ici le filtre de tendance. Reprenez ce que votre IA a écrit ou codez directement ici : chaque modification est appliquée et simulée aussitôt, et le terminal à droite se met à jour.'},
   {state: 'ide_tree', depart: true, label: 'Contact'},
 ];
@@ -1006,7 +1008,8 @@ function enter(k, forward) {
   if (step.code) {
     // Coming from the tree step on a desktop, the cursor already rests on the allocator: click at once.
     const fromTree = STEPS[prev]?.state === 'ed_tree' && STEPS[prev]?.target === 'alloc' && $('cursor').classList.contains('on') && innerWidth > 760;
-    if (forward && !reduce) playCode(() => { show(step.state); settle(k); }, fromTree); else { show(step.state); settle(k); } return; }
+    const end = () => { show(step.state); settle(k); $('joinann').classList.remove('on'); nextOn('code'); };
+    if (forward && !reduce) playCode(end, fromTree); else end(); return; }
   stopLoop();
   // The clicks that lead here: `from` (one click on the previous state) or `play` ([state, target, next state]).
   const acts = step.play || (step.from && prev >= 0 ? [[STEPS[prev].state, step.from, step.state]] : []);
@@ -1068,16 +1071,16 @@ function startVal() {
   // Capture coordinates (1600 x 1000): the locked card with its button, then the research / sealed table.
   const cam = (r) => { const c = $('vwcam'), f = box.clientWidth / W; if (!r) { c.style.transform = ''; return; }
     const [x, y, w, h] = r, z = Math.min(3, .92 * Math.min(W / w, H / h)); c.style.transform = `translate(${f * (W / 2 - (x + w / 2) * z)}px,${f * (H / 2 - (y + h / 2) * z)}px) scale(${z})`; };
-  later(500, popVal); later(1500, () => cam([0, 150, 720, 150]));
-  const T0 = 2400;
+  later(500, popVal);
+  const T0 = 3800;   // time to read the locked page
   later(T0 + 300, () => { cur.style.transition = 'none'; cur.style.transform = `translate(${box.clientWidth * .6}px,${box.clientHeight * .7}px)`; cur.style.opacity = 1;
     void cur.offsetWidth; cur.style.transition = ''; });
   later(T0 + 700, () => { const r = at(); cur.style.transform = `translate(${r.x + r.w / 2}px,${r.y + r.h / 2}px)`; });
   later(T0 + 1750, () => { const r = at(); Object.assign(press.style, {left: `${r.x - 3}px`, top: `${r.y - 3}px`, width: `${r.w + 6}px`, height: `${r.h + 6}px`});
     press.classList.remove('go'); void press.offsetWidth; press.classList.add('go'); });
   later(T0 + 2300, () => { v.classList.add('open'); cur.style.opacity = 0; });
-  later(T0 + 2400, () => cam(null));   // opened: the whole results page at once
-  later(T0 + 3800, () => nextOn('val'));
+  later(T0 + 2900, () => { v.querySelector('.vw-pane').style.transform = ''; v.classList.remove('big'); });   // opened: back to the whole window
+  later(T0 + 4000, () => nextOn('val'));
 }
 // The "continue" prompt of a step with `nx`, at the moment its animation names.
 function nextOn(kind) {
@@ -1365,7 +1368,7 @@ function schemaPhase() {
 const FIRST_TERMINAL_STEP = STEPS.findIndex(s => !s.hero && !s.schema);
 // Time on screen: the animation that leads in or plays, then reading time for the bubble.
 function stepTime(s) {
-  if (s.val) return 12500;
+  if (s.val) return 11000;
   if (s.depart) return 6000;
   if (s.cross) return 19000;
   if (s.tests) return 9000;
