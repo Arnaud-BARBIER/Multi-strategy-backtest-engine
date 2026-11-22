@@ -245,6 +245,7 @@ a{color:inherit}
 .ed-head{max-width:820px}
 .vw-head .sch-sub{max-width:760px}
 .vw-box{position:relative;aspect-ratio:16/10;overflow:hidden;background:#0b0e14}
+.vw-cam{position:absolute;inset:0;transform-origin:0 0;transition:transform 1s cubic-bezier(.4,0,.2,1)}
 .vw-box img{position:absolute;inset:0;width:100%;height:100%;display:block;transition:opacity .45s ease}
 #vwoos{opacity:0}.valwin.open #vwoos{opacity:1}
 .vw-cur{position:absolute;left:0;top:0;width:22px;height:22px;opacity:0;transition:transform .9s cubic-bezier(.4,0,.2,1),opacity .3s}
@@ -383,9 +384,10 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
 .eng .bx{fill:#10161f;stroke:#3a4558;stroke-width:1.4;transition:stroke .25s,fill .25s}
 .eng .bx.hot{stroke:var(--accent);fill:#12283a}.eng .bx.hotw{stroke:#d9bf5a;fill:#262111}
 .eng .t1{fill:var(--text);font-size:17px;font-weight:600;text-anchor:middle}.eng .t2{fill:var(--muted);font-size:12.5px;text-anchor:middle}
-.eng .lk{fill:none;stroke-width:1.4;opacity:.45}.eng .la{stroke:var(--accent)}.eng .lw{stroke:#d9bf5a}
-.eng .pa{fill:var(--accent)}.eng .pw{fill:#d9bf5a}
+.eng .lk{fill:none;stroke-width:1.4;opacity:.5}.eng .lk.lw{opacity:.8}.eng .la{stroke:var(--accent)}.eng .lw{stroke:#d9bf5a}
+.eng .pa{fill:var(--accent)}.eng .pw{fill:#ffd75e;filter:drop-shadow(0 0 4px #ffd75e)}
 .eng .tag{font:500 12px var(--mono);opacity:0;transition:opacity .3s}.eng .tag.on{opacity:1}
+.eng .pw{r:5}
 .eng .tick{stroke:#2a3446;stroke-width:1}.eng .tick.m{stroke:#4a5568}
 .eng .rb{fill:#0b0e14;stroke:var(--accent);stroke-width:1.6}.eng .rb.done{fill:var(--accent)}
 .eng .rbw{fill:#0b0e14;stroke:#d9bf5a;stroke-width:1.6}
@@ -405,6 +407,8 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
 .m2-l b{color:var(--text);font-weight:600}.m2-l i{grid-column:1/-1;font:400 12px var(--sans);font-style:normal;color:var(--muted)}
 .m2-l li.w i{color:#d9bf5a}.m2-l .buy{color:var(--up)}.m2-l .sell{color:#c3ccdb}
 .ob-loop{margin:10px 0 0;font:400 12.5px var(--sans);color:var(--muted)}
+.ob-cap{margin:0;padding:12px 22px 16px;min-height:3.2em;border-top:1px solid #1a2230;font:400 14px/1.5 var(--sans);color:#c3ccdb;opacity:0;transition:opacity .25s}.ob-cap.on{opacity:1}
+.ob.fast .book .cdl,.ob.fast .book .fl,.ob.fast .book .ft,.ob.fast .book .cost{transition:none}
 .ob-arr{font:300 34px var(--sans);color:var(--accent);text-align:center}
 .books{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .book{width:100%;height:auto;display:block;border:1px solid #243044;background:#0d121a;font-family:var(--mono);opacity:.35;transition:opacity .4s}
@@ -510,8 +514,8 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
           <h2 class="sch-title">La période verrouillée, ouverte une seule fois.</h2>
           <p class="sch-sub">La recherche s’arrête en août 2023. La suite reste <strong>scellée jusqu’à ce que vous l’ouvriez</strong>, pour voir comment la stratégie se comporte sur des <strong>données qu’elle n’a jamais vues</strong>.</p></div>
         <div class="pane vw-pane"><div class="pane-h">Validation · Mon portefeuille<span>période scellée août 2023 → 2026</span></div>
-          <div class="vw-box" id="vwbox"><img src="states/val_lock.jpg" alt="" id="vwlock"><img src="states/val_oos.jpg" alt="Validation : la période scellée ouverte, résultats hors échantillon" id="vwoos">
-            <i class="vw-press" id="vwpress"></i><i class="vw-cur" id="vwcur"><svg viewBox="0 0 22 22"><path d="M3 2 L3 18 L7.5 13.8 L10.6 20.5 L13.4 19.2 L10.3 12.6 L16.4 12.4 Z" fill="#fff" stroke="#0b0e14" stroke-width="1.3" stroke-linejoin="round"/></svg></i></div></div>
+          <div class="vw-box" id="vwbox"><div class="vw-cam" id="vwcam"><img src="states/val_lock.jpg" alt="" id="vwlock"><img src="states/val_oos.jpg" alt="Validation : la période scellée ouverte, résultats hors échantillon" id="vwoos">
+            <i class="vw-press" id="vwpress"></i><i class="vw-cur" id="vwcur"><svg viewBox="0 0 22 22"><path d="M3 2 L3 18 L7.5 13.8 L10.6 20.5 L13.4 19.2 L10.3 12.6 L16.4 12.4 Z" fill="#fff" stroke="#0b0e14" stroke-width="1.3" stroke-linejoin="round"/></svg></i></div></div></div>
         <p class="vw-res" id="vwres">Hors échantillon : 21,9 % par an, volatilité 13,7 %, baisse maximale −12,3 %. 85 % de l’avance sur le 1/N est conservée.</p>
       </div>
     </div>
@@ -607,7 +611,7 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
     <p class="sub">L’allocateur et les watchers écrivent leurs ordres dans <strong>un seul carnet</strong>. Le moteur le parcourt actif par actif, <strong>uniquement pour les actifs concernés</strong>, et exécute chaque ordre sur la barre suivante avec tous ses coûts : <strong>écart achat/vente, glissement et commission</strong>.</p>
     <div class="ob pane" id="ob"><div class="pane-h">Moteur compilé · rebalancement du 01/03/2023<span>exemple chiffré</span></div>
       <div class="ob-in">
-        <div class="m2"><p class="ob-t">Carnet de la stratégie</p>
+        <div class="m2"><p class="ob-t">Carnet M2 · la stratégie</p>
           <ol class="m2-l" id="m2">
             <li data-i="0"><b>XAUUSD</b><span class="buy">achat</span><span>7,93 oz</span><i>rebalancement · 14,9 % → 20,0 %</i></li>
             <li data-i="1"><b>USA500IDXUSD</b><span class="sell">vente</span><span>3,84</span><i>rebalancement · 22,4 % → 17,0 %</i></li>
@@ -615,8 +619,8 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
           </ol>
           <p class="ob-loop" id="ob-loop">3 actifs concernés sur 7 · les 4 autres sont sautés</p></div>
         <div class="ob-arr" aria-hidden="true">→</div>
-        <div class="books"><svg class="book" id="bk0" viewBox="0 0 320 380"></svg><svg class="book" id="bk1" viewBox="0 0 320 380"></svg></div>
-      </div></div>
+        <div class="books"><svg class="book" id="bk0" viewBox="0 0 320 396"></svg><svg class="book" id="bk1" viewBox="0 0 320 396"></svg></div>
+      </div><p class="ob-cap" id="ob-cap"></p></div>
   </div>
 
   <div class="blk" id="mesure">
@@ -905,8 +909,8 @@ function enter(k, forward) {
   if (step.edintro || step.tests) { $('cursor').classList.remove('on'); show(step.state); layout(); return; }
   if (step.depart) {   // pop out: the maximised field is left (Esc), the editor goes back to its tree
     // Swap the editor first, then turn the screen: no layer change while the 3D transform runs (it stuttered).
-    $('cursor').classList.remove('on'); show(step.state);
-    if (forward && !reduce) { pose = 'flat'; timer = setTimeout(() => { pose = 'depart'; layout(); }, 380); } else layout();
+    $('cursor').classList.remove('on');
+    if (forward && !reduce) { show('ide_max'); layout(); timer = setTimeout(() => show(step.state), 1100); } else { show(step.state); layout(); }
     return; }
   if (step.code) {
     // Coming from the tree step on a desktop, the cursor already rests on the allocator: click at once.
@@ -956,7 +960,7 @@ function playCode(done, fromTree) {
 const VAL_BTN = [34, 208, 178, 35];   // "Ouvrir la période scellée" on the 1600 x 1000 capture
 let valTimers = [];
 function stopVal() { valTimers.forEach(clearTimeout); valTimers = []; const v = $('valwin'); v.classList.remove('on', 'open', 'big');
-  $('vwcur').style.opacity = 0; v.querySelector('.vw-pane').style.transform = ''; }
+  $('vwcur').style.opacity = 0; v.querySelector('.vw-pane').style.transform = ''; $('vwcam').style.transform = ''; }
 // Once opened, the capture is unreadable at its size in the window: it grows to fill the screen.
 function popVal() {
   const v = $('valwin'), p = v.querySelector('.vw-pane'), r = p.getBoundingClientRect(), st = $('stage').getBoundingClientRect();
@@ -970,14 +974,20 @@ function startVal() {
   v.classList.add('on');
   if (reduce) { v.classList.add('open'); popVal(); nextOn('val'); return; }
   const at = () => { const s = box.clientWidth / W, [x, y, w, h] = VAL_BTN.map(n => n * s); return {s, x, y, w, h}; };
-  later(300, () => { cur.style.transition = 'none'; cur.style.transform = `translate(${box.clientWidth * .6}px,${box.clientHeight * .7}px)`; cur.style.opacity = 1;
+  // Capture coordinates (1600 x 1000): the locked card with its button, then the research / sealed table.
+  const cam = (r) => { const c = $('vwcam'), f = box.clientWidth / W; if (!r) { c.style.transform = ''; return; }
+    const [x, y, w, h] = r, z = Math.min(3, .92 * Math.min(W / w, H / h)); c.style.transform = `translate(${f * (W / 2 - (x + w / 2) * z)}px,${f * (H / 2 - (y + h / 2) * z)}px) scale(${z})`; };
+  later(500, popVal); later(1500, () => cam([0, 150, 720, 150]));
+  const T0 = 2400;
+  later(T0 + 300, () => { cur.style.transition = 'none'; cur.style.transform = `translate(${box.clientWidth * .6}px,${box.clientHeight * .7}px)`; cur.style.opacity = 1;
     void cur.offsetWidth; cur.style.transition = ''; });
-  later(700, () => { const r = at(); cur.style.transform = `translate(${r.x + r.w / 2}px,${r.y + r.h / 2}px)`; });
-  later(1750, () => { const r = at(); Object.assign(press.style, {left: `${r.x - 3}px`, top: `${r.y - 3}px`, width: `${r.w + 6}px`, height: `${r.h + 6}px`});
+  later(T0 + 700, () => { const r = at(); cur.style.transform = `translate(${r.x + r.w / 2}px,${r.y + r.h / 2}px)`; });
+  later(T0 + 1750, () => { const r = at(); Object.assign(press.style, {left: `${r.x - 3}px`, top: `${r.y - 3}px`, width: `${r.w + 6}px`, height: `${r.h + 6}px`});
     press.classList.remove('go'); void press.offsetWidth; press.classList.add('go'); });
-  later(2300, () => { v.classList.add('open'); cur.style.opacity = 0; });
-  later(3500, popVal);
-  later(4300, () => nextOn('val'));
+  later(T0 + 2300, () => { v.classList.add('open'); cur.style.opacity = 0; });
+  later(T0 + 2900, () => cam([10, 140, 790, 240]));
+  later(T0 + 7400, () => cam(null));
+  later(T0 + 8200, () => nextOn('val'));
 }
 // The "continue" prompt of a step with `nx`, at the moment its animation names.
 function nextOn(kind) {
@@ -1265,7 +1275,7 @@ function schemaPhase() {
 const FIRST_TERMINAL_STEP = STEPS.findIndex(s => !s.hero && !s.schema);
 // Time on screen: the animation that leads in or plays, then reading time for the bubble.
 function stepTime(s) {
-  if (s.val) return 9000;
+  if (s.val) return 12500;
   if (s.depart) return 6000;
   if (s.cross) return 19000;
   if (s.tests) return 9000;
@@ -1315,9 +1325,9 @@ async function autoplay() {
   const msk = el('mask', {id: 'fm'}, '', defs); el('rect', {x: 620, y: 0, width: 280, height: 560, fill: 'url(#fade)'}, '', msk);
   const L = {ea: 'M360 252 C 312 252, 318 92, 262 92', ae: 'M262 112 C 334 112, 322 268, 360 268',
     e1: 'M360 284 C 306 284, 312 332, 262 332', e2: 'M360 298 C 300 298, 306 420, 262 420',
-    w1: 'M150 300 L150 140', w2: 'M262 436 C 340 436, 330 306, 360 306'};
+    w1: 'M150 300 L150 140', ta: 'M690 274 L562 274', aw: 'M262 112 C 334 112, 322 268, 360 268', w2: 'M262 436 C 340 436, 330 306, 360 306'};
   const P = {};
-  for (const [k, d] of Object.entries(L)) P[k] = el('path', {d, class: 'lk ' + (k[0] === 'w' || k[1] === '1' || k[1] === '2' ? 'lw' : 'la'), 'marker-end': `url(#${k[0] === 'w' || k[1] === '1' || k[1] === '2' ? 'hw' : 'ha'})`});
+  for (const [k, d] of Object.entries(L)) P[k] = k === 'ta' || k === 'aw' ? el('path', {d, fill: 'none'}) : el('path', {d, class: 'lk ' + (k[0] === 'w' || k[1] === '1' || k[1] === '2' ? 'lw' : 'la'), 'marker-end': `url(#${k[0] === 'w' || k[1] === '1' || k[1] === '2' ? 'hw' : 'ha'})`});
   const box = (x, y, w, h, t1, t2) => { const g = el('g', {}); const r = el('rect', {class: 'bx', x, y, width: w, height: h, rx: 4}, '', g);
     el('text', {class: 't1', x: x + w / 2, y: y + h / 2 - (t2 ? 3 : -6)}, t1, g); if (t2) el('text', {class: 't2', x: x + w / 2, y: y + h / 2 + 16}, t2, g); return r; };
   const B = {al: box(40, 56, 222, 84, 'Allocateur', 'appelé aux dates prévues'), w1: box(40, 300, 222, 66, 'Watcher · portefeuille', 'peut demander un rebalancement'),
@@ -1339,23 +1349,23 @@ async function autoplay() {
     else el('line', {class: 'tick' + (b % 5 ? '' : ' m'), x1: 712, x2: 728, y1: y, y2: y}, '', tl);
   }
   el('line', {class: 'now', x1: 690, x2: 870, y1: NOW, y2: NOW});
-  el('text', {class: 'nowt', x: 870, y: NOW - 8, 'text-anchor': 'end'}, 'MAINTENANT');
   el('text', {class: 'ml', x: 738, y: 548}, 'le temps ↓');
   const pulse = (k, cls, ms, then) => { const path = P[k], len = path.getTotalLength(), c = el('circle', {r: 4.5, class: cls}), t0 = performance.now();
     const f = now => { const q = Math.min(1, (now - t0) / ms), pt = path.getPointAtLength(len * q); c.setAttribute('cx', pt.x); c.setAttribute('cy', pt.y);
       if (q < 1) requestAnimationFrame(f); else { c.remove(); then && then(); } }; requestAnimationFrame(f); };
   const flash = (r, cls = 'hot', ms = 500) => { r.classList.add(cls); setTimeout(() => r.classList.remove(cls), ms); };
   const say = (t, ms = 1400) => { t.classList.add('on'); setTimeout(() => t.classList.remove('on'), ms); };
-  const realloc = () => { flash(B.al, 'hot', 700); pulse('ae', 'pa', 420, () => { flash(B.en); say(T.w); }); };
+  // The allocator answers in the colour of whoever called it.
+  const realloc = w => { flash(B.al, w ? 'hotw' : 'hot', 700); pulse(w ? 'aw' : 'ae', w ? 'pw' : 'pa', 420, () => { flash(B.en); say(T.w); }); };
   let bar = 0, run = false, timer = null;
   const step = () => {
     bar = (bar + 1) % (N - 70); if (!bar) tl.querySelectorAll('.done,.rbw').forEach(e => e.classList.contains('rbw') ? e.remove() : e.classList.remove('done'));
     tl.style.transition = bar ? 'transform .26s linear' : 'none'; tl.style.transform = `translateY(${bar * STEP}px)`;
     $('eng-clock').textContent = `barre ${bar}`;
     pulse('e1', 'pw', 300); pulse('e2', 'pw', 300);
-    if (bar % EVERY === 0) { rbs[bar]?.classList.add('done'); flash(B.en); pulse('ea', 'pa', 420, realloc); }
+    if (bar % EVERY === 0) { rbs[bar]?.classList.add('done'); pulse('ta', 'pa', 220, () => { flash(B.en); pulse('ea', 'pa', 380, () => realloc(false)); }); }
     else if (Math.random() < 1 / 14) {
-      if (Math.random() < .5) setTimeout(() => { flash(B.w1, 'hotw'); say(T.r); el('circle', {class: 'rbw', cx: 720, cy: NOW - bar * STEP, r: 6}, '', tl); pulse('w1', 'pw', 420, realloc); }, 300);
+      if (Math.random() < .5) setTimeout(() => { flash(B.w1, 'hotw'); say(T.r); el('circle', {class: 'rbw', cx: 720, cy: NOW - bar * STEP, r: 6}, '', tl); pulse('w1', 'pw', 420, () => realloc(true)); }, 300);
       else setTimeout(() => { flash(B.w2, 'hotw'); say(T.o); pulse('w2', 'pw', 420, () => flash(B.en)); }, 300);
     }
   };
@@ -1369,8 +1379,8 @@ async function autoplay() {
   const fmt = (x, d = 2) => x.toLocaleString('fr-FR', {minimumFractionDigits: d, maximumFractionDigits: d});
   // Example figures: quantity = weight change × NAV / price; buy at ask + slippage, sell at bid − slippage.
   const BK = [
-    {id: 'bk0', a: 'XAUUSD', side: 'buy', q: 7.93, u: ' oz', mid: 1836.40, st: .10, spr: .30, slip: .12, O: 1836.40, H: 1836.85, L: 1836.05, C: 1836.75, comm: 1.46},
-    {id: 'bk1', a: 'USA500IDXUSD', side: 'sell', q: 3.84, u: '', mid: 4012.60, st: .20, spr: .80, slip: .30, O: 4012.60, H: 4013.00, L: 4011.70, C: 4011.90, comm: 1.54}];
+    {id: 'bk0', a: 'XAUUSD', side: 'buy', q: 7.93, u: ' oz', mid: 1836.40, st: .10, spr: .30, slip: .12, O: 1836.40, H: 1836.85, L: 1836.05, C: 1836.75, comm: 1.46, tax: 0},
+    {id: 'bk1', a: 'USA500IDXUSD', side: 'sell', q: 3.84, u: '', mid: 4012.60, st: .20, spr: .80, slip: .30, O: 4012.60, H: 4013.00, L: 4011.70, C: 4011.90, comm: 1.54, tax: .77}];
   for (const b of BK) {
     const svg = $(b.id), el = (tag, a, txt) => { const e = document.createElementNS(ns, tag); for (const k in a) e.setAttribute(k, a[k]); if (txt) e.textContent = txt; svg.append(e); return e; };
     const top = b.mid + 5 * b.st, Y = p => 52 + (top - p) / b.st * 22;
@@ -1385,17 +1395,28 @@ async function autoplay() {
       const e = document.createElementNS(ns, t); for (const k in a) e.setAttribute(k, a[k]); g.append(e); }
     const fill = b.side === 'buy' ? ask + b.slip : bid - b.slip;
     el('line', {class: 'fl', x1: 130, x2: 306, y1: Y(fill), y2: Y(fill)}); el('text', {class: 'ft', x: 244, y: Y(fill) + (b.side === 'buy' ? -6 : 14), 'text-anchor': 'end'}, `exécuté ${fmt(fill)}`);
-    const c = [['écart', b.q * b.spr / 2], ['glissement', b.q * b.slip], ['commission', b.comm]], tot = c.reduce((s, [, v]) => s + v, 0);
+    const c = [['écart', b.q * b.spr / 2], ['glissement', b.q * b.slip], ['commission', b.comm], ['taxes', b.tax]], tot = c.reduce((s, [, v]) => s + v, 0);
     c.forEach(([k, v], i) => { el('text', {class: 'cost', x: 14, y: 310 + i * 17}, k); el('text', {class: 'cost', x: 306, y: 310 + i * 17, 'text-anchor': 'end'}, `${fmt(v)} $`); });
-    el('text', {class: 'cost tt', x: 14, y: 368}, 'coût total'); el('text', {class: 'cost tt', x: 306, y: 368, 'text-anchor': 'end'}, `${fmt(tot)} $`);
+    el('text', {class: 'cost tt', x: 14, y: 385}, 'coût total'); el('text', {class: 'cost tt', x: 306, y: 385, 'text-anchor': 'end'}, `${fmt(tot)} $`);
   }
   const li = [...document.querySelectorAll('#m2 li')], bk = BK.map(b => $(b.id));
   const play = () => {
     ob.classList.add('go'); if (reduce) { li.forEach(l => l.classList.add('on', 'ok')); bk.forEach(b => b.classList.add('on', 'ex')); return; }
-    li.forEach((l, i) => setTimeout(() => l.classList.add('on'), 900 + i * 380));
-    const ex = (i, t) => { setTimeout(() => { li.forEach(l => l.classList.remove('run')); li[i].classList.add('run'); if (bk[i]) bk[i].classList.add('on'); }, t);
-      setTimeout(() => { if (bk[i]) bk[i].classList.add('ex'); }, t + 600); setTimeout(() => li[i].classList.add('ok'), t + 1500); };
-    ex(0, 2400); ex(1, 4400); ex(2, 6400); setTimeout(() => li.forEach(l => l.classList.remove('run')), 7800);
+    // Slow motion first, one caption per stage; then the same loop at full speed.
+    const cap = $('ob-cap'), at = (t, f) => setTimeout(f, t), say = txt => { cap.classList.remove('on'); at(120, () => { cap.textContent = txt; cap.classList.add('on'); }); };
+    at(700, () => say('Ralenti · 1. L’allocateur et le watcher écrivent leurs ordres dans le carnet M2 : quantité = écart de poids × valeur du portefeuille ÷ prix.'));
+    li.forEach((l, i) => at(1300 + i * 500, () => l.classList.add('on')));
+    const ex = (i, t, txt) => { at(t, () => { li.forEach(l => l.classList.remove('run')); li[i].classList.add('run'); if (bk[i]) bk[i].classList.add('on'); say(txt); });
+      at(t + 1600, () => { if (bk[i]) bk[i].classList.add('ex'); }); at(t + 3200, () => li[i].classList.add('ok')); };
+    ex(0, 4200, 'Ralenti · 2. Le moteur visite XAUUSD : l’achat part à l’ouverture de la barre suivante, au prix vendeur plus le glissement. Écart, glissement, commission et taxes sont prélevés.');
+    ex(1, 9000, 'Ralenti · 3. Puis USA500IDXUSD : la vente part au prix acheteur moins le glissement, avec ses propres coûts.');
+    ex(2, 13400, 'Ralenti · 4. Puis l’ordre du watcher sur BRENTCMDUSD. Les 4 autres actifs n’ont rien à faire : ils sont sautés.');
+    at(17400, () => { li.forEach(l => l.classList.remove('run')); say('Vitesse réelle · la même boucle, barre après barre, sur toute la période.'); ob.classList.add('fast');
+      let bar = 1532; const lp = $('ob-loop'), t0 = performance.now();
+      const f = now => { const q = Math.min(1, (now - t0) / 3200); bar = Math.round(1532 + q * 1680); lp.textContent = `barre ${bar.toLocaleString('fr-FR')} · seuls les actifs concernés sont visités`;
+        const k = Math.floor(now / 70) % 3; li.forEach((l, i) => l.classList.toggle('run', i === k)); bk.forEach((b, i) => b.classList.toggle('ex', i !== k || q >= 1));
+        if (q < 1) requestAnimationFrame(f); else { li.forEach(l => l.classList.remove('run')); ob.classList.remove('fast'); } };
+      requestAnimationFrame(f); });
   };
   new IntersectionObserver((es, o) => { if (es.some(e => e.isIntersecting)) { play(); o.disconnect(); } }, {threshold: .4}).observe(ob);
 })();
