@@ -670,12 +670,13 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
     <div class="bench-w"><table class="bench">
       <thead><tr><th>Cas testé</th><th>FORGE</th><th>vectorbt</th><th>NautilusTrader</th></tr></thead>
       <tbody>
-        <tr><td><b>Stratégie classique</b><small>croisement de moyennes, stop et objectif · 100 000 barres · 793 opérations identiques</small></td><td class="best">0,031 s</td><td>0,045 s</td><td>2,45 s</td></tr>
-        <tr><td><b>Gestion de position avancée</b><small>sortie partielle, stop au point mort, suivi sur H1, pause après 3 pertes · 200 000 barres · 2 955 opérations identiques</small></td><td>0,311 s</td><td class="best">0,217 s</td><td>8,90 s</td></tr>
-        <tr><td><b>Allocation</b><small>8 actifs, rebalancements périodiques · comptabilité identique au centime</small></td><td>0,020 s</td><td class="best">0,004 s</td><td>—</td></tr>
+        <tr><td><b>Stratégie algorithmique classique</b><small>croisement de moyennes, stop et objectif · 100 000 barres · 793 opérations identiques</small></td><td class="best">0,031 s<small>31 lignes</small></td><td>0,045 s<small>11 lignes</small></td><td>2,45 s<small>109 lignes</small></td></tr>
+        <tr><td><b>Stratégie algorithmique avec gestion de position avancée</b><small>sortie partielle, stop au point mort, suivi sur H1, pause après 3 pertes · 200 000 barres · 2 955 opérations identiques</small></td><td>0,311 s<small>64 lignes</small></td><td class="best">0,217 s<small>78 lignes</small></td><td>8,90 s<small>146 lignes</small></td></tr>
+        <tr><td><b>Allocation</b><small>8 actifs, rebalancements périodiques · comptabilité identique au centime</small></td><td>0,020 s<small>49 lignes</small></td><td class="best">0,004 s<small>56 lignes</small></td><td>—<small>—</small></td></tr>
         <tr><td><b>Grille de 1 000 réglages</b><small>stratégie classique · temps total et mémoire maximale</small></td><td>25,5 s<small class="best">0,82 Go</small></td><td class="best">13,7 s<small>4,26 Go</small></td><td>—</td></tr>
       </tbody></table></div>
-    <p class="bench-n">Temps à chaud, un processus, un fil d’exécution, Apple M2, 5 novembre 2026. vectorbt 1.2.0 en version libre (la version PRO n’a pas été testée), NautilusTrader 1.231.0. La comparaison d’allocation n’a pas été menée avec NautilusTrader.</p>
+    <p class="bench-n">Temps à chaud, un processus, un fil d’exécution, Apple M2, 5 novembre 2026. vectorbt 1.2.0 en version libre (la version PRO n’a pas été testée), NautilusTrader 1.231.0. La comparaison d’allocation n’a pas été menée avec NautilusTrader. Lignes : code à écrire dans le notebook pour la stratégie, hors imports et chargement des données (l'optimiseur de poids commun aux trois, 175 lignes, n'est pas compté).</p>
+    <p class="bench-n">Depuis, sur la même machine avec 7 cœurs : 1 480 réglages en 14 s dans FORGE (mesure non comparée aux autres outils).</p>
     <p class="sub bench-next">FORGE est en tête sur la stratégie classique ; vectorbt l’est sur la gestion avancée, l’allocation et la grille. Le moteur actuel est écrit en Python compilé (Numba). Le prochain chantier est son portage en C, pour gagner en vitesse sur ces cas et permettre des tests de robustesse encore plus fournis.</p>
   </div>
 
