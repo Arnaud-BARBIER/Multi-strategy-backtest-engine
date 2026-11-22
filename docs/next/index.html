@@ -1519,9 +1519,9 @@ async function autoplay() {
     b.el.innerHTML=`<h3 class="book-h">CARNET D’ORDRES<b>${b.a}</b></h3>
       <table aria-label="${b.a} : prix acheteur et vendeur, uniquement notre quantité">
         <thead><tr><th scope="col">Qté achat</th><th scope="col">Prix</th><th scope="col">Qté vente</th></tr></thead>
-        <tbody><tr class="ask"><td></td><td class="quote-price">${fmt(b.ask)}</td><td>${b.side==='buy' ? size : ''}</td></tr>
+        <tbody><tr class="ask"><td>${b.side==='buy' ? size : ''}</td><td class="quote-price">${fmt(b.ask)}</td><td></td></tr>
         <tr class="spread"><td colspan="3"><span>acheteur <b>${fmt(b.bid)}</b> / vendeur <b>${fmt(b.ask)}</b></span><span>écart achat/vente <b>${fmt(b.spr)}</b></span></td></tr>
-        <tr class="bid"><td>${b.side==='sell' ? size : ''}</td><td class="quote-price">${fmt(b.bid)}</td><td></td></tr></tbody>
+        <tr class="bid"><td></td><td class="quote-price">${fmt(b.bid)}</td><td>${b.side==='sell' ? size : ''}</td></tr></tbody>
       </table><p class="own-order">notre ordre · ${b.side==='buy' ? 'achat' : 'vente'} ${fmt(b.q)}${b.u}</p>
       <p class="fill" aria-hidden="true"><b>exécuté ${fmt(b.fill)}</b>= ${b.side==='buy' ? 'vendeur' : 'acheteur'} ${fmt(b.side==='buy' ? b.ask : b.bid)} ${b.side==='buy' ? '+' : '−'} glissement ${fmt(b.slip)}</p>
       <dl class="costs">${b.costs.map(([label,value],i)=>`<div class="cost-line${i===4 ? ' total' : ''}" aria-hidden="true"><dt>${label}</dt><dd>${fmt(value)} $</dd></div>`).join('')}</dl>`;
@@ -1611,10 +1611,10 @@ async function autoplay() {
   const observer=new IntersectionObserver(entries=>{
     entries.forEach(entry=>{
       visible=entry.isIntersecting;
-      if (entry.isIntersecting && entry.intersectionRatio>=.4) started=true;
+      if (entry.isIntersecting && (entry.intersectionRatio>=.4 || entry.intersectionRect.height>=innerHeight*.5)) started=true;   // a tall panel on a phone never reaches 40 %
     });
     if (visible) resume(); else stop();
-  },{threshold:[0,.4]});
+  },{threshold:[0,.1,.2,.3,.4]});
   observer.observe(ob);
   document.addEventListener('visibilitychange',()=>{ if (document.hidden) stop(); else resume(); });
 })();
