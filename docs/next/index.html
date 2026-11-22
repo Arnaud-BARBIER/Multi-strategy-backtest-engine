@@ -369,6 +369,12 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
 @media (max-width:760px){.bench{min-width:0;font-size:13px}.bench th,.bench td{padding:9px 7px}.bench th{font-size:9.5px;letter-spacing:.03em;white-space:normal;vertical-align:bottom}
   .bench td:first-child small{display:none}.bench small{font-size:11px}}
 .end{text-align:center;padding-bottom:40px}
+.after .blk{min-height:100vh;min-height:100svh;box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;padding:84px 0 48px}
+.arts-w{margin:64px auto 0;max-width:860px;text-align:left}.arts-n{margin:0 0 14px;font-size:14px;color:var(--muted)}
+.arts{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.arts a{display:flex;justify-content:space-between;gap:12px;padding:12px 16px;border:1px solid #243044;background:#10161f;color:var(--text);text-decoration:none;font-size:14px}
+.arts a:hover{border-color:var(--accent)}.arts a span{color:var(--accent)}
+@media (max-width:760px){.arts{grid-template-columns:1fr}.after .blk{padding:64px 0 32px}}
 .after .sub strong{color:var(--text);font-weight:600}
 /* ticker of the products that can be simulated */
 .ticker{position:absolute;left:0;right:0;bottom:0;height:38px;overflow:hidden;border-top:1px solid #243044;background:#0b0e14cc;
@@ -580,7 +586,7 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
         <a class="btn primary" href="mailto:arnaud.barbier@grenoble-em.com?subject=FORGE">Me contacter pour un essai ou des infos <span aria-hidden="true">↗</span></a>
         <a class="btn" href="https://arnaud-barbier.github.io/" target="_blank" rel="noopener">Découvrir mon parcours <span aria-hidden="true">↗</span></a>
       </div>
-      <a class="dep-next" href="#tests">La suite : liste des 12 tests <span aria-hidden="true">↓</span></a>
+      <a class="dep-next" href="#moteur">La suite : sous le capot <span aria-hidden="true">↓</span></a>
     </div>
     </div></div>
     <div class="chat" id="chat" aria-live="polite">
@@ -607,15 +613,8 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
 
 <section class="after" id="acces"><div class="after-in">
 
-  <div class="blk" id="tests">
-    <p class="cap">Avant le déploiement</p>
-    <h2>Les 12 tests de validation.</h2>
-    <p class="sub">Une stratégie retenue passe par ces douze questions avant d’être déployée. Chaque réglage essayé pendant la recherche est compté, pour que le résultat final reste crédible.</p>
-    <ol class="tlist"><li><b>Référence</b><span>La stratégie bat-elle les poids égaux sur le même calendrier ?</span></li><li><b>Prévision de covariance</b><span>La covariance estimée prédit-elle la période suivante ?</span></li><li><b>Taille neutre</b><span>Les poids optimisés apportent-ils quelque chose aux poids égaux sur la même sélection ?</span></li><li><b>Levier</b><span>Le résultat vaut-il mieux qu’un simple levier sur le marché ?</span></li><li><b>Concentration de l’avantage</b><span>Le gain est-il réparti dans le temps ou concentré sur un épisode chanceux ?</span></li><li><b>Monte-Carlo</b><span>Le gain résiste-t-il à des trajectoires de marché rééchantillonnées ?</span></li><li><b>Pouvoir d’achat</b><span>L’avantage est-il obtenu lorsque l’argent vaut plus, et la réserve est-elle utilisée ?</span></li><li><b>Stress inversé</b><span>À partir de quelle baisse des marchés la stratégie casse-t-elle ?</span></li><li><b>Triage</b><span>L’échantillon permet-il de conclure ?</span></li><li><b>Sharpe déflaté</b><span>Le Sharpe est-il significatif après prise en compte de tous les réglages testés ?</span></li><li><b>Hors échantillon</b><span>L’avantage trouvé en recherche résiste-t-il à la période scellée ?</span></li><li><b>Multi-actifs</b><span>L’avantage résiste-t-il à des paniers d’actifs inconnus du réglage ?</span></li></ol>
-  </div>
-
   <div class="blk" id="moteur">
-    <p class="cap">Sous le capot · 1 sur 2</p>
+    <p class="cap">Sous le capot</p>
     <h2>Le moteur appelle votre code au bon moment.</h2>
     <p class="sub">Le moteur compilé avance <strong>barre par barre</strong>. Aux dates prévues, il appelle l’<strong>allocateur</strong>, qui renvoie les nouvelles pondérations. À chaque barre, il appelle les <strong>watchers</strong> : l’un peut demander un rebalancement hors calendrier, l’autre ajuste les opérations en cours.</p>
     <div class="eng-wrap pane"><div class="pane-h">Moteur compilé · appels du code<span>calendrier et watchers</span></div>
@@ -628,21 +627,11 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
     </div>
   </div>
 
-  <div class="blk" id="carnet">
-    <p class="cap">Sous le capot · 2 sur 2</p>
-    <h2>Chaque rebalancement devient un carnet d’ordres.</h2>
-    <p class="sub">L’allocateur et les watchers écrivent leurs ordres dans <strong>un seul carnet</strong>. Le moteur le parcourt actif par actif, <strong>uniquement pour les actifs concernés</strong>, et exécute chaque ordre sur la barre suivante avec tous ses coûts : <strong>écart achat/vente, glissement et commission</strong>.</p>
-    <div class="ob pane" id="ob"><div class="pane-h">Moteur compilé · rebalancement du 01/03/2023<span>exemple chiffré</span></div>
-      <div class="ob-in">
-        <div class="m2"><p class="ob-t">Carnet M2 · la stratégie</p>
-          <ol class="m2-l" id="m2">
-            <li data-i="0"><b>XAUUSD</b><span class="buy">achat</span><span>7,93 oz</span><i>rebalancement · 14,9 % → 20,0 %</i><span class="m2-state">à émettre</span></li>
-            <li data-i="1"><b>USA500IDXUSD</b><span class="sell">vente</span><span>3,84</span><i>rebalancement · 22,4 % → 17,0 %</i><span class="m2-state">à émettre</span></li>
-            <li data-i="2" class="w"><b>BRENTCMDUSD</b><span class="sell">vente</span><span>12</span><i>watcher · opérations</i><span class="m2-state">à traiter</span></li>
-          </ol>
-          <p class="ob-loop" id="ob-loop">3 actifs concernés sur 7 · 4 autres actifs sautés</p></div>
-        <div class="books" aria-label="Carnets d’ordres par actif"><div class="book buy" id="bk0"></div><div class="book sell" id="bk1"></div></div>
-      </div><p class="ob-cap" id="ob-cap" aria-live="polite">Ralenti · du carnet M2 au carnet d’ordres de chaque actif, puis à l’exécution.</p></div>
+  <div class="blk" id="tests">
+    <p class="cap">Avant le déploiement</p>
+    <h2>Les 12 tests de validation.</h2>
+    <p class="sub">Une stratégie retenue passe par ces douze questions avant d’être déployée. Chaque réglage essayé pendant la recherche est compté, pour que le résultat final reste crédible.</p>
+    <ol class="tlist"><li><b>Référence</b><span>La stratégie bat-elle les poids égaux sur le même calendrier ?</span></li><li><b>Prévision de covariance</b><span>La covariance estimée prédit-elle la période suivante ?</span></li><li><b>Taille neutre</b><span>Les poids optimisés apportent-ils quelque chose aux poids égaux sur la même sélection ?</span></li><li><b>Levier</b><span>Le résultat vaut-il mieux qu’un simple levier sur le marché ?</span></li><li><b>Concentration de l’avantage</b><span>Le gain est-il réparti dans le temps ou concentré sur un épisode chanceux ?</span></li><li><b>Monte-Carlo</b><span>Le gain résiste-t-il à des trajectoires de marché rééchantillonnées ?</span></li><li><b>Pouvoir d’achat</b><span>L’avantage est-il obtenu lorsque l’argent vaut plus, et la réserve est-elle utilisée ?</span></li><li><b>Stress inversé</b><span>À partir de quelle baisse des marchés la stratégie casse-t-elle ?</span></li><li><b>Triage</b><span>L’échantillon permet-il de conclure ?</span></li><li><b>Sharpe déflaté</b><span>Le Sharpe est-il significatif après prise en compte de tous les réglages testés ?</span></li><li><b>Hors échantillon</b><span>L’avantage trouvé en recherche résiste-t-il à la période scellée ?</span></li><li><b>Multi-actifs</b><span>L’avantage résiste-t-il à des paniers d’actifs inconnus du réglage ?</span></li></ol>
   </div>
 
   <div class="blk" id="mesure">
@@ -661,10 +650,14 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
     <p class="sub bench-next">FORGE est en tête sur la stratégie classique ; vectorbt l’est sur la gestion avancée, l’allocation et la grille. Le moteur actuel est écrit en Python compilé (Numba). Le prochain chantier est son portage en C, pour gagner en vitesse sur ces cas et permettre des tests de robustesse encore plus fournis.</p>
   </div>
 
-  <div class="blk end">
-    <h2>Voyez le parcours complet.</h2>
-    <p class="sub" style="margin-left:auto;margin-right:auto">Le tutoriel reprend chaque étape : données, poids, IA, réglages, comparaison, validation.</p>
-    <div class="ctas"><a class="btn primary" href="?tuto">Voir le tutoriel complet</a><a class="btn" href="mailto:">Demander un accès</a></div>
+  <div class="blk end" id="fin">
+    <p class="cap">Et ensuite</p>
+    <h2>Parlons de votre allocation.</h2>
+    <p class="sub" style="margin-left:auto;margin-right:auto">Un essai sur vos données, une question sur le moteur ou sur mon parcours : écrivez-moi.</p>
+    <div class="ctas"><a class="btn primary" href="mailto:arnaud.barbier@grenoble-em.com?subject=FORGE">Me contacter <span aria-hidden="true">↗</span></a><a class="btn" href="https://arnaud-barbier.github.io/" target="_blank" rel="noopener">Découvrir mon parcours <span aria-hidden="true">↗</span></a></div>
+    <div class="arts-w"><p class="cap">Les autres pages du site</p>
+      <p class="arts-n">Elles détaillent le moteur et des études menées avec lui. Elles gardent pour l’instant l’ancienne présentation.</p>
+      <ul class="arts"><li><a href="../engine/">Mode allocation<span aria-hidden="true">→</span></a></li><li><a href="../algo/">Mode Algo<span aria-hidden="true">→</span></a></li><li><a href="../stateful/">Replay, resume, watcher<span aria-hidden="true">→</span></a></li><li><a href="../research/">Mode Research<span aria-hidden="true">→</span></a></li><li><a href="../costs/">Attribution des coûts et de la performance<span aria-hidden="true">→</span></a></li><li><a href="../validation/">Validation d’une optimisation de la durée maximale du drawdown<span aria-hidden="true">→</span></a></li><li><a href="../validation-2/">L’optimisation du Sharpe bat-elle l’équipondération ?<span aria-hidden="true">→</span></a></li></ul></div>
   </div>
 
 </div></section>
@@ -722,7 +715,7 @@ const ALL_STEPS = [
   {state: 'ed_tree', target: 'alloc', cursor: true, label: 'L’arbre', nx: 'bubble',
    n: 'L’arbre', h: 'La stratégie, branche par branche', p: 'Chaque branche de l’arbre est une partie du code : indicateurs, allocateur, paramètres, graphiques. Un clic ouvre la branche.'},
   {state: 'ide_max', code: true, freeb: true, target: 'code', label: 'Le code', nx: 'bubble',
-   n: 'Le code', h: 'Le code écrit par votre IA reste le vôtre', p: 'Un clic sur l’allocateur ouvre son code, ici le filtre de tendance. Le champ passe en plein écran à côté du terminal : vous modifiez le code et voyez aussitôt le résultat.'},
+   n: 'Le code', h: 'Le code de votre IA, ou le vôtre', p: 'Un clic sur l’allocateur ouvre son code, ici le filtre de tendance. Reprenez ce que votre IA a écrit ou codez directement ici : chaque modification est appliquée et simulée aussitôt, et le terminal à droite se met à jour.'},
   {state: 'ide_tree', depart: true, label: 'Contact'},
 ];
 // Every step is driven by scrolling or the arrow keys. ?auto plays them on their own (tools/site/record.py).
@@ -753,7 +746,7 @@ const TOUR = [
   {state: 'ed_tree', target: 'alloc', cursor: true, label: 'L’arbre', nx: 'bubble',
    n: 'L’arbre', h: 'La stratégie, branche par branche', p: 'Chaque branche de l’arbre est une partie du code : indicateurs, allocateur, paramètres, graphiques. Un clic ouvre la branche.'},
   {state: 'ide_max', code: true, freeb: true, target: 'code', label: 'Le code', nx: 'bubble',
-   n: 'Le code', h: 'Le code écrit par votre IA reste le vôtre', p: 'Un clic sur l’allocateur ouvre son code, ici le filtre de tendance. Le champ passe en plein écran à côté du terminal : vous modifiez le code et voyez aussitôt le résultat.'},
+   n: 'Le code', h: 'Le code de votre IA, ou le vôtre', p: 'Un clic sur l’allocateur ouvre son code, ici le filtre de tendance. Reprenez ce que votre IA a écrit ou codez directement ici : chaque modification est appliquée et simulée aussitôt, et le terminal à droite se met à jour.'},
   {state: 'ide_tree', depart: true, label: 'Contact'},
 ];
 const STEPS = AUTO || new URLSearchParams(location.search).has('tuto') ? ALL_STEPS : TOUR;
@@ -814,13 +807,24 @@ async function boot() {
 function stepByGesture() {
   const lastTop = () => $('demo').offsetTop + (STEPS.length - 1) * innerHeight;
   const inDemo = dir => scrollY <= lastTop() + 2 && !(current === 0 && dir < 0 && scrollY <= $('demo').offsetTop + 2);
-  const leave = () => scrollTo({top: $('tests').getBoundingClientRect().top + scrollY - 96, behavior: reduce ? 'auto' : 'smooth'});
+  const blocks = [...document.querySelectorAll('.after .blk')];
+  const leave = () => scrollTo({top: blocks[0].getBoundingClientRect().top + scrollY, behavior: reduce ? 'auto' : 'smooth'});
+  // After the demo, the page moves block by block too: one gesture = the next block (a block taller than the
+  // screen, the 12 tests on a phone, is read in screenfuls first).
+  const page = dir => {
+    let i = -1; blocks.forEach((b, k) => { if (b.getBoundingClientRect().top <= 4) i = k; });
+    const b = blocks[i], r = b?.getBoundingClientRect(), sm = reduce ? 'auto' : 'smooth';
+    if (b && dir > 0 && r.bottom > innerHeight * 1.15) return scrollBy({top: Math.min(innerHeight * .85, r.bottom - innerHeight), behavior: sm});
+    if (b && dir < 0 && r.top < -innerHeight * .15) return scrollBy({top: Math.max(-innerHeight * .85, r.top), behavior: sm});
+    const n = i + dir; if (n < 0) return scrollToStep(STEPS.length - 1); if (n >= blocks.length) return;
+    scrollTo({top: blocks[n].getBoundingClientRect().top + scrollY, behavior: sm});
+  };
   const go = dir => dir > 0 && current === STEPS.length - 1 ? leave() : scrollToStep(Math.max(0, Math.min(STEPS.length - 1, current + dir)));
   // A slow finger movement makes the amplitude rise and fall: never read that as a new gesture. Only the
   // inertia tail decays smoothly; a new push during it is a sudden jump after several decreasing events.
   let lastT = 0, lastDir = 0, stepT = 0, tail = [];
   addEventListener('wheel', e => {
-    const dir = Math.sign(e.deltaY); if (!dir || !inDemo(dir)) return;
+    const dir = Math.sign(e.deltaY); if (!dir) return; const demo = inDemo(dir);
     e.preventDefault();
     const t = performance.now(), mag = Math.abs(e.deltaY);
     let fresh = t - lastT > 150 || dir !== lastDir;
@@ -831,21 +835,21 @@ function stepByGesture() {
       if (newer > older * 1.25 && newer > older + 3) fresh = true;
     }
     lastT = t; lastDir = dir;
-    if (fresh) { stepT = t; tail = [mag]; go(dir); }
+    if (fresh) { stepT = t; tail = [mag]; demo ? go(dir) : page(dir); }
     else { tail.push(mag); if (tail.length > 30) tail.shift(); }
   }, {passive: false});
   let y0 = null;
   addEventListener('touchstart', e => { y0 = e.touches[0].clientY; }, {passive: true});
-  addEventListener('touchmove', e => { if (y0 != null && inDemo(Math.sign(y0 - e.touches[0].clientY))) e.preventDefault(); }, {passive: false});
+  addEventListener('touchmove', e => { if (y0 != null) e.preventDefault(); }, {passive: false});
   addEventListener('touchend', e => {
     if (y0 == null) return; const dy = y0 - e.changedTouches[0].clientY; y0 = null;
-    if (Math.abs(dy) > 8 && inDemo(Math.sign(dy))) go(Math.sign(dy));
+    if (Math.abs(dy) > 8) inDemo(Math.sign(dy)) ? go(Math.sign(dy)) : page(Math.sign(dy));
   });
   // One key press = one step, always, even in the middle of an animation (go() stops it).
   addEventListener('keydown', e => {
     const dir = {ArrowDown: 1, PageDown: 1, ' ': 1, ArrowRight: 1, ArrowUp: -1, PageUp: -1, ArrowLeft: -1}[e.key];
-    if (!dir || e.target.closest?.('input,textarea,select') || !inDemo(dir)) return;
-    e.preventDefault(); if (!e.repeat) go(dir);
+    if (!dir || e.target.closest?.('input,textarea,select')) return;
+    e.preventDefault(); if (!e.repeat) inDemo(dir) ? go(dir) : page(dir);
   }, {capture: true});
 
 }
@@ -1007,9 +1011,8 @@ function startVal() {
   later(T0 + 1750, () => { const r = at(); Object.assign(press.style, {left: `${r.x - 3}px`, top: `${r.y - 3}px`, width: `${r.w + 6}px`, height: `${r.h + 6}px`});
     press.classList.remove('go'); void press.offsetWidth; press.classList.add('go'); });
   later(T0 + 2300, () => { v.classList.add('open'); cur.style.opacity = 0; });
-  later(T0 + 2900, () => cam([10, 140, 790, 240]));
-  later(T0 + 6400, () => cam([10, 140, 790, 520]));   // stays on the out-of-sample results: no zoom-out to the whole page
-  later(T0 + 7400, () => nextOn('val'));
+  later(T0 + 2400, () => cam(null));   // opened: the whole results page at once
+  later(T0 + 3800, () => nextOn('val'));
 }
 // The "continue" prompt of a step with `nx`, at the moment its animation names.
 function nextOn(kind) {
@@ -1501,123 +1504,6 @@ async function autoplay() {
   document.addEventListener('visibilitychange',()=>{ if (visible && !document.hidden) scene.start(); else scene.stop(); });
 })();
 
-// ---------- under the hood 2: only our size, emitted at the quote and drained on execution ----------
-(() => {
-  const ob = $('ob'); if (!ob) return;
-  const fmt = (value, digits=2) => value.toLocaleString('fr-FR', {minimumFractionDigits:digits,maximumFractionDigits:digits});
-  // Keep the original numerical example. Spread cost is measured from the midpoint, per unit.
-  const BK = [
-    {id:'bk0',a:'XAUUSD',side:'buy',q:7.93,u:' oz',mid:1836.40,spr:.30,slip:.12,comm:1.46,tax:0},
-    {id:'bk1',a:'USA500IDXUSD',side:'sell',q:3.84,u:'',mid:4012.60,spr:.80,slip:.30,comm:1.54,tax:.77}
-  ];
-  BK.forEach(b => {
-    b.el=$(b.id); b.ask=b.mid+b.spr/2; b.bid=b.mid-b.spr/2;
-    b.fill=b.side==='buy' ? b.ask+b.slip : b.bid-b.slip;
-    b.costs=[['écart',b.q*b.spr/2],['glissement',b.q*b.slip],['commission',b.comm],['taxes',b.tax]];
-    b.costs.push(['coût total',b.costs.reduce((sum,[,value])=>sum+value,0)]);
-    const size='<div class="size"><span class="size-bar"></span><span class="size-text"></span></div>';
-    b.el.innerHTML=`<h3 class="book-h">CARNET D’ORDRES<b>${b.a}</b></h3>
-      <table aria-label="${b.a} : prix acheteur et vendeur, uniquement notre quantité">
-        <thead><tr><th scope="col">Qté achat</th><th scope="col">Prix</th><th scope="col">Qté vente</th></tr></thead>
-        <tbody><tr class="ask"><td>${b.side==='buy' ? size : ''}</td><td class="quote-price">${fmt(b.ask)}</td><td></td></tr>
-        <tr class="spread"><td colspan="3"><span>acheteur <b>${fmt(b.bid)}</b> / vendeur <b>${fmt(b.ask)}</b></span><span>écart achat/vente <b>${fmt(b.spr)}</b></span></td></tr>
-        <tr class="bid"><td></td><td class="quote-price">${fmt(b.bid)}</td><td>${b.side==='sell' ? size : ''}</td></tr></tbody>
-      </table><p class="own-order">notre ordre · ${b.side==='buy' ? 'achat' : 'vente'} ${fmt(b.q)}${b.u}</p>
-      <p class="fill" aria-hidden="true"><b>exécuté ${fmt(b.fill)}</b>= ${b.side==='buy' ? 'vendeur' : 'acheteur'} ${fmt(b.side==='buy' ? b.ask : b.bid)} ${b.side==='buy' ? '+' : '−'} glissement ${fmt(b.slip)}</p>
-      <dl class="costs">${b.costs.map(([label,value],i)=>`<div class="cost-line${i===4 ? ' total' : ''}" aria-hidden="true"><dt>${label}</dt><dd>${fmt(value)} $</dd></div>`).join('')}</dl>`;
-    b.size=b.el.querySelector('.size'); b.bar=b.el.querySelector('.size-bar'); b.quantity=b.el.querySelector('.size-text');
-    b.fillLabel=b.el.querySelector('.fill'); b.costLines=[...b.el.querySelectorAll('.cost-line')];
-  });
-  const lines=[...document.querySelectorAll('#m2 li')], caption=$('ob-cap'), counter=$('ob-loop');
-  const captions=[
-    'Ralenti · 1. L’allocateur et le watcher écrivent leurs ordres dans le carnet M2 : quantité = écart de poids × valeur du portefeuille ÷ prix.',
-    'Ralenti · 2. XAUUSD quitte M2 et est émis sur son carnet d’ordres, côté vendeur. La quantité est exécutée au prix vendeur plus le glissement ; les coûts apparaissent ensuite.',
-    'Ralenti · 3. Puis USA500IDXUSD : l’ordre est émis sur son carnet d’ordres, côté acheteur. La vente est exécutée au prix acheteur moins le glissement, avec ses propres coûts.',
-    'Ralenti · 4. Puis l’ordre du watcher sur BRENTCMDUSD est traité. Les 4 autres actifs n’ont aucun ordre : ils sont sautés.'
-  ];
-  const setText=(node,text)=>{ if (node.textContent!==text) node.textContent=text; };
-  const state=(i,{shown=true,run=false,departing=false,emitted=false,filled=false,costs=0,remaining=1}={})=>{
-    const line=lines[i];
-    Object.entries({on:shown,run,departing,ok:filled}).forEach(([key,value])=>line.classList.toggle(key,value));
-    setText(line.querySelector('.m2-state'),filled ? 'exécuté ✓' : emitted ? 'émis · carnet d’ordres' : departing ? 'émission en cours' : i===2 ? 'à traiter' : 'à émettre');
-    const b=BK[i]; if (!b) return;
-    b.el.classList.toggle('emitted',emitted); b.el.classList.toggle('filled',filled);
-    const ratio=emitted ? Math.max(0,Math.min(1,remaining)) : 0;
-    b.bar.style.width=`${ratio*100}%`; setText(b.quantity,`${fmt(b.q*ratio)}${b.u}`);
-    b.fillLabel.setAttribute('aria-hidden',String(!filled));
-    b.costLines.forEach((line,index)=>{ const on=index<costs; line.classList.toggle('on',on); line.setAttribute('aria-hidden',String(!on)); });
-  };
-  let flight=null, flightAsset=-1;
-  const clearFlight=()=>{ flight?.remove(); flight=null; flightAsset=-1; };
-  const fly=(i,progress)=>{
-    if (flightAsset!==i) {
-      clearFlight(); flight=document.createElement('div'); flight.className=`ob-flight ${BK[i].side}`;
-      flight.setAttribute('aria-hidden','true'); flight.textContent=`${BK[i].a} · ${BK[i].side==='buy' ? 'ACHAT' : 'VENTE'} ${fmt(BK[i].q)}${BK[i].u}`;
-      ob.append(flight); flightAsset=i;
-    }
-    // Measure at emission time: the same ticket route works when the books stack on a phone.
-    const root=ob.getBoundingClientRect(), from=lines[i].getBoundingClientRect(), to=BK[i].size.getBoundingClientRect();
-    const width=flight.getBoundingClientRect().width, ease=progress*progress*(3-2*progress);
-    const startX=from.left-root.left, endX=Math.max(8,Math.min(root.width-width-8,to.left-root.left));
-    const x=startX+(endX-startX)*ease, y=from.top-root.top+(to.top-from.top)*ease;
-    flight.style.transform=`translate(${x}px, ${y}px)`;
-  };
-  const execution=(i,t,start,fast=false)=>{
-    const emit=fast ? 75 : 1000, wait=fast ? 0 : 1000, drain=fast ? 85 : 1600;
-    const elapsed=t-start, landed=elapsed>=emit, filled=elapsed>=emit+wait+drain;
-    const costs=filled ? Math.min(5,Math.floor((elapsed-emit-wait-drain)/(fast ? 8 : 180))) : 0;
-    state(i,{run:elapsed>=0 && !filled,departing:elapsed>=0 && !landed,emitted:landed,filled,costs,
-      remaining:1-Math.max(0,(elapsed-emit-wait)/drain)});
-    if (elapsed>=0 && !landed) fly(i,elapsed/emit);
-  };
-  const final=()=>{
-    clearFlight(); lines.forEach((_,i)=>state(i,{emitted:i<2,filled:true,costs:5,remaining:0}));
-    setText(counter,'barre 3 212 · 3 actifs concernés · 4 autres actifs sautés'); ob.classList.remove('fast');
-    setText(caption,'Vitesse réelle · la période est parcourue. Chaque ordre est exécuté avec ses coûts ; les 4 autres actifs sont sautés.');
-  };
-  const duration=20600;
-  const render=t=>{
-    const phase=(t-17400)%640;
-    const flying=t<17400 ? (t>=4200 && t<5200 ? 0 : t>=9600 && t<10600 ? 1 : -1)
-      : phase<75 ? 0 : phase>=210 && phase<285 ? 1 : -1;
-    if (flightAsset!==flying) clearFlight();
-    if (t>=duration) { final(); return; }
-    if (t<17400) {
-      lines.forEach((_,i)=>state(i,{shown:t>=1300+i*500}));
-      if (t>=700) setText(caption,captions[t>=15400 ? 3 : t>=9600 ? 2 : t>=4200 ? 1 : 0]);
-      if (t>=4200) execution(0,t,4200);
-      if (t>=9600) execution(1,t,9600);
-      if (t>=15400) state(2,{run:t<16400,filled:t>=16400});
-    } else {
-      ob.classList.add('fast');
-      setText(caption,'Vitesse réelle · la même boucle de carnets d’ordres, barre après barre, sur toute la période.');
-      setText(counter,`barre ${Math.round(1532+(t-17400)/3200*1680).toLocaleString('fr-FR')} · 4 autres actifs sautés`);
-      lines.forEach((_,i)=>state(i)); execution(0,phase,0,true);
-      if (phase>=210) execution(1,phase,210,true);
-      if (phase>=450) state(2,{run:phase<560,filled:phase>=560});
-    }
-  };
-  // One pass; pause the clock outside the viewport and while the tab is hidden.
-  let started=false, visible=false, finished=false, elapsed=0, previous=null, raf=null;
-  const stop=()=>{ if (raf!==null) cancelAnimationFrame(raf); raf=null; previous=null; };
-  const frame=now=>{
-    if (previous!==null) elapsed+=Math.min(now-previous,80); previous=now;
-    render(elapsed);
-    if (elapsed>=duration) { finished=true; stop(); observer.disconnect(); }
-    else raf=requestAnimationFrame(frame);
-  };
-  const resume=()=>{ if (started && visible && !document.hidden && !finished && raf===null) { previous=null; raf=requestAnimationFrame(frame); } };
-  if (reduce) { final(); return; }
-  const observer=new IntersectionObserver(entries=>{
-    entries.forEach(entry=>{
-      visible=entry.isIntersecting;
-      if (entry.isIntersecting && (entry.intersectionRatio>=.4 || entry.intersectionRect.height>=innerHeight*.5)) started=true;   // a tall panel on a phone never reaches 40 %
-    });
-    if (visible) resume(); else stop();
-  },{threshold:[0,.1,.2,.3,.4]});
-  observer.observe(ob);
-  document.addEventListener('visibilitychange',()=>{ if (document.hidden) stop(); else resume(); });
-})();
 boot();
 </script>
 </body>
