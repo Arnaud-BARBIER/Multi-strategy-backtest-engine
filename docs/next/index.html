@@ -274,6 +274,7 @@ a{color:inherit}
 .joinann .ja-l{stroke:var(--muted)}.joinann .ja-r{stroke:var(--accent);fill:#29c5ff1a}
 .joinann.on .ja-r{animation:jaR 1.1s cubic-bezier(.4,0,.2,1) .25s both}
 @keyframes jaR{from{transform:translateX(26px);opacity:0}to{transform:none;opacity:1}}
+.sch-sub strong{color:var(--text);font-weight:600}
 .joinann b{display:block;font:600 16px/1.3 var(--sans);color:var(--text)}
 .joinann span{display:block;margin-top:3px;font:400 14px/1.45 var(--sans);color:#c3ccdb;max-width:520px}
 @media (max-width:760px){.joinann{left:16px;right:16px;bottom:76px;transform:none}.joinann.on{transform:none}.joinann svg{display:none}.joinann b{font-size:14px}.joinann span{font-size:12.5px}}
@@ -452,7 +453,7 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
       <div class="vw-in">
         <div class="vw-head"><p class="sch-cap">Avant le déploiement · test 1 sur 12</p>
           <h2 class="sch-title">La période verrouillée, ouverte une seule fois.</h2>
-          <p class="sch-sub">La recherche s’arrête en août 2023. La suite reste scellée jusqu’à ce que vous l’ouvriez, pour voir comment la stratégie se comporte sur des données qu’elle n’a jamais vues.</p></div>
+          <p class="sch-sub">La recherche s’arrête en août 2023. La suite reste <strong>scellée jusqu’à ce que vous l’ouvriez</strong>, pour voir comment la stratégie se comporte sur des <strong>données qu’elle n’a jamais vues</strong>.</p></div>
         <div class="pane vw-pane"><div class="pane-h">Validation · Mon portefeuille<span>période scellée août 2023 → 2026</span></div>
           <div class="vw-box" id="vwbox"><img src="states/val_lock.jpg" alt="" id="vwlock"><img src="states/val_oos.jpg" alt="Validation : la période scellée ouverte, résultats hors échantillon" id="vwoos">
             <i class="vw-press" id="vwpress"></i><i class="vw-cur" id="vwcur"><svg viewBox="0 0 22 22"><path d="M3 2 L3 18 L7.5 13.8 L10.6 20.5 L13.4 19.2 L10.3 12.6 L16.4 12.4 Z" fill="#fff" stroke="#0b0e14" stroke-width="1.3" stroke-linejoin="round"/></svg></i></div></div>
@@ -463,16 +464,17 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
     <div class="valwin" id="testwin">
       <div class="vw-in"><div class="vw-head ed-head"><p class="sch-cap">Avant le déploiement</p>
         <h2 class="sch-title">Trouvée ne suffit pas : 12 tests de validation.</h2>
-        <p class="sch-sub">Battre le 1/N sur la période d’étude ne suffit pas. FORGE éprouve chaque stratégie à travers 12 tests de robustesse : période scellée, autres actifs, Monte-Carlo, stress tests et sensibilité des paramètres.</p>
-        <p class="sch-sub">Des centaines, voire des milliers de simulations exécutées en quelques secondes permettent de pousser la validation beaucoup plus loin.</p>
+        <p class="sch-sub">Battre le 1/N sur la période d’étude ne suffit pas. FORGE éprouve chaque stratégie à travers <strong>12 tests de robustesse</strong> : période scellée, autres actifs, Monte-Carlo, stress tests et sensibilité des paramètres.</p>
+        <p class="sch-sub"><strong>Des centaines, voire des milliers de simulations</strong> exécutées en quelques secondes permettent de pousser la validation beaucoup plus loin.</p>
         <p class="sch-sub">Voici deux de ces tests, appliqués à la stratégie de la démonstration.</p></div></div>
     </div>
     <!-- Validation, another test: the same setting on 80 baskets it never saw (the real run, sped up) -->
     <div class="valwin" id="crosswin">
       <div class="vw-in vw-wide">
         <div class="vw-head"><p class="sch-cap">Avant le déploiement · test 2 sur 12</p>
-          <p class="sch-sub">Sans modifier aucun paramètre, FORGE teste l’allocation sur 80 paniers tirés au hasard dans un univers d’actifs réservé à la validation.</p>
-          <p class="sch-sub">Chaque résultat est comparé à son propre 1/N pour déterminer si la performance provient réellement de la méthode d’allocation ou simplement du choix des actifs.</p></div>
+          <h2 class="sch-title">La même allocation, sur 80 paniers inconnus.</h2>
+          <p class="sch-sub"><strong>Sans modifier aucun paramètre</strong>, FORGE teste l’allocation sur <strong>80 paniers tirés au hasard</strong> dans un univers d’actifs réservé à la validation.</p>
+          <p class="sch-sub">Chaque résultat est comparé à son propre 1/N pour déterminer si la performance provient réellement de <strong>la méthode d’allocation</strong> ou simplement <strong>du choix des actifs</strong>.</p></div>
         <div class="pane vw-pane"><div class="pane-h">Validation · Multi-actifs<span>calcul réel, accéléré ×8</span></div>
           <div class="vw-box wide"><video id="crossvid" src="states/cross.mp4" muted playsinline preload="auto"></video></div></div>
         <div class="vw-foot"><a class="btn" href="#tests" id="alltests">Voir la liste des 12 tests <span aria-hidden="true">↓</span></a></div>
@@ -482,7 +484,7 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
     <div class="valwin" id="edwin">
       <div class="vw-in"><div class="vw-head ed-head"><p class="sch-cap">L’éditeur</p>
         <h2 class="sch-title">Chaque stratégie est du code, lisible et modifiable.</h2>
-        <p class="sch-sub">Ce que votre IA écrit arrive dans l’éditeur de FORGE, rangé dans un arbre : indicateurs, allocateur, paramètres, graphiques. Vous pouvez tout reprendre à la main, à côté du terminal, et chaque modification est simulée aussitôt.</p></div></div>
+        <p class="sch-sub">Ce que votre IA écrit arrive dans l’éditeur de FORGE, <strong>rangé dans un arbre</strong> : indicateurs, allocateur, paramètres, graphiques. Vous pouvez <strong>tout reprendre à la main</strong>, à côté du terminal, et chaque modification est <strong>simulée aussitôt</strong>.</p></div></div>
     </div>
     <!-- The end of the demo: the code and the terminal side by side, seen from the left; who made it -->
     <div class="depart-o" id="departo"><div class="dep-in">
@@ -509,7 +511,7 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
     </div>
     <div class="found" id="found" aria-live="polite"><span class="ok">✓</span><div><h3>Trouvé : meilleure que le 1/N sur les quatre mesures</h3><div class="m"><div>Rendement<b>17,6 %</b><small>1/N 17,2 %</small></div><div>Volatilité<b>16,1 %</b><small>1/N 19,6 %</small></div><div>Sharpe<b>1,09</b><small>1/N 0,91</small></div><div>Drawdown<b>−26,7 %</b><small>1/N −30,9 %</small></div></div><p class="nx">Prochaine étape : les 12 tests de validation →</p></div></div>
     <div class="joinann" id="joinann" aria-live="polite"><svg viewBox="0 0 54 34" aria-hidden="true"><rect class="ja-l" x="1" y="1" width="16" height="32" rx="2"/><rect class="ja-r" x="21" y="1" width="32" height="32" rx="2"/></svg>
-      <div><b>L’éditeur et le terminal sur le même écran</b><span>Le code à gauche, ses résultats à droite : vous modifiez, FORGE simule, et la boucle de recherche reste sous vos yeux.</span></div></div>
+      <div><b>Éditeur et terminal sur le même écran</b></div></div>
     <div class="ring" id="ring"></div>
     <div class="bubble" id="bubble"><div class="n" id="b-n"></div><h3 id="b-h"></h3><p id="b-p"></p></div>
     <div class="press" id="press"></div>
