@@ -1,0 +1,1641 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Forge · Portfolio allocation lab</title>
+<meta name="description" content="Forge, portfolio allocation lab: build, simulate and refine multi-asset portfolios in one research environment.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --up:#2fd28c; --down:#ff5a6e;
+  --bg:#0b0e14; --panel:#10161f; --panel-2:#141b26; --line:#1d2532;
+  --text:#e6ecf5; --muted:#8592a6; --faint:#5a6680;
+  --accent:#29c5ff; --accent-soft:#29c5ff22;
+  --tuto:#ffffff; --tuto-soft:#ffffff26;
+  --sans:"IBM Plex Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px; --s6:32px; --s7:48px; --s8:64px;
+}
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%;background:var(--bg)}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 var(--sans);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+
+/* ---------- top bar ---------- */
+.top{position:fixed;inset:0 0 auto;z-index:50;display:flex;align-items:center;gap:var(--s5);padding:14px 24px;
+  background:linear-gradient(var(--bg),#0b0e14cc 70%,transparent)}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.08em;text-decoration:none}
+.brand i{width:10px;height:10px;border-radius:50%;border:2px solid var(--accent)}
+.brand small{font:500 12px var(--sans);color:var(--muted);letter-spacing:.02em;margin-left:4px}
+.brand{transition:opacity .4s}body.at-hero .top .brand{opacity:0}
+.top nav{margin-left:auto;display:flex;gap:var(--s5);font-size:14px;color:var(--muted)}
+.top nav a{text-decoration:none}.top nav a:hover{color:var(--text)}
+
+/* ---------- demo: sticky stage driven by scroll ---------- */
+.demo{position:relative}
+.stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;perspective:2000px;perspective-origin:50% 45%}
+.screen{position:absolute;left:0;top:0;width:1600px;height:1000px;transform-origin:0 0;will-change:transform,filter;
+  transition:transform 1s cubic-bezier(.2,.7,.2,1),filter .9s ease,box-shadow .9s ease}
+/* hero and schema: the terminal is a screen seen from the side, then pushed back and blurred under the schema */
+.screen.posed{box-shadow:0 0 0 1px #29c5ff30,0 60px 160px #000,0 0 120px #29c5ff14}
+.screen.dim{filter:blur(7px) brightness(.4) saturate(.7)}
+.screen iframe{position:absolute;inset:0;pointer-events:none;width:1600px;height:1000px;border:0;opacity:0;transition:opacity .35s ease;background:var(--bg)}
+.screen iframe.on{opacity:1}
+.screen img.shot{position:absolute;inset:0;width:1600px;height:1000px;object-fit:cover;object-position:left top;opacity:0;transition:opacity .35s ease;background:var(--bg)}
+.screen img.shot.on{opacity:1}
+.screen.instant iframe{transition:none}
+.veil{position:absolute;inset:0;background:linear-gradient(90deg,#0b0e14 0%,#0b0e14f2 30%,#0b0e1400 58%);transition:opacity .6s ease;pointer-events:none}
+.hero{position:absolute;inset:0;display:grid;place-items:center start;padding:96px 24px 64px 6vw;text-align:left;transition:opacity .5s ease,transform .6s ease}
+.rail{transition:opacity .5s ease}
+.hero-inner{max-width:min(620px,46vw)}
+.badge{font:600 14px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:0 0 var(--s4)}
+.mark{display:flex;align-items:center;gap:16px;margin:0 0 var(--s6)}
+.mark i{width:30px;height:30px;border-radius:50%;border:5px solid var(--accent);box-shadow:0 0 24px #29c5ff66}
+.mark b{font:700 42px/1 var(--sans);letter-spacing:.06em}
+.mark span{font:500 13px/1.35 var(--mono);color:var(--muted);letter-spacing:.06em;text-transform:uppercase;border-left:1px solid #3a4558;padding-left:16px}
+.pillars{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--s4);margin:var(--s6) 0 0;text-align:left}
+.pillars div{border-top:2px solid var(--accent);padding:12px 4px 0;font-size:14px;color:#c3ccdb}
+.pillars b{display:block;font:600 18px var(--sans);color:var(--text);margin-bottom:4px}
+.hero h1{font:600 clamp(32px,3.6vw,54px)/1.08 var(--sans);letter-spacing:-.02em;margin:0;text-wrap:balance}
+.hero h1 span{color:var(--accent)}
+.hero .lead{font-size:clamp(16px,1.3vw,18px);color:#c3ccdb;margin:var(--s5) 0 0}
+.nocode{display:inline-flex;align-items:center;gap:10px;margin:var(--s5) 0 0;padding:8px 14px;border:1px solid var(--line);
+  background:#10161fcc;font-size:15px;color:var(--text)}
+.nocode b{color:var(--accent);font-weight:600}
+.facts{display:flex;justify-content:center;gap:var(--s7);margin:var(--s6) 0 0;flex-wrap:wrap}
+.facts div{font-size:13px;color:var(--muted)}
+.facts b{display:block;font:600 24px var(--sans);font-variant-numeric:tabular-nums;color:var(--text);letter-spacing:-.01em}
+.ctas{display:flex;gap:var(--s3);justify-content:flex-start;margin-top:var(--s6);flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;font:500 15px var(--sans);border:1px solid var(--line);
+  background:var(--panel);color:var(--text);text-decoration:none;cursor:pointer}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#06121c;font-weight:600}
+.btn:hover{filter:brightness(1.12)}
+.hint{position:absolute;left:50%;bottom:20px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;
+  font:500 12px var(--sans);color:var(--muted);transition:opacity .4s;cursor:pointer;background:none;border:0}
+.hint svg{width:22px;height:22px;stroke:var(--text);animation:nudge 1.6s ease-in-out infinite}
+@keyframes nudge{0%,100%{transform:translateY(0);opacity:.6}50%{transform:translateY(6px);opacity:1}}
+
+/* bubble: square comic box with a small pointer */
+.bubble{position:absolute;z-index:5;width:340px;padding:16px 18px;background:var(--panel);border:1px solid var(--tuto);
+  box-shadow:0 18px 50px #000a;opacity:0;transform:translateY(8px);transition:opacity .35s ease,transform .35s ease,left .5s ease,top .5s ease}
+.bubble.on{opacity:1;transform:none}
+.bubble::before{content:"";position:absolute;width:12px;height:12px;background:var(--panel);border:1px solid var(--tuto);
+  border-right:0;border-bottom:0;left:var(--px,24px);top:-7px;transform:rotate(45deg)}
+.bubble.below::before{top:auto;bottom:-7px;transform:rotate(225deg)}
+.bubble.side::before{left:-7px;top:var(--py,20px);transform:rotate(-45deg)}
+.bubble .n{font:500 11px var(--mono);letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
+.bubble h3{font:600 17px/1.3 var(--sans);margin:6px 0 6px}
+.bubble p{margin:0;font-size:14.5px;color:#c3ccdb}
+.ring{position:absolute;z-index:4;border:2px solid var(--tuto);box-shadow:0 0 0 4px var(--tuto-soft);opacity:0;transition:all .45s ease;pointer-events:none}
+.ring.on{opacity:1}
+
+/* fake cursor */
+.cursor{position:absolute;z-index:6;left:0;top:0;width:26px;height:26px;opacity:0;transition:transform .9s cubic-bezier(.45,.05,.25,1),opacity .3s;pointer-events:none}
+.cursor.on{opacity:1}
+.cursor svg{position:absolute;left:0;top:0;width:26px;height:26px;filter:drop-shadow(0 2px 3px #000c);transform-origin:3px 2px;transition:transform .12s ease}
+.cursor.click svg{transform:scale(.8)}
+.cursor .tap{display:block;position:absolute;left:-20px;top:-20px;width:44px;height:44px;border-radius:50%;border:2px solid var(--tuto);background:var(--tuto-soft);opacity:0}
+.cursor.click .tap{animation:tap .8s ease-out}
+.cursor.click .tap.t2{animation:tap .8s .18s ease-out both}
+@keyframes tap{0%{opacity:1;transform:scale(.2)}100%{opacity:0;transform:scale(1.9)}}
+.press{position:absolute;z-index:4;pointer-events:none;border:2px solid var(--tuto);background:var(--tuto-soft);opacity:0}
+.press.go{animation:press 1.1s ease-out}
+@keyframes press{0%{opacity:1;background:#ffffff59}35%{opacity:1}100%{opacity:0}}
+.done{position:absolute;z-index:6;pointer-events:none;padding:4px 10px;background:var(--tuto);color:#0b0e14;font:600 13px var(--sans);
+  opacity:0;transform:translateY(4px);transition:opacity .2s,transform .2s}
+.done.on{opacity:1;transform:none}
+
+/* progress rail */
+.rail{position:absolute;right:20px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:10px;z-index:7;transition:opacity .4s}
+.rail button{all:unset;cursor:pointer;display:flex;align-items:center;gap:10px;justify-content:flex-end;font:500 12px var(--sans);color:var(--faint)}
+.rail button span{opacity:0;transition:opacity .25s}
+.rail:hover button span,.rail button.on span{opacity:1}
+.rail button i{width:8px;height:8px;border:1px solid var(--faint);transform:rotate(45deg)}
+.rail button.on{color:var(--text)}.rail button.on i{background:var(--tuto);border-color:var(--tuto)}
+.replay{position:absolute;left:20px;bottom:20px;z-index:7;font-size:13px;padding:7px 12px}
+
+
+/* ---------- how it works: a risk / return plane over the blurred terminal ---------- */
+.schema{position:absolute;inset:0;z-index:3;display:grid;place-items:center;padding:80px 72px 40px 40px;background:#0b0e1499;
+  opacity:0;pointer-events:none;transition:opacity .7s ease}
+.schema.on{opacity:1;pointer-events:auto}
+.rr{width:min(1180px,100%);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:16px 44px;align-items:start}
+.rr-head{grid-column:1/-1}
+.sch-cap{font:500 12px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+.sch-title{font:600 clamp(22px,2.4vw,32px)/1.2 var(--sans);margin:0}
+.sch-sub{margin:6px 0 0;font-size:clamp(15px,1.3vw,18px);color:#c3ccdb}
+.sch-ex{grid-column:1/-1;margin:6px 0 0;font-size:12.5px;color:var(--faint)}
+/* panels framed like the terminal's own: a header strip, a hairline border, values in mono */
+.pane{border:1px solid #243044;background:#0b0e14d9;box-shadow:0 30px 80px #000a}
+.pane-h{display:flex;justify-content:space-between;gap:12px;padding:8px 14px;border-bottom:1px solid #243044;background:#10161f;
+  font:600 11px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--text)}
+.pane-h span{color:var(--faint);font-weight:500;letter-spacing:.06em;text-transform:none}
+.pane-h b{color:var(--accent);font-weight:600}
+.plane{display:block;width:100%;height:auto;overflow:visible;font-family:var(--mono)}
+.plane .ax{stroke:#8592a6;stroke-width:2}
+.plane .gr{stroke:#1a2230;stroke-width:1}
+.plane .tk{font-size:13px;fill:#7d8aa0}
+.plane .at{font:700 15px var(--mono);letter-spacing:.08em;fill:var(--text)}
+.plane .ah{font:500 12.5px var(--sans);fill:var(--muted)}
+.plane .zone{fill:#29c5ff0a;stroke:#29c5ff66;stroke-width:1.5;stroke-dasharray:6 5;transition:fill .5s,stroke .5s}
+.plane .zone.hit{fill:#29c5ff22;stroke:var(--accent);stroke-dasharray:none}
+.plane .zt{font:700 12px var(--mono);letter-spacing:.12em;fill:var(--accent)}
+.plane .zl{font-size:12px;fill:#9fc6db}
+.plane .ref{fill:#0b0e14;stroke:var(--text);stroke-width:2.2}
+.plane .pt{fill:#0b0e14;stroke:#c3ccdb;stroke-width:2.2;opacity:0;transition:opacity .3s}
+.plane .pt.on{opacity:1}.plane .pt.win{fill:var(--accent);stroke:var(--accent)}
+.plane .pl{font:600 13px var(--mono);fill:var(--text);opacity:0;transition:opacity .3s}.plane .pl.on{opacity:1}
+.plane .path{fill:none;stroke:#29c5ff70;stroke-width:2}
+.plane .head{fill:var(--accent);opacity:0}
+.plane .cross{stroke:var(--accent);stroke-width:1.3;stroke-dasharray:3 4;opacity:0;transition:opacity .25s}
+.plane .chip{opacity:0;transition:opacity .25s}.plane .chip rect{fill:var(--accent)}.plane .chip text{font:700 13px var(--mono);fill:#06121c}
+.plane .cross.on,.plane .chip.on{opacity:1}
+/* mini logo: a ball (the strategy) drops into a receptacle (Forge), once per trial */
+.rr-head{display:flex;align-items:center;gap:18px}
+.mini{flex:0 0 auto;width:72px;height:72px;overflow:visible}
+.mini .cup{fill:none;stroke:#5a6680;stroke-width:3.5;stroke-linecap:round;transition:stroke .3s,filter .3s}
+.mini.hit .cup{stroke:var(--accent);filter:drop-shadow(0 0 6px #29c5ffaa)}
+.mini .ball{fill:var(--accent);opacity:0}
+.mini.drop .ball{animation:drop .6s cubic-bezier(.5,0,.75,1) forwards}
+.mini.rest .ball{opacity:1;transform:translateY(28px)}
+@keyframes drop{0%{opacity:0;transform:translateY(0)}25%{opacity:1}100%{opacity:1;transform:translateY(28px)}}
+.log{margin:0;padding:6px 0;list-style:none;font:14px/1.5 var(--mono);color:#c3ccdb}
+.log li{display:grid;grid-template-columns:104px minmax(0,1fr) 78px 78px 22px;gap:10px;align-items:baseline;padding:9px 16px;
+  opacity:0;transform:translateX(-6px);transition:opacity .35s,transform .35s}
+.log li.on{opacity:1;transform:none}
+.log li.hd{color:var(--muted);font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding-bottom:2px;border-bottom:1px solid #1a2230}
+.log li.hd .n{color:var(--text);font-weight:600}
+.log .sh{display:none}
+.log .k{color:var(--muted)}.log .n{text-align:right;font-variant-numeric:tabular-nums}
+.log .x{color:var(--faint);text-align:center}.log .v{color:var(--accent);text-align:center;font-weight:700}
+.log li.win{background:#29c5ff14;box-shadow:inset 3px 0 var(--accent)}
+.log .met{grid-column:2/-1;color:var(--accent);font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-top:-2px}
+.log li.wide{grid-template-columns:104px minmax(0,1fr)}
+.sq{display:inline-flex;gap:4px;vertical-align:middle;margin-right:10px}
+.sq i{width:11px;height:11px;border:1px solid #3a4558;transition:background .2s,border-color .2s}
+.sq i.on{background:var(--accent);border-color:var(--accent)}
+
+/* the visitor's AI: a chat card over the terminal (thinking, then the code it hands back) */
+.chat{position:absolute;z-index:5;right:72px;top:50%;width:460px;transform:translateY(-46%);background:var(--panel);border:1px solid var(--tuto);
+  box-shadow:0 24px 70px #000c;opacity:0;pointer-events:none;transition:opacity .35s ease,transform .35s ease}
+.chat.on{opacity:1;transform:translateY(-50%)}
+.chat-h{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line);font:500 12px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.chat-body{padding:14px 16px 16px;font-size:14px;color:#c3ccdb;min-height:230px}
+.think{display:flex;align-items:center;gap:10px;color:var(--text);font-size:14px}
+.spark{width:22px;height:22px;flex:0 0 auto;stroke:var(--text);animation:spin 2.4s linear infinite}
+.spark.still{animation:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+.think i{font-style:normal;animation:blink 1.2s steps(4) infinite;display:inline-block;width:1.4em;overflow:hidden;vertical-align:bottom;white-space:nowrap}
+@keyframes blink{0%{width:0}100%{width:1.4em}}
+.chat-msg{margin:12px 0 0;line-height:1.5;opacity:0;transition:opacity .4s}
+.chat-msg.on{opacity:1}
+.code{margin:12px 0 0;border:1px solid var(--line);background:#0b0e14;opacity:0;transition:opacity .4s}
+.code.on{opacity:1}
+.code-h{display:flex;align-items:center;justify-content:space-between;padding:6px 10px;border-bottom:1px solid var(--line);font:500 12px var(--mono);color:var(--muted)}
+.code-h b{color:var(--text);font-weight:500}
+.code pre{margin:0;padding:10px;font:12px/1.55 var(--mono);color:#c3ccdb;white-space:pre-wrap;min-height:7.8em}
+.code pre .k{color:var(--accent)}
+.caret{display:inline-block;width:7px;height:13px;background:var(--text);vertical-align:-2px;animation:caret 1s steps(2) infinite}
+@keyframes caret{50%{opacity:0}}
+.bubble.free{left:24px!important;top:auto!important;bottom:28px}
+.bubble.free::before{display:none}
+
+/* end of the demo: what we were looking for has been found */
+.found{position:absolute;z-index:8;left:50%;top:84px;transform:translate(-50%,-10px);display:flex;align-items:center;gap:18px;padding:16px 22px;
+  background:#0b0e14f5;border:1px solid var(--accent);box-shadow:0 0 0 4px #29c5ff22,0 24px 70px #000c;opacity:0;pointer-events:none;transition:opacity .45s,transform .45s}
+.found.on{opacity:1;transform:translate(-50%,0)}
+.found .ok{flex:0 0 auto;width:44px;height:44px;border-radius:50%;background:var(--accent);color:#06121c;display:grid;place-items:center;font:700 24px var(--sans)}
+.found h3{margin:0;font:600 20px/1.25 var(--sans)}
+.found .m{display:flex;gap:26px;margin:10px 0 0}
+.found .m div{font:500 11px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.found .m b{display:block;font:600 22px/1.15 var(--sans);letter-spacing:-.01em;text-transform:none;color:var(--accent);font-variant-numeric:tabular-nums}
+.found .m small{display:block;white-space:nowrap;margin-top:2px;font:500 12px var(--sans);letter-spacing:0;text-transform:none;color:var(--muted);font-variant-numeric:tabular-nums}
+.found .nx{margin:10px 0 0;font:500 13px var(--sans);color:#c3ccdb}
+@media (max-width:760px){.found{left:16px;right:16px;top:64px;transform:none;padding:12px 14px;gap:12px}.found.on{transform:none}.found h3{font-size:16px}.found .m{gap:14px}.found .m b{font-size:16px}.found .m div{font-size:9.5px}.found .nx{font-size:12px}.found .ok{width:34px;height:34px;font-size:18px}}
+
+/* "next" prompt: shown once a step has played */
+.next{position:absolute;z-index:7;left:50%;bottom:18px;transform:translate(-50%,6px);display:flex;align-items:center;gap:10px;padding:8px 14px;
+  background:#0b0e14f2;border:1px solid var(--tuto);box-shadow:0 8px 30px #000c;color:var(--text);font:500 14px var(--sans);cursor:pointer;opacity:0;pointer-events:none;
+  transition:opacity .4s,transform .4s}
+.next.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+.next svg{width:18px;height:18px;stroke:var(--text);animation:nudge 1.6s ease-in-out infinite}
+.next .short{display:none}
+.next kbd{font:500 12px var(--mono);border:1px solid #3a4558;padding:0 6px;color:var(--muted)}
+
+/* the recorded demo, after the schema */
+.video{position:absolute;inset:0;z-index:4;width:100%;height:100%;object-fit:contain;background:var(--bg);opacity:0;pointer-events:none;transition:opacity .5s ease}
+.video.on{opacity:1;pointer-events:auto}
+
+/* automatic mode: the bare stage, for recording */
+.auto .top,.auto .rail,.auto .replay,.auto .hero,.auto .veil,.auto .schema,.auto .after{display:none!important}
+
+/* the Validation window over the receded terminal */
+.valwin{position:absolute;inset:0;z-index:3;display:grid;place-items:center;padding:72px 72px 32px 40px;background:#0b0e1499;opacity:0;pointer-events:none;transition:opacity .5s ease}
+.valwin.on{opacity:1}
+.vw-in{width:min(1080px,100%);display:grid;gap:12px;justify-items:start}
+.vw-pane{width:min(100%,calc((100vh - 300px) * 1.6))}
+.vw-box.wide{aspect-ratio:1600/490}
+.vw-wide{width:min(1480px,100%)}.vw-wide .vw-pane{width:100%}
+.vw-box video{position:absolute;inset:0;width:100%;height:100%;display:block}
+.vw-foot{margin-top:4px}
+.ed-head{max-width:820px}
+.vw-head .sch-sub{max-width:760px}
+.vw-box{position:relative;aspect-ratio:16/10;overflow:hidden;background:#0b0e14}
+.vw-cam{position:absolute;inset:0;transform-origin:0 0;transition:transform 1s cubic-bezier(.4,0,.2,1)}
+.vw-box img{position:absolute;inset:0;width:100%;height:100%;display:block;transition:opacity .45s ease}
+#vwoos{opacity:0}.valwin.open #vwoos{opacity:1}
+.vw-cur{position:absolute;left:0;top:0;width:22px;height:22px;opacity:0;transition:transform .9s cubic-bezier(.4,0,.2,1),opacity .3s}
+.vw-cur svg{width:22px;height:22px;display:block}
+.vw-press{position:absolute;border:2px solid var(--accent);opacity:0}
+.vw-press.go{animation:vwpress .7s ease-out}
+@keyframes vwpress{0%{opacity:1}100%{opacity:0;transform:scale(1.08)}}
+.vw-res{margin:0;font:500 15px var(--sans);color:var(--text);opacity:0;transform:translateY(6px);transition:opacity .5s ease,transform .5s ease}
+.valwin.open .vw-res{opacity:1;transform:none}
+@media (max-width:760px){.valwin{padding:64px 16px 24px;place-items:start center}.vw-res{font-size:13px}}
+/* the editor and the terminal side by side (each a 1000 x 1250 page shown at 0.8) */
+.screen .ide{position:absolute;inset:0;opacity:0;transition:opacity .35s ease;background:var(--bg)}
+.screen .ide.on{opacity:1}
+.ide .pane-l,.ide .pane-r{position:absolute;top:0;height:1000px;overflow:hidden;background:var(--bg)}
+.ide .pane-l{left:0;width:533px;box-shadow:1px 0 0 #243044;z-index:1}.ide .pane-r{left:533px;width:1067px}
+/* Left third: the incoming editor fades in on top, the outgoing one stays opaque until it is covered
+   (two simultaneous fades let the dark background show through: a flash). */
+.screen .ide iframe{height:1250px;transform:scale(.8);transform-origin:0 0;opacity:0;transition:opacity 0s linear .32s}
+.screen .ide .pane-l iframe{width:666px}.screen .ide .pane-r iframe{width:1334px;opacity:1}
+.ide[data-left=box] .l-box,.ide[data-left=max] .l-max,.ide[data-left=tree] .l-tree{opacity:1;z-index:1;transition:opacity .3s ease}
+/* Before the join: why the editor and the terminal share the screen */
+.joinann{position:absolute;z-index:8;left:50%;bottom:30px;transform:translate(-50%,10px);display:flex;align-items:center;gap:16px;padding:14px 20px 14px 16px;
+  background:#0b0e14f5;border:1px solid #243044;border-left:2px solid var(--accent);box-shadow:0 20px 60px #000c;opacity:0;pointer-events:none;transition:opacity .45s,transform .45s}
+.joinann.on{opacity:1;transform:translate(-50%,0)}
+.joinann svg{flex:0 0 auto;width:54px;height:34px}
+.joinann rect{fill:none;stroke-width:1.6}
+.joinann .ja-l{stroke:var(--muted)}.joinann .ja-r{stroke:var(--accent);fill:#29c5ff1a}
+.joinann.on .ja-r{animation:jaR 1.1s cubic-bezier(.4,0,.2,1) .25s both}
+@keyframes jaR{from{transform:translateX(26px);opacity:0}to{transform:none;opacity:1}}
+.sch-sub strong{color:var(--accent);font-weight:600}
+.joinann b{display:block;font:600 16px/1.3 var(--sans);color:var(--text)}
+.joinann span{display:block;margin-top:3px;font:400 14px/1.45 var(--sans);color:#c3ccdb;max-width:520px}
+@media (max-width:760px){.joinann{left:16px;right:16px;bottom:76px;transform:none}.joinann.on{transform:none}.joinann svg{display:none}.joinann b{font-size:14px}.joinann span{font-size:12.5px}}
+/* the sealed-period capture, enlarged to the whole screen once opened */
+.vw-pane{transition:transform .75s cubic-bezier(.4,0,.2,1);transform-origin:50% 50%}
+.vw-head{transition:opacity .35s ease}
+.valwin.big .vw-head,.valwin.big .vw-res{opacity:0}
+.valwin.big{background:#0b0e14e6}
+.ide.join .pane-l{animation:ideL .7s cubic-bezier(.4,0,.2,1) both}
+.ide.join .pane-r{animation:ideR .8s cubic-bezier(.4,0,.2,1) .1s both}
+@keyframes ideL{from{opacity:0;transform:translateX(-60px)}to{opacity:1;transform:none}}
+@keyframes ideR{from{transform:translateX(1100px)}to{transform:none}}
+/* Pod Lab's own box opening: the box flies from its tree card to its place, over the tree */
+.screen .fly{position:absolute;overflow:hidden;z-index:2;opacity:0;transform-origin:0 0;box-shadow:0 20px 60px #0008}
+.screen .fly.on{opacity:1}
+.screen .fly iframe{position:absolute;opacity:1;width:1600px;height:1000px}
+/* "Un point de départ": text on the right of the tilted double screen */
+.depart-o{position:absolute;inset:0;z-index:4;display:grid;place-items:center end;padding:96px 6vw 64px 24px;opacity:0;pointer-events:none;
+  transform:translateY(16px);transition:opacity .5s ease,transform .6s ease}
+.depart-o.on{opacity:1;pointer-events:auto;transform:none}
+.dep-in{max-width:min(540px,40vw)}
+body.at-depart .rail{opacity:0!important;pointer-events:none}
+@media (max-width:760px){.depart-o{place-items:start center;padding:64px 16px 0}.dep-in{max-width:100%}
+  .depart-o .dep-text p{font-size:13px;margin:0 0 8px}.depart-o .dep-h{font-size:28px!important;margin:0 0 10px!important}.depart-o .ctas{margin-top:10px}
+  .depart-o .btn{padding:8px 12px;font-size:13px}.depart-o .dep-next{margin-top:10px;font-size:12px}}
+/* after the demo: a curtain rises over the terminal, then the page scrolls normally */
+.after{position:relative;z-index:60;margin-top:-100vh;margin-top:-100svh;color:#c3ccdb;
+  background:linear-gradient(180deg,#0b0e1400 0,#0b0e14e6 22vh,var(--bg) 42vh)}
+.after-in{max-width:1120px;margin:0 auto;padding:46vh 24px 96px}
+.blk{padding:0 0 88px}
+.cap{font:500 12px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+.after h2{font:600 clamp(24px,2.6vw,34px)/1.2 var(--sans);color:var(--text);margin:0 0 10px}
+.after .sub{margin:0 0 28px;font-size:clamp(15px,1.25vw,17px);max-width:720px}
+/* validation: one screen, plays on its own */
+.val{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:40px;align-items:center}
+.funnel{width:100%;height:auto;font-family:var(--mono)}
+.funnel .t{fill:#10161f;stroke:#3a4558;stroke-width:1.5;transition:fill .4s,stroke .4s}
+.funnel .t.on{fill:#12283a;stroke:var(--accent)}
+.funnel text{fill:var(--text);font-size:15px;text-anchor:middle}
+.funnel text.s{fill:var(--muted);font-size:12px}
+.tests{margin:0;padding:0;list-style:none;border:1px solid #243044;background:#0b0e14}
+.tests li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:12px;align-items:baseline;padding:11px 16px;border-bottom:1px solid #1a2230;font-size:15px;color:#c3ccdb}
+.tests li:last-child{border-bottom:0}
+.tests li i{font:700 15px var(--mono);font-style:normal;color:transparent;transition:color .3s}
+.tests li.dep i{color:var(--faint)}
+.tests li.ok i{color:var(--accent)}
+.tests li.warn i{color:#f0a93b}.tests li.ko i{color:var(--down)}
+.tests li.dep.back{background:#ff5a6e10}.tests li.dep.back b{color:var(--text)}.tests li.dep.back i{color:var(--down)}
+.funnel .t.ko{fill:#2a1418;stroke:var(--down)}
+.tests li b{display:block;font-weight:600;color:var(--text)}
+.tests li small{color:var(--muted);font-size:13px}
+.tests li.dep{background:#29c5ff10}
+.tests li.dep b{color:var(--accent)}
+/* under the hood */
+.hood{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.hood div{border-top:2px solid var(--accent);padding:14px 4px 0;font-size:15px}
+.hood b{display:block;font:600 26px/1.15 var(--sans);color:var(--text);margin-bottom:6px;font-variant-numeric:tabular-nums}
+/* for those who code */
+.codecard{border:1px solid #243044;background:#0b0e14;max-width:760px}
+.codecard .h{display:flex;justify-content:space-between;padding:8px 14px;border-bottom:1px solid #243044;background:#10161f;font:500 12px var(--mono);color:var(--muted)}
+.codecard pre{margin:0;padding:14px;font:13px/1.6 var(--mono);color:#c3ccdb;overflow-x:auto}
+.codecard pre .k{color:var(--accent)}
+.dep-text{color:#c3ccdb}
+.dep-text p{font-size:clamp(15px,1.2vw,17px);line-height:1.6;margin:0 0 16px}
+.dep-text .badge{font-size:12px;margin:0 0 10px}
+.dep-h{font:600 clamp(34px,4vw,56px)/1.05 var(--sans);letter-spacing:-.02em;margin:0 0 22px}
+.dep-goal{color:var(--text);font-weight:500}
+.depart-o .ctas{margin-top:26px}
+.dep-next{display:inline-flex;gap:8px;margin-top:22px;font-size:14px;color:var(--muted);text-decoration:none;border-bottom:1px dotted var(--muted)}
+.dep-next:hover{color:var(--text)}
+.tlist{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;counter-reset:t}
+.tlist li{border:1px solid #243044;background:#10161f;padding:14px 16px;counter-increment:t}
+.tlist b{display:block;font:600 15px var(--sans);color:var(--text);margin-bottom:4px}
+.tlist b::before{content:counter(t,decimal-leading-zero) "  ";font:500 12px var(--mono);color:var(--accent)}
+.tlist span{font-size:14px;line-height:1.5}
+@media (max-width:760px){.tlist{grid-template-columns:1fr}}
+/* benchmark against NautilusTrader and vectorbt */
+.bench-w{overflow-x:auto;border:1px solid #243044;background:#0b0e14}
+.bench{width:100%;border-collapse:collapse;font-size:15px;min-width:560px}
+.bench th{padding:10px 16px;text-align:right;font:500 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:#10161f;border-bottom:1px solid #243044}
+.bench th:first-child,.bench td:first-child{text-align:left}
+.bench td{padding:12px 16px;border-bottom:1px solid #1a2230;text-align:right;vertical-align:top;color:#c3ccdb;font-variant-numeric:tabular-nums;white-space:nowrap}
+.bench td:first-child{white-space:normal}
+.bench tr:last-child td{border-bottom:0}
+.bench td b{display:block;font-weight:600;color:var(--text)}
+.bench small{display:block;font-size:13px;color:var(--muted);margin-top:2px}
+.bench td.best{color:var(--accent);font-weight:600}
+.bench td.best small{color:var(--muted);font-weight:400}.bench small.best{color:var(--accent);font-weight:600}
+.bench-n{margin:12px 0 0;font-size:13px;color:var(--muted);max-width:820px}
+.bench-next{margin-top:22px!important}
+@media (max-width:760px){.bench{min-width:0;font-size:13px}.bench th,.bench td{padding:9px 7px}.bench th{font-size:9.5px;letter-spacing:.03em;white-space:normal;vertical-align:bottom}
+  .bench td:first-child small{display:none}.bench small{font-size:11px}}
+.end{text-align:left;padding-bottom:40px}
+.after .blk{min-height:100vh;min-height:100svh;box-sizing:border-box;display:flex;flex-direction:column;justify-content:flex-start;padding:76px 0 48px}
+#fin .cap{color:var(--accent)}
+.fin-contact{min-width:0}
+.fin-question{margin:0 0 16px;font-size:clamp(17px,1.8vw,22px);color:var(--text);max-width:720px}
+.fin-mail{display:inline-block;max-width:100%;padding-bottom:8px;border-bottom:2px solid var(--accent);color:var(--text);
+  font:500 clamp(24px,3vw,40px)/1.3 var(--sans);text-decoration:none;overflow-wrap:anywhere}
+.fin-mail:hover,.fin-mail:focus-visible{color:var(--accent)}
+.fin-demo{margin:18px 0 16px;color:var(--muted)}
+.arts-w{margin:56px 0 0;min-width:0}.arts-n{margin:0 0 20px;font-size:14px;color:var(--muted)}
+.arts{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.arts li{min-width:0}
+.arts a{display:flex;flex-direction:column;gap:12px;height:100%;padding:20px;border:1px solid #243044;border-radius:0;
+  background:var(--panel);color:var(--text);text-decoration:none;overflow-wrap:anywhere}
+.arts .arts-next a{border-top-color:var(--accent)}
+.arts-tag{font:500 12px/1.5 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.arts h3{margin:0;font:600 19px/1.3 var(--sans)}
+.arts p{margin:0 0 8px;font-size:15px;color:#c3ccdb}
+.arts-go{margin-top:auto;font:500 14px var(--mono);color:var(--accent)}
+.fin-site{display:flex;align-items:center;gap:16px;margin-top:16px;padding:20px;border:1px solid #243044;border-radius:0;
+  background:var(--panel);text-decoration:none;overflow-wrap:anywhere}
+.fin-site>span:last-child{min-width:0}.fin-site-arrow{flex:0 0 auto;color:var(--accent);font-size:24px}
+.fin-site b{display:block;color:var(--text);font-weight:500}.fin-site small{display:block;margin-top:4px;font-size:14px;color:var(--muted)}
+.arts a:hover,.arts a:focus-visible,.fin-site:hover,.fin-site:focus-visible{border-color:var(--accent)}
+@media (max-width:1100px){.arts{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:600px){.arts{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:760px){.after .blk{padding:64px 0 32px}}
+.after .sub strong{color:var(--text);font-weight:600}
+/* ticker of the products that can be simulated */
+.ticker{position:absolute;left:0;right:0;bottom:0;height:38px;overflow:hidden;border-top:1px solid #243044;background:#0b0e14cc;
+  -webkit-mask:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.tk-track{display:flex;width:max-content;height:100%;align-items:center;animation:tk 48s linear infinite}
+.ticker:hover .tk-track{animation-play-state:paused}
+.tk-track span{display:flex;align-items:center;gap:28px;padding-right:28px;font:500 12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.tk-track span::after{content:"";width:5px;height:5px;background:var(--accent);transform:rotate(45deg)}
+@keyframes tk{to{transform:translateX(-50%)}}
+.hero .hint{bottom:52px}
+/* under the hood 1: the engine and its calls */
+#moteur .eng-wrap{background:var(--bg);box-shadow:none}
+#moteur .pane-h{font-family:var(--mono);flex-wrap:wrap}
+#moteur .eng-layout{display:grid;grid-template-columns:minmax(0,2.15fr) minmax(0,1fr);align-items:start}
+#moteur .eng-schema{min-width:0;padding:14px 0}
+.eng{display:block;width:100%;height:auto;font-family:var(--mono)}
+.eng .bx{fill:var(--bg)}
+.eng .band{fill:var(--panel)}
+.eng .outline,.eng .divider{fill:none;stroke:#243044;stroke-width:1;vector-effect:non-scaling-stroke}
+.eng .node.hot .outline,.eng .node.hot .divider{stroke:var(--flow);stroke-width:2}
+.eng .t1{fill:var(--text);font-size:12px;font-weight:500;letter-spacing:.04em}
+.eng .code,.eng .counter{fill:#c3ccdb;font-size:14px;font-variant-numeric:tabular-nums}
+.eng .date{fill:#c3ccdb;font-size:12px;font-variant-numeric:tabular-nums}
+.eng .t2{fill:var(--muted);font:13px var(--sans)}
+.eng .lk{fill:none;stroke:#3a4558;stroke-width:1;vector-effect:non-scaling-stroke}
+.eng .pulse-line{fill:none;stroke-width:2;vector-effect:non-scaling-stroke}
+.eng .tag{font:11px var(--mono);opacity:0}.eng .tag.on{opacity:1}
+.eng .tick,.eng .month-rule{stroke:#3a4558;stroke-width:1;vector-effect:non-scaling-stroke}
+.eng .rb{fill:var(--accent)}.eng .rbw{fill:#d9bf5a}
+.eng .ml{fill:var(--muted);font:11px var(--mono);font-variant-numeric:tabular-nums}
+.eng .month{fill:var(--text);font:11px var(--mono)}
+.eng .now{stroke:var(--accent);stroke-width:1;vector-effect:non-scaling-stroke}
+#moteur .eng-costs{min-width:0;margin:24px 0;padding:0 20px;border-left:1px solid #243044;font-size:14px;line-height:1.5}
+#moteur .eng-costs h3{margin:0 0 8px;color:var(--text);font:600 18px/1.3 var(--sans)}
+#moteur .eng-costs p{margin:0 0 18px;color:var(--muted)}
+#moteur .eng-costs h4{margin:18px 0 8px;padding-top:12px;border-top:1px solid #243044;color:var(--text);font:500 12px/1.5 var(--mono);letter-spacing:.04em}
+#moteur .eng-costs ul{list-style:none;margin:0;padding:0}
+#moteur .eng-costs li{padding:3px 0;color:#c3ccdb}
+#moteur .eng-costs li span{color:var(--muted)}
+#moteur .eng-costs .eng-position{margin:0;color:#c3ccdb}
+@media(max-width:1000px){#moteur .eng-layout{grid-template-columns:minmax(0,1fr)}
+  #moteur .eng-costs{margin:0 20px 20px;padding:20px 0 0;border-left:0;border-top:1px solid #243044}}
+@media(max-width:760px){#moteur .pane-h{font-size:11px;letter-spacing:.06em}#moteur .eng-schema{padding:0}
+  #moteur .eng-costs{margin:0 16px 20px}}
+/* under the hood 2: M2 emission, our order at the quote, then execution */
+#carnet .ob{position:relative;background:var(--bg);box-shadow:none}
+#carnet .pane-h{font-family:var(--mono);align-items:baseline;flex-wrap:wrap}
+#carnet .pane-h span{display:inline}
+.ob-in{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.9fr);gap:20px;align-items:start;padding:20px}
+.ob-t{margin:0;padding:8px 12px;border:1px solid #243044;border-bottom:0;background:#10161f;
+  font:500 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--text)}
+.m2-l{list-style:none;margin:0;padding:0;border:1px solid #243044}
+.m2-l li{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:5px 10px;padding:12px;border-bottom:1px solid #243044;
+  font:13px/1.5 var(--mono);color:#c3ccdb;opacity:0;transition:opacity .3s,transform .3s}
+.m2-l li:last-child{border-bottom:0}.m2-l li.on{opacity:1}
+.m2-l b{color:var(--text);font-weight:500;overflow-wrap:anywhere}
+.m2-l i{grid-column:1/-1;font:13px/1.5 var(--sans);font-style:normal;color:var(--muted)}
+.m2-l .m2-state{grid-column:1/-1;color:var(--muted);font-size:12px}
+.m2-l li.run{border-left:2px solid var(--accent);padding-left:10px}
+.m2-l li.departing{opacity:.35;transform:translateX(8px)}
+.m2-l li.ok .m2-state{color:var(--accent)}
+.m2-l li.w,.m2-l li.w b,.m2-l li.w i,.m2-l li.w .sell,.m2-l li.w.ok .m2-state{color:#d9bf5a}
+.m2-l li.w.run{border-left-color:#d9bf5a}
+.m2-l .buy{color:var(--accent)}.m2-l .sell{color:#c3ccdb}
+.ob-loop{margin:12px 0 0;font:13px/1.5 var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
+.ob-cap{margin:0;padding:12px 20px 16px;min-height:6em;border-top:1px solid #243044;font:14px/1.5 var(--sans);color:#c3ccdb}
+.books{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;min-width:0}
+.book{min-width:0;border:1px solid #243044;background:var(--bg);font:13px/1.5 var(--mono);font-variant-numeric:tabular-nums}
+.book-h{margin:0;padding:8px 10px;background:#10161f;border-bottom:1px solid #243044;font:500 12px/1.5 var(--mono);color:var(--muted)}
+.book-h b{display:block;font-weight:500;font-size:14px;color:var(--text)}
+.book table{width:100%;table-layout:fixed;border-collapse:collapse;text-align:center}
+.book th{padding:9px 3px;font-size:11px;font-weight:500;color:var(--muted);border-bottom:1px solid #243044}
+.book td{height:42px;padding:5px 3px;border-bottom:1px solid #243044;color:#c3ccdb}
+.book .quote-price{white-space:nowrap}
+.book .spread td{height:auto;padding:8px 6px;font-size:12px;color:var(--muted);text-align:left}
+.book .spread span{display:block}.book .spread b{font-weight:500;color:#c3ccdb}
+.book .size{position:relative;min-height:30px;display:flex;align-items:center;justify-content:center;isolation:isolate}
+.book .size-bar{position:absolute;inset:0 auto 0 0;width:0;background:#c3ccdb;opacity:.25;z-index:-1}
+.book .size-text{visibility:hidden}.book.emitted .size-text{visibility:visible}
+.book.buy .size-bar{background:var(--accent)}.book.buy .size-text{color:var(--accent)}
+.book .own-order{margin:0;padding:8px 10px;color:var(--muted);font-size:12px;border-bottom:1px solid #243044}
+.book .fill{margin:0;padding:10px;min-height:6em;color:#c3ccdb;font-size:12px;opacity:0}
+.book .fill b{display:block;font-weight:500;color:var(--text);font-size:13px}
+.book.filled .fill{opacity:1}
+.book .costs{margin:0;padding:0 10px 10px}
+.book .cost-line{display:flex;justify-content:space-between;gap:6px;opacity:0;color:#c3ccdb}
+.book .cost-line.on{opacity:1}.book dt,.book dd{margin:0;font-weight:400}
+.book .cost-line.total{margin-top:6px;padding-top:6px;border-top:1px solid #243044;color:var(--text)}
+.ob-flight{position:absolute;left:0;top:0;z-index:2;padding:7px 9px;background:#10161f;border:1px solid var(--accent);
+  color:var(--text);font:12px var(--mono);pointer-events:none;max-width:calc(100% - 24px)}
+.ob-flight.sell{border-color:#c3ccdb}
+.ob.fast .m2-l li{transition:none}
+@media(max-width:760px){.ob-in{grid-template-columns:1fr;padding:12px;gap:16px}.books{grid-template-columns:1fr}
+  #carnet .pane-h{font-size:11px}#carnet .pane-h span{font-size:11px}.ob-cap{padding:12px;min-height:8em}
+  .book .fill{min-height:5em}.tk-track span{font-size:10.5px}}
+@media(prefers-reduced-motion:reduce){#carnet .m2-l li{transition:none}}
+.end .ctas{justify-content:center}
+@media (max-width:760px){.val{grid-template-columns:1fr;gap:20px}.hood{grid-template-columns:1fr}.after-in{padding-top:40vh}}
+
+/* phones: the camera zooms on each step's area, the bubble sits under it */
+@media (max-width:760px){
+  .top nav{display:none}
+  .veil{background:linear-gradient(180deg,#0b0e14 0%,#0b0e14f0 58%,#0b0e1400 82%)}
+  .hero{padding:72px 18px 28px;place-items:start;align-content:start}
+  .hero-inner{max-width:none}
+  .pillars,.brand small{display:none}
+  .next{white-space:nowrap}.next .long{display:none}.next .short{display:inline}
+  .rr{grid-template-columns:1fr;gap:8px}
+  .log{font-size:11px}.log li{grid-template-columns:74px minmax(0,1fr) 50px 50px 14px;gap:6px;padding:5px 10px}.pane-h span{display:none}.log .lg{display:none}.log .sh{display:inline}
+  .log li.wide{grid-template-columns:74px minmax(0,1fr)}.sq i{width:8px;height:8px}.sq{gap:3px}
+  .hero h1{font-size:30px}
+  .hero .lead{font-size:15px;margin-top:var(--s4)}
+  .nocode{display:block;margin-top:var(--s4);font-size:14px}
+  .badge{font-size:11px;margin-bottom:var(--s3)}
+  .mark{margin-bottom:var(--s4);gap:12px}.mark i{width:22px;height:22px;border-width:4px}.mark b{font-size:32px}.mark span{font-size:10.5px;padding-left:12px}
+  .pillars{grid-template-columns:1fr;gap:10px;margin-top:var(--s4)}.pillars div{padding-top:8px;font-size:13px}.pillars b{font-size:15px}
+  .ctas{margin-top:var(--s5)}
+  .hint{position:static;transform:none;margin:var(--s4) auto 0}
+  .bubble{left:16px!important;right:16px;top:auto!important;bottom:76px;width:auto}
+  .bubble::before{display:none}
+  .bubble.free{left:16px!important;bottom:76px}
+  .found .m{gap:14px}.found .m small{font-size:10.5px}
+  .chat{left:16px;right:16px;width:auto;top:64px;transform:none}.chat.on{transform:none}
+  .chat-body{min-height:0}.code pre{font-size:11px;min-height:0}
+  .rail{right:10px}.rail button span{display:none}
+  .schema{padding:60px 30px 16px 14px}
+  .sch-cap{font-size:11px;margin-bottom:4px}.sch-title{font-size:18px}.sch-ex{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  .hint svg{animation:none}
+  .screen,.screen iframe,.bubble,.ring,.cursor,.veil,.hero,.schema,.box,.frame,.arr{transition:none!important}
+  .cursor{display:none}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <a class="brand" href="#"><i></i>FORGE<small>Laboratoire d’allocation de portefeuille</small></a>
+  <nav><a href="#demo">Démo</a><a href="../">Documentation</a><a href="https://arnaud-barbier.github.io/">À propos</a></nav>
+</header>
+
+<section class="demo" id="demo">
+  <div class="stage" id="stage">
+    <div class="screen" id="screen"></div>
+    <div class="veil" id="veil"></div>
+
+    <div class="hero" id="hero">
+      <div class="hero-inner">
+        <div class="mark"><i></i><b>FORGE</b><span>Laboratoire d’allocation<br>de portefeuille</span></div>
+        <p class="badge">Conçu pour les professionnels</p>
+        <h1>Mettez votre allocation à l’épreuve <span>avant que les marchés ne le fassent.</span></h1>
+        <p class="lead">Construisez et testez vos stratégies d’allocation multi-actifs. Analysez leurs performances, mesurez les risques et comparez vos décisions dans un même environnement de recherche.</p>
+        <div class="ctas">
+          <a class="btn primary" href="#" id="start">Voir la démo ↓</a>
+          <a class="btn" href="#acces">Demander un accès</a>
+        </div>
+      </div>
+      <div class="ticker" aria-label="Produits simulables"><div class="tk-track"><span>ETF</span><span>Actions à dividendes</span><span>Forex</span><span>Métaux</span><span>Matières premières</span><span>Énergies</span><span>CFD</span><span>Obligations du Trésor</span><span>Indices</span><span aria-hidden="true">ETF</span><span aria-hidden="true">Actions à dividendes</span><span aria-hidden="true">Forex</span><span aria-hidden="true">Métaux</span><span aria-hidden="true">Matières premières</span><span aria-hidden="true">Énergies</span><span aria-hidden="true">CFD</span><span aria-hidden="true">Obligations du Trésor</span><span aria-hidden="true">Indices</span></div></div>
+      <button class="hint" id="hint" type="button">Faites défiler ou appuyez sur ↓<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v15M5 12l7 7 7-7"/></svg></button>
+    </div>
+
+    <!-- How it works: the demo's own trials on a risk / return plane, with their log -->
+    <div class="schema" id="schema">
+      <div class="rr">
+        <div class="rr-head"><svg class="mini" id="mini" viewBox="0 0 52 52" aria-hidden="true"><circle class="ball" cx="26" cy="4" r="10"/><path class="cup" d="M12 18 V32 A14 14 0 0 0 40 32 V18"/></svg>
+          <div><p class="sch-cap">Comment ça marche</p>
+          <h2 class="sch-title">Déposez une stratégie, FORGE rend son verdict.</h2>
+          <p class="sch-sub">Explorez vos allocations. Mesurez leurs limites. Affinez vos décisions.</p></div></div>
+        <div class="pane"><div class="pane-h">Risque / rendement<span>période d’étude 2017 → 2023</span></div>
+        <svg class="plane" id="plane" viewBox="0 0 600 450" role="img" aria-label="Rendement annuel en fonction de la volatilité : trois essais successifs, le troisième entre dans la zone cible, meilleur que le 1/N sur les deux axes."></svg>
+        </div>
+        <div class="pane"><div class="pane-h">Journal des essais<span>chaque essai est compté par la validation</span></div>
+        <ol class="log" id="log"></ol></div>
+        <p class="sch-ex">Exemple : simulations réelles de la démo ci-dessous, sur la période d’étude février 2017 → août 2023 ; la suite reste verrouillée pour la validation.</p>
+      </div>
+    </div>
+    <!-- Before deployment: the real Validation page, the sealed period opened with one click -->
+    <div class="valwin" id="valwin">
+      <div class="vw-in">
+        <div class="vw-head"><p class="sch-cap">Avant le déploiement · test 1 sur 12</p>
+          <h2 class="sch-title">La période verrouillée, ouverte une seule fois.</h2>
+          <p class="sch-sub">La recherche s’arrête en août 2023. La suite reste <strong>scellée jusqu’à ce que vous l’ouvriez</strong>, pour voir comment la stratégie se comporte sur des <strong>données qu’elle n’a jamais vues</strong>.</p></div>
+        <div class="pane vw-pane"><div class="pane-h">Validation · Mon portefeuille<span>période scellée août 2023 → 2026</span></div>
+          <div class="vw-box" id="vwbox"><div class="vw-cam" id="vwcam"><img src="states/val_lock.jpg" alt="" id="vwlock"><img src="states/val_oos.jpg" alt="Validation : la période scellée ouverte, résultats hors échantillon" id="vwoos">
+            <i class="vw-press" id="vwpress"></i><i class="vw-cur" id="vwcur"><svg viewBox="0 0 22 22"><path d="M3 2 L3 18 L7.5 13.8 L10.6 20.5 L13.4 19.2 L10.3 12.6 L16.4 12.4 Z" fill="#fff" stroke="#0b0e14" stroke-width="1.3" stroke-linejoin="round"/></svg></i></div></div></div>
+        <p class="vw-res" id="vwres">Hors échantillon : 21,9 % par an, volatilité 13,7 %, baisse maximale −12,3 %. 85 % de l’avance sur le 1/N est conservée.</p>
+      </div>
+    </div>
+    <!-- The validation tests, announced before two of them are shown -->
+    <div class="valwin" id="testwin">
+      <div class="vw-in"><div class="vw-head ed-head"><p class="sch-cap">Avant le déploiement</p>
+        <h2 class="sch-title">Une bonne performance ne suffit pas. 12 tests de robustesse.</h2>
+        <p class="sch-sub">Une stratégie performante sur le passé ne l’est pas forcément dans d’autres conditions.</p>
+        <p class="sch-sub">FORGE la soumet à <strong>12 tests de robustesse</strong> : données hors échantillon, autres actifs, Monte-Carlo, stress tests et sensibilité des paramètres.</p>
+        <p class="sch-sub"><strong>Des milliers de simulations en quelques secondes</strong> pour mettre votre stratégie à l’épreuve avant que les marchés ne s’en chargent.</p>
+        <p class="sch-sub">En voici deux :</p></div></div>
+    </div>
+    <!-- Validation, another test: the same setting on 80 baskets it never saw (the real run, sped up) -->
+    <div class="valwin" id="crosswin">
+      <div class="vw-in vw-wide">
+        <div class="vw-head"><p class="sch-cap">Avant le déploiement · test 2 sur 12</p>
+          <h2 class="sch-title">La même allocation, sur 80 paniers inconnus.</h2>
+          <p class="sch-sub"><strong>Sans modifier aucun paramètre</strong>, FORGE teste l’allocation sur <strong>80 paniers tirés au hasard</strong> dans un univers d’actifs réservé à la validation.</p>
+          <p class="sch-sub">Chaque résultat est comparé à son propre 1/N pour déterminer si la performance provient réellement de <strong>la méthode d’allocation</strong> ou simplement <strong>du choix des actifs</strong>.</p></div>
+        <div class="pane vw-pane"><div class="pane-h">Validation · Multi-actifs<span>calcul réel, accéléré ×8</span></div>
+          <div class="vw-box wide"><video id="crossvid" src="states/cross.mp4" muted playsinline preload="auto"></video></div></div>
+        <div class="vw-foot"><a class="btn" href="#tests" id="alltests">Voir la liste des 12 tests <span aria-hidden="true">↓</span></a></div>
+      </div>
+    </div>
+    <!-- The editor, announced before it is shown -->
+    <div class="valwin" id="edwin">
+      <div class="vw-in"><div class="vw-head ed-head"><p class="sch-cap">L’éditeur</p>
+        <h2 class="sch-title">Chaque stratégie est du code, lisible et modifiable.</h2>
+        <p class="sch-sub">Ce que votre IA écrit arrive directement dans l’éditeur de FORGE, <strong>organisé dans un arbre</strong> : indicateurs, allocateur, paramètres, graphiques.</p>
+        <p class="sch-sub">Conçu pour faciliter la programmation, cet environnement vous permet de <strong>développer, modifier et tester librement vos idées</strong>, avec une IA ou directement dans le code. Chaque modification peut être <strong>simulée immédiatement</strong>.</p></div></div>
+    </div>
+    <!-- The end of the demo: the code and the terminal side by side, seen from the left; who made it -->
+    <div class="depart-o" id="departo"><div class="dep-in">
+      <div class="dep-text">
+      <p class="badge">Projet indépendant</p>
+      <h2 class="dep-h">Un point de départ.</h2>
+      <p>FORGE est un projet que j’ai conçu et développé pour explorer une conviction : les outils d’analyse doivent s’adapter aux besoins des gestionnaires, et non l’inverse.</p>
+      <p>De la modélisation financière à la simulation de stratégies, en passant par l’automatisation et l’analyse des risques, je développe des solutions pour répondre à des problématiques complexes et spécialisées.</p>
+      <p class="dep-goal">Je recherche un stage de 6 mois dès janvier 2027, au sein d’une équipe de gestion d’actifs ou d’ingénierie financière.</p>
+      <div class="ctas">
+        <a class="btn primary" href="mailto:arnaud.barbier@grenoble-em.com?subject=FORGE">Me contacter pour un essai ou des infos <span aria-hidden="true">↗</span></a>
+        <a class="btn" href="https://arnaud-barbier.github.io/" target="_blank" rel="noopener">Découvrir mon parcours <span aria-hidden="true">↗</span></a>
+      </div>
+      <a class="dep-next" href="#moteur">La suite : sous le capot <span aria-hidden="true">↓</span></a>
+    </div>
+    </div></div>
+    <div class="chat" id="chat" aria-live="polite">
+      <div class="chat-h"><svg class="spark" id="spark" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 2v6M12 16v6M2 12h6M16 12h6M4.9 4.9l4.2 4.2M14.9 14.9l4.2 4.2M4.9 19.1l4.2-4.2M14.9 9.1l4.2-4.2"/></svg>Votre IA</div>
+      <div class="chat-body">
+        <div class="think" id="think">Réflexion<i>...</i></div>
+        <p class="chat-msg" id="chat-msg"></p>
+        <div class="code" id="code"><div class="code-h"><b id="code-file">&gt;_ strategy.py</b><span>+ réglages</span></div><pre id="code-pre"></pre></div>
+      </div>
+    </div>
+    <div class="found" id="found" aria-live="polite"><span class="ok">✓</span><div><h3>Trouvé : meilleure que le 1/N sur les quatre mesures</h3><div class="m"><div>Rendement<b>17,6 %</b><small>1/N 17,2 %</small></div><div>Volatilité<b>16,1 %</b><small>1/N 19,6 %</small></div><div>Sharpe<b>1,09</b><small>1/N 0,91</small></div><div>Drawdown<b>−26,7 %</b><small>1/N −30,9 %</small></div></div><p class="nx">Prochaine étape : les 12 tests de validation →</p></div></div>
+    <div class="joinann" id="joinann" aria-live="polite"><svg viewBox="0 0 54 34" aria-hidden="true"><rect class="ja-l" x="1" y="1" width="16" height="32" rx="2"/><rect class="ja-r" x="21" y="1" width="32" height="32" rx="2"/></svg>
+      <div><b>Éditeur et terminal sur le même écran</b></div></div>
+    <div class="ring" id="ring"></div>
+    <div class="bubble" id="bubble"><div class="n" id="b-n"></div><h3 id="b-h"></h3><p id="b-p"></p></div>
+    <div class="press" id="press"></div>
+    <div class="done" id="done"></div>
+    <div class="cursor" id="cursor"><i class="tap"></i><i class="tap t2"></i><svg viewBox="0 0 22 22"><path d="M3 2 L3 18 L7.5 13.8 L10.6 20.5 L13.4 19.2 L10.3 12.6 L16.4 12.4 Z" fill="#fff" stroke="#0b0e14" stroke-width="1.3" stroke-linejoin="round"/></svg></div>
+    <nav class="rail" id="rail" aria-label="Étapes de la démo"></nav>
+    <button class="next" id="next" type="button" aria-label="Next step"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v15M5 12l7 7 7-7"/></svg><span class="long">Faites défiler ou appuyez sur <kbd>↓</kbd> pour continuer</span><span class="short">Suivant</span></button>
+    <button class="btn replay" id="replay" hidden>↺ Revoir la démo</button>
+  </div>
+</section>
+
+<section class="after" id="acces"><div class="after-in">
+
+  <div class="blk" id="moteur">
+    <p class="cap">Moteur</p>
+    <h2>Le moteur appelle votre code au bon moment.</h2>
+    <p class="sub">Le moteur compilé (<strong>Numba</strong>) avance <strong>barre par barre</strong>. Aux dates prévues, il appelle <strong>votre fonction d'allocation</strong>, qui renvoie les nouvelles pondérations. À chaque barre, il appelle des <strong>watchers d'événements</strong>, qui peuvent intervenir sur les positions en cours ou déclencher une nouvelle pondération en appelant la fonction d'allocation.</p>
+    <div class="eng-wrap pane"><div class="pane-h">Moteur compilé · appels du code<span>calendrier et watchers</span></div>
+      <div class="eng-layout">
+        <div class="eng-schema"><svg class="eng" id="eng" viewBox="0 0 800 600" role="img" aria-label="Le moteur compilé appelle l’allocateur aux dates prévues et les deux watchers à chaque barre. Les flux de l’allocateur sont bleus, ceux des watchers jaunes. Le temps défile vers le bas."></svg></div>
+        <aside class="eng-costs" aria-labelledby="eng-cost-title">
+          <h3 id="eng-cost-title">Coûts de transaction</h3>
+          <p>Le moteur applique les coûts à chaque ordre et tout au long de la position.</p>
+          <h4>Ordre au marché</h4>
+          <ul><li>Bid/ask spread</li><li>Slippage</li><li>Commission</li><li>Taxes</li><li>Market impact <span>(selon le volume moyen)</span></li></ul>
+          <h4>Ordre limite</h4>
+          <ul><li>Exécuté à son prix limite seulement s’il est atteint.</li><li>Commission et Taxes.</li><li><span>Sans spread ni slippage.</span></li></ul>
+          <h4>Sur la position</h4>
+          <p class="eng-position">Financement du levier et des positions courtes, conversion de devises.</p>
+        </aside>
+      </div>
+    </div>
+    <div style="height:28px"></div>
+    <div class="hood">
+      <div><b>~0,01 s</b>par simulation : chaque réglage déplacé est recalculé aussitôt.</div>
+      <div><b>Coûts réels</b>frais, dividendes, devises et financement compris dans chaque résultat.</div>
+      <div><b>0 ligne de code</b>obligatoire : votre IA écrit, FORGE simule et vérifie.</div>
+    </div>
+  </div>
+
+  <div class="blk" id="tests">
+    <p class="cap">Avant le déploiement</p>
+    <h2>Les 12 tests de validation.</h2>
+    <p class="sub">Une stratégie retenue passe par ces douze questions avant d’être déployée. Chaque réglage essayé pendant la recherche est compté, pour que le résultat final reste crédible.</p>
+    <ol class="tlist"><li><b>Référence</b><span>La stratégie bat-elle les poids égaux sur le même calendrier ?</span></li><li><b>Prévision de covariance</b><span>La covariance estimée prédit-elle la période suivante ?</span></li><li><b>Taille neutre</b><span>Les poids optimisés apportent-ils quelque chose aux poids égaux sur la même sélection ?</span></li><li><b>Levier</b><span>Le résultat vaut-il mieux qu’un simple levier sur le marché ?</span></li><li><b>Concentration de l’avantage</b><span>Le gain est-il réparti dans le temps ou concentré sur un épisode chanceux ?</span></li><li><b>Monte-Carlo</b><span>Le gain résiste-t-il à des trajectoires de marché rééchantillonnées ?</span></li><li><b>Pouvoir d’achat</b><span>L’avantage est-il obtenu lorsque l’argent vaut plus, et la réserve est-elle utilisée ?</span></li><li><b>Stress inversé</b><span>À partir de quelle baisse des marchés la stratégie casse-t-elle ?</span></li><li><b>Triage</b><span>L’échantillon permet-il de conclure ?</span></li><li><b>Sharpe déflaté</b><span>Le Sharpe est-il significatif après prise en compte de tous les réglages testés ?</span></li><li><b>Hors échantillon</b><span>L’avantage trouvé en recherche résiste-t-il à la période scellée ?</span></li><li><b>Multi-actifs</b><span>L’avantage résiste-t-il à des paniers d’actifs inconnus du réglage ?</span></li></ol>
+  </div>
+
+  <div class="blk" id="mesure">
+    <p class="cap">Mesuré, pas annoncé</p>
+    <h2>Face à NautilusTrader et vectorbt.</h2>
+    <p class="sub">Les mêmes stratégies écrites dans les trois outils, sur les mêmes données. Avant de comparer les temps, chaque opération a été vérifiée : mêmes entrées, mêmes sorties, mêmes soldes (les seuls écarts viennent de l’arrondi au centime que NautilusTrader applique à chaque mouvement).</p>
+    <div class="bench-w"><table class="bench">
+      <thead><tr><th>Cas testé</th><th>FORGE</th><th>vectorbt</th><th>NautilusTrader</th></tr></thead>
+      <tbody>
+        <tr><td><b>Stratégie algorithmique classique</b><small>croisement de moyennes, stop et objectif · 100 000 barres · 793 opérations identiques</small></td><td class="best">0,031 s<small>31 lignes</small></td><td>0,045 s<small>11 lignes</small></td><td>2,45 s<small>109 lignes</small></td></tr>
+        <tr><td><b>Stratégie algorithmique avec gestion de position avancée</b><small>sortie partielle, stop au point mort, suivi sur H1, pause après 3 pertes · 200 000 barres · 2 955 opérations identiques</small></td><td>0,311 s<small>64 lignes</small></td><td class="best">0,217 s<small>78 lignes</small></td><td>8,90 s<small>146 lignes</small></td></tr>
+        <tr><td><b>Allocation</b><small>8 actifs, rebalancements périodiques · comptabilité identique au centime</small></td><td>0,020 s<small>49 lignes</small></td><td class="best">0,004 s<small>56 lignes</small></td><td>—<small>—</small></td></tr>
+        <tr><td><b>Grille de 1 000 réglages</b><small>stratégie classique · temps total et mémoire maximale</small></td><td>25,5 s<small class="best">0,82 Go</small></td><td class="best">13,7 s<small>4,26 Go</small></td><td>—</td></tr>
+      </tbody></table></div>
+    <p class="bench-n">Temps à chaud, un processus, un fil d’exécution, Apple M2, 5 novembre 2026. vectorbt 1.2.0 en version libre (la version PRO n’a pas été testée), NautilusTrader 1.231.0. La comparaison d’allocation n’a pas été menée avec NautilusTrader. Lignes : code à écrire dans le notebook pour la stratégie, hors imports et chargement des données (l'optimiseur de poids commun aux trois, 175 lignes, n'est pas compté).</p>
+    <p class="bench-n">Depuis, sur la même machine avec 7 cœurs : 1 480 réglages en 14 s dans FORGE (mesure non comparée aux autres outils).</p>
+    <p class="sub bench-next">FORGE est en tête sur la stratégie classique ; vectorbt l’est sur la gestion avancée, l’allocation et la grille. Le moteur actuel est écrit en Python compilé (Numba). Le prochain chantier est son portage en C, pour gagner en vitesse sur ces cas et permettre des tests de robustesse encore plus fournis.</p>
+  </div>
+
+  <div class="blk end" id="fin">
+    <div class="fin-contact">
+      <p class="cap">CONTACT</p>
+      <p class="fin-question">Une question, un retour, ou l'envie de voir FORGE tourner en direct ? Écrivez-moi.</p>
+      <a class="fin-mail" href="mailto:arnaud.barbier@grenoble-em.com?subject=FORGE">arnaud.barbier@grenoble-em.com <span aria-hidden="true">→</span></a>
+      <p class="fin-demo">Une démonstration est possible sur place ou en visio.</p>
+      <a class="btn" href="https://arnaud-barbier.github.io/" target="_blank" rel="noopener">Découvrir mon parcours <span aria-hidden="true">↗</span></a>
+    </div>
+    <nav class="arts-w" aria-label="Continuer la lecture">
+      <p class="cap">CONTINUER LA LECTURE</p>
+      <p class="arts-n">Ces pages gardent pour l'instant l'ancienne présentation.</p>
+      <ul class="arts">
+        <li class="arts-next"><a href="../research/"><span class="arts-tag">Suite conseillée · Le signal</span><h3>Mode Research</h3><p>Développer un indicateur et mesurer ses signaux, sans compilation.</p><span class="arts-go">Lire <span aria-hidden="true">→</span></span></a></li>
+        <li><a href="../algo/"><span class="arts-tag">La stratégie</span><h3>Mode Algo</h3><p>Du signal aux trades gérés, avec frais et sizing.</p><span class="arts-go">Lire <span aria-hidden="true">→</span></span></a></li>
+        <li><a href="../engine/"><span class="arts-tag">Le portefeuille</span><h3>Mode allocation</h3><p>Quarante lignes pour déclarer un portefeuille, et la sortie réelle du moteur.</p><span class="arts-go">Lire <span aria-hidden="true">→</span></span></a></li>
+        <li><a href="../validation/"><span class="arts-tag">La mesure</span><h3>Validation · Max DDR</h3><p>Trois tests de validation appliqués à une optimisation de la durée de drawdown.</p><span class="arts-go">Lire <span aria-hidden="true">→</span></span></a></li>
+        <li><a href="../validation-2/"><span class="arts-tag">La mesure</span><h3>Validation · Sharpe</h3><p>Dix contrôles, du hors échantillon jusqu'à 80 univers inédits.</p><span class="arts-go">Lire <span aria-hidden="true">→</span></span></a></li>
+        <li><a href="../costs/"><span class="arts-tag">Le rapprochement</span><h3>Les coûts</h3><p>Chaque coût suivi de sa déclaration jusqu'à son débit dans la NAV.</p><span class="arts-go">Lire <span aria-hidden="true">→</span></span></a></li>
+        <li><a href="../stateful/"><span class="arts-tag">La mécanique</span><h3>Replay &amp; resume</h3><p>Comment un kernel compilé décide en fonction de son propre passé.</p><span class="arts-go">Lire <span aria-hidden="true">→</span></span></a></li>
+        <li><a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine"><span class="arts-tag">Le code</span><h3>Le dépôt</h3><p>Source publique du moteur, sous licence MIT.</p><span class="arts-go">Voir sur GitHub <span aria-hidden="true">→</span></span></a></li>
+      </ul>
+    </nav>
+    <a class="fin-site" href="https://arnaud-barbier.github.io/"><span class="fin-site-arrow" aria-hidden="true">←</span><span><b>Retour sur mon site principal</b><small>arnaud-barbier.github.io · projets, parcours et contact</small></span></a>
+  </div>
+
+</div></section>
+
+<script>
+// Each step: the frozen FORGE state shown, an optional click that leads into it, a bubble and a camera focus.
+// Rects come from states/targets.json, measured on the real page at 1600 x 1000.
+const ALL_STEPS = [
+  {state: 'shot', hero: true, label: 'Accueil'},          // a real screenshot of the terminal
+  {state: 'shot', schema: 'flow', label: 'Comment ça marche'},
+  {state: 'run', target: 'create', cursor: true, label: 'Créer',
+   n: 'Étape 1', h: 'Créer une stratégie', p: 'Tout part d’ici. FORGE propose de partir d’un portefeuille ou d’une stratégie d’allocation simple, que vous modifierez ensuite.'},
+  {state: 'create', from: 'create', target: 'blank', cursor: true, label: 'Point de départ',
+   n: 'Étape 2', h: 'Choisir le point de départ', p: 'Un portefeuille blanc pour composer vos poids vous-même, ou une stratégie de départ pour aller plus vite. Les deux restent modifiables.'},
+  {state: 'blank', from: 'blank', target: 'data', cursor: false, label: 'Données',
+   n: 'Étape 3', h: 'Choisir les données', p: 'Vos actifs, ceux d’une liste existante, ou vos propres fichiers. La période commune est calculée pour vous.'},
+  {state: 'tick', target: 'deu', cursor: true, label: 'Ajouter un actif',
+   n: 'Étape 4', h: 'Ajouter un actif et créer', p: 'Cochez DEUIDXEUR pour l’ajouter au portefeuille, donnez un nom, puis Créer.'},
+  {state: 'portfolio', from: 'go', target: 'alloc', cursor: true, label: 'Premier résultat',
+   n: 'Étape 5', h: 'Le portefeuille est simulé', p: 'Un seul rebalancement : la mise en place des poids initiaux, à parts égales. Les résultats, l’exécution et la comptabilité sont déjà là.'},
+  // Each frame is a real run at that weight (gold 14.3 %, 25 %, 40 %, 55 %); the cursor drags the slider across them.
+  {state: 'w0', from: 'alloc', target: 'rows', label: 'Régler les poids',
+   drag: {frames: ['w0', 'w1', 'w2', 'w3'], values: [1 / 7, .25, .4, .55], target: 'xau'}, below: true,
+   n: 'Étape 6', h: 'Déplacer un curseur', p: 'Les autres poids s’ajustent pour rester à 100 % et tout le rapport est recalculé. Or de 14 % à 55 % : volatilité 31,8 % → 22,8 %, drawdown max −58,3 % → −46,3 %, rendement annuel 20,9 % → 15,5 %.'},
+  {state: 'ai', target: 'promptmd', cursor: true, label: 'Copier le prompt',
+   n: 'Étape 7', h: 'Copier le prompt et le guide', p: 'Le prompt contient le code et les réglages de la stratégie ; le guide (.md) décrit tout FORGE pour votre IA. Elle sait ainsi écrire une réponse que FORGE relit tel quel.'},
+  {state: 'ai', chat: 'one', label: 'L’IA écrit',
+   n: 'Étape 8', h: 'Votre IA écrit la stratégie', p: 'Dans votre propre conversation (ChatGPT, Claude, Gemini…) : vous collez le prompt et décrivez ce que vous voulez. Elle répond en code et en réglages.'},
+  {state: 'p1', play: [['ai', 'paste', 'p1', 'Collé ✓']], target: 'apply', cursor: true, label: 'Coller la réponse',
+   n: 'Étape 9', h: 'Coller la réponse de votre IA', p: 'Ici, une optimisation max Sharpe : elle ajoute aussi ses indicateurs aux bougies OHLCV (moyennes 50 et 200 jours, bandes de volatilité). Collez la réponse, puis Appliquer.'},
+  {state: 'a1t', from: 'apply', target: 'params', cursor: false, label: 'Ses réglages',
+   n: 'Étape 10', h: 'La stratégie arrive avec ses réglages', p: 'FORGE range le code dans l’arbre de la stratégie et ses réglages dans le volet Stratégie : poids maximum, shrinkage, moyennes mobiles. Chacun se règle à la main.'},
+  {state: 'a1t', target: 'equity', cursor: false, label: 'Période d’étude',
+   n: 'Étape 11', h: 'Étude 2017 → 2023, la suite verrouillée', p: 'Les résultats couvrent la période d’étude, février 2017 → août 2023. D’août 2023 à 2026, les données restent verrouillées hors échantillon (OOS) : la validation finale se fera sur une période que la stratégie n’a jamais vue.'},
+  // Each frame is a real run at that max weight; the cursor drags the slider once, left to right.
+  {state: 'a1', target: 'mw', label: 'Ajuster un réglage',
+   drag: {frames: ['a1', 'm1', 'm2', 'm3'], values: [.35, .30, .25, .20], target: 'mw'},
+   n: 'Étape 12', h: 'Ajuster un réglage', p: 'Poids maximum par actif de 35 % à 20 %, un vrai calcul à chaque position : volatilité 19,9 % → 18,2 %, drawdown max −36,6 % → −27,8 %, rendement annuel 14,5 % → 16,9 %.'},
+  {state: 'm3', scroll: true, label: 'Toutes les vues',
+   n: 'Étape 13', h: 'Toutes les vues du rapport', p: 'Sous le résumé : distribution des rendements, poids à chaque rebalancement, corrélations, exécution par actif et comptabilité. Chaque vue se déplace et se règle.'},
+  {state: 'm3', target: 'copy', cursor: true, label: 'Copier les résultats',
+   n: 'Étape 14', h: 'Copier les résultats pour l’IA', p: 'Un clic copie les réglages et les résultats : métriques, DSR, comparaison au 1/N. Collez-les dans la conversation avec votre IA.'},
+  {state: 'm3', chat: 'two', label: 'L’IA analyse',
+   n: 'Étape 15', h: 'Votre IA analyse', p: 'Elle lit les résultats et propose une nouvelle logique, en code et en réglages.'},
+  {state: 'p2', target: 'paste', cursor: false, label: 'Nouvelle version',
+   n: 'Étape 16', h: 'Coller la nouvelle version', p: 'Même geste : coller, puis Appliquer. Le filtre de tendance arrive avec son propre réglage.'},
+  {state: 'a2', from: 'apply', target: 'tiles', cursor: false, label: 'Nouveaux résultats',
+   n: 'Étape 17', h: 'Nouveaux résultats', p: 'Avec le filtre de tendance : rendement annuel 17,6 %, volatilité 16,1 %, Sharpe 1,09, drawdown max −26,7 %.'},
+  {state: 'bench', from: 'compare', target: 'equity', cursor: false, label: 'Benchmarks',
+   n: 'Étape 18', h: 'Comparer aux benchmarks', p: 'À côté : le 1/N rebalancé (17,2 % par an, volatilité 19,6 %, Sharpe 0,91, drawdown −30,9 %) et l’itération 1 avec ses derniers réglages (16,9 %, 18,2 %, 0,95, −27,8 %). La nouvelle version fait mieux sur les quatre : résultat satisfaisant, on s’arrête là.'},
+  {state: 'bench', tests: true, label: 'Validation'},
+  {state: 'bench', val: true, label: 'Période scellée', nx: 'val'},
+  {state: 'bench', cross: true, label: 'Autres actifs'},
+  {state: 'ed_tree', edintro: true, label: 'L’éditeur'},
+  {state: 'ed_tree', target: 'alloc', cursor: true, label: 'L’arbre', nx: 'bubble',
+   n: 'L’arbre', h: 'La stratégie, représentée par un arbre', p: 'Pour vous repérer facilement dans votre stratégie, FORGE organise le code en différentes branches : indicateurs, allocateur, paramètres, graphiques… Chaque branche correspond à une fonctionnalité que vous pouvez ouvrir et modifier indépendamment.'},
+  {state: 'ide_max', code: true, label: 'Le code', nx: 'code',
+   n: 'Le code', h: 'Le code de votre IA, ou le vôtre', p: 'Un clic sur l’allocateur ouvre son code, ici le filtre de tendance. Reprenez ce que votre IA a écrit ou codez directement ici : chaque modification est appliquée et simulée aussitôt, et le terminal à droite se met à jour.'},
+  {state: 'ide_tree', depart: true, label: 'Contact'},
+];
+// Every step is driven by scrolling or the arrow keys. ?auto plays them on their own (tools/site/record.py).
+const AUTO = new URLSearchParams(location.search).has('auto');
+// The home page: 6 actions that show the principle. The full walkthrough (?tuto) is for the Tutorial page.
+const TOUR = [
+  ...ALL_STEPS.filter(s => s.hero || s.schema),
+  {state: 'create0', play: [['run0', 'create', 'create0']], target: 'blank', label: 'Créer', nx: 'bubble',
+   n: 'Action 1', h: 'Créer une stratégie', p: 'Rien n’est encore chargé ni simulé. Deux points de départ : un portefeuille blanc à composer vous-même, ou une stratégie d’allocation simple.'},
+  {state: 'portfolio', play: [['create0', 'blank', 'blank0'], ['blank0', 'deu', 'tick0', 'Coché ✓'], ['tick0', 'go', 'portfolio']], target: 'alloc', label: 'Composer', nx: 'bubble',
+   n: 'Action 2', h: 'Choisir les actifs, Créer', p: 'Cochez vos actifs, nommez le portefeuille, Créer : tout s’active, le portefeuille est simulé aussitôt, frais, dividendes et devises compris.'},
+  {state: 'w0', from: 'alloc', target: 'rows', label: 'Régler les poids',
+   drag: {frames: ['w0', 'w1', 'w2', 'w3'], values: [1 / 7, .25, .4, .55], target: 'xau'}, below: true, nx: 'drag',
+   n: 'Action 3', h: 'Déplacer un curseur', p: 'Tout le rapport est recalculé à chaque position. Or de 14 % à 55 % : volatilité 31,8 % → 22,8 %, drawdown max −58,3 % → −46,3 %.'},
+  {state: 'ai', play: [['ai', 'promptmd', null, 'Copié ✓']], chat: 'one', label: 'Votre IA', nx: 'chat',
+   n: 'Action 4', h: 'Votre IA écrit la stratégie', p: 'Copiez le prompt de FORGE dans votre propre IA (ChatGPT, Claude, Gemini…) et dites ce que vous voulez. Elle répond en code et en réglages.'},
+  {state: 'a1t', play: [['ai', 'paste', 'p1', 'Collé ✓'], ['p1', 'apply', 'a1t']], target: 'equity', label: 'Coller',
+   n: 'Action 5', h: 'Coller, appliquer : simulé', p: 'FORGE range le code et affiche ses réglages à gauche. Étude 2017 → août 2023 ; la suite reste verrouillée pour la validation finale.'},
+  {state: 'a1t', play: [['a1t', 'copy', null, 'Copié ✓']], chat: 'tour', label: 'Améliorer', nx: 'chat',
+   n: 'Action 6', h: 'Votre IA analyse et améliore', p: 'Un clic copie les résultats pour votre IA. Elle propose une nouvelle logique, que vous collez de la même façon.'},
+  {state: 'bencht', play: [['a1t', 'paste', 'p2t', 'Collé ✓'], ['p2t', 'apply', 'a2t'], ['a2t', 'compare', 'bencht']], target: 'equity', label: 'Comparer',
+   found: true,
+   n: 'Action 7', h: 'Comparer aux benchmarks', p: 'Nouvelle version : 17,6 % par an, volatilité 16,1 %, Sharpe 1,09, drawdown −26,7 %. Le 1/N rebalancé : 17,2 %, 19,6 %, 0,91, −30,9 %. Meilleure sur les quatre : place aux 12 tests de validation.'},
+  {state: 'bencht', tests: true, label: 'Validation'},
+  {state: 'bencht', val: true, label: 'Période scellée', nx: 'val'},
+  {state: 'bencht', cross: true, label: 'Autres actifs'},
+  {state: 'ed_tree', edintro: true, label: 'L’éditeur'},
+  {state: 'ed_tree', target: 'alloc', cursor: true, label: 'L’arbre', nx: 'bubble',
+   n: 'L’arbre', h: 'La stratégie, représentée par un arbre', p: 'Pour vous repérer facilement dans votre stratégie, FORGE organise le code en différentes branches : indicateurs, allocateur, paramètres, graphiques… Chaque branche correspond à une fonctionnalité que vous pouvez ouvrir et modifier indépendamment.'},
+  {state: 'ide_max', code: true, label: 'Le code', nx: 'code',
+   n: 'Le code', h: 'Le code de votre IA, ou le vôtre', p: 'Un clic sur l’allocateur ouvre son code, ici le filtre de tendance. Reprenez ce que votre IA a écrit ou codez directement ici : chaque modification est appliquée et simulée aussitôt, et le terminal à droite se met à jour.'},
+  {state: 'ide_tree', depart: true, label: 'Contact'},
+];
+const STEPS = AUTO || new URLSearchParams(location.search).has('tuto') ? ALL_STEPS : TOUR;
+const $ = id => document.getElementById(id);
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const W = 1600, H = 1000;
+let targets = {}, frames = {}, current = -1, timer = null, nextTimer = null;
+
+async function boot() {
+  try { targets = await (await fetch('states/targets.json')).json(); } catch (_) {}
+  buildPlane();
+  const names = [...new Set(STEPS.flatMap(s => [s.state, ...(s.drag?.frames || []), ...(s.play || []).flatMap(([st, , nx]) => [st, nx]).filter(Boolean)]))];
+  { const img = new Image(); img.src = 'hero.jpg'; img.className = 'shot'; img.alt = ''; $('screen').append(img); frames.shot = img; }
+  const mk = src => { const f = document.createElement('iframe'); f.src = `states/${src}.html`; f.title = 'FORGE'; f.tabIndex = -1;
+    f.setAttribute('aria-hidden', 'true'); return f; };
+  if (names.some(n => n.startsWith('ide'))) {   // the editor (left third) and the terminal (right two thirds)
+    const d = document.createElement('div'); d.className = 'ide'; d.dataset.left = 'box';
+    const l = document.createElement('div'), r = document.createElement('div'); l.className = 'pane-l'; r.className = 'pane-r';
+    for (const [cls, src] of [['l-box', 'ed3_box'], ['l-max', 'ed3_max'], ['l-tree', 'ed3_tree']]) { const f = mk(src); f.className = cls; l.append(f); }
+    r.append(mk('term23')); d.append(l, r); $('screen').append(d); frames.ide = d;
+    for (const n of ['ed_tree', 'ed_alloc']) if (!names.includes(n)) names.push(n);
+    const fly = document.createElement('div'); fly.className = 'fly'; fly.id = 'fly'; fly.append(mk('ed_alloc')); $('screen').append(fly);
+  }
+  for (const name of names.filter(n => n !== 'shot' && !n.startsWith('ide'))) {
+    const f = document.createElement('iframe');
+    f.src = `states/${name}.html`; f.title = 'FORGE'; f.tabIndex = -1; f.setAttribute('aria-hidden', 'true'); f.loading = 'eager';
+    // A pasted answer shows from its first line (the frozen field kept the caret at the end).
+    f.addEventListener('load', () => setTimeout(() => { try { const t = f.contentDocument.getElementById('aipaste-text'); if (t) t.scrollTop = 0; } catch (_) {} }, 80));
+    $('screen').append(f); frames[name] = f;
+  }
+  // bench (the comparison) was frozen with its last view still undrawn, below the screen; a2 is the same run
+  // with that view drawn: copy it across.
+  for (const [B, A] of [['bench', 'a2'], ['bencht', 'a2t']]) if (frames[B] && frames[A]) Promise.all([frames[B], frames[A]].map(f => new Promise(r => f.addEventListener('load', r, {once: true}))))
+    .then(() => { try {
+      const sel = '.report-cell[data-chart-id=return_distribution] .report-plot';
+      const from = frames[A].contentDocument.querySelector(sel), to = frames[B].contentDocument.querySelector(sel);
+      if (from && to && !from.querySelector('.report-placeholder')) to.replaceWith(frames[B].contentDocument.importNode(from, true));
+    } catch (_) {} });
+  STEPS.forEach((s, k) => {
+    const b = document.createElement('button'); b.innerHTML = `<span>${s.label}</span><i></i>`;
+    b.onclick = () => scrollToStep(k); $('rail').append(b);
+  });
+  $('demo').style.height = `${(STEPS.length + 1) * 100}vh`;
+  $('start').onclick = e => { e.preventDefault(); scrollToStep(1); };
+  $('hint').onclick = () => scrollToStep(1);
+  $('next').onclick = () => scrollToStep(Math.min(STEPS.length - 1, current + 1));
+  if (AUTO) return autoplay();
+  stepByGesture();
+  $('replay').onclick = () => scrollToStep(0, true);
+  addEventListener('scroll', onScroll, {passive: true}); addEventListener('resize', () => { layout(); place(current); });
+  layout(); onScroll(true);
+}
+
+// One wheel gesture, swipe or key press = exactly one step, whatever its length and whatever is playing:
+// a gesture always moves on, and stops the current step's animation. A trackpad gesture is a burst of wheel
+// events that swells then fades (inertia). Its tail is ignored; a new gesture is recognised by a pause
+// (> 180 ms), a change of direction, or a swell (the movement grows again while the tail was fading).
+function stepByGesture() {
+  const lastTop = () => $('demo').offsetTop + (STEPS.length - 1) * innerHeight;
+  const inDemo = dir => scrollY <= lastTop() + 2 && !(current === 0 && dir < 0 && scrollY <= $('demo').offsetTop + 2);
+  const blocks = [...document.querySelectorAll('.after .blk')];
+  const leave = () => scrollTo({top: blocks[0].getBoundingClientRect().top + scrollY, behavior: reduce ? 'auto' : 'smooth'});
+  // After the demo, the page moves block by block too: one gesture = the next block (a block taller than the
+  // screen, the 12 tests on a phone, is read in screenfuls first).
+  const page = dir => {
+    let i = -1; blocks.forEach((b, k) => { if (b.getBoundingClientRect().top <= 4) i = k; });
+    const b = blocks[i], r = b?.getBoundingClientRect(), sm = reduce ? 'auto' : 'smooth';
+    if (b && dir > 0 && r.bottom > innerHeight * 1.15) return scrollBy({top: Math.min(innerHeight * .85, r.bottom - innerHeight), behavior: sm});
+    if (b && dir < 0 && r.top < -innerHeight * .15) return scrollBy({top: Math.max(-innerHeight * .85, r.top), behavior: sm});
+    const n = i + dir; if (n < 0) return scrollToStep(STEPS.length - 1); if (n >= blocks.length) return;
+    scrollTo({top: blocks[n].getBoundingClientRect().top + scrollY, behavior: sm});
+  };
+  const go = dir => dir > 0 && current === STEPS.length - 1 ? leave() : scrollToStep(Math.max(0, Math.min(STEPS.length - 1, current + dir)));
+  // A slow finger movement makes the amplitude rise and fall: never read that as a new gesture. Only the
+  // inertia tail decays smoothly; a new push during it is a sudden jump after several decreasing events.
+  let lastT = 0, lastDir = 0, stepT = 0, tail = [];
+  addEventListener('wheel', e => {
+    const dir = Math.sign(e.deltaY); if (!dir) return; const demo = inDemo(dir);
+    e.preventDefault();
+    const t = performance.now(), mag = Math.abs(e.deltaY);
+    let fresh = t - lastT > 150 || dir !== lastDir;
+    if (!fresh && t - stepT > 450 && tail.length >= 9) {
+      // Inertia only slows down; a new push speeds up again: compare the last 5 events with the 5 before.
+      const seq = [...tail, mag].slice(-10), avg = xs => xs.reduce((x, y) => x + y, 0) / xs.length;
+      const older = avg(seq.slice(0, 5)), newer = avg(seq.slice(5));
+      if (newer > older * 1.25 && newer > older + 3) fresh = true;
+    }
+    lastT = t; lastDir = dir;
+    if (fresh) { stepT = t; tail = [mag]; demo ? go(dir) : page(dir); }
+    else { tail.push(mag); if (tail.length > 30) tail.shift(); }
+  }, {passive: false});
+  let y0 = null;
+  addEventListener('touchstart', e => { y0 = e.touches[0].clientY; }, {passive: true});
+  addEventListener('touchmove', e => { if (y0 != null) e.preventDefault(); }, {passive: false});
+  addEventListener('touchend', e => {
+    if (y0 == null) return; const dy = y0 - e.changedTouches[0].clientY; y0 = null;
+    if (Math.abs(dy) > 8) inDemo(Math.sign(dy)) ? go(Math.sign(dy)) : page(Math.sign(dy));
+  });
+  // One key press = one step, always, even in the middle of an animation (go() stops it).
+  addEventListener('keydown', e => {
+    const dir = {ArrowDown: 1, PageDown: 1, ' ': 1, ArrowRight: 1, ArrowUp: -1, PageUp: -1, ArrowLeft: -1}[e.key];
+    if (!dir || e.target.closest?.('input,textarea,select')) return;
+    e.preventDefault(); if (!e.repeat) inDemo(dir) ? go(dir) : page(dir);
+  }, {capture: true});
+
+}
+
+function scrollToStep(k, instant) {
+  const top = $('demo').offsetTop + k * innerHeight + 2;
+  scrollTo({top, behavior: 'auto'});   // one gesture = one clean change: jump, the CSS transitions do the fading
+  onScroll();                          // switch now: a second press right after must see the new step
+}
+
+// Camera: whole screen on desktop; on phones, zoom on the step's area. On the hero the terminal is a screen
+// seen from the side (pose 'hero'); under the schema it is pushed back and blurred (pose 'schema').
+let view = {s: 1, x: 0, y: 0}, pose = 'flat';
+function layout(focus) {
+  flatView(focus);
+  const vw = innerWidth, vh = $('stage').clientHeight, phone = vw <= 760;
+  let s = view.s, cx = view.x + W * s / 2, cy = view.y + H * s / 2, ry = 0, rx = 0;
+  if (pose !== 'flat' && !AUTO) {
+    if (phone) { const low = pose === 'hero' || pose === 'depart'; s = vw * 1.25 / W; cx = vw / 2; cy = vh - H * s * (low ? .22 : .5); rx = low ? 32 : 14; }
+    else if (pose === 'hero') { s = Math.min(vw * .6 / W, vh * .74 / H); cx = vw * .72; cy = vh * .54; ry = -34; rx = 5; }
+    else if (pose === 'depart') { s = Math.min(vw * .56 / W, vh * .72 / H); cx = vw * .3; cy = vh * .54; ry = 34; rx = 5; }
+    else { s = Math.min(vw * .86 / W, vh * .92 / H); cx = vw * .5; cy = vh * .52; ry = -12; rx = 2; }
+  }
+  const sc = $('screen');
+  sc.style.transform = `translate(${cx}px,${cy}px) rotateY(${ry}deg) rotateX(${rx}deg) scale(${s}) translate(${-W / 2}px,${-H / 2}px)`;
+  sc.classList.toggle('posed', pose !== 'flat' && !AUTO); sc.classList.toggle('dim', pose === 'schema' && !AUTO);
+}
+function flatView(focus) {
+  const vw = innerWidth, vh = $('stage').clientHeight, phone = vw <= 760;
+  if (phone && focus) {
+    const [x, y, w, h] = focus, pad = 40;
+    const s = Math.min(vw / (w + 2 * pad), (vh * 0.55) / (h + 2 * pad), 1.4);
+    view = {s, x: vw / 2 - (x + w / 2) * s, y: vh * 0.32 - (y + h / 2) * s};
+  } else {
+    // Fit the width; a taller screen is centred, a shorter one keeps the top of the terminal.
+    const s = phone ? vh / H : vw / W;
+    view = {s, x: (vw - W * s) / 2, y: H * s < vh ? (vh - H * s) / 2 : 0};
+  }
+}
+const toScreen = ([x, y, w, h]) => [view.x + x * view.s, view.y + y * view.s, w * view.s, h * view.s];
+
+let shown = null;
+function show(state) {
+  const base = state.startsWith('ide') ? 'ide' : state;
+  for (const [n, f] of Object.entries(frames)) f.classList.toggle('on', n === base);
+  if (base === 'ide') {
+    frames.ide.dataset.left = {ide: 'box', ide_max: 'max', ide_tree: 'tree'}[state];
+    // Arriving on the double screen from the editor: the editor goes to the left third, the terminal slides in.
+    if (!String(shown).startsWith('ide') && shown && !reduce) { const d = frames.ide; d.classList.remove('join'); void d.offsetWidth; d.classList.add('join'); }
+  }
+  shown = state;
+}
+
+function onScroll(force) {
+  const p = (scrollY - $('demo').offsetTop) / innerHeight;
+  const k = Math.max(0, Math.min(STEPS.length - 1, Math.round(p)));
+  // One state per step (no half-way frames): the hero is either shown or gone, CSS fades between them.
+  const lift = k >= 1 ? 1 : 0;
+  $('veil').style.opacity = 1 - lift; $('hero').style.opacity = 1 - lift; document.body.classList.toggle('at-hero', !lift && !AUTO);
+  $('hero').style.transform = `translateY(${-lift * 60}px)`; $('hero').style.pointerEvents = lift > .5 ? 'none' : '';
+  $('rail').style.opacity = lift; $('replay').hidden = k < STEPS.length - 1 || !!STEPS[k].video;   // the video has its own controls
+  // Leaving the demo: the contact text goes with it (the curtain alone would leave a ghost of it).
+  $('departo').style.opacity = scrollY - ($('demo').offsetTop + (STEPS.length - 1) * innerHeight) > 40 ? 0 : '';
+  if (k !== current || force === true) enter(k, k === current + 1 && force !== true);
+}
+
+function enter(k, forward) {
+  clearTimeout(timer); stopChat(); stopScroll(); $('screen').classList.remove('instant'); const step = STEPS[k], prev = current; current = k;
+  // The "continue" prompt comes back once this step has played (not on the hero, which has its own, nor at the end).
+  clearTimeout(nextTimer); $('next').classList.remove('on');
+  // A step with `nx` shows it at a set moment of its own animation (nextOn); the others after a delay.
+  if (!step.hero && !step.nx && k < STEPS.length - 1 && !AUTO)
+    nextTimer = setTimeout(() => $('next').classList.add('on'), step.schema ? 8000 : Math.min(9000, Math.max(2500, stepTime(step) - 2500)));
+  [...$('rail').children].forEach((b, i) => b.classList.toggle('on', i === k));
+  $('bubble').classList.remove('on'); $('ring').classList.remove('on'); $('done').classList.remove('on'); $('found').classList.remove('on');
+  $('schema').classList.toggle('on', !!step.schema); stopVal(); stopCross(); $('edwin').classList.toggle('on', !!step.edintro); $('testwin').classList.toggle('on', !!step.tests); clearTimeout(codeTimer); $('fly')?.classList.remove('on'); $('joinann').classList.remove('on');
+  $('departo').classList.toggle('on', !!step.depart); document.body.classList.toggle('at-depart', !!step.depart);
+  pose = step.hero ? 'hero' : step.depart ? 'depart' : step.schema || step.val || step.cross || step.edintro || step.tests ? 'schema' : 'flat';
+
+  if (step.schema) { $('cursor').classList.remove('on'); show(step.state); layout(); schemaPhase(step.schema, prev); return; }
+  if (step.val) { $('cursor').classList.remove('on'); show(step.state); layout(); startVal(); return; }
+  if (step.cross) { $('cursor').classList.remove('on'); show(step.state); layout(); startCross(); return; }
+  if (step.edintro || step.tests) { $('cursor').classList.remove('on'); show(step.state); layout(); return; }
+  if (step.depart) {   // pop out: the maximised field is left (Esc), the editor goes back to its tree
+    // Swap the editor first, then turn the screen: no layer change while the 3D transform runs (it stuttered).
+    $('cursor').classList.remove('on');
+    if (forward && !reduce) { show('ide_max'); layout(); timer = setTimeout(() => show(step.state), 1100); } else { show(step.state); layout(); }
+    return; }
+  if (step.code) {
+    // Coming from the tree step on a desktop, the cursor already rests on the allocator: click at once.
+    const fromTree = STEPS[prev]?.state === 'ed_tree' && STEPS[prev]?.target === 'alloc' && $('cursor').classList.contains('on') && innerWidth > 760;
+    const end = () => { show(step.state); settle(k); $('joinann').classList.remove('on'); nextOn('code'); };
+    if (forward && !reduce) playCode(end, fromTree); else end(); return; }
+  stopLoop();
+  // The clicks that lead here: `from` (one click on the previous state) or `play` ([state, target, next state]).
+  const acts = step.play || (step.from && prev >= 0 ? [[STEPS[prev].state, step.from, step.state]] : []);
+  if (forward && acts.length && !reduce) playClicks(acts, () => { show(step.state); settle(k); });
+  else { show(step.state); settle(k); }
+}
+
+// The cross-asset test: the real run, recorded and sped up.
+function stopCross() { $('crosswin').classList.remove('on'); const v = $('crossvid'); try { v.pause(); } catch (_) {} }
+function startCross() { $('crosswin').classList.add('on'); const v = $('crossvid'); try { v.currentTime = 0; v.play().catch(() => {}); } catch (_) {} }
+
+// The editor: click the allocator in the tree (Pod Lab's box opening, replayed with its own geometry),
+// then the editor joins the terminal, then the field's full-screen button.
+let codeTimer = null;
+function playCode(done, fromTree) {
+  const later = (ms, f) => { codeTimer = setTimeout(f, ms); }, node = targets.ed_tree?.alloc, box = targets.ed_alloc?.box,
+    fs = targets.ed3_box?.cbfs && targets.ed3_box.cbfs.map(v => v * .8);
+  show('ed_tree'); layout(); if (!node || !box) return done();
+  if (!fromTree) moveCursor(node);
+  later(fromTree ? 0 : 950, () => {
+    clickAt(node);
+    later(800, () => flight());   // the press (cursor and ripples, ~0.8 s) ends before the box flies
+  });
+  const flight = () => {
+    const fly = $('fly'), f = fly.firstChild, [x, y, w, hh] = box, [sx, sy, sw, sh] = node;
+    Object.assign(fly.style, {left: `${x}px`, top: `${y}px`, width: `${w}px`, height: `${hh}px`, transition: 'none',
+      transform: `translate(${sx - x}px,${sy - y}px) scale(${sw / w},${sh / hh})`});
+    Object.assign(f.style, {left: `${-x}px`, top: `${-y}px`});
+    fly.classList.add('on'); void fly.offsetWidth;
+    fly.style.transition = 'transform 420ms cubic-bezier(.2,.75,.25,1)'; fly.style.transform = 'none';
+    later(460, () => { show('ed_alloc'); $('cursor').classList.remove('on');
+      setTimeout(() => fly.classList.remove('on'), 420);
+      // Just before the join, say why the two share the screen; it stays until the step's bubble (freeBubble).
+      later(1000, () => { $('joinann').classList.add('on');
+        later(1500, () => { show('ide');
+          later(1100, () => { if (!fs) return done(); layout(fs); moveCursor(fs);
+            later(950, () => { clickAt(fs, 'Plein écran'); later(520, () => { show('ide_max'); later(500, done); }); }); }); }); }); });
+  };
+}
+
+// The Validation step: the sealed period is still locked; the cursor opens it, the results replace the card.
+const VAL_BTN = [34, 208, 178, 35];   // "Ouvrir la période scellée" on the 1600 x 1000 capture
+let valTimers = [];
+function stopVal() { valTimers.forEach(clearTimeout); valTimers = []; const v = $('valwin'); v.classList.remove('on', 'open', 'big');
+  $('vwcur').style.opacity = 0; v.querySelector('.vw-pane').style.transform = ''; $('vwcam').style.transform = ''; }
+// Once opened, the capture is unreadable at its size in the window: it grows to fill the screen.
+function popVal() {
+  const v = $('valwin'), p = v.querySelector('.vw-pane'), r = p.getBoundingClientRect(), st = $('stage').getBoundingClientRect();
+  const top = 64, bottom = 64, side = 24, aw = st.width - 2 * side, ah = st.height - top - bottom;
+  const s = Math.min(aw / r.width, ah / r.height); if (!(s > 1.02)) return;
+  const dx = st.left + side + aw / 2 - (r.left + r.width / 2), dy = st.top + top + ah / 2 - (r.top + r.height / 2);
+  p.style.transform = `translate(${dx}px,${dy}px) scale(${s})`; v.classList.add('big');
+}
+function startVal() {
+  const v = $('valwin'), box = $('vwbox'), cur = $('vwcur'), press = $('vwpress'), later = (ms, f) => valTimers.push(setTimeout(f, ms));
+  v.classList.add('on');
+  if (reduce) { v.classList.add('open'); popVal(); nextOn('val'); return; }
+  const at = () => { const s = box.clientWidth / W, [x, y, w, h] = VAL_BTN.map(n => n * s); return {s, x, y, w, h}; };
+  // Capture coordinates (1600 x 1000): the locked card with its button, then the research / sealed table.
+  const cam = (r) => { const c = $('vwcam'), f = box.clientWidth / W; if (!r) { c.style.transform = ''; return; }
+    const [x, y, w, h] = r, z = Math.min(3, .92 * Math.min(W / w, H / h)); c.style.transform = `translate(${f * (W / 2 - (x + w / 2) * z)}px,${f * (H / 2 - (y + h / 2) * z)}px) scale(${z})`; };
+  later(500, popVal);
+  const T0 = 3800;   // time to read the locked page
+  later(T0 + 300, () => { cur.style.transition = 'none'; cur.style.transform = `translate(${box.clientWidth * .6}px,${box.clientHeight * .7}px)`; cur.style.opacity = 1;
+    void cur.offsetWidth; cur.style.transition = ''; });
+  later(T0 + 700, () => { const r = at(); cur.style.transform = `translate(${r.x + r.w / 2}px,${r.y + r.h / 2}px)`; });
+  later(T0 + 1750, () => { const r = at(); Object.assign(press.style, {left: `${r.x - 3}px`, top: `${r.y - 3}px`, width: `${r.w + 6}px`, height: `${r.h + 6}px`});
+    press.classList.remove('go'); void press.offsetWidth; press.classList.add('go'); });
+  later(T0 + 2300, () => { v.classList.add('open'); cur.style.opacity = 0; });
+  later(T0 + 2900, () => { v.querySelector('.vw-pane').style.transform = ''; v.classList.remove('big'); });   // opened: back to the whole window
+  later(T0 + 4000, () => nextOn('val'));
+}
+// The "continue" prompt of a step with `nx`, at the moment its animation names.
+function nextOn(kind) {
+  if (AUTO || current < 0 || current >= STEPS.length - 1 || STEPS[current].nx !== kind) return;
+  clearTimeout(nextTimer); $('next').classList.add('on');
+}
+
+// Move to each target, click it (cursor press, ripples, the area flashes), then show what the click opens.
+function playClicks(acts, done, i = 0) {
+  if (i >= acts.length) return done();
+  const [state, name, next, said] = acts[i], t = targets[state]?.[name];
+  show(state); layout(t);
+  if (!t) return playClicks(acts, done, i + 1);
+  moveCursor(t);
+  timer = setTimeout(() => {
+    clickAt(t, said);
+    timer = setTimeout(() => { if (next) show(next); timer = setTimeout(() => playClicks(acts, done, i + 1), next ? 350 : 900); }, 520);
+  }, 950);
+}
+function clickAt(t, said) {
+  const c = $('cursor'), p = $('press'), [x, y, w, h] = toScreen(t), d = $('done');
+  if (said) { d.textContent = said; Object.assign(d.style, {left: `${x + w + 10}px`, top: `${y + h / 2 - 13}px`}); d.classList.add('on');
+    setTimeout(() => d.classList.remove('on'), 1500); }
+  c.classList.remove('click'); void c.offsetWidth; c.classList.add('click');
+  Object.assign(p.style, {left: `${x - 3}px`, top: `${y - 3}px`, width: `${w + 6}px`, height: `${h + 6}px`});
+  p.classList.remove('go'); void p.offsetWidth; p.classList.add('go');
+  setTimeout(() => c.classList.remove('click'), 750);
+}
+
+function settle(k) {
+  const step = STEPS[k], t = step.target && targets[step.state]?.[step.target];
+  layout(t);
+  if (!t || !step.cursor) $('cursor').classList.remove('on');
+  if (step.frameScroll && !reduce) {
+    // Glide the page down (the comparison panel pushed the charts lower), then point at the target.
+    const w = frameDoc(step.state), y0 = w ? w.scrollY : 0, t0 = performance.now(), dur = 700;
+    const ease = x => x < .5 ? 2 * x * x : 1 - (-2 * x + 2) ** 2 / 2;
+    const tick = now => { const f = Math.min(1, (now - t0) / dur); if (w) w.scrollTo(0, y0 + (step.frameScroll - y0) * ease(f));
+      if (f < 1) scrollAnim = requestAnimationFrame(tick); else { place(k); if (step.found) timer = setTimeout(() => { $('found').classList.add('on'); $('bubble').classList.remove('on'); }, 1400); } };
+    timer = setTimeout(() => { scrollAnim = requestAnimationFrame(tick); }, 250);
+    return;
+  }
+  if (step.scroll) { timer = setTimeout(() => { freeBubble(step); startScroll(step.state); }, 300); return; }
+  if (step.chat) { timer = setTimeout(() => { freeBubble(step); startChat(step.chat); }, 300); return; }
+  if (step.freeb) { timer = setTimeout(() => freeBubble(step), 300); return; }
+  if (!t) return;
+  // The last action ends on the verdict card alone: no frame, no bubble that would flash before it.
+  if (step.found) { timer = setTimeout(() => $('found').classList.add('on'), 300); return; }
+  timer = setTimeout(() => { place(k); if (step.drag) startDrag(k); else if (step.cursor) moveCursor(t); }, 300);
+}
+
+// Drag a slider across frozen frames (one real run per value), once, and stay on the last one.
+function startDrag(k) {
+  const d = STEPS[k].drag, r = targets[d.frames[0]]?.[d.target], c = $('cursor');
+  if (!r) return;
+  if (reduce) { show(d.frames[d.frames.length - 1]); nextOn('drag'); return; }
+  $('screen').classList.add('instant');   // each position is a new run: the results swap at once, no fade
+  const at = v => { const [x, y, w, h] = toScreen(r), pad = 7 * view.s; return `translate(${x + pad + v * (w - 2 * pad)}px,${y + h / 2}px)`; };
+  const go = i => {
+    c.style.transform = at(d.values[i]);
+    timer = setTimeout(() => { show(d.frames[i]); if (i + 1 < d.frames.length) timer = setTimeout(() => go(i + 1), 900); else nextOn('drag'); }, 450);
+  };
+  c.classList.add('on'); c.style.transform = at(d.values[0]);
+  timer = setTimeout(() => { c.classList.add('click'); setTimeout(() => c.classList.remove('click'), 450); go(1); }, 1000);
+}
+
+// A step with no target: the bubble sits in the bottom-left corner.
+function freeBubble(step) {
+  const b = $('bubble'); b.classList.remove('below', 'side'); b.classList.add('free');
+  $('b-n').textContent = step.n; $('b-h').textContent = step.h; $('b-p').textContent = step.p; b.classList.add('on');
+  $('joinann').classList.remove('on'); nextOn('bubble');
+}
+
+// Scroll the frozen report down through every view, then back to the top (the report is the page itself).
+let scrollAnim = null;
+function frameDoc(state) { try { return frames[state].contentWindow; } catch (_) { return null; } }
+function stopScroll() {
+  cancelAnimationFrame(scrollAnim); scrollAnim = null;
+  for (const name of Object.keys(frames)) { const w = frameDoc(name); if (w && w.scrollY) w.scrollTo(0, 0); }
+}
+function startScroll(state) {
+  const w = frameDoc(state); if (!w) return;
+  // Down to the trades journal (the last view), then straight back up: quick, the visitor only gets the idea.
+  const doc = w.document, max = doc.documentElement.scrollHeight - H;
+  const journal = [...doc.querySelectorAll('body *')].find(e => e.children.length === 0 && /^journal des décisions$/i.test(e.textContent.trim()));
+  const end = Math.max(0, Math.min(max, journal ? journal.getBoundingClientRect().top + w.scrollY - 260 : max));
+  if (reduce || !end) return;
+  const down = Math.min(3200, 900 + end * 0.4), up = 650, hold = 500, t0 = performance.now();
+  const ease = x => x < .5 ? 2 * x * x : 1 - (-2 * x + 2) ** 2 / 2;
+  const tick = now => {
+    const t = now - t0;
+    let y = t < down ? end * ease(t / down) : t < down + hold ? end : t < down + hold + up ? end * (1 - ease((t - down - hold) / up)) : 0;
+    w.scrollTo(0, y);
+    if (t < down + hold + up) scrollAnim = requestAnimationFrame(tick);
+  };
+  scrollAnim = requestAnimationFrame(tick);
+}
+
+// The visitor's AI: thinking, a short reply, then the code it hands back, typed out.
+const CHATS = {
+  one: {file: '&gt;_ strategy.py · features + allocator',
+    msg: 'Je remplace les poids fixes par une optimisation max Sharpe, plafonnée à 35 % par actif et rebalancée chaque mois. J’ajoute à vos bougies les moyennes 50 et 200 jours et des bandes de volatilité.',
+    code: [['k', '# bt:features · indicateurs sur l’OHLCV'],
+           ['', "sma_fast = close.rolling(50).mean()"],
+           ['', "sma_slow = close.rolling(200).mean()"],
+           ['', "band_up = mid + 2 * close.rolling(20).std()"],
+           ['k', '# réglages'],
+           ['', 'model = "max_sharpe"   max_weight = 0.35']]},
+  tour: {file: '&gt;_ strategy.py · allocator',
+    msg: 'Volatilité 19,9 %, drawdown max −36,6 % : les plus fortes pertes viennent d’actifs en tendance baissière. Je plafonne chaque actif à 20 % et j’ajoute un filtre de tendance : un actif n’entre dans l’optimisation que si son prix est au-dessus de sa moyenne 200 jours. Je trace cette moyenne sur vos bougies et le Sharpe glissant de chaque actif dans un volet.',
+    code: [['k', '# bt:allocator · avant l’optimisation'],
+           ['', 'if ctx.f.trend_filter > 0.0 and not _above_average(full, j, int(ctx.f.sma_slow)):'],
+           ['', '    out.meta_per_asset[M.excluded, j] = 1.0'],
+           ['k', '# bt:view · sur l’OHLCV'],
+           ['', "plot.price().line(c.sma_slow)"],
+           ['', "plot.panel('individual_sharpe').line(c.individual_sharpe)"],
+           ['k', '# réglages'],
+           ['', 'trend_filter = 1.0   max_weight = 0.20']]},
+  two: {file: '&gt;_ strategy.py · allocator',
+    msg: 'Avec un plafond de 20 % : volatilité 18,2 %, drawdown max −27,8 %. Les plus fortes pertes viennent d’actifs en tendance baissière. Je propose un filtre de tendance : un actif n’entre dans l’optimisation que si son prix est au-dessus de sa moyenne 200 jours.',
+    code: [['k', '# bt:allocator · avant l’optimisation'],
+           ['', 'if ctx.f.trend_filter > 0.0 and not _above_average(full, j, int(ctx.f.sma_slow)):'],
+           ['', '    out.meta_per_asset[M.excluded, j] = 1.0'],
+           ['', '    continue'],
+           ['k', '# réglages'],
+           ['', 'trend_filter = 1.0']]},
+};
+let chatTimers = [];
+function stopChat() { chatTimers.forEach(clearTimeout); chatTimers = []; $('chat').classList.remove('on'); }
+function startChat(key) {
+  const CHAT = CHATS[key] || CHATS.one; $('code-file').innerHTML = CHAT.file;
+  const later = (ms, f) => chatTimers.push(setTimeout(f, ms));
+  $('think').innerHTML = 'Réflexion<i>...</i>'; $('spark').classList.remove('still');
+  $('chat-msg').textContent = CHAT.msg; $('chat-msg').classList.remove('on'); $('code').classList.remove('on'); $('code-pre').textContent = '';
+  $('chat').classList.add('on');
+  const lines = CHAT.code.map(([cls, text]) => ({cls, text}));
+  const done = () => { $('spark').classList.add('still'); $('think').textContent = 'Réponse prête : à coller dans FORGE.'; nextOn('chat'); };
+  if (reduce) { $('chat-msg').classList.add('on'); $('code').classList.add('on'); $('code-pre').innerHTML = lines.map(l => l.cls ? `<span class="${l.cls}">${l.text}</span>` : l.text).join('\n'); done(); return; }
+  later(600, () => $('chat-msg').classList.add('on'));
+  later(1100, () => {
+    $('code').classList.add('on'); const pre = $('code-pre'); let li = 0, ci = 0;
+    const type = () => {
+      if (li >= lines.length) { pre.querySelector('.caret')?.remove(); done(); return; }
+      const l = lines[li]; ci = Math.min(l.text.length, ci + 9);
+      const shown = lines.slice(0, li).map(x => x.cls ? `<span class="${x.cls}">${x.text}</span>` : x.text);
+      const part = l.text.slice(0, ci); shown.push((l.cls ? `<span class="${l.cls}">${part}</span>` : part) + '<span class="caret"></span>');
+      pre.innerHTML = shown.join('\n');
+      if (ci >= l.text.length) { li++; ci = 0; later(45, type); } else later(22, type);
+    };
+    type();
+  });
+}
+
+function moveCursor(t) {
+  const [x, y, w, h] = toScreen(t);
+  $('cursor').classList.add('on');
+  $('cursor').style.transform = `translate(${x + Math.min(w * 0.5, 60) - 3}px,${y + h * 0.5 - 2}px)`;
+}
+
+function place(k) {
+  const step = STEPS[k], t = step?.target && targets[step.state]?.[step.target];
+  if (!t || step.hero) return;
+  const [x, y, w, h] = toScreen(t), vw = innerWidth, vh = $('stage').clientHeight, b = $('bubble'); b.classList.remove('free');
+  Object.assign($('ring').style, {left: `${x - 6}px`, top: `${y - 6}px`, width: `${w + 12}px`, height: `${h + 12}px`});
+  $('ring').classList.add('on');
+  $('b-n').textContent = step.n; $('b-h').textContent = step.h; $('b-p').textContent = step.p;
+  // Prefer the right of the target, then below, then above; keep inside the screen.
+  const bw = 340, bh = b.offsetHeight || 150; b.classList.remove('below', 'side');
+  let left, top;
+  if (!step.below && x + w + 24 + bw < vw - 60) { left = x + w + 24; top = Math.max(70, Math.min(vh - bh - 20, y + h / 2 - 30)); b.classList.add('side'); b.style.setProperty('--py', `${Math.max(14, y + h / 2 - top - 6)}px`); }
+  else if (y + h + 20 + bh < vh) { left = Math.max(16, Math.min(vw - bw - 16, x)); top = y + h + 20; b.style.setProperty('--px', `${Math.max(14, Math.min(bw - 26, x + w / 2 - left))}px`); }
+  else { left = Math.max(16, Math.min(vw - bw - 16, x)); top = y - bh - 20; b.classList.add('below'); }
+  b.style.left = `${left}px`; b.style.top = `${top}px`; b.classList.add('on');
+  if (step === STEPS[current]) nextOn('bubble');
+}
+
+// ---------- how it works: the demo's trials on a risk / return plane ----------
+// The real numbers of the demo (study period 2017 → Aug 2023): the 1/N reference, then three trials. The target
+// zone is "better than 1/N on both axes": less volatility, more return. The third trial lands in it.
+const RR = {
+  ref: {v: 19.6, r: 17.2, what: '1/N rebalancé'},
+  trials: [
+    {v: 19.9, r: 14.5, what: 'max Sharpe, plafond 35 %'},
+    {v: 18.2, r: 16.9, what: 'plafond 20 %'},
+    {v: 16.1, r: 17.6, what: '+ filtre de tendance'},
+  ],
+};
+// Plot area: x 80-580 (volatility 14-22 %), y 70-370 (annual return 12-20 %).
+const X0 = 80, X1 = 580, Y0 = 70, Y1 = 370;
+const PX = v => X0 + (v - 14) / 8 * (X1 - X0), PY = r => Y1 - (r - 12) / 8 * (Y1 - Y0);
+const pct = x => `${x.toFixed(1).replace('.', ',')} %`;
+const inZone = p => p.v < RR.ref.v && p.r > RR.ref.r;
+function buildPlane() {
+  const ns = 'http://www.w3.org/2000/svg', svg = $('plane');
+  const el = (tag, attrs, text, parent = svg) => { const e = document.createElementNS(ns, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (text) e.textContent = text; parent.append(e); return e; };
+  for (const v of [14, 16, 18, 20, 22]) { el('line', {class: 'gr', x1: PX(v), x2: PX(v), y1: Y0, y2: Y1}); el('text', {class: 'tk', x: PX(v), y: Y1 + 22, 'text-anchor': 'middle'}, `${v} %`); }
+  for (const r of [12, 14, 16, 18, 20]) { el('line', {class: 'gr', x1: X0, x2: X1, y1: PY(r), y2: PY(r)}); el('text', {class: 'tk', x: X0 - 10, y: PY(r) + 5, 'text-anchor': 'end'}, `${r} %`); }
+  // Axis titles written flat, with what "better" means on each.
+  el('text', {class: 'at', x: X0 - 10, y: 30}, '↑ RENDEMENT ANNUEL');
+  el('text', {class: 'ah', x: X0 - 10, y: 50}, 'plus haut : plus de gains');
+  el('text', {class: 'at', x: X1, y: Y1 + 52, 'text-anchor': 'end'}, 'VOLATILITÉ (RISQUE) →');
+  el('text', {class: 'ah', x: X1, y: Y1 + 71, 'text-anchor': 'end'}, 'plus à droite : plus de risque');
+  const rx = PX(RR.ref.v), ry = PY(RR.ref.r);
+  el('rect', {class: 'zone', id: 'zone', x: X0 + 1, y: Y0, width: rx - X0 - 1, height: ry - Y0});
+  el('text', {class: 'zt', x: X0 + 12, y: Y0 + 20}, 'ZONE CIBLE');
+  el('text', {class: 'zl', x: X0 + 12, y: Y0 + 38}, 'mieux que le 1/N :');
+  el('text', {class: 'zl', x: X0 + 12, y: Y0 + 54}, 'moins de risque, plus de rendement');
+  el('line', {class: 'ax', x1: X0, x2: X1, y1: Y1, y2: Y1}); el('line', {class: 'ax', x1: X0, x2: X0, y1: Y0 - 6, y2: Y1});
+  // Crosshair: the active point projected on both axes, its values in chips on the axes.
+  el('line', {class: 'cross', id: 'cr-v'}); el('line', {class: 'cross', id: 'cr-h'});
+  const chip = (id, w) => { const g = el('g', {class: 'chip', id}); el('rect', {x: -w / 2, y: -11, width: w, height: 22, rx: 2}, '', g); el('text', {y: 5, 'text-anchor': 'middle'}, '', g); return g; };
+  chip('ch-v', 66); chip('ch-r', 66);
+  el('path', {class: 'path', id: 'trail', d: `M${rx} ${ry}`});
+  el('rect', {class: 'ref', x: rx - 7, y: ry - 7, width: 14, height: 14});
+  el('text', {class: 'pl on', x: rx + 13, y: ry + 5}, '1/N');
+  RR.trials.forEach((p, i) => {
+    el('circle', {class: 'pt', id: `pt${i}`, cx: PX(p.v), cy: PY(p.r), r: 8});
+    el('text', {class: 'pl', id: `pl${i}`, x: PX(p.v) + 13, y: PY(p.r) + (i === 1 ? 20 : 5)}, `essai ${i + 1}`);
+  });
+  el('circle', {class: 'head', id: 'head', r: 5, cx: rx, cy: ry});
+  // The log: one line per trial, then the validation (12 squares) and the deployment.
+  const row = (cls, cells) => { const li = document.createElement('li'); li.className = cls; li.innerHTML = cells; $('log').append(li); return li; };
+  row('hd', '<span></span><span>stratégie</span><span class="n"><span class="lg">volatilité</span><span class="sh">vol.</span></span><span class="n"><span class="lg">rendement</span><span class="sh">rend.</span></span><span></span>');
+  row('', `<span class="k">référence</span><span>${RR.ref.what}</span><span class="n">${pct(RR.ref.v)}</span><span class="n">${pct(RR.ref.r)}</span><span></span>`);
+  RR.trials.forEach((p, i) => row('', `<span class="k">essai ${i + 1}</span><span>${p.what}</span><span class="n">${pct(p.v)}</span><span class="n">${pct(p.r)}</span>`
+    + (inZone(p) ? '<span class="v">✓</span><span class="met">objectif atteint</span>' : '<span class="x">✗</span>')));
+  row('wide', `<span class="k">validation</span><span><span class="sq" id="sq">${'<i></i>'.repeat(12)}</span>12 tests de robustesse</span>`);
+  row('wide', '<span class="k">déploiement</span><span>ordres de rebalancement →</span>');
+}
+// Move the crosshair to a point (in data units); null hides it.
+function cross(p) {
+  const on = !!p; ['cr-v', 'cr-h', 'ch-v', 'ch-r'].forEach(id => $(id).classList.toggle('on', on)); if (!p) return;
+  const x = PX(p.v), y = PY(p.r), set = (id, a) => { for (const k in a) $(id).setAttribute(k, a[k]); };
+  set('cr-v', {x1: x, x2: x, y1: y, y2: Y1}); set('cr-h', {x1: X0, x2: x, y1: y, y2: y});
+  set('ch-v', {transform: `translate(${x} ${Y1 + 17})`}); $('ch-v').querySelector('text').textContent = pct(p.v);
+  set('ch-r', {transform: `translate(${X0 - 36} ${y})`}); $('ch-r').querySelector('text').textContent = pct(p.r);
+}
+// The mini logo: the ball drops into the receptacle, which lights up.
+function drop() {
+  const m = $('mini'); m.classList.remove('drop', 'rest', 'hit'); void m.getBoundingClientRect(); m.classList.add('drop');
+  loopTimers.push(setTimeout(() => m.classList.add('hit'), 560));
+}
+let loopTimers = [], loopRaf = null;
+function stopLoop() { loopTimers.forEach(clearTimeout); loopTimers = []; cancelAnimationFrame(loopRaf); loopRaf = null; }
+function planeReset() {
+  [...$('log').children].forEach(li => li.classList.remove('on', 'win'));
+  RR.trials.forEach((_, i) => { $(`pt${i}`).classList.remove('on', 'win'); $(`pl${i}`).classList.remove('on'); });
+  $('zone').classList.remove('hit'); [...$('sq').children].forEach(q => q.classList.remove('on'));
+  $('trail').setAttribute('d', `M${PX(RR.ref.v)} ${PY(RR.ref.r)}`); $('head').style.opacity = 0; cross(null);
+  $('mini').classList.remove('drop', 'rest', 'hit');
+}
+function trialOn(i) {
+  const p = RR.trials[i]; $(`pt${i}`).classList.add('on'); $(`pl${i}`).classList.add('on'); $('log').children[i + 2].classList.add('on');
+  cross(p);
+  if (inZone(p)) { $(`pt${i}`).classList.add('win'); $('zone').classList.add('hit'); $('log').children[i + 2].classList.add('win'); }
+}
+function schemaPhase() {
+  stopLoop(); planeReset();
+  const log = $('log').children, later = (ms, f) => loopTimers.push(setTimeout(f, ms));
+  const pts = [RR.ref, ...RR.trials].map(p => [PX(p.v), PY(p.r)]);
+  if (reduce) { [...log].forEach(li => li.classList.add('on')); RR.trials.forEach((_, i) => trialOn(i)); cross(RR.trials[RR.trials.length - 1]);
+    [...$('sq').children].forEach(q => q.classList.add('on')); $('mini').classList.add('rest', 'hit');
+    $('trail').setAttribute('d', 'M' + pts.map(p => p.join(' ')).join(' L')); return; }
+  later(2000, () => { log[0].classList.add('on'); log[1].classList.add('on'); cross(RR.ref); });
+  // Each trial: the ball drops into FORGE, then the point travels from the last one, drawing the trail.
+  later(1500, drop);
+  RR.trials.forEach((_, i) => later(2400 + i * 1100, () => {
+    later(0, () => {
+      const [x0, y0] = pts[i], [x1, y1] = pts[i + 1], t0 = performance.now(), ms = 550, head = $('head'), trail = $('trail'), d0 = trail.getAttribute('d');
+      head.style.opacity = 1;
+      const tick = now => { const f = Math.min(1, (now - t0) / ms), e = f < .5 ? 2 * f * f : 1 - (-2 * f + 2) ** 2 / 2, x = x0 + (x1 - x0) * e, y = y0 + (y1 - y0) * e;
+        head.setAttribute('cx', x); head.setAttribute('cy', y); trail.setAttribute('d', `${d0} L${x} ${y}`);
+        const a = [RR.ref, ...RR.trials][i], b = RR.trials[i]; cross({v: a.v + (b.v - a.v) * e, r: a.r + (b.r - a.r) * e});
+        if (f < 1) loopRaf = requestAnimationFrame(tick); else { head.style.opacity = 0; trialOn(i); } };
+      loopRaf = requestAnimationFrame(tick);
+    });
+  }));
+  const tVal = 2400 + RR.trials.length * 1100 + 300;
+  later(tVal, () => log[log.length - 2].classList.add('on'));
+  [...$('sq').children].forEach((q, j) => later(tVal + 250 + j * 60, () => q.classList.add('on')));
+  later(tVal + 250 + 12 * 60 + 300, () => log[log.length - 1].classList.add('on'));
+}
+
+// ---------- automatic mode (?auto): plays the terminal steps on their own, for the recorded video ----------
+const FIRST_TERMINAL_STEP = STEPS.findIndex(s => !s.hero && !s.schema);
+// Time on screen: the animation that leads in or plays, then reading time for the bubble.
+function stepTime(s) {
+  if (s.val) return 11000;
+  if (s.depart) return 6000;
+  if (s.cross) return 19000;
+  if (s.tests) return 9000;
+  if (s.edintro) return 5000;
+  if (s.code) return 12000;
+  let t = 1800 + 33 * (s.h || '').length + 33 * (s.p || '').length;
+  if (s.from) t += 1400;
+  if (s.cursor) t += 900;
+  if (s.drag) t += 1300 + 1350 * (s.drag.frames.length - 1);
+  if (s.chat) { const c = CHATS[s.chat]; t = 1100 + 33 * c.msg.length + c.code.reduce((n, [, x]) => n + 2.5 * x.length + 45, 0) + 2500; }
+  if (s.scroll) t += 3600;
+  return t;
+}
+async function autoplay() {
+  document.body.classList.add('auto');
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+  layout(); current = FIRST_TERMINAL_STEP - 1;
+  $('veil').style.opacity = 0; $('hero').style.opacity = 0;
+  await new Promise(r => { if (document.readyState === 'complete') r(); else addEventListener('load', r); });
+  await sleep(1500);                                 // every frozen state loaded and painted
+  window.__autoStart = performance.now();
+  for (let k = FIRST_TERMINAL_STEP; k < STEPS.length; k++) { enter(k, true); await sleep(stepTime(STEPS[k])); }
+  window.__autoDone = true;
+}
+
+// Validation block: the funnel narrows and the tests tick once, when it comes into view.
+(() => {
+  const el = $('val'); if (!el) return;
+  const items = [...document.querySelectorAll('#tests li:not(.dep)')], fu = ['fu0', 'fu1', 'fu2'].map($);
+  const mark = li => li.classList.add(li.dataset.v || 'ok');
+  const play = () => {
+    if (reduce) { fu.forEach(f => f.classList.add('on')); items.forEach(mark); fu[2].classList.add('ko'); return; }
+    fu.slice(0, 2).forEach((f, i) => setTimeout(() => f.classList.add('on'), 200 + i * 450));
+    items.forEach((li, i) => setTimeout(() => mark(li), 900 + i * 380));
+    setTimeout(() => fu[2].classList.add('ko'), 900 + items.length * 380);
+  };
+  new IntersectionObserver((es, ob) => { if (es.some(e => e.isIntersecting)) { play(); ob.disconnect(); } }, {threshold: .45}).observe(el);
+})();
+// ---------- under the hood 1: terminal panels, shared call routes and a daily time axis ----------
+(() => {
+  const svg = $('eng'); if (!svg) return;
+  const ns = 'http://www.w3.org/2000/svg', compact = matchMedia('(max-width:760px)');
+  const motion = matchMedia('(prefers-reduced-motion: reduce)');
+  const accent = 'var(--accent)', yellow = '#d9bf5a', firstBar = 1586;
+  const origin = Date.UTC(2023, 2, 1), day = 86400000;
+  const months = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+  const dateAt = bar => new Date(origin + (bar-firstBar)*day);
+  const dateLabel = bar => {
+    const date = dateAt(bar);
+    return `${String(date.getUTCDate()).padStart(2,'0')}/${String(date.getUTCMonth()+1).padStart(2,'0')}/${date.getUTCFullYear()}`;
+  };
+  const scheduled = bar => (bar-firstBar)%10===0;
+  const el = (tag, attrs, text, parent = svg) => {
+    const node = document.createElementNS(ns, tag);
+    Object.entries(attrs).forEach(([key, value]) => node.setAttribute(key, value));
+    if (text) node.textContent = text; parent.append(node); return node;
+  };
+  let visible = false, scene;
+  const draw = () => {
+    scene?.stop(); svg.replaceChildren();
+    const mobile = compact.matches, reduced = motion.matches;
+    svg.setAttribute('viewBox', mobile ? '0 0 340 932' : '0 0 800 600');
+    el('title', {}, 'FORGE · appels du moteur compilé');
+    el('desc', {}, 'Une graduation par barre et par jour. Un rebalancement prévu toutes les dix barres ; environ une réaction de watcher toutes les cinq barres. Les appels et leurs réponses partagent le même trajet.');
+    const layout = mobile ? {
+      al:[42,20,266,92], w1:[42,184,266,92], w2:[42,348,266,92], en:[42,512,266,92],
+      axis:96, now:740, top:664, bottom:900, end:316,
+      paths:{ea:[[42,558],[14,558],[14,66],[42,66]],
+        fork:[[308,580],[326,580],[326,394]], e1:[[326,394],[326,230],[308,230]], e2:[[326,394],[308,394]],
+        w1:[[175,184],[175,112]], ta:[[96,740],[28,740],[28,628],[175,628],[175,604]]},
+      tags:{weights:[42,488], request:[188,152], order:[188,468]}
+    } : {
+      al:[24,44,266,92], w1:[24,254,266,92], w2:[24,464,266,92], en:[378,254,266,92],
+      axis:682, now:300, top:40, bottom:556, end:790,
+      paths:{ea:[[378,278],[348,278],[348,90],[290,90]],
+        fork:[[378,322],[324,322]], e1:[[324,322],[290,322]], e2:[[324,322],[324,510],[290,510]],
+        w1:[[157,254],[157,136]], ta:[[682,300],[644,300]]},
+      tags:{weights:[378,236], request:[169,198], order:[344,428]}
+    };
+    const paths = {};
+    Object.entries(layout.paths).forEach(([key, points]) => {
+      const segments = points.slice(1).map((point,i) => ({from:points[i],to:point,length:Math.hypot(point[0]-points[i][0],point[1]-points[i][1])}));
+      paths[key] = {points,segments,length:segments.reduce((sum,segment)=>sum+segment.length,0)};
+      el('path', {class:'lk',d:points.map(([x,y],i)=>`${i ? 'L' : 'M'}${x} ${y}`).join(' ')});
+    });
+    const panel = (rect, heading, code, note, colour) => {
+      const [x,y,width,height] = rect, group = el('g', {class:'node'});
+      el('rect', {class:'bx',x,y,width,height}, '', group);
+      el('rect', {class:'band',x,y,width,height:29}, '', group);
+      el('line', {class:'divider',x1:x,x2:x+width,y1:y+29,y2:y+29}, '', group);
+      el('rect', {x:x+12,y:y+12,width:6,height:6,fill:colour}, '', group);
+      el('text', {class:'t1',x:x+26,y:y+19}, heading, group);
+      const counter = el('text', {class:code.startsWith('barre') ? 'counter' : 'code',x:x+12,y:y+53}, code, group);
+      const date = code.startsWith('barre') ? el('text', {class:'date',x:x+width-12,y:y+53,'text-anchor':'end'}, dateLabel(firstBar), group) : null;
+      el('text', {class:'t2',x:x+12,y:y+76}, note, group);
+      // Draw the complete outline last so the header band can never cover its active border.
+      el('rect', {class:'outline',x,y,width,height}, '', group);
+      return {group,counter,date};
+    };
+    const boxes = {
+      al:panel(layout.al,'ALLOCATEUR','max_sharpe(ctx, mem, out)','appelé aux dates prévues',accent),
+      w1:panel(layout.w1,'WATCHER · PORTEFEUILLE','watch_portfolio(ctx, book)','peut demander un rebalancement',yellow),
+      w2:panel(layout.w2,'WATCHER · OPÉRATIONS','watch_orders(ctx, book)','ajuste les ordres en cours',yellow),
+      en:panel(layout.en,'MOTEUR COMPILÉ','barre 1 586','avance barre par barre','var(--text)')
+    };
+    const tags = {};
+    Object.entries(layout.tags).forEach(([key,[x,y]]) => {
+      tags[key] = el('text', {class:'tag',x,y,fill:key==='weights' ? accent : yellow},
+        {weights:'nouvelles pondérations',request:'rebalancement demandé',order:'ordre ajusté'}[key]);
+    });
+    const defs = el('defs', {}), clip = el('clipPath', {id:'eng-time-clip'}, '', defs);
+    el('rect', {x:layout.axis-28,y:layout.top,width:layout.end-layout.axis+28,height:layout.bottom-layout.top}, '', clip);
+    const strip = el('g', {'clip-path':'url(#eng-time-clip)'}), ticks = el('g', {}, '', strip);
+    el('line', {class:'tick',x1:layout.axis,x2:layout.axis,y1:layout.top,y2:layout.bottom}, '', strip);
+    el('line', {class:'now',x1:layout.axis,x2:layout.end,y1:layout.now,y2:layout.now});
+    el('text', {class:'ml',x:layout.axis-8,y:layout.bottom+24}, 'le temps ↓');
+    const step = 13, watcherEvents = new Map();
+    const position = b => {
+      const date = dateAt(b), month = (date.getUTCFullYear()-2023)*12+date.getUTCMonth()-2;
+      return (b-firstBar)*step+month*28;
+    };
+    const monthText = date => `${months[date.getUTCMonth()]}${date.getUTCMonth()===0 || (date.getUTCFullYear()===2023 && date.getUTCMonth()===2) ? ' '+date.getUTCFullYear() : ''}`;
+    const heading = el('g', {}, '', strip);
+    el('rect', {x:layout.axis-28,y:layout.top,width:layout.end-layout.axis+28,height:28,fill:'var(--bg)'}, '', heading);
+    el('line', {class:'month-rule',x1:layout.axis+9,x2:layout.end,y1:layout.top+27,y2:layout.top+27}, '', heading);
+    const monthHeading = el('text', {class:'month',x:layout.axis+12,y:layout.top+17}, '', heading);
+    let bar = reduced ? firstBar+48 : firstBar, time = 0, barStart = 0, duration = 700;
+    let nextBar = 700, nextWatcher = firstBar+2, previous = null, raf = null, drawnBar = null;
+    let pulses = [], trails = [], flashes = new Map(), started = false;
+    if (reduced) for (let b=firstBar+2;b<=bar;b+=5) watcherEvents.set(b,b%2 ? 'w1' : 'w2');
+    const updateCounter = () => {
+      boxes.en.counter.textContent = `barre ${bar.toLocaleString('fr-FR')}`;
+      boxes.en.date.textContent = dateLabel(bar);
+    };
+    const timeline = fraction => {
+      const shift = fraction*(position(bar+1)-position(bar));
+      ticks.setAttribute('transform', `translate(0 ${shift})`);
+      if (drawnBar===bar) return;
+      drawnBar=bar; ticks.replaceChildren();
+      const past = Math.ceil((layout.bottom-layout.now)/step)+1, future = Math.ceil((layout.now-layout.top)/step)+1;
+      let topBar = bar+future;
+      while (layout.now+position(bar)-position(topBar)<layout.top+28) topBar--;
+      monthHeading.textContent=monthText(dateAt(topBar));
+      for (let b=bar-past;b<=bar+future;b++) {
+        const y = layout.now+position(bar)-position(b), date = dateAt(b), fifth = (b-firstBar)%5===0;
+        el('line', {class:'tick',x1:layout.axis-(fifth ? 9 : 4),x2:layout.axis+4,y1:y,y2:y}, '', ticks);
+        if (fifth) el('text', {class:'ml',x:layout.axis-13,y:y+4,'text-anchor':'end'}, String(date.getUTCDate()).padStart(2,'0'), ticks);
+        // Month headings occupy a reserved gap, away from day and event labels.
+        if (date.getUTCDate()===1) {
+          el('line', {class:'month-rule',x1:layout.axis+9,x2:layout.end,y1:y+10,y2:y+10}, '', ticks);
+          el('text', {class:'month',x:layout.axis+12,y:y+24}, monthText(date), ticks);
+        }
+        if (scheduled(b)) {
+          el('rect', {class:'rb',x:layout.axis-3,y:y-3,width:6,height:6}, '', ticks);
+          el('text', {class:'ml',x:layout.axis+12,y:y+4}, dateLabel(b), ticks);
+        }
+        if (watcherEvents.has(b)) {
+          el('rect', {class:'rbw',x:layout.axis-3,y:y-3,width:6,height:6}, '', ticks);
+          el('text', {class:'ml',x:layout.axis+12,y:y+4}, 'watcher', ticks);
+        }
+      }
+    };
+    const flash = (key,colour,at,d) => {
+      const node = boxes[key].group;
+      node.style.setProperty('--flow',colour); node.classList.add('hot');
+      flashes.set(node,{until:at+Math.max(50,d*.32),cls:'hot'});
+    };
+    const say = (key,colour,at,d) => {
+      const node = tags[key]; node.setAttribute('fill',colour); node.classList.add('on');
+      flashes.set(node,{until:at+Math.max(70,d*.7),cls:'on'});
+    };
+    const pulse = (key,colour,d,ratio,at,done,reverse=false) => {
+      const route = paths[key], segments = reverse ? [...route.segments].reverse().map(s=>({from:s.to,to:s.from,length:s.length})) : route.segments;
+      const dot = el('rect', {x:segments[0].from[0]-4,y:segments[0].from[1]-4,width:8,height:8,fill:colour,'aria-hidden':'true'});
+      pulses.push({segments,length:route.length,colour,dot,start:at,duration:Math.max(18,d*ratio),fade:Math.max(18,d*.16),done,segment:-1,line:null});
+    };
+    const answer = (colour,at,d) => {
+      flash('al',colour,at,d); say('weights',colour,at,d);
+      pulse('ea',colour,d,.28,at,end=>flash('en',colour,end,d),true);
+    };
+    const runBar = () => {
+      const at = barStart, d = duration, event = bar===nextWatcher ? (Math.random()<.5 ? 'w1' : 'w2') : null;
+      if (event) {
+        watcherEvents.set(bar,event); nextWatcher=bar+4+Math.floor(Math.random()*3);
+        // Separate event labels from scheduled dates while keeping roughly one reaction in five bars.
+        if (scheduled(nextWatcher)) nextWatcher++;
+        drawnBar=null;
+      }
+      pulse('fork',yellow,d,.18,at,forkAt=>{
+        ['e1','e2'].forEach((key,i)=>pulse(key,yellow,d,.2,forkAt,arrived=>{
+          const watcher = i===0 ? 'w1' : 'w2'; flash(watcher,yellow,arrived,d);
+          if (event!==watcher) return;
+          if (watcher==='w1') {
+            say('request',yellow,arrived,d);
+            pulse('w1',yellow,d,.25,arrived,end=>answer(yellow,end,d));
+          } else {
+            say('order',yellow,arrived,d);
+            pulse('e2',yellow,d,.2,arrived,end=>pulse('fork',yellow,d,.18,end,done=>flash('en',yellow,done,d),true),true);
+          }
+        }));
+      });
+      if (scheduled(bar)) pulse('ta',accent,d,.12,at,arrived=>{
+        flash('en',accent,arrived,d);
+        pulse('ea',accent,d,.28,arrived,end=>answer(accent,end,d));
+      });
+      for (const b of watcherEvents.keys()) if (b<bar-80) watcherEvents.delete(b);
+    };
+    const barDuration = at => {
+      const progress = Math.max(0,Math.min(1,(at-8*700)/4000));
+      return 700+(40-700)*progress*progress*(3-2*progress);
+    };
+    const frame = now => {
+      if (previous!==null) time += Math.min(now-previous,80); previous=now;
+      while (time>=nextBar) {
+        bar++; barStart=nextBar; duration=barDuration(barStart); nextBar=barStart+duration;
+        updateCounter(); runBar();
+      }
+      // Newly enqueued reply legs use their actual arrival time, even at 40 ms per bar.
+      const active = pulses; pulses=[];
+      for (let index=0;index<active.length;index++) {
+        const p = active[index], fraction = Math.min(1,(time-p.start)/p.duration);
+        let distance = fraction*p.length, segmentIndex=0;
+        while (segmentIndex<p.segments.length-1 && distance>p.segments[segmentIndex].length) distance-=p.segments[segmentIndex++].length;
+        const segment = p.segments[segmentIndex], part = distance/segment.length;
+        if (fraction<1) {
+          if (p.segment!==segmentIndex) {
+            if (p.line) trails.push({node:p.line,start:time,duration:p.fade});
+            p.line=el('line', {class:'pulse-line',stroke:p.colour,x1:segment.from[0],y1:segment.from[1],x2:segment.to[0],y2:segment.to[1]});
+            p.segment=segmentIndex;
+          }
+          p.dot.setAttribute('x',segment.from[0]+(segment.to[0]-segment.from[0])*part-4);
+          p.dot.setAttribute('y',segment.from[1]+(segment.to[1]-segment.from[1])*part-4);
+          svg.append(p.dot); pulses.push(p);
+        } else {
+          if (p.line) trails.push({node:p.line,start:time,duration:p.fade});
+          p.dot.remove();
+          // Keep existing active pulses; only the callback's new legs join this frame's queue.
+          const pending = pulses.length; p.done?.(p.start+p.duration);
+          active.push(...pulses.splice(pending));
+        }
+      }
+      trails=trails.filter(trail=>{
+        const opacity = 1-(time-trail.start)/trail.duration;
+        if (opacity<=0) { trail.node.remove(); return false; }
+        trail.node.setAttribute('opacity',opacity); return true;
+      });
+      for (const [node,flash] of flashes) if (time>=flash.until) { node.classList.remove(flash.cls); flashes.delete(node); }
+      timeline(Math.min(1,(time-barStart)/duration)); raf=requestAnimationFrame(frame);
+    };
+    updateCounter(); timeline(0);
+    scene = {
+      start:()=>{ if (raf===null && !reduced) { if (!started) { runBar(); started=true; } previous=null; raf=requestAnimationFrame(frame); } },
+      stop:()=>{ if (raf!==null) cancelAnimationFrame(raf); raf=null; previous=null; }
+    };
+    if (reduced) { tags.weights.classList.add('on'); }
+    else if (visible && !document.hidden) scene.start();
+  };
+  draw(); compact.addEventListener('change',draw); motion.addEventListener('change',draw);
+  new IntersectionObserver(entries => {
+    const entered = entries.some(entry=>entry.isIntersecting), wasVisible = visible;
+    visible=entered;
+    if (visible && !document.hidden) { if (!wasVisible) draw(); else scene.start(); } else scene.stop();
+  }, {threshold:0}).observe(svg);
+  document.addEventListener('visibilitychange',()=>{ if (visible && !document.hidden) draw(); else scene.stop(); });
+})();
+
+boot();
+</script>
+</body>
+</html>
