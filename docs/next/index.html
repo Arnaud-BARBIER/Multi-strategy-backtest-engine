@@ -368,13 +368,33 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
 .bench-next{margin-top:22px!important}
 @media (max-width:760px){.bench{min-width:0;font-size:13px}.bench th,.bench td{padding:9px 7px}.bench th{font-size:9.5px;letter-spacing:.03em;white-space:normal;vertical-align:bottom}
   .bench td:first-child small{display:none}.bench small{font-size:11px}}
-.end{text-align:center;padding-bottom:40px}
+.end{text-align:left;padding-bottom:40px}
 .after .blk{min-height:100vh;min-height:100svh;box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;padding:84px 0 48px}
-.arts-w{margin:64px auto 0;max-width:860px;text-align:left}.arts-n{margin:0 0 14px;font-size:14px;color:var(--muted)}
-.arts{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.arts a{display:flex;justify-content:space-between;gap:12px;padding:12px 16px;border:1px solid #243044;background:#10161f;color:var(--text);text-decoration:none;font-size:14px}
-.arts a:hover{border-color:var(--accent)}.arts a span{color:var(--accent)}
-@media (max-width:760px){.arts{grid-template-columns:1fr}.after .blk{padding:64px 0 32px}}
+#fin .cap{color:var(--accent)}
+.fin-contact{min-width:0}
+.fin-question{margin:0 0 16px;font-size:clamp(17px,1.8vw,22px);color:var(--text);max-width:720px}
+.fin-mail{display:inline-block;max-width:100%;padding-bottom:8px;border-bottom:2px solid var(--accent);color:var(--text);
+  font:500 clamp(24px,3vw,40px)/1.3 var(--sans);text-decoration:none;overflow-wrap:anywhere}
+.fin-mail:hover,.fin-mail:focus-visible{color:var(--accent)}
+.fin-demo{margin:18px 0 16px;color:var(--muted)}
+.arts-w{margin:56px 0 0;min-width:0}.arts-n{margin:0 0 20px;font-size:14px;color:var(--muted)}
+.arts{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.arts li{min-width:0}
+.arts a{display:flex;flex-direction:column;gap:12px;height:100%;padding:20px;border:1px solid #243044;border-radius:0;
+  background:var(--panel);color:var(--text);text-decoration:none;overflow-wrap:anywhere}
+.arts .arts-next a{border-top-color:var(--accent)}
+.arts-tag{font:500 12px/1.5 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.arts h3{margin:0;font:600 19px/1.3 var(--sans)}
+.arts p{margin:0 0 8px;font-size:15px;color:#c3ccdb}
+.arts-go{margin-top:auto;font:500 14px var(--mono);color:var(--accent)}
+.fin-site{display:flex;align-items:center;gap:16px;margin-top:16px;padding:20px;border:1px solid #243044;border-radius:0;
+  background:var(--panel);text-decoration:none;overflow-wrap:anywhere}
+.fin-site>span:last-child{min-width:0}.fin-site-arrow{flex:0 0 auto;color:var(--accent);font-size:24px}
+.fin-site b{display:block;color:var(--text);font-weight:500}.fin-site small{display:block;margin-top:4px;font-size:14px;color:var(--muted)}
+.arts a:hover,.arts a:focus-visible,.fin-site:hover,.fin-site:focus-visible{border-color:var(--accent)}
+@media (max-width:1100px){.arts{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:600px){.arts{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:760px){.after .blk{padding:64px 0 32px}}
 .after .sub strong{color:var(--text);font-weight:600}
 /* ticker of the products that can be simulated */
 .ticker{position:absolute;left:0;right:0;bottom:0;height:38px;overflow:hidden;border-top:1px solid #243044;background:#0b0e14cc;
@@ -681,13 +701,28 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
   </div>
 
   <div class="blk end" id="fin">
-    <p class="cap">Et ensuite</p>
-    <h2>Parlons de votre allocation.</h2>
-    <p class="sub" style="margin-left:auto;margin-right:auto">Un essai sur vos données, une question sur le moteur ou sur mon parcours : écrivez-moi.</p>
-    <div class="ctas"><a class="btn primary" href="mailto:arnaud.barbier@grenoble-em.com?subject=FORGE">Me contacter <span aria-hidden="true">↗</span></a><a class="btn" href="https://arnaud-barbier.github.io/" target="_blank" rel="noopener">Découvrir mon parcours <span aria-hidden="true">↗</span></a></div>
-    <div class="arts-w"><p class="cap">Les autres pages du site</p>
-      <p class="arts-n">Elles détaillent le moteur et des études menées avec lui. Elles gardent pour l’instant l’ancienne présentation.</p>
-      <ul class="arts"><li><a href="../engine/">Mode allocation<span aria-hidden="true">→</span></a></li><li><a href="../algo/">Mode Algo<span aria-hidden="true">→</span></a></li><li><a href="../stateful/">Replay, resume, watcher<span aria-hidden="true">→</span></a></li><li><a href="../research/">Mode Research<span aria-hidden="true">→</span></a></li><li><a href="../costs/">Attribution des coûts et de la performance<span aria-hidden="true">→</span></a></li><li><a href="../validation/">Validation d’une optimisation de la durée maximale du drawdown<span aria-hidden="true">→</span></a></li><li><a href="../validation-2/">L’optimisation du Sharpe bat-elle l’équipondération ?<span aria-hidden="true">→</span></a></li></ul></div>
+    <div class="fin-contact">
+      <p class="cap">CONTACT</p>
+      <p class="fin-question">Une question, un retour, ou l'envie de voir FORGE tourner en direct ? Écrivez-moi.</p>
+      <a class="fin-mail" href="mailto:arnaud.barbier@grenoble-em.com?subject=FORGE">arnaud.barbier@grenoble-em.com <span aria-hidden="true">→</span></a>
+      <p class="fin-demo">Une démonstration est possible sur place ou en visio.</p>
+      <a class="btn" href="https://arnaud-barbier.github.io/" target="_blank" rel="noopener">Découvrir mon parcours <span aria-hidden="true">↗</span></a>
+    </div>
+    <nav class="arts-w" aria-label="Continuer la lecture">
+      <p class="cap">CONTINUER LA LECTURE</p>
+      <p class="arts-n">Ces pages gardent pour l'instant l'ancienne présentation.</p>
+      <ul class="arts">
+        <li class="arts-next"><a href="../research/"><span class="arts-tag">Suite conseillée · Le signal</span><h3>Mode Research</h3><p>Développer un indicateur et mesurer ses signaux, sans compilation.</p><span class="arts-go">Lire <span aria-hidden="true">→</span></span></a></li>
+        <li><a href="../algo/"><span class="arts-tag">La stratégie</span><h3>Mode Algo</h3><p>Du signal aux trades gérés, avec frais et sizing.</p><span class="arts-go">Lire <span aria-hidden="true">→</span></span></a></li>
+        <li><a href="../engine/"><span class="arts-tag">Le portefeuille</span><h3>Mode allocation</h3><p>Quarante lignes pour déclarer un portefeuille, et la sortie réelle du moteur.</p><span class="arts-go">Lire <span aria-hidden="true">→</span></span></a></li>
+        <li><a href="../validation/"><span class="arts-tag">La mesure</span><h3>Validation · Max DDR</h3><p>Trois tests de validation appliqués à une optimisation de la durée de drawdown.</p><span class="arts-go">Lire <span aria-hidden="true">→</span></span></a></li>
+        <li><a href="../validation-2/"><span class="arts-tag">La mesure</span><h3>Validation · Sharpe</h3><p>Dix contrôles, du hors échantillon jusqu'à 80 univers inédits.</p><span class="arts-go">Lire <span aria-hidden="true">→</span></span></a></li>
+        <li><a href="../costs/"><span class="arts-tag">Le rapprochement</span><h3>Les coûts</h3><p>Chaque coût suivi de sa déclaration jusqu'à son débit dans la NAV.</p><span class="arts-go">Lire <span aria-hidden="true">→</span></span></a></li>
+        <li><a href="../stateful/"><span class="arts-tag">La mécanique</span><h3>Replay &amp; resume</h3><p>Comment un kernel compilé décide en fonction de son propre passé.</p><span class="arts-go">Lire <span aria-hidden="true">→</span></span></a></li>
+        <li><a href="https://github.com/Arnaud-BARBIER/Multi-strategy-backtest-engine"><span class="arts-tag">Le code</span><h3>Le dépôt</h3><p>Source publique du moteur, sous licence MIT.</p><span class="arts-go">Voir sur GitHub <span aria-hidden="true">→</span></span></a></li>
+      </ul>
+    </nav>
+    <a class="fin-site" href="https://arnaud-barbier.github.io/"><span class="fin-site-arrow" aria-hidden="true">←</span><span><b>Retour sur mon site principal</b><small>arnaud-barbier.github.io · projets, parcours et contact</small></span></a>
   </div>
 
 </div></section>
