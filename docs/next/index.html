@@ -463,15 +463,16 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
     <div class="valwin" id="testwin">
       <div class="vw-in"><div class="vw-head ed-head"><p class="sch-cap">Avant le déploiement</p>
         <h2 class="sch-title">Trouvée ne suffit pas : 12 tests de validation.</h2>
-        <p class="sch-sub">Une stratégie qui bat le 1/N sur la période d’étude n’est pas encore prête à être déployée. FORGE la soumet à douze tests : période scellée, autres actifs, Monte-Carlo, stress tests, robustesse des paramètres, nombre de réglages essayés…</p>
-        <p class="sch-sub">Les plus exigeants, comme les stress tests et la robustesse des paramètres, rejouent la stratégie un grand nombre de fois. Ils restent praticables parce que chaque simulation ne prend qu’une fraction de seconde. En voici deux, sur la stratégie de la démo.</p></div></div>
+        <p class="sch-sub">Battre le 1/N sur la période d’étude ne suffit pas. FORGE éprouve chaque stratégie à travers 12 tests de robustesse : période scellée, autres actifs, Monte-Carlo, stress tests et sensibilité des paramètres.</p>
+        <p class="sch-sub">Des centaines, voire des milliers de simulations exécutées en quelques secondes permettent de pousser la validation beaucoup plus loin.</p>
+        <p class="sch-sub">Voici deux de ces tests, appliqués à la stratégie de la démonstration.</p></div></div>
     </div>
     <!-- Validation, another test: the same setting on 80 baskets it never saw (the real run, sped up) -->
     <div class="valwin" id="crosswin">
       <div class="vw-in vw-wide">
         <div class="vw-head"><p class="sch-cap">Avant le déploiement · test 2 sur 12</p>
-          <h2 class="sch-title">Le même réglage, sur 80 paniers qu’il n’a jamais vus.</h2>
-          <p class="sch-sub">Sans changer un seul paramètre, FORGE rejoue la stratégie sur 80 paniers tirés au hasard dans un univers d’actifs inconnu, gardé à part pour ce test. Chaque panier est comparé à son propre 1/N : ce test dit si l’avance vient de la logique de la stratégie ou du choix des actifs.</p></div>
+          <p class="sch-sub">Sans modifier aucun paramètre, FORGE teste l’allocation sur 80 paniers tirés au hasard dans un univers d’actifs réservé à la validation.</p>
+          <p class="sch-sub">Chaque résultat est comparé à son propre 1/N pour déterminer si la performance provient réellement de la méthode d’allocation ou simplement du choix des actifs.</p></div>
         <div class="pane vw-pane"><div class="pane-h">Validation · Multi-actifs<span>calcul réel, accéléré ×8</span></div>
           <div class="vw-box wide"><video id="crossvid" src="states/cross.mp4" muted playsinline preload="auto"></video></div></div>
         <div class="vw-foot"><a class="btn" href="#tests" id="alltests">Voir la liste des 12 tests <span aria-hidden="true">↓</span></a></div>
@@ -824,8 +825,9 @@ function enter(k, forward) {
   if (step.cross) { $('cursor').classList.remove('on'); show(step.state); layout(); startCross(); return; }
   if (step.edintro || step.tests) { $('cursor').classList.remove('on'); show(step.state); layout(); return; }
   if (step.depart) {   // pop out: the maximised field is left (Esc), the editor goes back to its tree
-    $('cursor').classList.remove('on'); show(forward && !reduce ? 'ide_max' : step.state); layout();
-    if (forward && !reduce) timer = setTimeout(() => show(step.state), 900);
+    // Swap the editor first, then turn the screen: no layer change while the 3D transform runs (it stuttered).
+    $('cursor').classList.remove('on'); show(step.state);
+    if (forward && !reduce) { pose = 'flat'; timer = setTimeout(() => { pose = 'depart'; layout(); }, 380); } else layout();
     return; }
   if (step.code) {
     // Coming from the tree step on a desktop, the cursor already rests on the allocator: click at once.
@@ -851,7 +853,7 @@ function playCode(done, fromTree) {
   show('ed_tree'); layout(); if (!node || !box) return done();
   if (!fromTree) moveCursor(node);
   later(fromTree ? 0 : 950, () => {
-    clickAt(node, 'Allocateur');
+    clickAt(node);
     later(800, () => flight());   // the press (cursor and ripples, ~0.8 s) ends before the box flies
   });
   const flight = () => {
