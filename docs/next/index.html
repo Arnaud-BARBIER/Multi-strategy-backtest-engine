@@ -986,8 +986,8 @@ function startVal() {
     press.classList.remove('go'); void press.offsetWidth; press.classList.add('go'); });
   later(T0 + 2300, () => { v.classList.add('open'); cur.style.opacity = 0; });
   later(T0 + 2900, () => cam([10, 140, 790, 240]));
-  later(T0 + 7400, () => cam(null));
-  later(T0 + 8200, () => nextOn('val'));
+  later(T0 + 6400, () => cam([10, 140, 790, 520]));   // stays on the out-of-sample results: no zoom-out to the whole page
+  later(T0 + 7400, () => nextOn('val'));
 }
 // The "continue" prompt of a step with `nx`, at the moment its animation names.
 function nextOn(kind) {
