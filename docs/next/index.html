@@ -630,9 +630,9 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
 <section class="after" id="acces"><div class="after-in">
 
   <div class="blk" id="moteur">
-    <p class="cap">Sous le capot</p>
+    <p class="cap">Moteur</p>
     <h2>Le moteur appelle votre code au bon moment.</h2>
-    <p class="sub">Le moteur compilé avance <strong>barre par barre</strong>. Aux dates prévues, il appelle l’<strong>allocateur</strong>, qui renvoie les nouvelles pondérations. À chaque barre, il appelle les <strong>watchers</strong> : l’un peut demander un rebalancement hors calendrier, l’autre ajuste les opérations en cours.</p>
+    <p class="sub">Le moteur compilé (<strong>Numba</strong>) avance <strong>barre par barre</strong>. Aux dates prévues, il appelle <strong>votre fonction d'allocation</strong>, qui renvoie les nouvelles pondérations. À chaque barre, il appelle des <strong>watchers d'événements</strong>, qui peuvent intervenir sur les positions en cours ou déclencher une nouvelle pondération en appelant la fonction d'allocation.</p>
     <div class="eng-wrap pane"><div class="pane-h">Moteur compilé · appels du code<span>calendrier et watchers</span></div>
       <div class="eng-layout">
         <div class="eng-schema"><svg class="eng" id="eng" viewBox="0 0 800 600" role="img" aria-label="Le moteur compilé appelle l’allocateur aux dates prévues et les deux watchers à chaque barre. Les flux de l’allocateur sont bleus, ceux des watchers jaunes. Le temps défile vers le bas."></svg></div>
@@ -640,9 +640,9 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
           <h3 id="eng-cost-title">Coûts de transaction</h3>
           <p>Le moteur applique les coûts à chaque ordre et tout au long de la position.</p>
           <h4>Ordre au marché</h4>
-          <ul><li>Écart achat/vente</li><li>Glissement</li><li>Commission</li><li>Taxes</li><li>Impact de marché <span>(selon le volume moyen)</span></li></ul>
+          <ul><li>Bid/ask spread</li><li>Slippage</li><li>Commission</li><li>Taxes</li><li>Market impact <span>(selon le volume moyen)</span></li></ul>
           <h4>Ordre limite</h4>
-          <ul><li>Exécuté à son prix limite seulement s’il est atteint.</li><li>Commission et taxes.</li><li><span>Sans écart ni glissement.</span></li></ul>
+          <ul><li>Exécuté à son prix limite seulement s’il est atteint.</li><li>Commission et Taxes.</li><li><span>Sans spread ni slippage.</span></li></ul>
           <h4>Sur la position</h4>
           <p class="eng-position">Financement du levier et des positions courtes, conversion de devises.</p>
         </aside>
