@@ -538,6 +538,7 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
 @media (max-width:760px){#moteur .eng{height:auto;min-height:0}}
 #fin{position:relative;z-index:0}
 #fin::before{content:"";position:absolute;z-index:-1;top:-120px;bottom:0;left:calc(50% - 50vw);right:calc(50% - 50vw);background:linear-gradient(180deg,#0b0e14 0,#151d2a 220px,#18212f 100%)}
+.free-hint{margin:0 0 22px;font:500 12px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
 </style>
 </head>
 <body>
@@ -662,6 +663,7 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
 <section class="after" id="acces"><div class="after-in">
 
   <div class="blk" id="moteur">
+    <p class="free-hint">Fin de la démo · la page défile librement à partir d’ici <span aria-hidden="true">↓</span></p>
     <p class="cap">Moteur</p>
     <h2>Le moteur appelle votre code <span class="hl">au bon moment.</span></h2>
     <p class="sub">Le moteur compilé (<strong>Numba</strong>) avance <strong>barre par barre</strong>. Aux dates prévues, il appelle <strong>votre fonction d'allocation</strong>, qui renvoie les nouvelles pondérations. À chaque barre, il appelle des <strong>watchers d'événements</strong>, qui peuvent intervenir sur les positions en cours ou déclencher une nouvelle pondération en appelant la fonction d'allocation.</p>
@@ -899,21 +901,14 @@ function stepByGesture() {
   const go = dir => dir > 0 && current === STEPS.length - 1 ? leave() : scrollToStep(Math.max(0, Math.min(STEPS.length - 1, current + dir)));
   // A slow finger movement makes the amplitude rise and fall: never read that as a new gesture. Only the
   // inertia tail decays smoothly; a new push during it is a sudden jump after several decreasing events.
-  let lastT = 0, lastDir = 0, stepT = 0, tail = [];
+  // One gesture = one step, however long or strong: the first wheel event moves, then everything is ignored until
+  // the wheel has been quiet for 250 ms (a trackpad's inertia tail never re-triggers), and never twice within 450 ms.
+  let lastT = 0, stepT = 0;
   addEventListener('wheel', e => {
     const dir = Math.sign(e.deltaY); if (!dir || !inDemo(dir)) return;   // after the demo: free scroll
     e.preventDefault();
-    const t = performance.now(), mag = Math.abs(e.deltaY);
-    let fresh = t - lastT > 150 || dir !== lastDir;
-    if (!fresh && t - stepT > 450 && tail.length >= 9) {
-      // Inertia only slows down; a new push speeds up again: compare the last 5 events with the 5 before.
-      const seq = [...tail, mag].slice(-10), avg = xs => xs.reduce((x, y) => x + y, 0) / xs.length;
-      const older = avg(seq.slice(0, 5)), newer = avg(seq.slice(5));
-      if (newer > older * 1.25 && newer > older + 3) fresh = true;
-    }
-    lastT = t; lastDir = dir;
-    if (fresh) { stepT = t; tail = [mag]; go(dir); }
-    else { tail.push(mag); if (tail.length > 30) tail.shift(); }
+    const t = performance.now(), fresh = t - lastT > 250 && t - stepT > 450; lastT = t;
+    if (fresh) { stepT = t; go(dir); }
   }, {passive: false});
   let y0 = null;
   addEventListener('touchstart', e => { y0 = e.touches[0].clientY; }, {passive: true});
