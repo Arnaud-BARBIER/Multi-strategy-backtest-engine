@@ -370,7 +370,7 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
 @media (max-width:760px){.bench{min-width:0;font-size:13px}.bench th,.bench td{padding:9px 7px}.bench th{font-size:9.5px;letter-spacing:.03em;white-space:normal;vertical-align:bottom}
   .bench td:first-child small{display:none}.bench small{font-size:11px}}
 .end{text-align:left;padding-bottom:40px}
-.after .blk{min-height:100vh;min-height:100svh;box-sizing:border-box;display:flex;flex-direction:column;justify-content:flex-start;padding:62px 0 40px}
+.after .blk{box-sizing:border-box;padding:62px 0 72px}
 #fin .cap{color:var(--accent)}
 .fin-contact{min-width:0}
 .fin-question{margin:0 0 16px;font-size:clamp(17px,1.8vw,22px);color:var(--text);max-width:720px}
@@ -901,7 +901,7 @@ function stepByGesture() {
   // inertia tail decays smoothly; a new push during it is a sudden jump after several decreasing events.
   let lastT = 0, lastDir = 0, stepT = 0, tail = [];
   addEventListener('wheel', e => {
-    const dir = Math.sign(e.deltaY); if (!dir) return; const demo = inDemo(dir);
+    const dir = Math.sign(e.deltaY); if (!dir || !inDemo(dir)) return;   // after the demo: free scroll
     e.preventDefault();
     const t = performance.now(), mag = Math.abs(e.deltaY);
     let fresh = t - lastT > 150 || dir !== lastDir;
@@ -912,21 +912,21 @@ function stepByGesture() {
       if (newer > older * 1.25 && newer > older + 3) fresh = true;
     }
     lastT = t; lastDir = dir;
-    if (fresh) { stepT = t; tail = [mag]; demo ? go(dir) : page(dir); }
+    if (fresh) { stepT = t; tail = [mag]; go(dir); }
     else { tail.push(mag); if (tail.length > 30) tail.shift(); }
   }, {passive: false});
   let y0 = null;
   addEventListener('touchstart', e => { y0 = e.touches[0].clientY; }, {passive: true});
-  addEventListener('touchmove', e => { if (y0 != null) e.preventDefault(); }, {passive: false});
+  addEventListener('touchmove', e => { if (y0 != null && inDemo(Math.sign(y0 - e.touches[0].clientY))) e.preventDefault(); }, {passive: false});
   addEventListener('touchend', e => {
     if (y0 == null) return; const dy = y0 - e.changedTouches[0].clientY; y0 = null;
-    if (Math.abs(dy) > 8) inDemo(Math.sign(dy)) ? go(Math.sign(dy)) : page(Math.sign(dy));
+    if (Math.abs(dy) > 8 && inDemo(Math.sign(dy))) go(Math.sign(dy));
   });
   // One key press = one step, always, even in the middle of an animation (go() stops it).
   addEventListener('keydown', e => {
     const dir = {ArrowDown: 1, PageDown: 1, ' ': 1, ArrowRight: 1, ArrowUp: -1, PageUp: -1, ArrowLeft: -1}[e.key];
-    if (!dir || e.target.closest?.('input,textarea,select')) return;
-    e.preventDefault(); if (!e.repeat) inDemo(dir) ? go(dir) : page(dir);
+    if (!dir || e.target.closest?.('input,textarea,select') || !inDemo(dir)) return;
+    e.preventDefault(); if (!e.repeat) go(dir);
   }, {capture: true});
 
 }
