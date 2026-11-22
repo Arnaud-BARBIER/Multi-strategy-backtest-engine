@@ -380,20 +380,23 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
 @keyframes tk{to{transform:translateX(-50%)}}
 .hero .hint{bottom:52px}
 /* under the hood 1: the engine and its calls */
-.eng-wrap{background:#0b0e14}.eng{display:block;width:100%;height:auto;font-family:var(--sans)}
-.eng .bx{fill:#10161f;stroke:#3a4558;stroke-width:1.4;transition:stroke .25s,fill .25s}
-.eng .bx.hot{stroke:var(--accent);fill:#12283a}.eng .bx.hotw{stroke:#d9bf5a;fill:#262111}
-.eng .t1{fill:var(--text);font-size:17px;font-weight:600;text-anchor:middle}.eng .t2{fill:var(--muted);font-size:12.5px;text-anchor:middle}
-.eng .lk{fill:none;stroke-width:1.4;opacity:.5}.eng .lk.lw{opacity:.8}.eng .la{stroke:var(--accent)}.eng .lw{stroke:#d9bf5a}
-.eng .pa{fill:var(--accent)}.eng .pw{fill:#ffd75e;filter:drop-shadow(0 0 4px #ffd75e)}
-.eng .tag{font:500 12px var(--mono);opacity:0;transition:opacity .3s}.eng .tag.on{opacity:1}
-.eng .pw{r:5}
-.eng .tick{stroke:#2a3446;stroke-width:1}.eng .tick.m{stroke:#4a5568}
-.eng .rb{fill:#0b0e14;stroke:var(--accent);stroke-width:1.6}.eng .rb.done{fill:var(--accent)}
-.eng .rbw{fill:#0b0e14;stroke:#d9bf5a;stroke-width:1.6}
-.eng .ml{fill:var(--faint);font:500 11px var(--mono)}
-.eng .now{stroke:var(--accent);stroke-width:1.2;stroke-dasharray:3 4}
-.eng .nowt{fill:var(--accent);font:500 11px var(--mono);letter-spacing:.1em}
+#moteur .eng-wrap{background:var(--bg);box-shadow:none}
+#moteur .pane-h{font-family:var(--mono)}
+.eng{display:block;width:100%;height:auto;font-family:var(--mono)}
+.eng .bx{fill:var(--bg);stroke:#243044}
+.eng .band{fill:#10161f;stroke:#243044}
+.eng .bx.hot{stroke:var(--accent)}.eng .bx.hotw{stroke:#d9bf5a}
+.eng .t1{fill:var(--text);font-size:12px;font-weight:500;letter-spacing:.04em}
+.eng .code,.eng .counter{fill:#c3ccdb;font-size:14px;font-variant-numeric:tabular-nums}
+.eng .t2{fill:var(--muted);font:13px var(--sans)}
+.eng .lk{fill:none;stroke:#3a4558;stroke-width:1;vector-effect:non-scaling-stroke}
+.eng .pulse-line{fill:none;stroke-width:1;vector-effect:non-scaling-stroke}
+.eng .tag{font:11px var(--mono);opacity:0}.eng .tag.on{opacity:1}
+.eng .tick{stroke:#3a4558;stroke-width:1;vector-effect:non-scaling-stroke}
+.eng .rb{fill:var(--accent)}.eng .rbw{fill:#d9bf5a}
+.eng .ml{fill:var(--muted);font:11px var(--mono)}
+.eng .now{stroke:var(--accent);stroke-width:1;vector-effect:non-scaling-stroke}
+@media(max-width:760px){#moteur .pane-h{font-size:11px}.eng .t1{font-size:13px}.eng .tag,.eng .ml{font-size:12px}}
 /* under the hood 2: the strategy's book, split per asset */
 .ob{background:#0b0e14}.ob-in{display:grid;grid-template-columns:minmax(0,.85fr) 40px minmax(0,1.6fr);gap:16px;align-items:center;padding:22px;
   transform-origin:50% 50%;transition:transform .8s cubic-bezier(.4,0,.2,1),opacity .6s}
@@ -595,8 +598,8 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
     <p class="cap">Sous le capot · 1 sur 2</p>
     <h2>Le moteur appelle votre code au bon moment.</h2>
     <p class="sub">Le moteur compilé avance <strong>barre par barre</strong>. Aux dates prévues, il appelle l’<strong>allocateur</strong>, qui renvoie les nouvelles pondérations. À chaque barre, il appelle les <strong>watchers</strong> : l’un peut demander un rebalancement hors calendrier, l’autre ajuste les opérations en cours.</p>
-    <div class="eng-wrap pane"><div class="pane-h">Moteur compilé<span id="eng-clock">barre 0</span></div>
-    <svg class="eng" id="eng" viewBox="0 0 900 560" role="img" aria-label="Le moteur compilé appelle l’allocateur aux rebalancements prévus et les deux watchers à chaque barre ; la frise du temps défile vers le bas."></svg></div>
+    <div class="eng-wrap pane"><div class="pane-h">Moteur compilé · appels du code<span>calendrier et watchers</span></div>
+    <svg class="eng" id="eng" viewBox="0 0 1000 520" role="img" aria-label="Le moteur compilé appelle l’allocateur aux dates prévues et les deux watchers à chaque barre. Les appels des watchers et leurs réponses sont jaunes. Le temps défile vers le bas."></svg></div>
     <div style="height:28px"></div>
     <div class="hood">
       <div><b>~0,01 s</b>par simulation : chaque réglage déplacé est recalculé aussitôt.</div>
@@ -1314,63 +1317,169 @@ async function autoplay() {
   };
   new IntersectionObserver((es, ob) => { if (es.some(e => e.isIntersecting)) { play(); ob.disconnect(); } }, {threshold: .45}).observe(el);
 })();
-// ---------- under the hood 1: the engine calls the allocator on schedule, the watchers on every bar ----------
+// ---------- under the hood 1: terminal panels, orthogonal calls and a downward time axis ----------
 (() => {
-  const svg = $('eng'); if (!svg) return; const ns = 'http://www.w3.org/2000/svg';
-  const el = (tag, a, txt, par = svg) => { const e = document.createElementNS(ns, tag); for (const k in a) e.setAttribute(k, a[k]); if (txt) e.textContent = txt; par.append(e); return e; };
-  const defs = el('defs', {});
-  for (const [id, c] of [['ha', 'var(--accent)'], ['hw', '#d9bf5a']]) { const m = el('marker', {id, viewBox: '0 0 8 8', refX: 7, refY: 4, markerWidth: 7, markerHeight: 7, orient: 'auto'}, '', defs); el('path', {d: 'M0 0 L8 4 L0 8 Z', fill: c}, '', m); }
-  const mk = el('linearGradient', {id: 'fade', x1: 0, y1: 0, x2: 0, y2: 1}, '', defs);
-  for (const [o, op] of [[0, 0], [.12, 1], [.88, 1], [1, 0]]) el('stop', {offset: o, 'stop-color': '#fff', 'stop-opacity': op}, '', mk);
-  const msk = el('mask', {id: 'fm'}, '', defs); el('rect', {x: 620, y: 0, width: 280, height: 560, fill: 'url(#fade)'}, '', msk);
-  const L = {ea: 'M360 252 C 312 252, 318 92, 262 92', ae: 'M262 112 C 334 112, 322 268, 360 268',
-    e1: 'M360 284 C 306 284, 312 332, 262 332', e2: 'M360 298 C 300 298, 306 420, 262 420',
-    w1: 'M150 300 L150 140', ta: 'M690 274 L562 274', aw: 'M262 112 C 334 112, 322 268, 360 268', w2: 'M262 436 C 340 436, 330 306, 360 306'};
-  const P = {};
-  for (const [k, d] of Object.entries(L)) P[k] = k === 'ta' || k === 'aw' ? el('path', {d, fill: 'none'}) : el('path', {d, class: 'lk ' + (k[0] === 'w' || k[1] === '1' || k[1] === '2' ? 'lw' : 'la'), 'marker-end': `url(#${k[0] === 'w' || k[1] === '1' || k[1] === '2' ? 'hw' : 'ha'})`});
-  const box = (x, y, w, h, t1, t2) => { const g = el('g', {}); const r = el('rect', {class: 'bx', x, y, width: w, height: h, rx: 4}, '', g);
-    el('text', {class: 't1', x: x + w / 2, y: y + h / 2 - (t2 ? 3 : -6)}, t1, g); if (t2) el('text', {class: 't2', x: x + w / 2, y: y + h / 2 + 16}, t2, g); return r; };
-  const B = {al: box(40, 56, 222, 84, 'Allocateur', 'appelé aux dates prévues'), w1: box(40, 300, 222, 66, 'Watcher · portefeuille', 'peut demander un rebalancement'),
-    w2: box(40, 388, 222, 66, 'Watcher · opérations', 'ajuste les ordres en cours'), en: box(360, 226, 200, 96, 'Moteur compilé', 'barre par barre')};
-  const tag = (x, y, txt, c) => el('text', {class: 'tag', x, y, fill: c}, txt);
-  const T = {w: tag(276, 78, 'nouvelles pondérations', 'var(--accent)'), o: tag(286, 470, 'ordre ajusté', '#d9bf5a'), r: tag(162, 228, 'rebalancement demandé', '#d9bf5a')};
-  // The time line: bars flow down past "now" (level with the engine), scheduled rebalances are diamonds.
-  const NOW = 274, STEP = 9, EVERY = 21, N = 400;
-  el('line', {x1: 560, x2: 680, y1: NOW, y2: NOW, class: 'lk la', 'marker-end': 'url(#ha)', 'marker-start': 'url(#ha)'});
-  const fr = el('g', {mask: 'url(#fm)'}), tl = el('g', {}, '', fr);
-  el('line', {x1: 720, x2: 720, y1: 0, y2: 560, stroke: '#243044'}, '', fr);
-  const months = ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.'];
-  const rbs = {};
-  for (let b = 0; b < N; b++) {
-    const y = NOW - b * STEP;   // drawn upwards; the group moves down, so the future comes from above
-    if (b % EVERY === 0) { const m = (b / EVERY) % 12, yr = 2017 + Math.floor(b / EVERY / 12);
-      rbs[b] = el('rect', {class: 'rb', x: 714, y: y - 6, width: 12, height: 12, transform: `rotate(45 720 ${y})`}, '', tl);
-      el('text', {class: 'ml', x: 738, y: y + 4}, `${months[m]} ${yr}`, tl); }
-    else el('line', {class: 'tick' + (b % 5 ? '' : ' m'), x1: 712, x2: 728, y1: y, y2: y}, '', tl);
-  }
-  el('line', {class: 'now', x1: 690, x2: 870, y1: NOW, y2: NOW});
-  el('text', {class: 'ml', x: 738, y: 548}, 'le temps ↓');
-  const pulse = (k, cls, ms, then) => { const path = P[k], len = path.getTotalLength(), c = el('circle', {r: 4.5, class: cls}), t0 = performance.now();
-    const f = now => { const q = Math.min(1, (now - t0) / ms), pt = path.getPointAtLength(len * q); c.setAttribute('cx', pt.x); c.setAttribute('cy', pt.y);
-      if (q < 1) requestAnimationFrame(f); else { c.remove(); then && then(); } }; requestAnimationFrame(f); };
-  const flash = (r, cls = 'hot', ms = 500) => { r.classList.add(cls); setTimeout(() => r.classList.remove(cls), ms); };
-  const say = (t, ms = 1400) => { t.classList.add('on'); setTimeout(() => t.classList.remove('on'), ms); };
-  // The allocator answers in the colour of whoever called it.
-  const realloc = w => { flash(B.al, w ? 'hotw' : 'hot', 700); pulse(w ? 'aw' : 'ae', w ? 'pw' : 'pa', 420, () => { flash(B.en); say(T.w); }); };
-  let bar = 0, run = false, timer = null;
-  const step = () => {
-    bar = (bar + 1) % (N - 70); if (!bar) tl.querySelectorAll('.done,.rbw').forEach(e => e.classList.contains('rbw') ? e.remove() : e.classList.remove('done'));
-    tl.style.transition = bar ? 'transform .26s linear' : 'none'; tl.style.transform = `translateY(${bar * STEP}px)`;
-    $('eng-clock').textContent = `barre ${bar}`;
-    pulse('e1', 'pw', 300); pulse('e2', 'pw', 300);
-    if (bar % EVERY === 0) { rbs[bar]?.classList.add('done'); pulse('ta', 'pa', 220, () => { flash(B.en); pulse('ea', 'pa', 380, () => realloc(false)); }); }
-    else if (Math.random() < 1 / 14) {
-      if (Math.random() < .5) setTimeout(() => { flash(B.w1, 'hotw'); say(T.r); el('circle', {class: 'rbw', cx: 720, cy: NOW - bar * STEP, r: 6}, '', tl); pulse('w1', 'pw', 420, () => realloc(true)); }, 300);
-      else setTimeout(() => { flash(B.w2, 'hotw'); say(T.o); pulse('w2', 'pw', 420, () => flash(B.en)); }, 300);
-    }
+  const svg = $('eng'); if (!svg) return;
+  const ns = 'http://www.w3.org/2000/svg', compact = matchMedia('(max-width:760px)');
+  const accent = 'var(--accent)', yellow = '#d9bf5a';
+  const el = (tag, attrs, text, parent = svg) => {
+    const node = document.createElementNS(ns, tag);
+    Object.entries(attrs).forEach(([key, value]) => node.setAttribute(key, value));
+    if (text) node.textContent = text; parent.append(node); return node;
   };
-  if (reduce) { tl.style.transform = `translateY(${EVERY * STEP}px)`; rbs[EVERY]?.classList.add('done'); return; }
-  new IntersectionObserver(es => { const v = es.some(e => e.isIntersecting); if (v && !run) { run = true; timer = setInterval(step, 260); } else if (!v && run) { run = false; clearInterval(timer); } }, {threshold: .25}).observe(svg);
+  let visible = false, scene;
+  const draw = () => {
+    scene?.stop(); svg.replaceChildren();
+    const mobile = compact.matches;
+    svg.setAttribute('viewBox', mobile ? '0 0 340 790' : '0 0 1000 520');
+    el('title', {}, 'FORGE · appels du moteur compilé');
+    el('desc', {}, 'Chaque barre appelle les deux watchers. Le calendrier appelle l’allocateur en bleu ; un watcher le rappelle en jaune, hors calendrier.');
+    // On desktop all content ends before x=667: the right third stays available for the future chart.
+    const layout = mobile ? {
+      al:[22,16,296,88], w1:[22,132,296,88], w2:[22,248,296,88], en:[64,400,212,82],
+      axis:114, now:610, top:538, bottom:756,
+      paths:{fork:[[64,450],[12,450],[12,232]], e1:[[12,232],[12,176],[22,176]], e2:[[12,232],[12,292],[22,292]],
+        ea:[[64,414],[4,414],[4,60],[22,60]], ae:[[318,80],[334,80],[334,424],[276,424]],
+        w1:[[44,132],[44,104]], w2:[[318,310],[326,310],[326,460],[276,460]], ta:[[114,610],[170,610],[170,482]]},
+      tags:{weights:[86,380], request:[60,122], order:[160,358]}
+    } : {
+      al:[16,48,250,92], w1:[16,284,250,82], w2:[16,404,250,82], en:[372,218,178,90],
+      axis:592, now:264, top:40, bottom:480,
+      paths:{fork:[[372,280],[300,280],[300,384]], e1:[[300,384],[284,384],[284,325],[266,325]], e2:[[300,384],[300,445],[266,445]],
+        ea:[[372,240],[312,240],[312,78],[266,78]], ae:[[266,110],[340,110],[340,258],[372,258]],
+        w1:[[142,284],[142,140]], w2:[[266,465],[354,465],[354,296],[372,296]], ta:[[592,264],[550,264]]},
+      tags:{weights:[278,186], request:[22,220], order:[278,506]}
+    };
+    const paths = {};
+    Object.entries(layout.paths).forEach(([key, points]) => {
+      const d = points.map(([x,y],i) => `${i ? 'L' : 'M'}${x} ${y}`).join(' ');
+      paths[key] = {points, d, length:points.slice(1).reduce((sum,p,i) => sum + Math.hypot(p[0]-points[i][0],p[1]-points[i][1]),0)};
+      el('path', {class:'lk', d});
+    });
+    const panel = (rect, heading, code, note) => {
+      const [x,y,width,height] = rect, group = el('g', {});
+      const box = el('rect', {class:'bx',x,y,width,height}, '', group);
+      el('rect', {class:'band',x,y,width,height:29}, '', group);
+      el('text', {class:'t1',x:x+12,y:y+19}, heading, group);
+      el('text', {class:code.startsWith('barre') ? 'counter' : 'code',x:x+12,y:y+51}, code, group);
+      if (note) el('text', {class:'t2',x:x+12,y:y+73}, note, group);
+      return {box, counter:group.querySelector('.counter')};
+    };
+    const boxes = {
+      al:panel(layout.al,'ALLOCATEUR','max_sharpe(ctx, mem, out)','appelé aux dates prévues'),
+      w1:panel(layout.w1,'WATCHER · PORTEFEUILLE','', 'peut demander un rebalancement'),
+      w2:panel(layout.w2,'WATCHER · OPÉRATIONS','', 'ajuste les ordres en cours'),
+      en:panel(layout.en,'MOTEUR COMPILÉ','barre 1 532')
+    };
+    // Watchers have a single body line, aligned to the same terminal baseline.
+    ['w1','w2'].forEach(key => {
+      const note = boxes[key].box.parentNode.querySelector('.t2');
+      note.setAttribute('y', layout[key][1]+54);
+    });
+    const tags = {};
+    Object.entries(layout.tags).forEach(([key,[x,y]]) => {
+      tags[key] = el('text', {class:'tag',x,y,fill:key==='weights' ? accent : yellow},
+        {weights:'nouvelles pondérations',request:'rebalancement demandé',order:'ordre ajusté'}[key]);
+    });
+    const defs = el('defs', {}), clip = el('clipPath', {id:'eng-time-clip'}, '', defs);
+    el('rect', {x:layout.axis-12,y:layout.top,width:mobile ? 216 : 86,height:layout.bottom-layout.top}, '', clip);
+    const strip = el('g', {'clip-path':'url(#eng-time-clip)'}), ticks = el('g', {}, '', strip);
+    el('line', {class:'tick',x1:layout.axis,x2:layout.axis,y1:layout.top,y2:layout.bottom}, '', strip);
+    el('line', {class:'now',x1:layout.axis-12,x2:mobile ? 316 : 666,y1:layout.now,y2:layout.now});
+    el('text', {class:'ml',x:layout.axis-8,y:layout.bottom+22}, 'le temps ↓');
+    const step = 10, every = 21, months = ['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
+    const offSchedule = new Set([1526]);
+    let bar = 1532, time = 0, nextBar = 900, previous = null, raf = null, drawnBar = null, events = [], pulses = [], flashes = [];
+    const timeline = fraction => {
+      ticks.setAttribute('transform', `translate(0 ${fraction*step})`);
+      if (drawnBar===bar) return;
+      drawnBar=bar; ticks.replaceChildren();
+      const past = Math.ceil((layout.bottom-layout.now)/step)+1, future = Math.ceil((layout.now-layout.top)/step)+1;
+      for (let b=bar-past; b<=bar+future; b++) {
+        const y = layout.now+(bar-b)*step, scheduled = b % every === 0;
+        el('line', {class:'tick',x1:layout.axis-(b%5===0 ? 10 : 5),x2:layout.axis+5,y1:y,y2:y}, '', ticks);
+        if (scheduled || offSchedule.has(b)) {
+          el('rect', {class:scheduled ? 'rb' : 'rbw',x:layout.axis-3,y:y-3,width:6,height:6}, '', ticks);
+          const month = Math.round((b-1533)/every), index = ((month%12)+12)%12;
+          el('text', {class:'ml',x:layout.axis+12,y:y+4}, scheduled ? months[index] : (mobile ? 'hors calendrier' : 'hors'), ticks);
+          if (!scheduled && !mobile) el('text', {class:'ml',x:layout.axis+12,y:y+17}, 'calendrier', ticks);
+        }
+      }
+    };
+    const later = (delay, action) => events.push({at:time+delay,action});
+    const flash = (key, colour) => {
+      const node = boxes[key].box, cls = colour===yellow ? 'hotw' : 'hot';
+      node.classList.remove('hot','hotw'); node.classList.add(cls); flashes.push({node,cls,until:time+380});
+    };
+    const say = (key,colour) => {
+      const node = tags[key]; node.setAttribute('fill',colour); node.classList.add('on'); flashes.push({node,cls:'on',until:time+650});
+    };
+    const pulse = (key,colour,duration,done) => {
+      const route = paths[key], line = el('path', {class:'pulse-line',d:route.d,stroke:colour});
+      const dot = el('rect', {width:5,height:5,fill:colour});
+      pulses.push({route,line,dot,start:time,duration,done});
+    };
+    const answer = colour => {
+      flash('al',colour); say('weights',colour); pulse('ae',colour,400,()=>flash('en',colour));
+    };
+    const advance = () => {
+      bar++; boxes.en.counter.textContent = `barre ${bar.toLocaleString('fr-FR')}`;
+      pulse('fork',yellow,160,()=>{
+        pulse('e1',yellow,200,()=>flash('w1',yellow));
+        pulse('e2',yellow,200,()=>flash('w2',yellow));
+      });
+      if (bar%every===0) pulse('ta',accent,180,()=>{
+        flash('en',accent); pulse('ea',accent,300,()=>answer(accent));
+      });
+      else if (bar%14===5) {
+        const portfolio = Math.floor(bar/14)%2===0;
+        later(380,()=>{
+          if (portfolio) {
+            offSchedule.add(bar); say('request',yellow);
+            pulse('w1',yellow,300,()=>answer(yellow));
+          } else { say('order',yellow); pulse('w2',yellow,300,()=>flash('en',yellow)); }
+        });
+      }
+      for (const b of offSchedule) if (b<bar-60) offSchedule.delete(b);
+    };
+    const frame = now => {
+      if (previous!==null) time += Math.min(now-previous,80); previous = now;
+      if (time>=nextBar) { advance(); nextBar+=900; }
+      const due = events.filter(event=>event.at<=time); events=events.filter(event=>event.at>time); due.forEach(event=>event.action());
+      // Process a snapshot: a completed pulse may enqueue the next leg of its call.
+      const active = pulses; pulses=[];
+      active.forEach(pulse => {
+        const fraction = Math.min(1,(time-pulse.start)/pulse.duration);
+        let distance = fraction*pulse.route.length, point = pulse.route.points[0];
+        for (let i=1;i<pulse.route.points.length;i++) {
+          const next = pulse.route.points[i], length = Math.hypot(next[0]-point[0],next[1]-point[1]);
+          if (distance<=length) { point=[point[0]+(next[0]-point[0])*distance/length,point[1]+(next[1]-point[1])*distance/length]; break; }
+          distance-=length; point=next;
+        }
+        pulse.dot.setAttribute('x',point[0]-2.5); pulse.dot.setAttribute('y',point[1]-2.5);
+        if (fraction===1) { pulse.line.remove(); pulse.dot.remove(); pulse.done?.(); } else pulses.push(pulse);
+      });
+      flashes=flashes.filter(flash => {
+        if (flash.until>time) return true;
+        if (!flashes.some(other=>other!==flash && other.node===flash.node && other.cls===flash.cls && other.until>time)) flash.node.classList.remove(flash.cls);
+        return false;
+      });
+      timeline((time-(nextBar-900))/900); raf=requestAnimationFrame(frame);
+    };
+    timeline(0);
+    scene = {
+      start:()=>{ if (raf===null && !reduce) { previous=null; raf=requestAnimationFrame(frame); } },
+      stop:()=>{ if (raf!==null) cancelAnimationFrame(raf); raf=null; previous=null; }
+    };
+    if (reduce) { tags.weights.classList.add('on'); }
+    else if (visible && !document.hidden) scene.start();
+  };
+  draw(); compact.addEventListener('change',draw);
+  new IntersectionObserver(entries => {
+    visible=entries.some(entry=>entry.isIntersecting);
+    if (visible && !document.hidden) scene.start(); else scene.stop();
+  }, {threshold:0}).observe(svg);
+  document.addEventListener('visibilitychange',()=>{ if (visible && !document.hidden) scene.start(); else scene.stop(); });
 })();
 
 // ---------- under the hood 2: the strategy's book, executed asset by asset on the next bar ----------
