@@ -387,22 +387,38 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
 .hero .hint{bottom:52px}
 /* under the hood 1: the engine and its calls */
 #moteur .eng-wrap{background:var(--bg);box-shadow:none}
-#moteur .pane-h{font-family:var(--mono)}
+#moteur .pane-h{font-family:var(--mono);flex-wrap:wrap}
+#moteur .eng-layout{display:grid;grid-template-columns:minmax(0,2.15fr) minmax(0,1fr);align-items:start}
+#moteur .eng-schema{min-width:0;padding:14px 0}
 .eng{display:block;width:100%;height:auto;font-family:var(--mono)}
-.eng .bx{fill:var(--bg);stroke:#243044}
-.eng .band{fill:#10161f;stroke:#243044}
-.eng .bx.hot{stroke:var(--accent)}.eng .bx.hotw{stroke:#d9bf5a}
+.eng .bx{fill:var(--bg)}
+.eng .band{fill:var(--panel)}
+.eng .outline,.eng .divider{fill:none;stroke:#243044;stroke-width:1;vector-effect:non-scaling-stroke}
+.eng .node.hot .outline,.eng .node.hot .divider{stroke:var(--flow);stroke-width:2}
 .eng .t1{fill:var(--text);font-size:12px;font-weight:500;letter-spacing:.04em}
 .eng .code,.eng .counter{fill:#c3ccdb;font-size:14px;font-variant-numeric:tabular-nums}
+.eng .date{fill:#c3ccdb;font-size:12px;font-variant-numeric:tabular-nums}
 .eng .t2{fill:var(--muted);font:13px var(--sans)}
 .eng .lk{fill:none;stroke:#3a4558;stroke-width:1;vector-effect:non-scaling-stroke}
-.eng .pulse-line{fill:none;stroke-width:1;vector-effect:non-scaling-stroke}
+.eng .pulse-line{fill:none;stroke-width:2;vector-effect:non-scaling-stroke}
 .eng .tag{font:11px var(--mono);opacity:0}.eng .tag.on{opacity:1}
-.eng .tick{stroke:#3a4558;stroke-width:1;vector-effect:non-scaling-stroke}
+.eng .tick,.eng .month-rule{stroke:#3a4558;stroke-width:1;vector-effect:non-scaling-stroke}
 .eng .rb{fill:var(--accent)}.eng .rbw{fill:#d9bf5a}
-.eng .ml{fill:var(--muted);font:11px var(--mono)}
+.eng .ml{fill:var(--muted);font:11px var(--mono);font-variant-numeric:tabular-nums}
+.eng .month{fill:var(--text);font:11px var(--mono)}
 .eng .now{stroke:var(--accent);stroke-width:1;vector-effect:non-scaling-stroke}
-@media(max-width:760px){#moteur .pane-h{font-size:11px}.eng .t1{font-size:13px}.eng .tag,.eng .ml{font-size:12px}}
+#moteur .eng-costs{min-width:0;margin:24px 0;padding:0 20px;border-left:1px solid #243044;font-size:14px;line-height:1.5}
+#moteur .eng-costs h3{margin:0 0 8px;color:var(--text);font:600 18px/1.3 var(--sans)}
+#moteur .eng-costs p{margin:0 0 18px;color:var(--muted)}
+#moteur .eng-costs h4{margin:18px 0 8px;padding-top:12px;border-top:1px solid #243044;color:var(--text);font:500 12px/1.5 var(--mono);letter-spacing:.04em}
+#moteur .eng-costs ul{list-style:none;margin:0;padding:0}
+#moteur .eng-costs li{padding:3px 0;color:#c3ccdb}
+#moteur .eng-costs li span{color:var(--muted)}
+#moteur .eng-costs .eng-position{margin:0;color:#c3ccdb}
+@media(max-width:1000px){#moteur .eng-layout{grid-template-columns:minmax(0,1fr)}
+  #moteur .eng-costs{margin:0 20px 20px;padding:20px 0 0;border-left:0;border-top:1px solid #243044}}
+@media(max-width:760px){#moteur .pane-h{font-size:11px;letter-spacing:.06em}#moteur .eng-schema{padding:0}
+  #moteur .eng-costs{margin:0 16px 20px}}
 /* under the hood 2: M2 emission, our order at the quote, then execution */
 #carnet .ob{position:relative;background:var(--bg);box-shadow:none}
 #carnet .pane-h{font-family:var(--mono);align-items:baseline;flex-wrap:wrap}
@@ -618,7 +634,20 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
     <h2>Le moteur appelle votre code au bon moment.</h2>
     <p class="sub">Le moteur compilé avance <strong>barre par barre</strong>. Aux dates prévues, il appelle l’<strong>allocateur</strong>, qui renvoie les nouvelles pondérations. À chaque barre, il appelle les <strong>watchers</strong> : l’un peut demander un rebalancement hors calendrier, l’autre ajuste les opérations en cours.</p>
     <div class="eng-wrap pane"><div class="pane-h">Moteur compilé · appels du code<span>calendrier et watchers</span></div>
-    <svg class="eng" id="eng" viewBox="0 0 1000 520" role="img" aria-label="Le moteur compilé appelle l’allocateur aux dates prévues et les deux watchers à chaque barre. Les appels des watchers et leurs réponses sont jaunes. Le temps défile vers le bas."></svg></div>
+      <div class="eng-layout">
+        <div class="eng-schema"><svg class="eng" id="eng" viewBox="0 0 800 600" role="img" aria-label="Le moteur compilé appelle l’allocateur aux dates prévues et les deux watchers à chaque barre. Les flux de l’allocateur sont bleus, ceux des watchers jaunes. Le temps défile vers le bas."></svg></div>
+        <aside class="eng-costs" aria-labelledby="eng-cost-title">
+          <h3 id="eng-cost-title">Coûts de transaction</h3>
+          <p>Le moteur applique les coûts à chaque ordre et tout au long de la position.</p>
+          <h4>Ordre au marché</h4>
+          <ul><li>Écart achat/vente</li><li>Glissement</li><li>Commission</li><li>Taxes</li><li>Impact de marché <span>(selon le volume moyen)</span></li></ul>
+          <h4>Ordre limite</h4>
+          <ul><li>Exécuté à son prix limite seulement s’il est atteint.</li><li>Commission et taxes.</li><li><span>Sans écart ni glissement.</span></li></ul>
+          <h4>Sur la position</h4>
+          <p class="eng-position">Financement du levier et des positions courtes, conversion de devises.</p>
+        </aside>
+      </div>
+    </div>
     <div style="height:28px"></div>
     <div class="hood">
       <div><b>~0,01 s</b>par simulation : chaque réglage déplacé est recalculé aussitôt.</div>
@@ -1339,11 +1368,20 @@ async function autoplay() {
   };
   new IntersectionObserver((es, ob) => { if (es.some(e => e.isIntersecting)) { play(); ob.disconnect(); } }, {threshold: .45}).observe(el);
 })();
-// ---------- under the hood 1: terminal panels, orthogonal calls and a downward time axis ----------
+// ---------- under the hood 1: terminal panels, shared call routes and a daily time axis ----------
 (() => {
   const svg = $('eng'); if (!svg) return;
   const ns = 'http://www.w3.org/2000/svg', compact = matchMedia('(max-width:760px)');
-  const accent = 'var(--accent)', yellow = '#d9bf5a';
+  const motion = matchMedia('(prefers-reduced-motion: reduce)');
+  const accent = 'var(--accent)', yellow = '#d9bf5a', firstBar = 1586;
+  const origin = Date.UTC(2023, 2, 1), day = 86400000;
+  const months = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+  const dateAt = bar => new Date(origin + (bar-firstBar)*day);
+  const dateLabel = bar => {
+    const date = dateAt(bar);
+    return `${String(date.getUTCDate()).padStart(2,'0')}/${String(date.getUTCMonth()+1).padStart(2,'0')}/${date.getUTCFullYear()}`;
+  };
+  const scheduled = bar => (bar-firstBar)%10===0;
   const el = (tag, attrs, text, parent = svg) => {
     const node = document.createElementNS(ns, tag);
     Object.entries(attrs).forEach(([key, value]) => node.setAttribute(key, value));
@@ -1352,156 +1390,210 @@ async function autoplay() {
   let visible = false, scene;
   const draw = () => {
     scene?.stop(); svg.replaceChildren();
-    const mobile = compact.matches;
-    svg.setAttribute('viewBox', mobile ? '0 0 340 790' : '0 0 1000 520');
+    const mobile = compact.matches, reduced = motion.matches;
+    svg.setAttribute('viewBox', mobile ? '0 0 340 932' : '0 0 800 600');
     el('title', {}, 'FORGE · appels du moteur compilé');
-    el('desc', {}, 'Chaque barre appelle les deux watchers. Le calendrier appelle l’allocateur en bleu ; un watcher le rappelle en jaune, hors calendrier.');
-    // On desktop all content ends before x=667: the right third stays available for the future chart.
+    el('desc', {}, 'Une graduation par barre et par jour. Un rebalancement prévu toutes les dix barres ; environ une réaction de watcher toutes les cinq barres. Les appels et leurs réponses partagent le même trajet.');
     const layout = mobile ? {
-      al:[22,16,296,88], w1:[22,132,296,88], w2:[22,248,296,88], en:[64,400,212,82],
-      axis:114, now:610, top:538, bottom:756,
-      paths:{fork:[[64,450],[12,450],[12,232]], e1:[[12,232],[12,176],[22,176]], e2:[[12,232],[12,292],[22,292]],
-        ea:[[64,414],[4,414],[4,60],[22,60]], ae:[[318,80],[334,80],[334,424],[276,424]],
-        w1:[[44,132],[44,104]], w2:[[318,310],[326,310],[326,460],[276,460]], ta:[[114,610],[170,610],[170,482]]},
-      tags:{weights:[86,380], request:[60,122], order:[160,358]}
+      al:[42,20,266,92], w1:[42,184,266,92], w2:[42,348,266,92], en:[42,512,266,92],
+      axis:96, now:740, top:664, bottom:900, end:316,
+      paths:{ea:[[42,558],[14,558],[14,66],[42,66]],
+        fork:[[308,580],[326,580],[326,394]], e1:[[326,394],[326,230],[308,230]], e2:[[326,394],[308,394]],
+        w1:[[175,184],[175,112]], ta:[[96,740],[28,740],[28,628],[175,628],[175,604]]},
+      tags:{weights:[42,488], request:[188,152], order:[188,468]}
     } : {
-      al:[16,48,250,92], w1:[16,284,250,82], w2:[16,404,250,82], en:[372,218,178,90],
-      axis:592, now:264, top:40, bottom:480,
-      paths:{fork:[[372,280],[300,280],[300,384]], e1:[[300,384],[284,384],[284,325],[266,325]], e2:[[300,384],[300,445],[266,445]],
-        ea:[[372,240],[312,240],[312,78],[266,78]], ae:[[266,110],[340,110],[340,258],[372,258]],
-        w1:[[142,284],[142,140]], w2:[[266,465],[354,465],[354,296],[372,296]], ta:[[592,264],[550,264]]},
-      tags:{weights:[278,186], request:[22,220], order:[278,506]}
+      al:[24,44,266,92], w1:[24,254,266,92], w2:[24,464,266,92], en:[378,254,266,92],
+      axis:682, now:300, top:40, bottom:556, end:790,
+      paths:{ea:[[378,278],[348,278],[348,90],[290,90]],
+        fork:[[378,322],[324,322]], e1:[[324,322],[290,322]], e2:[[324,322],[324,510],[290,510]],
+        w1:[[157,254],[157,136]], ta:[[682,300],[644,300]]},
+      tags:{weights:[378,236], request:[169,198], order:[344,428]}
     };
     const paths = {};
     Object.entries(layout.paths).forEach(([key, points]) => {
-      const d = points.map(([x,y],i) => `${i ? 'L' : 'M'}${x} ${y}`).join(' ');
-      paths[key] = {points, d, length:points.slice(1).reduce((sum,p,i) => sum + Math.hypot(p[0]-points[i][0],p[1]-points[i][1]),0)};
-      el('path', {class:'lk', d});
+      const segments = points.slice(1).map((point,i) => ({from:points[i],to:point,length:Math.hypot(point[0]-points[i][0],point[1]-points[i][1])}));
+      paths[key] = {points,segments,length:segments.reduce((sum,segment)=>sum+segment.length,0)};
+      el('path', {class:'lk',d:points.map(([x,y],i)=>`${i ? 'L' : 'M'}${x} ${y}`).join(' ')});
     });
-    const panel = (rect, heading, code, note) => {
-      const [x,y,width,height] = rect, group = el('g', {});
-      const box = el('rect', {class:'bx',x,y,width,height}, '', group);
+    const panel = (rect, heading, code, note, colour) => {
+      const [x,y,width,height] = rect, group = el('g', {class:'node'});
+      el('rect', {class:'bx',x,y,width,height}, '', group);
       el('rect', {class:'band',x,y,width,height:29}, '', group);
-      el('text', {class:'t1',x:x+12,y:y+19}, heading, group);
-      el('text', {class:code.startsWith('barre') ? 'counter' : 'code',x:x+12,y:y+51}, code, group);
-      if (note) el('text', {class:'t2',x:x+12,y:y+73}, note, group);
-      return {box, counter:group.querySelector('.counter')};
+      el('line', {class:'divider',x1:x,x2:x+width,y1:y+29,y2:y+29}, '', group);
+      el('rect', {x:x+12,y:y+12,width:6,height:6,fill:colour}, '', group);
+      el('text', {class:'t1',x:x+26,y:y+19}, heading, group);
+      const counter = el('text', {class:code.startsWith('barre') ? 'counter' : 'code',x:x+12,y:y+53}, code, group);
+      const date = code.startsWith('barre') ? el('text', {class:'date',x:x+width-12,y:y+53,'text-anchor':'end'}, dateLabel(firstBar), group) : null;
+      el('text', {class:'t2',x:x+12,y:y+76}, note, group);
+      // Draw the complete outline last so the header band can never cover its active border.
+      el('rect', {class:'outline',x,y,width,height}, '', group);
+      return {group,counter,date};
     };
     const boxes = {
-      al:panel(layout.al,'ALLOCATEUR','max_sharpe(ctx, mem, out)','appelé aux dates prévues'),
-      w1:panel(layout.w1,'WATCHER · PORTEFEUILLE','', 'peut demander un rebalancement'),
-      w2:panel(layout.w2,'WATCHER · OPÉRATIONS','', 'ajuste les ordres en cours'),
-      en:panel(layout.en,'MOTEUR COMPILÉ','barre 1 532')
+      al:panel(layout.al,'ALLOCATEUR','max_sharpe(ctx, mem, out)','appelé aux dates prévues',accent),
+      w1:panel(layout.w1,'WATCHER · PORTEFEUILLE','watch_portfolio(ctx, book)','peut demander un rebalancement',yellow),
+      w2:panel(layout.w2,'WATCHER · OPÉRATIONS','watch_orders(ctx, book)','ajuste les ordres en cours',yellow),
+      en:panel(layout.en,'MOTEUR COMPILÉ','barre 1 586','avance barre par barre','var(--text)')
     };
-    // Watchers have a single body line, aligned to the same terminal baseline.
-    ['w1','w2'].forEach(key => {
-      const note = boxes[key].box.parentNode.querySelector('.t2');
-      note.setAttribute('y', layout[key][1]+54);
-    });
     const tags = {};
     Object.entries(layout.tags).forEach(([key,[x,y]]) => {
       tags[key] = el('text', {class:'tag',x,y,fill:key==='weights' ? accent : yellow},
         {weights:'nouvelles pondérations',request:'rebalancement demandé',order:'ordre ajusté'}[key]);
     });
     const defs = el('defs', {}), clip = el('clipPath', {id:'eng-time-clip'}, '', defs);
-    el('rect', {x:layout.axis-12,y:layout.top,width:mobile ? 216 : 86,height:layout.bottom-layout.top}, '', clip);
+    el('rect', {x:layout.axis-28,y:layout.top,width:layout.end-layout.axis+28,height:layout.bottom-layout.top}, '', clip);
     const strip = el('g', {'clip-path':'url(#eng-time-clip)'}), ticks = el('g', {}, '', strip);
     el('line', {class:'tick',x1:layout.axis,x2:layout.axis,y1:layout.top,y2:layout.bottom}, '', strip);
-    el('line', {class:'now',x1:layout.axis-12,x2:mobile ? 316 : 666,y1:layout.now,y2:layout.now});
-    el('text', {class:'ml',x:layout.axis-8,y:layout.bottom+22}, 'le temps ↓');
-    const step = 10, every = 21, months = ['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
-    const offSchedule = new Set([1526]);
-    let bar = 1532, time = 0, nextBar = 900, previous = null, raf = null, drawnBar = null, events = [], pulses = [], flashes = [];
+    el('line', {class:'now',x1:layout.axis,x2:layout.end,y1:layout.now,y2:layout.now});
+    el('text', {class:'ml',x:layout.axis-8,y:layout.bottom+24}, 'le temps ↓');
+    const step = 13, watcherEvents = new Map();
+    const position = b => {
+      const date = dateAt(b), month = (date.getUTCFullYear()-2023)*12+date.getUTCMonth()-2;
+      return (b-firstBar)*step+month*28;
+    };
+    const monthText = date => `${months[date.getUTCMonth()]}${date.getUTCMonth()===0 || (date.getUTCFullYear()===2023 && date.getUTCMonth()===2) ? ' '+date.getUTCFullYear() : ''}`;
+    const heading = el('g', {}, '', strip);
+    el('rect', {x:layout.axis-28,y:layout.top,width:layout.end-layout.axis+28,height:28,fill:'var(--bg)'}, '', heading);
+    el('line', {class:'month-rule',x1:layout.axis+9,x2:layout.end,y1:layout.top+27,y2:layout.top+27}, '', heading);
+    const monthHeading = el('text', {class:'month',x:layout.axis+12,y:layout.top+17}, '', heading);
+    let bar = reduced ? firstBar+48 : firstBar, time = 0, barStart = 0, duration = 700;
+    let nextBar = 700, nextWatcher = firstBar+2, previous = null, raf = null, drawnBar = null;
+    let pulses = [], trails = [], flashes = new Map(), started = false;
+    if (reduced) for (let b=firstBar+2;b<=bar;b+=5) watcherEvents.set(b,b%2 ? 'w1' : 'w2');
+    const updateCounter = () => {
+      boxes.en.counter.textContent = `barre ${bar.toLocaleString('fr-FR')}`;
+      boxes.en.date.textContent = dateLabel(bar);
+    };
     const timeline = fraction => {
-      ticks.setAttribute('transform', `translate(0 ${fraction*step})`);
+      const shift = fraction*(position(bar+1)-position(bar));
+      ticks.setAttribute('transform', `translate(0 ${shift})`);
       if (drawnBar===bar) return;
       drawnBar=bar; ticks.replaceChildren();
       const past = Math.ceil((layout.bottom-layout.now)/step)+1, future = Math.ceil((layout.now-layout.top)/step)+1;
-      for (let b=bar-past; b<=bar+future; b++) {
-        const y = layout.now+(bar-b)*step, scheduled = b % every === 0;
-        el('line', {class:'tick',x1:layout.axis-(b%5===0 ? 10 : 5),x2:layout.axis+5,y1:y,y2:y}, '', ticks);
-        if (scheduled || offSchedule.has(b)) {
-          el('rect', {class:scheduled ? 'rb' : 'rbw',x:layout.axis-3,y:y-3,width:6,height:6}, '', ticks);
-          const month = Math.round((b-1533)/every), index = ((month%12)+12)%12;
-          el('text', {class:'ml',x:layout.axis+12,y:y+4}, scheduled ? months[index] : (mobile ? 'hors calendrier' : 'hors'), ticks);
-          if (!scheduled && !mobile) el('text', {class:'ml',x:layout.axis+12,y:y+17}, 'calendrier', ticks);
+      let topBar = bar+future;
+      while (layout.now+position(bar)-position(topBar)<layout.top+28) topBar--;
+      monthHeading.textContent=monthText(dateAt(topBar));
+      for (let b=bar-past;b<=bar+future;b++) {
+        const y = layout.now+position(bar)-position(b), date = dateAt(b), fifth = (b-firstBar)%5===0;
+        el('line', {class:'tick',x1:layout.axis-(fifth ? 9 : 4),x2:layout.axis+4,y1:y,y2:y}, '', ticks);
+        if (fifth) el('text', {class:'ml',x:layout.axis-13,y:y+4,'text-anchor':'end'}, String(date.getUTCDate()).padStart(2,'0'), ticks);
+        // Month headings occupy a reserved gap, away from day and event labels.
+        if (date.getUTCDate()===1) {
+          el('line', {class:'month-rule',x1:layout.axis+9,x2:layout.end,y1:y+10,y2:y+10}, '', ticks);
+          el('text', {class:'month',x:layout.axis+12,y:y+24}, monthText(date), ticks);
+        }
+        if (scheduled(b)) {
+          el('rect', {class:'rb',x:layout.axis-3,y:y-3,width:6,height:6}, '', ticks);
+          el('text', {class:'ml',x:layout.axis+12,y:y+4}, dateLabel(b), ticks);
+        }
+        if (watcherEvents.has(b)) {
+          el('rect', {class:'rbw',x:layout.axis-3,y:y-3,width:6,height:6}, '', ticks);
+          el('text', {class:'ml',x:layout.axis+12,y:y+4}, 'watcher', ticks);
         }
       }
     };
-    const later = (delay, action) => events.push({at:time+delay,action});
-    const flash = (key, colour) => {
-      const node = boxes[key].box, cls = colour===yellow ? 'hotw' : 'hot';
-      node.classList.remove('hot','hotw'); node.classList.add(cls); flashes.push({node,cls,until:time+380});
+    const flash = (key,colour,at,d) => {
+      const node = boxes[key].group;
+      node.style.setProperty('--flow',colour); node.classList.add('hot');
+      flashes.set(node,{until:at+Math.max(50,d*.32),cls:'hot'});
     };
-    const say = (key,colour) => {
-      const node = tags[key]; node.setAttribute('fill',colour); node.classList.add('on'); flashes.push({node,cls:'on',until:time+650});
+    const say = (key,colour,at,d) => {
+      const node = tags[key]; node.setAttribute('fill',colour); node.classList.add('on');
+      flashes.set(node,{until:at+Math.max(70,d*.7),cls:'on'});
     };
-    const pulse = (key,colour,duration,done) => {
-      const route = paths[key], line = el('path', {class:'pulse-line',d:route.d,stroke:colour});
-      const dot = el('rect', {width:5,height:5,fill:colour});
-      pulses.push({route,line,dot,start:time,duration,done});
+    const pulse = (key,colour,d,ratio,at,done,reverse=false) => {
+      const route = paths[key], segments = reverse ? [...route.segments].reverse().map(s=>({from:s.to,to:s.from,length:s.length})) : route.segments;
+      const dot = el('rect', {x:segments[0].from[0]-4,y:segments[0].from[1]-4,width:8,height:8,fill:colour,'aria-hidden':'true'});
+      pulses.push({segments,length:route.length,colour,dot,start:at,duration:Math.max(18,d*ratio),fade:Math.max(18,d*.16),done,segment:-1,line:null});
     };
-    const answer = colour => {
-      flash('al',colour); say('weights',colour); pulse('ae',colour,400,()=>flash('en',colour));
+    const answer = (colour,at,d) => {
+      flash('al',colour,at,d); say('weights',colour,at,d);
+      pulse('ea',colour,d,.28,at,end=>flash('en',colour,end,d),true);
     };
-    const advance = () => {
-      bar++; boxes.en.counter.textContent = `barre ${bar.toLocaleString('fr-FR')}`;
-      pulse('fork',yellow,160,()=>{
-        pulse('e1',yellow,200,()=>flash('w1',yellow));
-        pulse('e2',yellow,200,()=>flash('w2',yellow));
-      });
-      if (bar%every===0) pulse('ta',accent,180,()=>{
-        flash('en',accent); pulse('ea',accent,300,()=>answer(accent));
-      });
-      else if (bar%14===5) {
-        const portfolio = Math.floor(bar/14)%2===0;
-        later(380,()=>{
-          if (portfolio) {
-            offSchedule.add(bar); say('request',yellow);
-            pulse('w1',yellow,300,()=>answer(yellow));
-          } else { say('order',yellow); pulse('w2',yellow,300,()=>flash('en',yellow)); }
-        });
+    const runBar = () => {
+      const at = barStart, d = duration, event = bar===nextWatcher ? (Math.random()<.5 ? 'w1' : 'w2') : null;
+      if (event) {
+        watcherEvents.set(bar,event); nextWatcher=bar+4+Math.floor(Math.random()*3);
+        // Separate event labels from scheduled dates while keeping roughly one reaction in five bars.
+        if (scheduled(nextWatcher)) nextWatcher++;
+        drawnBar=null;
       }
-      for (const b of offSchedule) if (b<bar-60) offSchedule.delete(b);
+      pulse('fork',yellow,d,.18,at,forkAt=>{
+        ['e1','e2'].forEach((key,i)=>pulse(key,yellow,d,.2,forkAt,arrived=>{
+          const watcher = i===0 ? 'w1' : 'w2'; flash(watcher,yellow,arrived,d);
+          if (event!==watcher) return;
+          if (watcher==='w1') {
+            say('request',yellow,arrived,d);
+            pulse('w1',yellow,d,.25,arrived,end=>answer(yellow,end,d));
+          } else {
+            say('order',yellow,arrived,d);
+            pulse('e2',yellow,d,.2,arrived,end=>pulse('fork',yellow,d,.18,end,done=>flash('en',yellow,done,d),true),true);
+          }
+        }));
+      });
+      if (scheduled(bar)) pulse('ta',accent,d,.12,at,arrived=>{
+        flash('en',accent,arrived,d);
+        pulse('ea',accent,d,.28,arrived,end=>answer(accent,end,d));
+      });
+      for (const b of watcherEvents.keys()) if (b<bar-80) watcherEvents.delete(b);
+    };
+    const barDuration = at => {
+      const progress = Math.max(0,Math.min(1,(at-8*700)/4000));
+      return 700+(40-700)*progress*progress*(3-2*progress);
     };
     const frame = now => {
-      if (previous!==null) time += Math.min(now-previous,80); previous = now;
-      if (time>=nextBar) { advance(); nextBar+=900; }
-      const due = events.filter(event=>event.at<=time); events=events.filter(event=>event.at>time); due.forEach(event=>event.action());
-      // Process a snapshot: a completed pulse may enqueue the next leg of its call.
+      if (previous!==null) time += Math.min(now-previous,80); previous=now;
+      while (time>=nextBar) {
+        bar++; barStart=nextBar; duration=barDuration(barStart); nextBar=barStart+duration;
+        updateCounter(); runBar();
+      }
+      // Newly enqueued reply legs use their actual arrival time, even at 40 ms per bar.
       const active = pulses; pulses=[];
-      active.forEach(pulse => {
-        const fraction = Math.min(1,(time-pulse.start)/pulse.duration);
-        let distance = fraction*pulse.route.length, point = pulse.route.points[0];
-        for (let i=1;i<pulse.route.points.length;i++) {
-          const next = pulse.route.points[i], length = Math.hypot(next[0]-point[0],next[1]-point[1]);
-          if (distance<=length) { point=[point[0]+(next[0]-point[0])*distance/length,point[1]+(next[1]-point[1])*distance/length]; break; }
-          distance-=length; point=next;
+      for (let index=0;index<active.length;index++) {
+        const p = active[index], fraction = Math.min(1,(time-p.start)/p.duration);
+        let distance = fraction*p.length, segmentIndex=0;
+        while (segmentIndex<p.segments.length-1 && distance>p.segments[segmentIndex].length) distance-=p.segments[segmentIndex++].length;
+        const segment = p.segments[segmentIndex], part = distance/segment.length;
+        if (fraction<1) {
+          if (p.segment!==segmentIndex) {
+            if (p.line) trails.push({node:p.line,start:time,duration:p.fade});
+            p.line=el('line', {class:'pulse-line',stroke:p.colour,x1:segment.from[0],y1:segment.from[1],x2:segment.to[0],y2:segment.to[1]});
+            p.segment=segmentIndex;
+          }
+          p.dot.setAttribute('x',segment.from[0]+(segment.to[0]-segment.from[0])*part-4);
+          p.dot.setAttribute('y',segment.from[1]+(segment.to[1]-segment.from[1])*part-4);
+          svg.append(p.dot); pulses.push(p);
+        } else {
+          if (p.line) trails.push({node:p.line,start:time,duration:p.fade});
+          p.dot.remove();
+          // Keep existing active pulses; only the callback's new legs join this frame's queue.
+          const pending = pulses.length; p.done?.(p.start+p.duration);
+          active.push(...pulses.splice(pending));
         }
-        pulse.dot.setAttribute('x',point[0]-2.5); pulse.dot.setAttribute('y',point[1]-2.5);
-        if (fraction===1) { pulse.line.remove(); pulse.dot.remove(); pulse.done?.(); } else pulses.push(pulse);
+      }
+      trails=trails.filter(trail=>{
+        const opacity = 1-(time-trail.start)/trail.duration;
+        if (opacity<=0) { trail.node.remove(); return false; }
+        trail.node.setAttribute('opacity',opacity); return true;
       });
-      flashes=flashes.filter(flash => {
-        if (flash.until>time) return true;
-        if (!flashes.some(other=>other!==flash && other.node===flash.node && other.cls===flash.cls && other.until>time)) flash.node.classList.remove(flash.cls);
-        return false;
-      });
-      timeline((time-(nextBar-900))/900); raf=requestAnimationFrame(frame);
+      for (const [node,flash] of flashes) if (time>=flash.until) { node.classList.remove(flash.cls); flashes.delete(node); }
+      timeline(Math.min(1,(time-barStart)/duration)); raf=requestAnimationFrame(frame);
     };
-    timeline(0);
+    updateCounter(); timeline(0);
     scene = {
-      start:()=>{ if (raf===null && !reduce) { previous=null; raf=requestAnimationFrame(frame); } },
+      start:()=>{ if (raf===null && !reduced) { if (!started) { runBar(); started=true; } previous=null; raf=requestAnimationFrame(frame); } },
       stop:()=>{ if (raf!==null) cancelAnimationFrame(raf); raf=null; previous=null; }
     };
-    if (reduce) { tags.weights.classList.add('on'); }
+    if (reduced) { tags.weights.classList.add('on'); }
     else if (visible && !document.hidden) scene.start();
   };
-  draw(); compact.addEventListener('change',draw);
+  draw(); compact.addEventListener('change',draw); motion.addEventListener('change',draw);
   new IntersectionObserver(entries => {
-    visible=entries.some(entry=>entry.isIntersecting);
-    if (visible && !document.hidden) scene.start(); else scene.stop();
+    const entered = entries.some(entry=>entry.isIntersecting), wasVisible = visible;
+    visible=entered;
+    if (visible && !document.hidden) { if (!wasVisible) draw(); else scene.start(); } else scene.stop();
   }, {threshold:0}).observe(svg);
-  document.addEventListener('visibilitychange',()=>{ if (visible && !document.hidden) scene.start(); else scene.stop(); });
+  document.addEventListener('visibilitychange',()=>{ if (visible && !document.hidden) draw(); else scene.stop(); });
 })();
 
 boot();
