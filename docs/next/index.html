@@ -195,6 +195,8 @@ a{color:inherit}
 #openwin.on .ow-l2,#openwin.on .ow-f2{animation-delay:2.2s}
 #openwin.on .ow-l3,#openwin.on .ow-f3{animation-delay:3.2s}
 #openwin.on .ow-c{animation:owin 1.2s ease 4.8s forwards}
+/* leaving the step (fade-out): keep the final, customised terminal, never flash back to the original */
+#openwin:not(.on) .ow-c{opacity:1}
 @keyframes owin{to{opacity:1}}
 @keyframes owflag{0%{opacity:0}20%{opacity:1}70%{opacity:1}100%{opacity:0}}
 @media (prefers-reduced-motion:reduce){#openwin .ow-c{opacity:1;animation:none!important}#openwin .ow-f{display:none}}
