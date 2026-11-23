@@ -181,6 +181,41 @@ a{color:inherit}
 .sq{display:inline-flex;gap:4px;vertical-align:middle;margin-right:10px}
 .sq i{width:11px;height:11px;border:1px solid #3a4558;transition:background .2s,border-color .2s}
 .sq i.on{background:var(--accent);border-color:var(--accent)}
+/* page 3: the strategy's own views, in a panel framed like the terminal */
+.ow{width:min(1240px,100%);display:grid;grid-template-columns:minmax(0,330px) minmax(0,1fr);gap:28px;align-items:center}
+.ow .sch-sub{max-width:none}
+.ow .ow-data{margin-top:18px}
+.ow-shot{position:relative;overflow:hidden;max-height:calc(100vh - 170px)}
+.ow-shot img{display:block;width:100%;height:auto}
+.ow-shot .ow-l,.ow-shot .ow-c{position:absolute;inset:0;opacity:0}
+.ow-f{position:absolute;border:2px solid var(--accent);box-shadow:0 0 18px #29c5ff88;opacity:0;pointer-events:none}
+/* entering the step: the three cells are swapped one by one (each flagged by a frame), then the yellow theme */
+#openwin.on .ow-l{animation:owin .6s ease forwards}#openwin.on .ow-f{animation:owflag 1.4s ease forwards}
+#openwin.on .ow-l1,#openwin.on .ow-f1{animation-delay:1.2s}
+#openwin.on .ow-l2,#openwin.on .ow-f2{animation-delay:2.2s}
+#openwin.on .ow-l3,#openwin.on .ow-f3{animation-delay:3.2s}
+#openwin.on .ow-c{animation:owin 1.2s ease 4.8s forwards}
+@keyframes owin{to{opacity:1}}
+@keyframes owflag{0%{opacity:0}20%{opacity:1}70%{opacity:1}100%{opacity:0}}
+@media (prefers-reduced-motion:reduce){#openwin .ow-c{opacity:1;animation:none!important}#openwin .ow-f{display:none}}
+.ow-data{margin:0;font-size:13.5px;color:var(--muted)}.ow-data b{color:var(--text);font-weight:600}
+/* page 2: three cards (idea, simulation, analysis) framed like the terminal's panels, then the trial log */
+.rr{grid-template-columns:1fr;gap:14px;width:min(1100px,100%)}
+.rr .sch-sub{max-width:980px}
+.fc-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.fc{transition:border-color .3s,box-shadow .3s}
+.fc .pane-h{transition:color .3s}
+.fc-b{display:flex;align-items:center;gap:14px;padding:14px 16px;color:#c3ccdb;font-size:15px;line-height:1.4}
+.fc-b p{margin:0}
+.fc-i{flex:0 0 auto;width:28px;height:28px;fill:none;stroke:#8592a6;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;transition:stroke .3s,filter .3s}
+.fc.on{border-color:var(--accent);box-shadow:0 0 0 1px #29c5ff55,0 30px 80px #000a}
+.fc.on .pane-h{color:var(--accent)}
+.fc.on .fc-i{stroke:var(--accent);filter:drop-shadow(0 0 5px #29c5ff88)}
+.loopl{display:flex;justify-content:center;align-items:center;gap:10px;margin:0;font:500 16px var(--sans);color:var(--text)}
+.loopl svg{width:20px;height:20px;fill:none;stroke:var(--accent);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.loopl.spin svg{animation:spin 1.5s linear infinite}
+.rr .log li{padding:5px 16px}
+.fc{display:flex;flex-direction:column}.fc-b{flex:1}
 
 /* the visitor's AI: a chat card over the terminal (thinking, then the code it hands back) */
 .chat{position:absolute;z-index:5;right:72px;top:50%;width:460px;transform:translateY(-46%);background:var(--panel);border:1px solid var(--tuto);
@@ -512,6 +547,8 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
   .rr{grid-template-columns:1fr;gap:8px}
   .log{font-size:11px}.log li{grid-template-columns:74px minmax(0,1fr) 50px 50px 14px;gap:6px;padding:5px 10px}.pane-h span{display:none}.log .lg{display:none}.log .sh{display:inline}
   .log li.wide{grid-template-columns:74px minmax(0,1fr)}.sq i{width:8px;height:8px}.sq{gap:3px}
+  .ow{grid-template-columns:1fr;gap:12px}.ow .ow-data{margin-top:8px}.ow .sch-cap{display:none}.ow .sch-sub,.ow-data{font-size:13px}
+  .fc-row{gap:6px}.fc .pane-h{padding:6px 8px;font-size:10px;letter-spacing:.08em}.fc-b{padding:8px;justify-content:center}.fc-b p{display:none}.fc-i{width:22px;height:22px}.loopl{font-size:13px}.rr .sch-sub{font-size:13px}.rr .sch-cap{display:none}.rr .log li{padding:4px 10px}.fc .pane-h{letter-spacing:.04em}
   .hero h1{font-size:30px}
   .hero .lead{font-size:15px;margin-top:var(--s4)}
   .nocode{display:block;margin-top:var(--s4);font-size:14px}
@@ -565,7 +602,7 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
         <div class="mark"><i></i><b>FORGE</b><span>Laboratoire d’allocation<br>de portefeuille</span></div>
         <p class="badge">Conçu pour les professionnels</p>
         <h1>Mettez votre allocation à l’épreuve <span>avant que les marchés ne le fassent.</span></h1>
-        <p class="lead">Construisez et testez vos stratégies d’allocation multi-actifs. Analysez leurs performances, mesurez les risques et comparez vos décisions dans un même environnement de recherche.</p>
+        <p class="lead">Construisez votre portefeuille multi-actifs et testez vos règles de gestion. Analysez leurs performances, mesurez les risques et comparez vos décisions dans un même environnement de recherche.</p>
         <div class="ctas">
           <a class="btn primary" href="#" id="start">Voir la démo ↓</a>
           <a class="btn" href="#acces">Demander un accès</a>
@@ -578,16 +615,25 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
     <!-- How it works: the demo's own trials on a risk / return plane, with their log -->
     <div class="schema" id="schema">
       <div class="rr">
-        <div class="rr-head"><svg class="mini" id="mini" viewBox="0 0 52 52" aria-hidden="true"><circle class="ball" cx="26" cy="4" r="10"/><path class="cup" d="M12 18 V32 A14 14 0 0 0 40 32 V18"/></svg>
-          <div><p class="sch-cap">Comment ça marche</p>
-          <h2 class="sch-title">Déposez une stratégie, FORGE rend son verdict.</h2>
-          <p class="sch-sub">Explorez vos allocations. Mesurez leurs limites. Affinez vos décisions.</p></div></div>
-        <div class="pane"><div class="pane-h">Risque / rendement<span>période d’étude 2017 → 2023</span></div>
-        <svg class="plane" id="plane" viewBox="0 0 600 450" role="img" aria-label="Rendement annuel en fonction de la volatilité : trois essais successifs, le troisième entre dans la zone cible, meilleur que le 1/N sur les deux axes."></svg>
-        </div>
-        <div class="pane"><div class="pane-h">Journal des essais<span>chaque essai est compté par la validation</span></div>
+        <div class="rr-head"><div><p class="sch-cap">Comment ça marche</p>
+          <h2 class="sch-title">Toute la puissance de FORGE au service de vos idées.</h2>
+          <p class="sch-sub">Concentrez toute votre énergie sur votre logique d’investissement. FORGE prend en charge vos simulations en quelques secondes, grâce à un moteur optimisé dont les règles d’exécution sont entièrement documentées. Évaluez vos décisions, affinez vos règles de gestion et explorez de nouvelles idées à partir des résultats obtenus.</p></div></div>
+        <div class="fc-row"><div class="pane fc" id="fc0"><div class="pane-h">Vos idées<span>01</span></div><div class="fc-b"><svg class="fc-i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.6 10.8c.7.5 1.1 1.3 1.1 2.1V16h5v-.1c0-.8.4-1.6 1.1-2.1A6 6 0 0 0 12 3z"/></svg><p>Portefeuilles, allocations et règles de gestion</p></div></div><div class="pane fc" id="fc1"><div class="pane-h">FORGE simule<span>02</span></div><div class="fc-b"><svg class="fc-i" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1.5"/><rect x="9.5" y="9.5" width="5" height="5"/><path d="M10 2.5v3.5M14 2.5v3.5M10 18v3.5M14 18v3.5M2.5 10h3.5M2.5 14h3.5M18 10h3.5M18 14h3.5"/></svg><p>Exécution rapide et fiable de vos stratégies</p></div></div><div class="pane fc" id="fc2"><div class="pane-h">Vous analysez<span>03</span></div><div class="fc-b"><svg class="fc-i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21v-5M9 21v-8M14 21v-6M19 21v-11"/><path d="M3 11l6-5 5 3 7-6"/><path d="M17 3h4v4"/></svg><p>Performances, risques et nouvelles hypothèses</p></div></div></div>
+        <p class="loopl" id="loopl"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14.3-4.9L4 8"/><path d="M4 3v5h5"/><path d="M4 13a8 8 0 0 0 14.3 4.9L20 16"/><path d="M20 21v-5h-5"/></svg>Testez. Comparez. Affinez. Recommencez.</p>
+        <div class="pane"><div class="pane-h">Votre recherche, essai après essai<span>simulations réelles de la démo, 2017 → 2023 · chaque essai est compté</span></div>
         <ol class="log" id="log"></ol></div>
-        <p class="sch-ex">Exemple : simulations réelles de la démo ci-dessous, sur la période d’étude février 2017 → août 2023 ; la suite reste verrouillée pour la validation.</p>
+      </div>
+    </div>
+    <!-- Page 3: the environment is open: views written in the strategy's own code -->
+    <div class="schema" id="openwin">
+      <div class="ow">
+        <div><p class="sch-cap">Un environnement ouvert et personnalisable</p>
+          <h2 class="sch-title">Votre stratégie. Vos outils. <span class="hl">Votre environnement.</span></h2>
+          <p class="sch-sub">FORGE ne vous enferme pas dans des modèles ou des visualisations prédéfinis. Développez vos propres indicateurs, personnalisez vos graphiques et construisez un espace d’analyse entièrement adapté à votre méthode de gestion.</p>
+          <p class="ow-data"><b>Vos données, vos sources.</b> La démonstration utilise des historiques de prix au format CSV (forexsb). Vous pouvez brancher vos propres données ou celles de votre fournisseur.</p>
+        </div>
+        <div class="pane"><div class="pane-h">Terminal d’analyse personnalisé<span>vues écrites dans le code de la stratégie</span></div>
+          <div class="ow-shot"><img src="next/states/open_a.jpg" alt="Terminal FORGE d’origine"><img class="ow-l ow-l1" src="next/states/open_b.jpg" alt="" style="clip-path:inset(28.90% 21.88% 37.47% 57.01%)"><i class="ow-f ow-f1" style="left:57.01%;top:28.90%;width:21.11%;height:33.63%"></i><img class="ow-l ow-l2" src="next/states/open_b.jpg" alt="" style="clip-path:inset(62.97% 38.33% 0.00% 23.61%)"><i class="ow-f ow-f2" style="left:23.61%;top:62.97%;width:38.06%;height:37.03%"></i><img class="ow-l ow-l3" src="next/states/open_b.jpg" alt="" style="clip-path:inset(62.97% 0.00% 0.00% 61.94%)"><i class="ow-f ow-f3" style="left:61.94%;top:62.97%;width:38.06%;height:37.03%"></i><img class="ow-c" src="next/states/open_c.jpg" alt="Le même terminal avec les vues écrites dans le code de la stratégie et le thème jaune"></div></div>
       </div>
     </div>
     <!-- Before deployment: the real Validation page, the sealed period opened with one click -->
@@ -753,7 +799,8 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
 // Rects come from next/states/targets.json, measured on the real page at 1600 x 1000.
 const ALL_STEPS = [
   {state: 'shot', hero: true, label: 'Accueil'},          // a real screenshot of the terminal
-  {state: 'shot', schema: 'flow', label: 'Comment ça marche'},
+  {state: 'shot', schema: 'flow', label: 'Principe'},
+  {state: 'shot', open: true, label: 'Votre environnement'},
   {state: 'run', target: 'create', cursor: true, label: 'Créer',
    n: 'Étape 1', h: 'Créer une stratégie', p: 'Tout part d’ici. FORGE propose de partir d’un portefeuille ou d’une stratégie d’allocation simple, que vous modifierez ensuite.'},
   {state: 'create', from: 'create', target: 'blank', cursor: true, label: 'Point de départ',
@@ -808,7 +855,7 @@ const ALL_STEPS = [
 const AUTO = new URLSearchParams(location.search).has('auto');
 // The home page: 6 actions that show the principle. The full walkthrough (?tuto) is for the Tutorial page.
 const TOUR = [
-  ...ALL_STEPS.filter(s => s.hero || s.schema),
+  ...ALL_STEPS.filter(s => s.hero || s.schema || s.open),
   {state: 'create0', play: [['run0', 'create', 'create0']], target: 'blank', label: 'Créer', nx: 'bubble',
    n: 'Action 1', h: 'Créer une stratégie', p: 'Rien n’est encore chargé ni simulé. Deux points de départ : un portefeuille blanc à composer vous-même, ou une stratégie d’allocation simple.'},
   {state: 'portfolio', play: [['create0', 'blank', 'blank0'], ['blank0', 'deu', 'tick0', 'Coché ✓'], ['tick0', 'go', 'portfolio']], target: 'alloc', label: 'Composer', nx: 'bubble',
@@ -1013,14 +1060,14 @@ function enter(k, forward) {
     nextTimer = setTimeout(() => $('next').classList.add('on'), step.schema ? 8000 : Math.min(9000, Math.max(2500, stepTime(step) - 2500)));
   [...$('rail').children].forEach((b, i) => b.classList.toggle('on', i === k));
   $('bubble').classList.remove('on'); $('ring').classList.remove('on'); $('done').classList.remove('on'); $('found').classList.remove('on');
-  $('schema').classList.toggle('on', !!step.schema); stopVal(); stopCross(); $('edwin').classList.toggle('on', !!step.edintro); $('testwin').classList.toggle('on', !!step.tests); clearTimeout(codeTimer); $('fly')?.classList.remove('on'); $('joinann').classList.remove('on');
+  $('schema').classList.toggle('on', !!step.schema); stopVal(); stopCross(); $('edwin').classList.toggle('on', !!step.edintro); $('testwin').classList.toggle('on', !!step.tests); $('openwin').classList.toggle('on', !!step.open); clearTimeout(codeTimer); $('fly')?.classList.remove('on'); $('joinann').classList.remove('on');
   $('departo').classList.toggle('on', !!step.depart); document.body.classList.toggle('at-depart', !!step.depart);
-  pose = step.hero ? 'hero' : step.depart ? 'depart' : step.schema || step.val || step.cross || step.edintro || step.tests ? 'schema' : 'flat';
+  pose = step.hero ? 'hero' : step.depart ? 'depart' : step.schema || step.open || step.val || step.cross || step.edintro || step.tests ? 'schema' : 'flat';
 
   if (step.schema) { $('cursor').classList.remove('on'); show(step.state); layout(); schemaPhase(step.schema, prev); return; }
   if (step.val) { $('cursor').classList.remove('on'); show(step.state); layout(); startVal(); return; }
   if (step.cross) { $('cursor').classList.remove('on'); show(step.state); layout(); startCross(); return; }
-  if (step.edintro || step.tests) { $('cursor').classList.remove('on'); show(step.state); layout(); return; }
+  if (step.edintro || step.tests || step.open) { $('cursor').classList.remove('on'); show(step.state); layout(); return; }
   if (step.depart) {   // pop out: the maximised field is left (Esc), the editor goes back to its tree
     // Swap the editor first, then turn the screen: no layer change while the 3D transform runs (it stuttered).
     $('cursor').classList.remove('on');
@@ -1269,7 +1316,7 @@ function place(k) {
   if (step === STEPS[current]) nextOn('bubble');
 }
 
-// ---------- how it works: the demo's trials on a risk / return plane ----------
+// ---------- how it works: three cards, then the demo's trials in the log ----------
 // The real numbers of the demo (study period 2017 → Aug 2023): the 1/N reference, then three trials. The target
 // zone is "better than 1/N on both axes": less volatility, more return. The third trial lands in it.
 const RR = {
@@ -1280,40 +1327,10 @@ const RR = {
     {v: 16.1, r: 17.6, what: '+ filtre de tendance'},
   ],
 };
-// Plot area: x 80-580 (volatility 14-22 %), y 70-370 (annual return 12-20 %).
-const X0 = 80, X1 = 580, Y0 = 70, Y1 = 370;
-const PX = v => X0 + (v - 14) / 8 * (X1 - X0), PY = r => Y1 - (r - 12) / 8 * (Y1 - Y0);
 const pct = x => `${x.toFixed(1).replace('.', ',')} %`;
 const inZone = p => p.v < RR.ref.v && p.r > RR.ref.r;
+// Each trial goes round the loop: the idea, FORGE simulates, you analyse; then its line lands in the log.
 function buildPlane() {
-  const ns = 'http://www.w3.org/2000/svg', svg = $('plane');
-  const el = (tag, attrs, text, parent = svg) => { const e = document.createElementNS(ns, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (text) e.textContent = text; parent.append(e); return e; };
-  for (const v of [14, 16, 18, 20, 22]) { el('line', {class: 'gr', x1: PX(v), x2: PX(v), y1: Y0, y2: Y1}); el('text', {class: 'tk', x: PX(v), y: Y1 + 22, 'text-anchor': 'middle'}, `${v} %`); }
-  for (const r of [12, 14, 16, 18, 20]) { el('line', {class: 'gr', x1: X0, x2: X1, y1: PY(r), y2: PY(r)}); el('text', {class: 'tk', x: X0 - 10, y: PY(r) + 5, 'text-anchor': 'end'}, `${r} %`); }
-  // Axis titles written flat, with what "better" means on each.
-  el('text', {class: 'at', x: X0 - 10, y: 30}, '↑ RENDEMENT ANNUEL');
-  el('text', {class: 'ah', x: X0 - 10, y: 50}, 'plus haut : plus de gains');
-  el('text', {class: 'at', x: X1, y: Y1 + 52, 'text-anchor': 'end'}, 'VOLATILITÉ (RISQUE) →');
-  el('text', {class: 'ah', x: X1, y: Y1 + 71, 'text-anchor': 'end'}, 'plus à droite : plus de risque');
-  const rx = PX(RR.ref.v), ry = PY(RR.ref.r);
-  el('rect', {class: 'zone', id: 'zone', x: X0 + 1, y: Y0, width: rx - X0 - 1, height: ry - Y0});
-  el('text', {class: 'zt', x: X0 + 12, y: Y0 + 20}, 'ZONE CIBLE');
-  el('text', {class: 'zl', x: X0 + 12, y: Y0 + 38}, 'mieux que le 1/N :');
-  el('text', {class: 'zl', x: X0 + 12, y: Y0 + 54}, 'moins de risque, plus de rendement');
-  el('line', {class: 'ax', x1: X0, x2: X1, y1: Y1, y2: Y1}); el('line', {class: 'ax', x1: X0, x2: X0, y1: Y0 - 6, y2: Y1});
-  // Crosshair: the active point projected on both axes, its values in chips on the axes.
-  el('line', {class: 'cross', id: 'cr-v'}); el('line', {class: 'cross', id: 'cr-h'});
-  const chip = (id, w) => { const g = el('g', {class: 'chip', id}); el('rect', {x: -w / 2, y: -11, width: w, height: 22, rx: 2}, '', g); el('text', {y: 5, 'text-anchor': 'middle'}, '', g); return g; };
-  chip('ch-v', 66); chip('ch-r', 66);
-  el('path', {class: 'path', id: 'trail', d: `M${rx} ${ry}`});
-  el('rect', {class: 'ref', x: rx - 7, y: ry - 7, width: 14, height: 14});
-  el('text', {class: 'pl on', x: rx + 13, y: ry + 5}, '1/N');
-  RR.trials.forEach((p, i) => {
-    el('circle', {class: 'pt', id: `pt${i}`, cx: PX(p.v), cy: PY(p.r), r: 8});
-    el('text', {class: 'pl', id: `pl${i}`, x: PX(p.v) + 13, y: PY(p.r) + (i === 1 ? 20 : 5)}, `essai ${i + 1}`);
-  });
-  el('circle', {class: 'head', id: 'head', r: 5, cx: rx, cy: ry});
-  // The log: one line per trial, then the validation (12 squares) and the deployment.
   const row = (cls, cells) => { const li = document.createElement('li'); li.className = cls; li.innerHTML = cells; $('log').append(li); return li; };
   row('hd', '<span></span><span>stratégie</span><span class="n"><span class="lg">volatilité</span><span class="sh">vol.</span></span><span class="n"><span class="lg">rendement</span><span class="sh">rend.</span></span><span></span>');
   row('', `<span class="k">référence</span><span>${RR.ref.what}</span><span class="n">${pct(RR.ref.v)}</span><span class="n">${pct(RR.ref.r)}</span><span></span>`);
@@ -1322,62 +1339,36 @@ function buildPlane() {
   row('wide', `<span class="k">validation</span><span><span class="sq" id="sq">${'<i></i>'.repeat(12)}</span>12 tests de robustesse</span>`);
   row('wide', '<span class="k">déploiement</span><span>ordres de rebalancement →</span>');
 }
-// Move the crosshair to a point (in data units); null hides it.
-function cross(p) {
-  const on = !!p; ['cr-v', 'cr-h', 'ch-v', 'ch-r'].forEach(id => $(id).classList.toggle('on', on)); if (!p) return;
-  const x = PX(p.v), y = PY(p.r), set = (id, a) => { for (const k in a) $(id).setAttribute(k, a[k]); };
-  set('cr-v', {x1: x, x2: x, y1: y, y2: Y1}); set('cr-h', {x1: X0, x2: x, y1: y, y2: y});
-  set('ch-v', {transform: `translate(${x} ${Y1 + 17})`}); $('ch-v').querySelector('text').textContent = pct(p.v);
-  set('ch-r', {transform: `translate(${X0 - 36} ${y})`}); $('ch-r').querySelector('text').textContent = pct(p.r);
-}
-// The mini logo: the ball drops into the receptacle, which lights up.
-function drop() {
-  const m = $('mini'); m.classList.remove('drop', 'rest', 'hit'); void m.getBoundingClientRect(); m.classList.add('drop');
-  loopTimers.push(setTimeout(() => m.classList.add('hit'), 560));
-}
 let loopTimers = [], loopRaf = null;
 function stopLoop() { loopTimers.forEach(clearTimeout); loopTimers = []; cancelAnimationFrame(loopRaf); loopRaf = null; }
+const cards = on => [0, 1, 2].forEach(k => $(`fc${k}`).classList.toggle('on', on === k || on === 'all'));
 function planeReset() {
   [...$('log').children].forEach(li => li.classList.remove('on', 'win'));
-  RR.trials.forEach((_, i) => { $(`pt${i}`).classList.remove('on', 'win'); $(`pl${i}`).classList.remove('on'); });
-  $('zone').classList.remove('hit'); [...$('sq').children].forEach(q => q.classList.remove('on'));
-  $('trail').setAttribute('d', `M${PX(RR.ref.v)} ${PY(RR.ref.r)}`); $('head').style.opacity = 0; cross(null);
-  $('mini').classList.remove('drop', 'rest', 'hit');
+  [...$('sq').children].forEach(q => q.classList.remove('on')); cards(null); $('loopl').classList.remove('spin');
 }
 function trialOn(i) {
-  const p = RR.trials[i]; $(`pt${i}`).classList.add('on'); $(`pl${i}`).classList.add('on'); $('log').children[i + 2].classList.add('on');
-  cross(p);
-  if (inZone(p)) { $(`pt${i}`).classList.add('win'); $('zone').classList.add('hit'); $('log').children[i + 2].classList.add('win'); }
+  const li = $('log').children[i + 2]; li.classList.add('on'); if (inZone(RR.trials[i])) li.classList.add('win');
 }
 function schemaPhase() {
   stopLoop(); planeReset();
   const log = $('log').children, later = (ms, f) => loopTimers.push(setTimeout(f, ms));
-  const pts = [RR.ref, ...RR.trials].map(p => [PX(p.v), PY(p.r)]);
-  if (reduce) { [...log].forEach(li => li.classList.add('on')); RR.trials.forEach((_, i) => trialOn(i)); cross(RR.trials[RR.trials.length - 1]);
-    [...$('sq').children].forEach(q => q.classList.add('on')); $('mini').classList.add('rest', 'hit');
-    $('trail').setAttribute('d', 'M' + pts.map(p => p.join(' ')).join(' L')); return; }
-  later(2000, () => { log[0].classList.add('on'); log[1].classList.add('on'); cross(RR.ref); });
-  // Each trial: the ball drops into FORGE, then the point travels from the last one, drawing the trail.
-  later(1500, drop);
-  RR.trials.forEach((_, i) => later(2400 + i * 1100, () => {
-    later(0, () => {
-      const [x0, y0] = pts[i], [x1, y1] = pts[i + 1], t0 = performance.now(), ms = 550, head = $('head'), trail = $('trail'), d0 = trail.getAttribute('d');
-      head.style.opacity = 1;
-      const tick = now => { const f = Math.min(1, (now - t0) / ms), e = f < .5 ? 2 * f * f : 1 - (-2 * f + 2) ** 2 / 2, x = x0 + (x1 - x0) * e, y = y0 + (y1 - y0) * e;
-        head.setAttribute('cx', x); head.setAttribute('cy', y); trail.setAttribute('d', `${d0} L${x} ${y}`);
-        const a = [RR.ref, ...RR.trials][i], b = RR.trials[i]; cross({v: a.v + (b.v - a.v) * e, r: a.r + (b.r - a.r) * e});
-        if (f < 1) loopRaf = requestAnimationFrame(tick); else { head.style.opacity = 0; trialOn(i); } };
-      loopRaf = requestAnimationFrame(tick);
-    });
-  }));
-  const tVal = 2400 + RR.trials.length * 1100 + 300;
-  later(tVal, () => log[log.length - 2].classList.add('on'));
+  if (reduce) { [...log].forEach(li => li.classList.add('on')); RR.trials.forEach((_, i) => trialOn(i));
+    [...$('sq').children].forEach(q => q.classList.add('on')); cards('all'); return; }
+  later(900, () => { log[0].classList.add('on'); log[1].classList.add('on'); $('loopl').classList.add('spin'); });
+  const T0 = 1300, LAP = 1500;
+  RR.trials.forEach((_, i) => {
+    const t = T0 + i * LAP;
+    later(t, () => cards(0)); later(t + 380, () => cards(1)); later(t + 760, () => cards(2));
+    later(t + 1100, () => trialOn(i));
+  });
+  const tVal = T0 + RR.trials.length * LAP;
+  later(tVal, () => { cards(null); $('loopl').classList.remove('spin'); log[log.length - 2].classList.add('on'); });
   [...$('sq').children].forEach((q, j) => later(tVal + 250 + j * 60, () => q.classList.add('on')));
   later(tVal + 250 + 12 * 60 + 300, () => log[log.length - 1].classList.add('on'));
 }
 
 // ---------- automatic mode (?auto): plays the terminal steps on their own, for the recorded video ----------
-const FIRST_TERMINAL_STEP = STEPS.findIndex(s => !s.hero && !s.schema);
+const FIRST_TERMINAL_STEP = STEPS.findIndex(s => !s.hero && !s.schema && !s.open);
 // Time on screen: the animation that leads in or plays, then reading time for the bubble.
 function stepTime(s) {
   if (s.val) return 4500;

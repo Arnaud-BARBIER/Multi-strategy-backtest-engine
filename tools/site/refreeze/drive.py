@@ -29,7 +29,7 @@ try:
     REC = None
     send("Runtime.enable"); send("Page.enable")
     pump(0.5, send("Browser.setPermission", permission={"name": "fullscreen", "allowWithoutSanitization": True}, setting="granted"))
-    send("Emulation.setDeviceMetricsOverride", width=W, height=H, deviceScaleFactor=1, mobile=False)
+    send("Emulation.setDeviceMetricsOverride", width=W, height=H, deviceScaleFactor=float(os.environ.get("SNAP_DPR", 1)), mobile=False)
     for s in steps:
         k = s[0]
         if k == "nav": send("Page.navigate", url=s[1]); pump(5)
