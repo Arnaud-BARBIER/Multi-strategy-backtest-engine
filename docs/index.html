@@ -223,6 +223,9 @@ a{color:inherit}
   background:#0b0e14f2;border:1px solid var(--tuto);box-shadow:0 8px 30px #000c;color:var(--text);font:500 14px var(--sans);cursor:pointer;opacity:0;pointer-events:none;
   transition:opacity .4s,transform .4s}
 .next.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+.next{transition:opacity .4s,transform .8s cubic-bezier(.4,0,.2,1),bottom .8s cubic-bezier(.4,0,.2,1)}
+body.at-hero .next{bottom:54px}
+.next.big{bottom:50%;transform:translate(-50%,50%) scale(1.7)}
 .next svg{width:18px;height:18px;stroke:var(--text);animation:nudge 1.6s ease-in-out infinite}
 .next .short{display:none}
 .next kbd{font:500 12px var(--mono);border:1px solid #3a4558;padding:0 6px;color:var(--muted)}
@@ -538,7 +541,7 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
 #moteur .eng-costs h4{margin:10px 0 4px;padding-top:8px}#moteur .eng-costs li{margin:0}
 @media (max-width:760px){#moteur .eng{height:auto;min-height:0}}
 #fin{position:relative;z-index:0}
-#fin::before{content:"";position:absolute;z-index:-1;top:-120px;bottom:0;left:calc(50% - 50vw);right:calc(50% - 50vw);background:linear-gradient(180deg,#0b0e14 0,#151d2a 220px,#18212f 100%)}
+#fin::before{content:"";position:absolute;z-index:-1;top:0;bottom:0;left:calc(50% - 50vw);right:calc(50% - 50vw);background:linear-gradient(180deg,#0b0e1400 0,#151d2a 220px,#18212f 100%)}
 .free-hint{margin:0 0 22px;font:500 12px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
 </style>
 </head>
@@ -656,7 +659,7 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
     <div class="done" id="done"></div>
     <div class="cursor" id="cursor"><i class="tap"></i><i class="tap t2"></i><svg viewBox="0 0 22 22"><path d="M3 2 L3 18 L7.5 13.8 L10.6 20.5 L13.4 19.2 L10.3 12.6 L16.4 12.4 Z" fill="#fff" stroke="#0b0e14" stroke-width="1.3" stroke-linejoin="round"/></svg></div>
     <nav class="rail" id="rail" aria-label="Étapes de la démo"></nav>
-    <button class="next" id="next" type="button" aria-label="Next step"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v15M5 12l7 7 7-7"/></svg><span class="long">Faites défiler ou appuyez sur <kbd>↓</kbd> pour continuer</span><span class="short">Suivant</span></button>
+    <button class="next" id="next" type="button" aria-label="Next step"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v15M5 12l7 7 7-7"/></svg><span class="long">Appuyez sur <kbd>↓</kbd> pour continuer</span><span class="short">Suivant</span></button>
     <button class="btn replay" id="replay" hidden>↺ Revoir la démo</button>
   </div>
 </section>
@@ -874,6 +877,15 @@ async function boot() {
   $('hint').onclick = () => scrollToStep(1);
   $('next').onclick = () => scrollToStep(Math.min(STEPS.length - 1, current + 1));
   if (AUTO) return autoplay();
+  // Desktop: people's first reflex is the wheel. After a moment on the hero, a large notice asks for the arrow key,
+  // then shrinks into the usual bottom prompt.
+  if (matchMedia('(pointer: fine)').matches) setTimeout(() => {
+    if (current !== 0) return;
+    const n = $('next'), l = n.querySelector('.long'), txt = l.innerHTML;
+    l.innerHTML = 'Utilisez la flèche <kbd>↓</kbd> de votre clavier plutôt que la molette'; $('hint').style.opacity = 0;
+    n.classList.add('big', 'on');
+    setTimeout(() => { n.classList.remove('big'); setTimeout(() => { l.innerHTML = txt; }, 700); }, 3200);
+  }, 2500);
   stepByGesture();
   $('replay').onclick = () => scrollToStep(0, true);
   addEventListener('scroll', onScroll, {passive: true}); addEventListener('resize', () => { layout(); place(current); });
@@ -908,7 +920,7 @@ function stepByGesture() {
   addEventListener('wheel', e => {
     const dir = Math.sign(e.deltaY); if (!dir || !inDemo(dir)) return;   // after the demo: free scroll
     e.preventDefault();
-    const t = performance.now(), fresh = t - lastT > 250 && t - stepT > 450; lastT = t;
+    const t = performance.now(), fresh = t - lastT > 400 && t - stepT > 800 && Math.abs(e.deltaY) >= 4; lastT = t;   // inertia ends with sparse tiny deltas
     if (fresh) { stepT = t; go(dir); }
   }, {passive: false});
   let y0 = null;
@@ -992,7 +1004,7 @@ function onScroll(force) {
 function enter(k, forward) {
   clearTimeout(timer); stopChat(); stopScroll(); $('screen').classList.remove('instant'); const step = STEPS[k], prev = current; current = k;
   // The "continue" prompt comes back once this step has played (not on the hero, which has its own, nor at the end).
-  clearTimeout(nextTimer); $('next').classList.remove('on');
+  clearTimeout(nextTimer); $('next').classList.remove('on', 'big');
   // A step with `nx` shows it at a set moment of its own animation (nextOn); the others after a delay.
   if (!step.hero && !step.nx && k < STEPS.length - 1 && !AUTO)
     nextTimer = setTimeout(() => $('next').classList.add('on'), step.schema ? 8000 : Math.min(9000, Math.max(2500, stepTime(step) - 2500)));
