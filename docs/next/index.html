@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Forge · Portfolio allocation lab</title>
+<title>FORGE · Portfolio allocation lab</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%2711%27 fill=%27none%27 stroke=%27%2329c5ff%27 stroke-width=%275%27/%3E%3C/svg%3E">
 <meta name="description" content="Forge, portfolio allocation lab: build, simulate and refine multi-asset portfolios in one research environment.">
 <meta name="robots" content="noindex">
@@ -35,6 +35,8 @@ a{color:inherit}
 .brand{transition:opacity .4s}body.at-hero .top .brand{opacity:0}
 .top nav{margin-left:auto;display:flex;gap:var(--s5);font-size:14px;color:var(--muted)}
 .top nav a{text-decoration:none}.top nav a:hover{color:var(--text)}
+.lang-switch{margin-left:auto;white-space:nowrap;font-size:14px;color:var(--muted)}
+.lang-switch a{text-decoration:none}.lang-switch [aria-current]{color:var(--accent)}
 
 /* ---------- demo: sticky stage driven by scroll ---------- */
 .demo{position:relative}
@@ -550,6 +552,7 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
 <header class="top">
   <a class="brand" href="#"><i></i>FORGE<small>Laboratoire d’allocation de portefeuille</small></a>
   <nav><a href="#demo">Démo</a><a href="../">Documentation</a><a href="https://arnaud-barbier.github.io/">À propos</a></nav>
+  <div class="lang-switch" aria-label="Langue"><a href="./" lang="fr" aria-current="page">FR</a> · <a href="en/" lang="en">EN</a></div>
 </header>
 
 <section class="demo" id="demo">

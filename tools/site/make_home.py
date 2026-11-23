@@ -1,10 +1,30 @@
-"""Copy docs/next/index.html to docs/index.html (the site's home) with paths rewritten for the docs root."""
+"""Generate French and English home pages from the FORGE preview pages."""
 from pathlib import Path
 
 root = Path(__file__).resolve().parents[2] / 'docs'
-s = (root / 'next/index.html').read_text()
-s = s.replace('states/', 'next/states/').replace("'hero.jpg'", "'next/hero.jpg'").replace('"hero.jpg"', '"next/hero.jpg"')
-s = s.replace('href="../"', 'href="ancien.html"').replace('href="../', 'href="')
-assert 'next/next/' not in s and '../' not in s
-(root / 'index.html').write_text(s)
-print('docs/index.html updated')
+
+
+def french_home(source):
+    source = source.replace('states/', 'next/states/')
+    source = source.replace("'hero.jpg'", "'next/hero.jpg'").replace('"hero.jpg"', '"next/hero.jpg"')
+    source = source.replace('href="../"', 'href="ancien.html"').replace('href="../', 'href="')
+    assert 'next/next/' not in source and '../' not in source
+    return source
+
+
+def english_home(source):
+    source = source.replace('../states/', '../next/states/')
+    source = source.replace('../hero.jpg', '../next/hero.jpg')
+    source = source.replace('href="../../', 'href="../')
+    assert '../next/next/' not in source and '../../' not in source
+    return source
+
+
+for destination, source, transform in (
+    ('index.html', 'next/index.html', french_home),
+    ('en/index.html', 'next/en/index.html', english_home),
+):
+    output = root / destination
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(transform((root / source).read_text()))
+    print(f'docs/{destination} updated')
