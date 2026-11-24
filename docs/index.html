@@ -39,15 +39,19 @@ a{color:inherit}
 .lang-switch a{text-decoration:none}.lang-switch [aria-current]{color:var(--accent)}
 
 /* ---------- demo: sticky stage driven by scroll ---------- */
-.demo{position:relative}
-.stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;perspective:2000px;perspective-origin:50% 45%}
-.screen{position:absolute;left:0;top:0;width:1600px;height:1000px;transform-origin:0 0;will-change:transform,filter;
+.demo{position:relative;isolation:isolate}
+.stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;contain:paint;perspective:2000px;perspective-origin:50% 45%}
+.screen{position:absolute;left:0;top:0;width:1600px;height:1000px;transform-origin:0 0;will-change:transform;
   transition:transform 1s cubic-bezier(.2,.7,.2,1),filter .9s ease,box-shadow .9s ease}
 /* hero and schema: the terminal is a screen seen from the side, then pushed back and blurred under the schema */
 .screen.posed{box-shadow:0 0 0 1px #29c5ff30,0 60px 160px #000,0 0 120px #29c5ff14}
-.screen.dim{filter:blur(7px) brightness(.4) saturate(.7)}
+.screen.dim{filter:brightness(.4)}
 .screen iframe{position:absolute;inset:0;pointer-events:none;width:1600px;height:1000px;border:0;opacity:0;transition:opacity .35s ease;background:var(--bg)}
-.screen iframe.on{opacity:1}
+.screen > iframe{visibility:hidden}
+.screen iframe.on{opacity:1;visibility:visible}
+.screen .ide{visibility:hidden}
+.screen .ide.on{visibility:visible}
+.stage.offstage{display:none}
 .screen img.shot{position:absolute;inset:0;width:1600px;height:1000px;object-fit:cover;object-position:left top;opacity:0;transition:opacity .35s ease;background:var(--bg)}
 .screen img.shot.on{opacity:1}
 .screen.instant iframe{transition:none}
@@ -345,10 +349,9 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
 @media (max-width:760px){.depart-o{place-items:start center;padding:64px 16px 0}.dep-in{max-width:100%}
   .depart-o .dep-text p{font-size:13px;margin:0 0 8px}.depart-o .dep-h{font-size:28px!important;margin:0 0 10px!important}.depart-o .ctas{margin-top:10px}
   .depart-o .btn{padding:8px 12px;font-size:13px}.depart-o .dep-next{margin-top:10px;font-size:12px}}
-/* after the demo: a curtain rises over the terminal, then the page scrolls normally */
-.after{position:relative;z-index:60;margin-top:-100vh;margin-top:-100svh;color:#c3ccdb;
-  background:linear-gradient(180deg,#0b0e1400 0,#0b0e14e6 22vh,var(--bg) 42vh)}
-.after-in{max-width:1120px;margin:0 auto;padding:46vh 24px 96px}
+/* After the demo: an opaque section in normal flow, isolated from the 3D stage. */
+.after{position:relative;z-index:1;color:#c3ccdb;background:var(--bg)}
+.after-in{max-width:1120px;margin:0 auto;padding:0 24px 96px}
 .blk{padding:0 0 88px}
 .cap{font:500 12px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
 .after h2{font:600 clamp(24px,2.6vw,34px)/1.2 var(--sans);color:var(--text);margin:0 0 10px}
@@ -603,7 +606,7 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
       <div class="hero-inner">
         <div class="mark"><i></i><b>FORGE</b><span>Laboratoire d’allocation<br>de portefeuille</span></div>
         <h1>Mettez votre allocation à l’épreuve <span>avant que les marchés ne le fassent.</span></h1>
-        <p class="lead">Construisez votre portefeuille multi-actifs et testez vos règles de gestion. Analysez leurs performances, mesurez les risques et comparez vos décisions dans un même environnement de recherche.</p>
+        <p class="lead">Conçu pour les personnes qui ne savent pas coder, FORGE permet de construire et tester des portefeuilles multi-actifs grâce à son interface et à votre IA. Si vous codez, étendez directement vos stratégies, indicateurs et graphiques en Python.</p>
         <div class="ctas">
           <a class="btn primary" href="#" id="start">Voir la démo ↓</a>
           <a class="btn" href="#acces">Demander un accès</a>
@@ -630,7 +633,7 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
       <div class="ow">
         <div><p class="sch-cap">Un environnement ouvert et personnalisable</p>
           <h2 class="sch-title">Votre stratégie. Vos outils. <span class="hl">Votre environnement.</span></h2>
-          <p class="sch-sub">FORGE ne vous enferme pas dans des modèles ou des visualisations prédéfinis. Développez vos propres indicateurs, personnalisez vos graphiques et construisez un espace d’analyse entièrement adapté à votre méthode de gestion.</p>
+          <p class="sch-sub">Partez sans coder avec votre IA, ou écrivez vous-même votre code. L’interface de FORGE réunit vos stratégies, indicateurs et graphiques. Vous pouvez les étendre en Python pour créer un environnement d’analyse adapté à votre méthode de gestion.</p>
           <p class="ow-data"><b>Vos données, vos sources.</b> La démonstration utilise des historiques de prix au format CSV (forexsb). Vous pouvez brancher vos propres données ou celles de votre fournisseur.</p>
         </div>
         <div class="pane"><div class="pane-h">Terminal d’analyse personnalisé<span>vues écrites dans le code de la stratégie</span></div>
@@ -768,6 +771,12 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
     <p class="sub bench-next">FORGE est en tête sur la stratégie classique ; vectorbt l’est sur la gestion avancée, l’allocation et la grille. Le moteur actuel est écrit en Python compilé (Numba). Le prochain chantier est son portage en C, pour gagner en vitesse sur ces cas et permettre des tests de robustesse encore plus fournis.</p>
   </div>
 
+  <div class="blk" id="agents">
+    <p class="cap">Intégration agentique</p>
+    <h2>Un framework pour vos <span class="hl">chaînes d’agents.</span></h2>
+    <p class="sub">Le moteur Python de FORGE peut servir d’outil de simulation dans une chaîne d’agents pilotée par un LLM : proposer une stratégie, lancer un backtest, lire les résultats, puis itérer. Cette intégration demanderait une couche API exposant les fonctions du moteur à l’agent. Ce raccordement reste à développer.</p>
+  </div>
+
   <div class="blk end" id="fin">
     <div class="fin-contact">
       <p class="cap">CONTACT</p>
@@ -887,14 +896,51 @@ const STEPS = AUTO || new URLSearchParams(location.search).has('tuto') ? ALL_STE
 const $ = id => document.getElementById(id);
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const W = 1600, H = 1000;
-let targets = {}, frames = {}, current = -1, timer = null, nextTimer = null;
+let targets = {}, frames = {}, current = -1, timer = null, nextTimer = null, entryId = 0;
+function loadFrame(f) {
+  if (!f.dataset.src) return Promise.resolve();
+  if (!f.ready) f.ready = new Promise(resolve => {
+    const loaded = () => {
+      if (f.contentDocument?.URL !== new URL(f.dataset.src, document.baseURI).href) return;
+      f.removeEventListener('load', loaded); resolve();
+    };
+    f.addEventListener('load', loaded);
+    f.src = f.dataset.src;
+  });
+  return f.ready;
+}
+function prepareStep(step) {
+  if (!step) return Promise.resolve();
+  const names = [step.state, ...(step.drag?.frames || []),
+    ...(step.play || []).flatMap(([state, , next]) => [state, next]).filter(Boolean)];
+  if (step.code || step.depart) names.push('ed_tree', 'ed_alloc', 'ide');
+  if (names.includes('bench')) names.push('a2');
+  if (names.includes('bencht')) names.push('a2t');
+  const documents = new Set();
+  for (const name of names) {
+    const frame = frames[name.startsWith('ide') ? 'ide' : name];
+    if (frame?.tagName === 'IFRAME') documents.add(frame);
+    else frame?.querySelectorAll('iframe').forEach(f => documents.add(f));
+  }
+  if (step.code) $('fly')?.querySelectorAll('iframe').forEach(f => documents.add(f));
+  return Promise.all([...documents].map(loadFrame)).then(() => {
+    // Copy the drawn distribution only when both real documents have finished loading.
+    for (const [comparison, result] of [['bench', 'a2'], ['bencht', 'a2t']]) {
+      if (!names.includes(comparison)) continue;
+      const from = frames[result]?.contentDocument?.querySelector('.report-cell[data-chart-id=return_distribution] .report-plot');
+      const doc = frames[comparison]?.contentDocument;
+      const to = doc?.querySelector('.report-cell[data-chart-id=return_distribution] .report-plot');
+      if (from && to && !from.querySelector('.report-placeholder')) to.replaceWith(doc.importNode(from, true));
+    }
+  });
+}
 
 async function boot() {
   try { targets = await (await fetch('next/states/targets.json')).json(); } catch (_) {}
   buildPlane();
   const names = [...new Set(STEPS.flatMap(s => [s.state, ...(s.drag?.frames || []), ...(s.play || []).flatMap(([st, , nx]) => [st, nx]).filter(Boolean)]))];
   { const img = new Image(); img.src = 'next/hero.jpg'; img.className = 'shot'; img.alt = ''; $('screen').append(img); frames.shot = img; }
-  const mk = src => { const f = document.createElement('iframe'); f.src = `next/states/${src}.html`; f.title = 'FORGE'; f.tabIndex = -1;
+  const mk = src => { const f = document.createElement('iframe'); f.dataset.src = `next/states/${src}.html`; f.title = 'FORGE'; f.tabIndex = -1;
     f.setAttribute('aria-hidden', 'true'); return f; };
   if (names.some(n => n.startsWith('ide'))) {   // the editor (left third) and the terminal (right two thirds)
     const d = document.createElement('div'); d.className = 'ide'; d.dataset.left = 'box';
@@ -906,24 +952,16 @@ async function boot() {
   }
   for (const name of names.filter(n => n !== 'shot' && !n.startsWith('ide'))) {
     const f = document.createElement('iframe');
-    f.src = `next/states/${name}.html`; f.title = 'FORGE'; f.tabIndex = -1; f.setAttribute('aria-hidden', 'true'); f.loading = 'eager';
+    f.dataset.src = `next/states/${name}.html`; f.title = 'FORGE'; f.tabIndex = -1; f.setAttribute('aria-hidden', 'true'); f.loading = 'eager';
     // A pasted answer shows from its first line (the frozen field kept the caret at the end).
     f.addEventListener('load', () => setTimeout(() => { try { const t = f.contentDocument.getElementById('aipaste-text'); if (t) t.scrollTop = 0; } catch (_) {} }, 80));
     $('screen').append(f); frames[name] = f;
   }
-  // bench (the comparison) was frozen with its last view still undrawn, below the screen; a2 is the same run
-  // with that view drawn: copy it across.
-  for (const [B, A] of [['bench', 'a2'], ['bencht', 'a2t']]) if (frames[B] && frames[A]) Promise.all([frames[B], frames[A]].map(f => new Promise(r => f.addEventListener('load', r, {once: true}))))
-    .then(() => { try {
-      const sel = '.report-cell[data-chart-id=return_distribution] .report-plot';
-      const from = frames[A].contentDocument.querySelector(sel), to = frames[B].contentDocument.querySelector(sel);
-      if (from && to && !from.querySelector('.report-placeholder')) to.replaceWith(frames[B].contentDocument.importNode(from, true));
-    } catch (_) {} });
   STEPS.forEach((s, k) => {
     const b = document.createElement('button'); b.innerHTML = `<span>${s.label}</span><i></i>`;
     b.onclick = () => scrollToStep(k); $('rail').append(b);
   });
-  $('demo').style.height = `${(STEPS.length + 1) * 100}vh`;
+  $('demo').style.height = `${STEPS.length * innerHeight}px`;
   $('start').onclick = e => { e.preventDefault(); scrollToStep(1); };
   $('hint').onclick = () => scrollToStep(1);
   $('next').onclick = () => scrollToStep(Math.min(STEPS.length - 1, current + 1));
@@ -939,7 +977,7 @@ async function boot() {
   }, 2500);
   stepByGesture();
   $('replay').onclick = () => scrollToStep(0, true);
-  addEventListener('scroll', onScroll, {passive: true}); addEventListener('resize', () => { layout(); place(current); });
+  addEventListener('scroll', onScroll, {passive: true}); addEventListener('resize', () => { $('demo').style.height = `${STEPS.length * innerHeight}px`; layout(); place(current); });
   layout(); onScroll(true);
 }
 
@@ -1040,6 +1078,18 @@ function show(state) {
 }
 
 function onScroll(force) {
+  const outside = $('demo').getBoundingClientRect().bottom <= 1;
+  $('stage').classList.toggle('offstage', outside);
+  if (outside) {
+    if (!document.body.classList.contains('past-demo')) {
+      document.body.classList.add('past-demo'); ++entryId;
+      clearTimeout(timer); clearTimeout(nextTimer); clearTimeout(codeTimer);
+      stopVal(); stopOpen(); stopLoop(); stopChat(); stopScroll(); stopCross();
+    }
+    return;
+  }
+  const returning = document.body.classList.contains('past-demo');
+  document.body.classList.remove('past-demo');
   const p = (scrollY - $('demo').offsetTop) / innerHeight;
   const k = Math.max(0, Math.min(STEPS.length - 1, Math.round(p)));
   // One state per step (no half-way frames): the hero is either shown or gone, CSS fades between them.
@@ -1049,10 +1099,11 @@ function onScroll(force) {
   $('rail').style.opacity = lift; $('replay').hidden = k < STEPS.length - 1 || !!STEPS[k].video;   // the video has its own controls
   // Leaving the demo: the contact text goes with it (the curtain alone would leave a ghost of it).
   $('departo').style.opacity = scrollY - ($('demo').offsetTop + (STEPS.length - 1) * innerHeight) > 40 ? 0 : '';
-  if (k !== current || force === true) enter(k, k === current + 1 && force !== true);
+  if (k !== current || force === true || returning) enter(k, k === current + 1 && force !== true);
 }
 
-function enter(k, forward) {
+async function enter(k, forward) {
+  const entry = ++entryId; stopOpen(); stopLoop();
   clearTimeout(timer); stopChat(); stopScroll(); $('screen').classList.remove('instant'); const step = STEPS[k], prev = current; current = k;
   // The "continue" prompt comes back once this step has played (not on the hero, which has its own, nor at the end).
   clearTimeout(nextTimer); $('next').classList.remove('on', 'big');
@@ -1065,10 +1116,13 @@ function enter(k, forward) {
   $('departo').classList.toggle('on', !!step.depart); document.body.classList.toggle('at-depart', !!step.depart);
   pose = step.hero ? 'hero' : step.depart ? 'depart' : step.schema || step.open || step.val || step.cross || step.edintro || step.tests ? 'schema' : 'flat';
 
+  await prepareStep(step);
+  if (entry !== entryId) return;
+  if (!AUTO) void prepareStep(STEPS[k + 1]);
   if (step.schema) { $('cursor').classList.remove('on'); show(step.state); layout(); schemaPhase(step.schema, prev); return; }
   if (step.val) { $('cursor').classList.remove('on'); show(step.state); layout(); startVal(); return; }
   if (step.cross) { $('cursor').classList.remove('on'); show(step.state); layout(); startCross(); return; }
-  if (step.edintro || step.tests || step.open) { $('cursor').classList.remove('on'); show(step.state); layout(); return; }
+  if (step.edintro || step.tests || step.open) { $('cursor').classList.remove('on'); show(step.state); layout(); if (step.open) startOpen(); return; }
   if (step.depart) {   // pop out: the maximised field is left (Esc), the editor goes back to its tree
     // Swap the editor first, then turn the screen: no layer change while the 3D transform runs (it stuttered).
     $('cursor').classList.remove('on');
@@ -1084,6 +1138,17 @@ function enter(k, forward) {
   const acts = step.play || (step.from && prev >= 0 ? [[STEPS[prev].state, step.from, step.state]] : []);
   if (forward && acts.length && !reduce) playClicks(acts, () => { show(step.state); settle(k); });
   else { show(step.state); settle(k); }
+}
+
+let openTimer = null;
+function stopOpen() { clearTimeout(openTimer); }
+function startOpen() {
+  if (reduce || AUTO) return;
+  openTimer = setTimeout(() => {
+    const window = $('openwin');
+    window.classList.remove('on'); void window.offsetWidth; window.classList.add('on');
+    startOpen();
+  }, 10500);
 }
 
 // The cross-asset test: the real run, recorded and sped up.
@@ -1133,14 +1198,15 @@ function startVal() {
   const cam = (r) => { const c = $('vwcam'), f = box.clientWidth / W; if (!r) { c.style.transform = ''; return; }
     const [x, y, w, h] = r, z = Math.min(3, .92 * Math.min(W / w, H / h)); c.style.transform = `translate(${f * (W / 2 - (x + w / 2) * z)}px,${f * (H / 2 - (y + h / 2) * z)}px) scale(${z})`; };
   later(400, () => cam([0, 150, 720, 150]));   // zoom inside the capture only, on the locked card
-  later(850, () => { cur.style.transition = 'none'; cur.style.transform = `translate(${box.clientWidth * .6}px,${box.clientHeight * .7}px)`; cur.style.opacity = 1;
+  later(2200, () => { cur.style.transition = 'none'; cur.style.transform = `translate(${box.clientWidth * .6}px,${box.clientHeight * .7}px)`; cur.style.opacity = 1;
     void cur.offsetWidth; cur.style.transition = ''; });
-  later(900, () => { const r = at(); cur.style.transform = `translate(${r.x + r.w / 2}px,${r.y + r.h / 2}px)`; });
-  later(1400, () => { const r = at(); Object.assign(press.style, {left: `${r.x - 3}px`, top: `${r.y - 3}px`, width: `${r.w + 6}px`, height: `${r.h + 6}px`});
+  later(2600, () => { const r = at(); cur.style.transform = `translate(${r.x + r.w / 2}px,${r.y + r.h / 2}px)`; });
+  later(3900, () => { const r = at(); Object.assign(press.style, {left: `${r.x - 3}px`, top: `${r.y - 3}px`, width: `${r.w + 6}px`, height: `${r.h + 6}px`});
     press.classList.remove('go'); void press.offsetWidth; press.classList.add('go'); });
-  later(1550, () => { v.classList.add('open'); cur.style.opacity = 0; });
-  later(1800, () => cam(null));   // opened: the whole capture
-  later(2250, () => nextOn('val'));
+  later(4700, () => { v.classList.add('open'); cur.style.opacity = 0; });
+  later(5600, () => cam(null));   // opened: the whole capture
+  later(6800, () => nextOn('val'));
+  if (!AUTO) later(12500, () => { stopVal(); startVal(); });
 }
 // The "continue" prompt of a step with `nx`, at the moment its animation names.
 function nextOn(kind) {
@@ -1372,7 +1438,7 @@ function schemaPhase() {
 const FIRST_TERMINAL_STEP = STEPS.findIndex(s => !s.hero && !s.schema && !s.open);
 // Time on screen: the animation that leads in or plays, then reading time for the bubble.
 function stepTime(s) {
-  if (s.val) return 4500;
+  if (s.val) return 12500;
   if (s.depart) return 6000;
   if (s.cross) return 19000;
   if (s.tests) return 9000;
@@ -1394,7 +1460,7 @@ async function autoplay() {
   await new Promise(r => { if (document.readyState === 'complete') r(); else addEventListener('load', r); });
   await sleep(1500);                                 // every frozen state loaded and painted
   window.__autoStart = performance.now();
-  for (let k = FIRST_TERMINAL_STEP; k < STEPS.length; k++) { enter(k, true); await sleep(stepTime(STEPS[k])); }
+  for (let k = FIRST_TERMINAL_STEP; k < STEPS.length; k++) { await enter(k, true); await sleep(stepTime(STEPS[k])); }
   window.__autoDone = true;
 }
 
