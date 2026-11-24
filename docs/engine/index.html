@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mode allocation · Arnaud Barbier</title>
+<title>Mode allocation · FORGE</title>
 <meta name="description" content="Le code réel du mode allocation multi-actifs et les sorties qu'il produit : registre d'emprunt, identités comptables, watcher compilé et attribution des coûts.">
 <meta name="author" content="Arnaud Barbier">
 <link rel="canonical" href="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/engine/">
@@ -31,7 +31,7 @@
   --bg:#0e1117; --panel:#161b22; --well:#12171f;
   --hair:#21262d; --hard:#3d444d; --soft:#1b2028;
   --ink:#e6edf3; --sub:#8b949e; --faint:#6e7681;
-  --accent:#F0A93A; --accent-well:#1E1710;
+  --accent:#29c5ff; --accent-well:#0c2230;
   --f-sans:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;
   --f-serif:"Times New Roman",Tinos,Times,"Liberation Serif",serif;
   --f-term:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
@@ -41,7 +41,7 @@
   --bg:#0e1117; --panel:#161b22; --well:#12171f;
   --hair:#21262d; --hard:#3d444d; --soft:#1b2028;
   --ink:#e6edf3; --sub:#8b949e; --faint:#6e7681;
-  --accent:#F0A93A; --accent-well:#1E1710;
+  --accent:#29c5ff; --accent-well:#0c2230;
 }
 
 *{box-sizing:border-box}
@@ -296,7 +296,7 @@ figcaption b{color:var(--ink);font-weight:600}
 .reading-map li{min-width:0;background:var(--panel)}
 .reading-map a{display:grid;grid-template-columns:1.6rem minmax(0,1fr);gap:.45rem;height:100%;padding:.62rem .7rem;text-decoration:none;color:var(--ink)}
 .reading-map a{transition:box-shadow .18s ease}
-.reading-map a:hover,.reading-map a:focus-visible{box-shadow:inset 0 0 0 2px #EAB308;outline:0}
+.reading-map a:hover,.reading-map a:focus-visible{box-shadow:inset 0 0 0 2px #29c5ff;outline:0}
 .reading-map .n{font-size:.68rem;font-weight:700;color:var(--accent);padding-top:.08rem}
 .reading-map .t{font-size:.78rem;font-weight:600;line-height:1.25}
 .reading-map small{display:block;margin-top:.18rem;font-family:var(--f-serif);font-size:.68rem;font-weight:400;line-height:1.35;color:var(--faint)}
@@ -333,14 +333,16 @@ img{max-width:100%;display:block}
 button{font:inherit}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
-<link rel="stylesheet" href="../assets/endnav.css?v=3">
+<link rel="stylesheet" href="../assets/endnav.css?v=4">
 <script src="../assets/endnav.js?v=3" defer></script>
-<link rel="stylesheet" href="../assets/readable-pages.css?v=3">
+<link rel="stylesheet" href="../assets/readable-pages.css?v=4">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/forge-theme.css?v=1">
 </head>
 <body class="site-readable">
 <div id="page" data-lang="fr">
   <div class="wrap topbar">
-    <a class="topbar-brand" href="../">Arnaud Barbier</a>
+    <a class="topbar-brand" href="../" title="Retour à l’accueil FORGE"><i class="ring" aria-hidden="true"></i>FORGE<small>← accueil</small></a>
     <nav class="pagenav" aria-label="Pages">
       <a href="../"><span class="lang-fr">Accueil</span><span class="lang-en">Home</span></a>
       <a href="../research/"><span class="lang-fr">Mode Research</span><span class="lang-en">Research mode</span></a>

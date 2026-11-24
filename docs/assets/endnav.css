@@ -1,5 +1,5 @@
 /* bas de page commun : contact puis suite de la lecture */
-.endnav{--en-sans:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;--en-yellow:#EAB308;margin:4rem 0 2.2rem;padding-top:2.2rem;position:relative;font-family:var(--en-sans)}
+.endnav{--en-sans:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;--en-yellow:#29c5ff;margin:4rem 0 2.2rem;padding-top:2.2rem;position:relative;font-family:var(--en-sans)}
 .endnav::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--hard) 35%,var(--hair) 80%);transform-origin:0 50%}
 .endnav .en-k{display:block;font:600 .66rem/1.6 var(--en-sans);letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:.7rem}
 .endnav .en-q{font-family:"Times New Roman",Tinos,Times,serif;font-size:1.12rem;line-height:1.5;color:var(--sub);max-width:62ch;margin:0 0 .5rem}
@@ -9,7 +9,7 @@
 .endnav .en-mail:hover,.endnav .en-mail:focus-visible{color:var(--accent);outline:0}
 .endnav .en-mail .en-arrow{display:inline-block;margin-left:.35em;color:var(--accent);transition:transform .3s ease}
 .endnav .en-mail:hover .en-arrow{transform:translateX(6px)}
-.endnav .en-mail .en-shine{position:absolute;top:0;bottom:0;left:-60%;width:40%;background:linear-gradient(100deg,transparent,rgba(240,169,58,.22),transparent);pointer-events:none}
+.endnav .en-mail .en-shine{position:absolute;top:0;bottom:0;left:-60%;width:40%;background:linear-gradient(100deg,transparent,rgba(41,197,255,.22),transparent);pointer-events:none}
 .endnav.in .en-mail .en-shine{animation:en-shine 1.4s .5s ease both}
 .endnav .en-sub{font-size:.8rem;line-height:1.5;color:var(--faint);margin:.7rem 0 0;max-width:70ch}
 .endnav .en-sub a{color:var(--sub)}

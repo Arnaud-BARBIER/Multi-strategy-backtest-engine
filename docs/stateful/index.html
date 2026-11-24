@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Replay, resume, watcher · Arnaud Barbier</title>
+<title>Replay, resume, watcher · FORGE</title>
 <meta name="description" content="Comment un kernel compilé prend des décisions qui dépendent de son propre passé : replay, resume, et watcher intra-période.">
 <meta name="author" content="Arnaud Barbier">
 <link rel="canonical" href="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/stateful/">
@@ -27,7 +27,7 @@
   --bg:#0e1117; --panel:#161b22; --well:#12171f;
   --hair:#21262d; --hard:#3d444d; --soft:#1b2028;
   --ink:#e6edf3; --sub:#8b949e; --faint:#6e7681;
-  --accent:#F0A93A; --accent-well:#1E1710;
+  --accent:#29c5ff; --accent-well:#0c2230;
   --f-sans:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;
   --f-serif:"Times New Roman",Tinos,Times,"Liberation Serif",serif;
   --f-term:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
@@ -37,7 +37,7 @@
   --bg:#0e1117; --panel:#161b22; --well:#12171f;
   --hair:#21262d; --hard:#3d444d; --soft:#1b2028;
   --ink:#e6edf3; --sub:#8b949e; --faint:#6e7681;
-  --accent:#F0A93A; --accent-well:#1E1710;
+  --accent:#29c5ff; --accent-well:#0c2230;
 }
 
 *{box-sizing:border-box}
@@ -152,16 +152,18 @@ td:first-child{font-weight:600;white-space:nowrap;padding-right:1.4rem}
 .reading-map .t{font-family:var(--f-sans);font-size:.76rem;font-weight:600;line-height:1.3}
 .reading-map small{display:block;margin-top:.18rem;font-family:var(--f-serif);font-size:.68rem;font-weight:400;line-height:1.35;color:var(--faint)}
 .reading-map a{transition:box-shadow .18s ease}
-.reading-map a:hover,.reading-map a:focus-visible{box-shadow:inset 0 0 0 2px #EAB308;outline:0}
+.reading-map a:hover,.reading-map a:focus-visible{box-shadow:inset 0 0 0 2px #29c5ff;outline:0}
 @media (max-width:700px){.reading-map .intro{display:block}.reading-map .intro p{margin-top:.35rem}.reading-map ol{grid-template-columns:1fr}}
 </style>
-<link rel="stylesheet" href="../assets/endnav.css?v=3">
+<link rel="stylesheet" href="../assets/endnav.css?v=4">
 <script src="../assets/endnav.js?v=3" defer></script>
-<link rel="stylesheet" href="../assets/readable-pages.css?v=3">
+<link rel="stylesheet" href="../assets/readable-pages.css?v=4">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/forge-theme.css?v=1">
 </head>
 <body class="site-readable">
 <div class="topbar">
-  <a class="topbar-brand" href="../">Arnaud Barbier</a>
+  <a class="topbar-brand" href="../" title="Retour à l’accueil FORGE"><i class="ring" aria-hidden="true"></i>FORGE<small>← accueil</small></a>
   <nav class="pagenav" aria-label="Pages">
     <a href="../">Accueil</a>
       <a href="../research/">Mode Research</a>

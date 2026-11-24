@@ -1,0 +1,40 @@
+/* FORGE look for the documentation pages: same colours, fonts and brand as the FORGE home page.
+   Loaded last, after each page's own <style>, so these tokens win. */
+:root, :root[data-theme="dark"] {
+  --bg: #0b0e14; --panel: #10161f; --well: #0d1219;
+  --hair: #1d2532; --hard: #2a3546; --soft: #141b26;
+  --ink: #e6ecf5; --sub: #8592a6; --faint: #5a6680;
+  --accent: #29c5ff; --accent-well: #0c2230;
+  --f-sans: "IBM Plex Sans", system-ui, sans-serif;
+  --f-serif: "IBM Plex Sans", system-ui, sans-serif;
+  --f-term: "IBM Plex Mono", ui-monospace, monospace;
+}
+html, body { background: var(--bg); }
+body.site-readable { font-family: var(--f-sans); }
+::selection { background: #29c5ff44; }
+
+/* The top bar stays visible while reading: the FORGE brand always leads back to the home page. */
+body.site-readable .topbar {
+  position: sticky; top: 0; z-index: 40;
+  width: 100%; max-width: none; padding: .6rem max(16px, calc((100% - 1080px) / 2)) .65rem;
+  background: linear-gradient(var(--bg), #0b0e14f2 75%, #0b0e14e6);
+  backdrop-filter: blur(6px);
+}
+body.site-readable .topbar::after { background: linear-gradient(90deg, #29c5ff 0%, #1b6f93 32%, #1d2532 78%); }
+body.site-readable .topbar-brand {
+  display: inline-flex; align-items: center; gap: .55rem; text-decoration: none;
+  font: 700 .95rem/1 var(--f-sans); letter-spacing: .08em; color: var(--ink);
+}
+body.site-readable .topbar-brand .ring {
+  width: 14px; height: 14px; border-radius: 50%; border: 3px solid var(--accent);
+  box-shadow: 0 0 8px #29c5ff88; flex: 0 0 auto;
+}
+body.site-readable .topbar-brand small {
+  font: 500 .68rem/1 var(--f-term); letter-spacing: .06em; color: var(--sub); text-transform: none;
+}
+body.site-readable .topbar-brand:hover small { color: var(--accent); }
+@media (max-width: 760px) { body.site-readable .topbar-brand small { display: none; } }
+
+/* The shared mode and end-of-page sheets name their own fonts: same FORGE fonts there. */
+:root { --sans: "IBM Plex Sans", system-ui, sans-serif; --serif: "IBM Plex Sans", system-ui, sans-serif; --mono: "IBM Plex Mono", ui-monospace, monospace; }
+.endnav { --en-sans: "IBM Plex Sans", system-ui, sans-serif; }

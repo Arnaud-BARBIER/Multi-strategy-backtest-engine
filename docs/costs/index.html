@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Attribution des coûts et de la performance · Arnaud Barbier</title>
+<title>Attribution des coûts et de la performance · FORGE</title>
 <meta name="description" content="Coûts d'exécution spot, carry, frais de gestion et financement : calcul, application et rapprochement jusqu'à la NAV.">
 <meta name="author" content="Arnaud Barbier">
 <link rel="canonical" href="https://arnaud-barbier.github.io/Multi-strategy-backtest-engine/costs/">
@@ -26,7 +26,7 @@
 <style>
 :root{
   --bg:#0e1117;--panel:#161b22;--well:#12171f;--hair:#21262d;--hard:#3d444d;--soft:#1b2028;
-  --ink:#e6edf3;--sub:#8b949e;--faint:#6e7681;--accent:#f0a93a;--accent-well:#1e1710;
+  --ink:#e6edf3;--sub:#8b949e;--faint:#6e7681;--accent:#29c5ff;--accent-well:#0c2230;
   --sans:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;
   --serif:"Times New Roman",Tinos,Times,"Liberation Serif",serif;
   --term:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
@@ -111,7 +111,7 @@ figcaption b{color:var(--ink);font-weight:600}
 .reading-map .t{font-family:var(--sans);font-size:.76rem;font-weight:600;line-height:1.3}
 .reading-map small{display:block;margin-top:.18rem;font-family:var(--serif);font-size:.68rem;font-weight:400;line-height:1.35;color:var(--faint)}
 .reading-map a{transition:box-shadow .18s ease}
-.reading-map a:hover,.reading-map a:focus-visible{box-shadow:inset 0 0 0 2px #EAB308;outline:0}
+.reading-map a:hover,.reading-map a:focus-visible{box-shadow:inset 0 0 0 2px #29c5ff;outline:0}
 footer{border-top:3px solid var(--hard);margin-top:3.5rem;padding-top:1.1rem;display:flex;flex-wrap:wrap;gap:1.25rem;justify-content:space-between;font-family:var(--sans);font-size:.72rem;color:var(--faint);letter-spacing:.06em;text-transform:uppercase}
 @media (max-width:700px){
   body{padding-left:1rem;padding-right:1rem}.fig{border-right:0;border-bottom:1px solid var(--hair);padding:.9rem 0;margin:0}.fig:last-child{border-bottom:0}
@@ -121,14 +121,16 @@ footer{border-top:3px solid var(--hard);margin-top:3.5rem;padding-top:1.1rem;dis
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
-<link rel="stylesheet" href="../assets/endnav.css?v=3">
+<link rel="stylesheet" href="../assets/endnav.css?v=4">
 <script src="../assets/endnav.js?v=3" defer></script>
-<link rel="stylesheet" href="../assets/readable-pages.css?v=3">
+<link rel="stylesheet" href="../assets/readable-pages.css?v=4">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/forge-theme.css?v=1">
 </head>
 
 <body class="site-readable">
 <div class="wrap topbar">
-  <a class="topbar-brand" href="../">Arnaud Barbier</a>
+  <a class="topbar-brand" href="../" title="Retour à l’accueil FORGE"><i class="ring" aria-hidden="true"></i>FORGE<small>← accueil</small></a>
     <nav class="pagenav" aria-label="Pages">
     <a href="../">Accueil</a>
       <a href="../research/">Mode Research</a>
