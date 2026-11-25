@@ -29,3 +29,11 @@ averages and the `individual_sharpe` pane under the candles.
   `grep -c "umami\|og:image" docs/index.html docs/en/index.html` = 1 each, `grep -c noindex` = 0).
 - No engine/kernel edit, no compilation. Commit; do NOT push (Arnaud says « push »).
 - End with « For the director » (≤ 10 lines) and add one line to `SITE_FORGE_DIRECTOR.md` Next.
+
+## Item 1 execution — 25 November 2026
+- Reused the verified main-demo restoration in a new isolated `forge_demo_recovery/2026-11-25/term23_indicators_work/state`; original recovered/user states untouched. Current Pod Lab code on 8767, `NUMBA_DISABLE_JIT=1`; no engine edit or compilation.
+- Updated `term23.json` to run the captured main-demo source/settings, explicitly select price + individual-Sharpe panes and write to `/tmp/forge-term23/{flow,chk}` (create these directories before replay).
+- Refroze only `term23.html`, branded FORGE. All six report cells drawn; bottom row remains cost impact / invested positions / cash ledger.
+- Exact metrics: annual return .17603038755922906, volatility .1611225113321582, Sharpe 1.0874035216788729, drawdown -.266643949899779.
+- Browser QA: 1333×1250 capture, joined demo forward/back at 1288×723; all six cell rectangles unchanged, no horizontal overflow. Candles 231/476px = 48.5% of execution cell.
+- Evidence: `/tmp/forge-term23/{capture.log,qa.log,geometry_before.json,geometry_after.json,chk/ide.png}`; levers: not concerned.
