@@ -45,7 +45,7 @@ a{color:inherit}
   transition:transform 1s cubic-bezier(.2,.7,.2,1),filter .9s ease,box-shadow .9s ease}
 /* hero and schema: the terminal is a screen seen from the side, then pushed back and blurred under the schema */
 .screen.posed{box-shadow:0 0 0 1px #29c5ff30,0 60px 160px #000,0 0 120px #29c5ff14}
-.screen.dim{filter:brightness(.4)}
+.screen.dim{filter:brightness(.22)}
 .screen iframe{position:absolute;inset:0;pointer-events:none;width:1600px;height:1000px;border:0;opacity:0;transition:opacity .35s ease;background:var(--bg)}
 .screen > iframe{visibility:hidden}
 .screen iframe.on{opacity:1;visibility:visible}
@@ -130,8 +130,6 @@ a{color:inherit}
 .schema{position:absolute;inset:0;z-index:3;display:grid;place-items:center;padding:80px 72px 40px 40px;background:#0b0e1499;
   opacity:0;pointer-events:none;transition:opacity .7s ease}
 .schema.on{opacity:1;pointer-events:auto}
-.rr{width:min(1180px,100%);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:16px 44px;align-items:start}
-.rr-head{grid-column:1/-1}
 .sch-cap{font:500 12px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
 .sch-title{font:600 clamp(22px,2.4vw,32px)/1.2 var(--sans);margin:0}
 .sch-sub{margin:6px 0 0;font-size:clamp(15px,1.3vw,18px);color:#c3ccdb}
@@ -142,49 +140,6 @@ a{color:inherit}
   font:600 11px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--text)}
 .pane-h span{color:var(--faint);font-weight:500;letter-spacing:.06em;text-transform:none}
 .pane-h b{color:var(--accent);font-weight:600}
-.plane{display:block;width:100%;height:auto;overflow:visible;font-family:var(--mono)}
-.plane .ax{stroke:#8592a6;stroke-width:2}
-.plane .gr{stroke:#1a2230;stroke-width:1}
-.plane .tk{font-size:13px;fill:#7d8aa0}
-.plane .at{font:700 15px var(--mono);letter-spacing:.08em;fill:var(--text)}
-.plane .ah{font:500 12.5px var(--sans);fill:var(--muted)}
-.plane .zone{fill:#29c5ff0a;stroke:#29c5ff66;stroke-width:1.5;stroke-dasharray:6 5;transition:fill .5s,stroke .5s}
-.plane .zone.hit{fill:#29c5ff22;stroke:var(--accent);stroke-dasharray:none}
-.plane .zt{font:700 12px var(--mono);letter-spacing:.12em;fill:var(--accent)}
-.plane .zl{font-size:12px;fill:#9fc6db}
-.plane .ref{fill:#0b0e14;stroke:var(--text);stroke-width:2.2}
-.plane .pt{fill:#0b0e14;stroke:#c3ccdb;stroke-width:2.2;opacity:0;transition:opacity .3s}
-.plane .pt.on{opacity:1}.plane .pt.win{fill:var(--accent);stroke:var(--accent)}
-.plane .pl{font:600 13px var(--mono);fill:var(--text);opacity:0;transition:opacity .3s}.plane .pl.on{opacity:1}
-.plane .path{fill:none;stroke:#29c5ff70;stroke-width:2}
-.plane .head{fill:var(--accent);opacity:0}
-.plane .cross{stroke:var(--accent);stroke-width:1.3;stroke-dasharray:3 4;opacity:0;transition:opacity .25s}
-.plane .chip{opacity:0;transition:opacity .25s}.plane .chip rect{fill:var(--accent)}.plane .chip text{font:700 13px var(--mono);fill:#06121c}
-.plane .cross.on,.plane .chip.on{opacity:1}
-/* mini logo: a ball (the strategy) drops into a receptacle (Forge), once per trial */
-.rr-head{display:flex;align-items:center;gap:18px}
-.mini{flex:0 0 auto;width:72px;height:72px;overflow:visible}
-.mini .cup{fill:none;stroke:#5a6680;stroke-width:3.5;stroke-linecap:round;transition:stroke .3s,filter .3s}
-.mini.hit .cup{stroke:var(--accent);filter:drop-shadow(0 0 6px #29c5ffaa)}
-.mini .ball{fill:var(--accent);opacity:0}
-.mini.drop .ball{animation:drop .6s cubic-bezier(.5,0,.75,1) forwards}
-.mini.rest .ball{opacity:1;transform:translateY(28px)}
-@keyframes drop{0%{opacity:0;transform:translateY(0)}25%{opacity:1}100%{opacity:1;transform:translateY(28px)}}
-.log{margin:0;padding:6px 0;list-style:none;font:14px/1.5 var(--mono);color:#c3ccdb}
-.log li{display:grid;grid-template-columns:104px minmax(0,1fr) 78px 78px 22px;gap:10px;align-items:baseline;padding:9px 16px;
-  opacity:0;transform:translateX(-6px);transition:opacity .35s,transform .35s}
-.log li.on{opacity:1;transform:none}
-.log li.hd{color:var(--muted);font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding-bottom:2px;border-bottom:1px solid #1a2230}
-.log li.hd .n{color:var(--text);font-weight:600}
-.log .sh{display:none}
-.log .k{color:var(--muted)}.log .n{text-align:right;font-variant-numeric:tabular-nums}
-.log .x{color:var(--faint);text-align:center}.log .v{color:var(--accent);text-align:center;font-weight:700}
-.log li.win{background:#29c5ff14;box-shadow:inset 3px 0 var(--accent)}
-.log .met{grid-column:2/-1;color:var(--accent);font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-top:-2px}
-.log li.wide{grid-template-columns:104px minmax(0,1fr)}
-.sq{display:inline-flex;gap:4px;vertical-align:middle;margin-right:10px}
-.sq i{width:11px;height:11px;border:1px solid #3a4558;transition:background .2s,border-color .2s}
-.sq i.on{background:var(--accent);border-color:var(--accent)}
 /* page 3: the strategy's own views, in a panel framed like the terminal */
 .ow{width:min(1240px,100%);display:grid;grid-template-columns:minmax(0,330px) minmax(0,1fr);gap:28px;align-items:center}
 .ow .sch-sub{max-width:none}
@@ -205,24 +160,6 @@ a{color:inherit}
 @keyframes owflag{0%{opacity:0}20%{opacity:1}70%{opacity:1}100%{opacity:0}}
 @media (prefers-reduced-motion:reduce){#openwin .ow-c{opacity:1;animation:none!important}#openwin .ow-f{display:none}}
 .ow-data{margin:0;font-size:13.5px;color:var(--muted)}.ow-data b{color:var(--text);font-weight:600}
-/* page 2: three cards (idea, simulation, analysis) framed like the terminal's panels, then the trial log */
-.rr{grid-template-columns:1fr;gap:14px;width:min(1100px,100%)}
-.rr .sch-sub{max-width:980px}
-.fc-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-.fc{transition:border-color .3s,box-shadow .3s}
-.fc .pane-h{transition:color .3s}
-.fc-b{display:flex;align-items:center;gap:14px;padding:14px 16px;color:#c3ccdb;font-size:15px;line-height:1.4}
-.fc-b p{margin:0}
-.fc-i{flex:0 0 auto;width:28px;height:28px;fill:none;stroke:#8592a6;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;transition:stroke .3s,filter .3s}
-.fc.on{border-color:var(--accent);box-shadow:0 0 0 1px #29c5ff55,0 30px 80px #000a}
-.fc.on .pane-h{color:var(--accent)}
-.fc.on .fc-i{stroke:var(--accent);filter:drop-shadow(0 0 5px #29c5ff88)}
-.loopl{display:flex;justify-content:center;align-items:center;gap:10px;margin:0;font:500 16px var(--sans);color:var(--text)}
-.loopl svg{width:20px;height:20px;fill:none;stroke:var(--accent);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.loopl.spin svg{animation:spin 1.5s linear infinite}
-.rr .log li{padding:5px 16px}
-.fc{display:flex;flex-direction:column}.fc-b{flex:1}
-
 /* the visitor's AI: a chat card over the terminal (thinking, then the code it hands back) */
 .chat{position:absolute;z-index:5;right:72px;top:50%;width:460px;transform:translateY(-46%);background:var(--panel);border:1px solid var(--tuto);
   box-shadow:0 24px 70px #000c;opacity:0;pointer-events:none;transition:opacity .35s ease,transform .35s ease}
@@ -549,11 +486,7 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
   .hero-inner{max-width:none}
   .pillars,.brand small{display:none}
   .next{white-space:nowrap}.next .long{display:none}.next .short{display:inline}
-  .rr{grid-template-columns:1fr;gap:8px}
-  .log{font-size:11px}.log li{grid-template-columns:74px minmax(0,1fr) 50px 50px 14px;gap:6px;padding:5px 10px}.pane-h span{display:none}.log .lg{display:none}.log .sh{display:inline}
-  .log li.wide{grid-template-columns:74px minmax(0,1fr)}.sq i{width:8px;height:8px}.sq{gap:3px}
   .ow{grid-template-columns:1fr;gap:12px}.ow .ow-data{margin-top:8px}.ow .sch-cap{display:none}.ow .sch-sub,.ow-data{font-size:13px}
-  .fc-row{gap:6px}.fc .pane-h{padding:6px 8px;font-size:10px;letter-spacing:.08em}.fc-b{padding:8px;justify-content:center}.fc-b p{display:none}.fc-i{width:22px;height:22px}.loopl{font-size:13px}.rr .sch-sub{font-size:13px}.rr .sch-cap{display:none}.rr .log li{padding:4px 10px}.fc .pane-h{letter-spacing:.04em}
   .hero h1{font-size:30px}
   .hero .lead{font-size:15px;margin-top:var(--s4)}
   .nocode{display:block;margin-top:var(--s4);font-size:14px}
@@ -587,6 +520,144 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
 #fin{position:relative;z-index:0}
 #fin::before{content:"";position:absolute;z-index:-1;top:0;bottom:0;left:calc(50% - 50vw);right:calc(50% - 50vw);background:linear-gradient(180deg,#0b0e1400 0,#151d2a 220px,#18212f 100%)}
 .free-hint{margin:0 0 22px;font:500 12px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+
+/* Native concept and agent diagrams: the same panels, type and tokens as the terminal. */
+.hero .lead + .lead{margin-top:14px}
+.diagram-page{width:min(1320px,100%);min-width:0;margin:auto}
+#schema,#agentwin{overflow-y:auto;overscroll-behavior:contain;align-items:start;scrollbar-width:thin}
+#schema .diagram-page,#agentwin .diagram-page{padding:12px 0 28px}
+.diagram-intro{max-width:1100px;margin-bottom:28px}
+.diagram-intro .sch-sub{margin-top:14px}
+.concept-flow{display:grid;grid-template-columns:.8fr 2.2fr 1.25fr .8fr;gap:28px;align-items:stretch}
+.diagram-card{position:relative;min-width:0;border:1px solid var(--line);background:var(--bg);box-shadow:none}
+.diagram-card > .pane-h{font-size:12px;letter-spacing:.08em;padding:12px 14px;min-height:42px;align-items:center}
+.diagram-body{padding:20px 14px;font-size:14px;line-height:1.5}
+.diagram-body h3{font:600 18px/1.35 var(--sans);margin:0 0 16px;color:var(--text)}
+.diagram-body p{margin:0;color:var(--muted)}
+.diagram-body ul{list-style:none;margin:0;padding:0;color:var(--muted)}
+.diagram-body li + li{margin-top:6px}
+.flow-output::after{content:"";position:absolute;left:100%;top:56%;width:28px;height:1px;background:var(--accent);z-index:1}
+.flow-output::before{content:"";position:absolute;right:-28px;top:calc(56% - 4px);border-left:7px solid var(--accent);border-top:4px solid transparent;border-bottom:4px solid transparent;z-index:2}
+.concept-node{border-width:2px;transition:border-color .45s,background .45s,box-shadow .45s}
+.concept-node.active{border-color:var(--accent);background:#10202a;box-shadow:0 0 18px #29c5ff88}
+.concept-edge .diagram-body{text-align:center;padding-top:24px}
+.diagram-icon{width:52px;height:52px;fill:none;stroke:var(--muted);stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round;margin:0 auto 22px}
+.concept-dev .diagram-body{padding:18px 16px}
+.concept-dev h3{text-align:center;font-size:16px;margin-bottom:18px}
+.dev-flow{display:grid;grid-template-columns:minmax(100px,.7fr) minmax(0,1.6fr);gap:24px;align-items:center}
+.dev-routes{display:grid;gap:26px;position:relative}
+.dev-route{padding:12px 6px;border:1px solid #3a4558;background:var(--panel);text-align:center;position:relative}
+.dev-route b{display:block;font-size:17px;color:var(--accent)}
+.dev-route span{display:block;margin-top:4px;color:var(--muted);font-size:14px}
+.dev-route::after{content:"";position:absolute;left:100%;top:50%;height:1px;width:24px;background:var(--accent)}
+.dev-tools{padding:14px 10px;background:var(--panel);border:1px solid var(--line);position:relative}
+.dev-tools::before{content:"";position:absolute;left:-13px;top:25%;bottom:25%;width:1px;background:var(--accent)}
+.dev-tools h4{margin:0 0 12px;font:500 12px/1.5 var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--muted);text-align:center}
+.tool-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.diagram-chip{display:flex;align-items:center;justify-content:center;min-height:40px;padding:8px;background:#192530;color:var(--text);text-align:center;font-size:14px;line-height:1.3}
+.concept-engine{border-color:#227693;background:#10202a}
+.concept-engine .diagram-body{text-align:center}
+.concept-engine h3{color:var(--accent);font-size:22px;margin-bottom:2px}
+.concept-engine p{margin-bottom:18px}
+.diagram-stack{display:grid;gap:8px}
+.diagram-stack .diagram-chip{min-height:38px}
+.concept-result .diagram-icon{stroke:var(--accent)}
+.concept-result ul,.concept-ideas ul{margin-top:24px}
+#openwin .sch-sub + .sch-sub{margin-top:16px}
+#agentwin{background:linear-gradient(180deg,#0b0e14f2,#0b0e14e6 68%,#0b0e1466);padding-top:74px}
+.agent-heading{margin-bottom:16px}
+.agent-heading .sch-cap{color:var(--accent)}
+.agent-map{display:grid;grid-template-columns:.9fr 1.25fr .65fr 2.4fr;grid-template-rows:78px auto;gap:24px 30px;align-items:stretch;padding-top:4px}
+.agent-provider{grid-column:3;grid-row:1;align-self:center;justify-self:center;width:190px;z-index:1;border-color:#366659;background:#11251f;text-align:center;padding:10px}
+.agent-provider b{display:block;color:#67c5aa;font-size:15px}.agent-provider span{color:var(--muted);font-size:14px}
+.agent-provider::after{content:"";position:absolute;left:50%;top:100%;height:190px;width:1px;background:#67c5aa;pointer-events:none}
+.agent-provider::before{content:"";position:absolute;left:calc(50% - 4px);top:calc(100% + 185px);border-top:7px solid #67c5aa;border-left:4px solid transparent;border-right:4px solid transparent}
+.provider-request{grid-column:2;grid-row:1;align-self:center;justify-self:end;font:14px var(--sans);color:#b3a0f0;border-top:1px solid #8c78c7;padding:8px 0 0;position:relative;width:72%}
+.provider-request::before{content:"";position:absolute;left:0;top:0;height:72px;width:1px;background:#8c78c7}
+.provider-request::after{content:"";position:absolute;left:100%;top:-5px;border-left:8px solid #8c78c7;border-top:4px solid transparent;border-bottom:4px solid transparent}
+.agent-investor{grid-column:1;grid-row:2}
+.agent-llm{grid-column:2;grid-row:2;border-color:#6f6099;background:#171725}
+.agent-llm > .pane-h{color:#c6b7f2;background:#222138}
+.agent-api{grid-column:3;grid-row:2;align-self:center;border-color:var(--accent);z-index:2;background:#10202a}
+.agent-forge{grid-column:4;grid-row:2;border-color:#227693;background:#10202a}
+.agent-investor .diagram-body,.agent-llm .diagram-body{text-align:center}
+.agent-investor .diagram-icon{width:44px;height:44px;margin:0 auto 12px}
+.agent-llm h3{font-size:30px;color:#b3a0f0;margin-bottom:0}
+.agent-llm p{margin-bottom:20px;font-size:14px}
+.agent-llm .diagram-chip{background:#252536}
+.agent-api .diagram-body{text-align:center;padding:18px 8px}
+.agent-api h3{color:var(--accent);font-size:26px;margin-bottom:0}.agent-api b{display:block;color:var(--text);font-size:14px}
+.agent-api hr{border:0;border-top:1px solid #365065;margin:14px 0}
+.agent-api ul{font-size:14px}
+.agent-forge > .diagram-body{padding:14px}
+.agent-forge h3{text-align:center;font-size:28px;color:var(--accent);margin-bottom:0;letter-spacing:.08em}
+.agent-forge .forge-caption{text-align:center;margin-bottom:16px;font-size:14px}
+.agent-capabilities{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.agent-capabilities section{border:1px solid #2b4656;padding:10px 8px;min-width:0}
+.agent-capabilities h4{font:500 12px/1.4 var(--mono);color:var(--accent);text-align:center;margin:0 0 10px;text-transform:uppercase;letter-spacing:.02em}
+.agent-forge .diagram-chip{font-size:14px;min-height:36px;padding:7px 5px}
+.agent-out::after{background:#b3a0f0;top:42%}
+.agent-out::before{top:calc(42% - 4px)}
+.agent-result-link,.agent-market-link{position:absolute;left:100%;top:76%;height:1px;width:30px;background:var(--accent);z-index:3}
+.agent-result-link::before{content:"";position:absolute;left:0;top:-4px;border-right:7px solid var(--accent);border-top:4px solid transparent;border-bottom:4px solid transparent}
+.agent-market-link{top:59%;background:#67c5aa}
+.agent-market-link::after{content:"";position:absolute;right:0;top:-4px;border-left:7px solid #67c5aa;border-top:4px solid transparent;border-bottom:4px solid transparent}
+.agent-market-in{position:absolute;left:calc(50% - 4px);top:-7px;border-top:7px solid #67c5aa;border-left:4px solid transparent;border-right:4px solid transparent;z-index:3}
+.agent-out::after{background:#b3a0f0}
+.agent-out::before{border-left-color:#b3a0f0}
+.agent-return{position:relative;text-align:center;margin:18px 0 22px;color:var(--accent);font:500 12px var(--mono);letter-spacing:.08em;text-transform:uppercase}
+.agent-return::before,.agent-return::after{content:"";display:inline-block;vertical-align:middle;width:12%;border-top:1px dashed #2d94b4;margin:0 14px}
+.flow-legend{display:flex;justify-content:center;gap:26px;flex-wrap:wrap;font-size:14px;color:var(--muted);margin:0 0 20px}
+.flow-legend span::before{content:"";display:inline-block;vertical-align:middle;width:20px;height:2px;background:var(--flow-color);margin-right:8px}
+.agent-guarantees{border-top:1px solid var(--line);padding-top:18px;display:flex;justify-content:space-around;gap:16px;flex-wrap:wrap;color:var(--text);font-size:15px}
+.agent-guarantees span::before{content:"✓";color:var(--accent);margin-right:8px}
+.agent-note{text-align:center;margin:16px 0 0;color:var(--muted);font-size:14px}
+.screen.parked{filter:brightness(.28);pointer-events:none}
+@media(min-width:761px) and (max-height:800px){
+  .hero{padding-top:74px;padding-bottom:58px}.hero .mark{margin-bottom:18px}.hero h1{font-size:clamp(30px,3.1vw,44px)}
+  .hero .lead{font-size:16px;margin-top:16px}.hero .ctas{margin-top:20px}
+  #schema,#agentwin{padding-top:68px}.diagram-intro{margin-bottom:18px}.diagram-intro .sch-sub{font-size:16px}
+  .diagram-body{padding-top:14px;padding-bottom:14px}.diagram-icon{margin-bottom:12px}
+}
+@media(max-width:1100px){
+  .concept-flow{grid-template-columns:1fr 2fr}.concept-dev::after,.concept-dev::before{display:none}
+  .concept-flow{row-gap:22px}.concept-edge .diagram-body{display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .agent-map{grid-template-columns:1fr 1.5fr;grid-template-rows:auto;gap:24px}
+  .agent-provider{grid-column:2;grid-row:1;width:auto;justify-self:stretch}
+  .provider-request{grid-column:1;grid-row:1;width:auto;justify-self:stretch;align-self:center}
+  .provider-request::before{display:none}.agent-provider::after,.agent-provider::before{display:none}
+  .agent-investor{grid-column:1;grid-row:2}.agent-llm{grid-column:2;grid-row:2}
+  .agent-api{grid-column:1;grid-row:3}.agent-forge{grid-column:2;grid-row:3}
+  .agent-llm::before,.agent-llm::after,.agent-llm .agent-result-link,.agent-market-in{display:none}.agent-api::after{width:24px}.agent-api::before{right:-24px}
+}
+@media(max-width:760px){
+  .hero{overflow-y:auto;overscroll-behavior:contain;display:block;padding-bottom:80px}
+  .hero h1{font-size:32px}.hero .lead{font-size:16px}.hero .lead + .lead{font-size:15px}
+  .hero .mark{margin-bottom:22px}.hero .ticker{display:none}.hero .hint{margin-top:22px}
+  #schema,#agentwin{padding:72px 30px 76px 16px}#schema .sch-cap,#openwin .sch-cap{display:block}
+  #schema .sch-title{font-size:26px}#schema .sch-sub,#openwin .sch-sub,#openwin .ow-data{font-size:16px}
+  .concept-flow{grid-template-columns:1fr;gap:24px}.concept-dev .diagram-body{padding:18px 12px}
+  .concept-edge .diagram-body{padding:18px}.concept-edge .diagram-icon{width:38px;height:38px;margin-bottom:12px}
+  .concept-edge ul{margin-top:12px}.concept-edge li{display:inline}.concept-edge li + li::before{content:" · "}
+  .flow-output::after{left:50%;top:100%;width:1px;height:24px}.flow-output::before{right:auto;left:calc(50% - 4px);top:calc(100% + 18px);border-left:4px solid transparent;border-right:4px solid transparent;border-top:7px solid var(--accent);border-bottom:0}
+  .concept-dev::before,.concept-dev::after{display:block}
+  .dev-flow{grid-template-columns:1fr;gap:20px}.dev-routes{grid-template-columns:1fr 1fr;gap:12px}
+  .dev-route::after,.dev-tools::before{display:none}.dev-tools{padding:14px}
+  #openwin{overflow-y:auto;overscroll-behavior:contain;align-items:start;padding-bottom:76px}
+  #openwin .ow{margin:auto}#openwin .sch-title{font-size:26px}#openwin .ow-data{margin-top:18px}
+  .agent-map{grid-template-columns:1fr;gap:24px}.agent-map > *{grid-column:1;grid-row:auto}
+  .provider-request{display:none}.agent-provider{order:3}.agent-investor{order:1}.agent-llm{order:2}.agent-api{order:4}.agent-forge{order:5}
+  .agent-map .flow-output::after,.agent-map .flow-output::before{display:block}
+  .agent-result-link,.agent-market-link{display:none}
+  .agent-map .agent-out::after{top:100%}.agent-map .agent-out::before{top:calc(100% + 18px);border-left-color:transparent;border-top-color:#b3a0f0}
+  .agent-capabilities{grid-template-columns:1fr}.agent-api .diagram-body{padding:14px}
+  .agent-api h3{display:inline;margin-right:10px}.agent-api b{display:inline}.agent-api ul{display:flex;justify-content:center;gap:16px}
+  .agent-guarantees{justify-content:flex-start;flex-direction:column}.flow-legend{justify-content:flex-start;gap:10px 20px}
+  .agent-return{line-height:1.7}.agent-return::before,.agent-return::after{display:none}
+  .agent-note{text-align:left}.agent-heading{margin-bottom:12px}
+}
+@media(prefers-reduced-motion:reduce){.concept-node{transition:none}.screen.parked{filter:brightness(.28)}}
+
 </style>
 </head>
 <body>
@@ -602,11 +673,11 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
     <div class="screen" id="screen"></div>
     <div class="veil" id="veil"></div>
 
-    <div class="hero" id="hero">
+    <div class="hero" id="hero" data-slide-scroll>
       <div class="hero-inner">
         <div class="mark"><i></i><b>FORGE</b><span>Laboratoire d’allocation<br>de portefeuille</span></div>
-        <h1>Mettez votre allocation à l’épreuve <span>avant que les marchés ne le fassent.</span></h1>
-        <p class="lead">Conçu pour les personnes qui ne savent pas coder, FORGE permet de construire et tester des portefeuilles multi-actifs grâce à son interface et à votre IA. Si vous codez, étendez directement vos stratégies, indicateurs et graphiques en Python.</p>
+        <h1>La puissance de la gestion quantitative, <span>à votre portée.</span></h1>
+        <p class="lead">Planifiez et composez vos futurs investissements, comparez vos options de placement et testez vos propres mécanismes de protection du capital et de sécurisation des gains, sans que la complexité technique ne limite vos ambitions.</p>
         <div class="ctas">
           <a class="btn primary" href="#" id="start">Voir la démo ↓</a>
           <a class="btn" href="#acces">Demander un accès</a>
@@ -616,25 +687,29 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
       <button class="hint" id="hint" type="button">Faites défiler ou appuyez sur ↓<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v15M5 12l7 7 7-7"/></svg></button>
     </div>
 
-    <!-- How it works: the demo's own trials on a risk / return plane, with their log -->
-    <div class="schema" id="schema">
-      <div class="rr">
-        <div class="rr-head"><div><p class="sch-cap">Comment ça marche</p>
-          <h2 class="sch-title">Toute la puissance de FORGE au service de vos idées.</h2>
-          <p class="sch-sub">Concentrez toute votre énergie sur votre logique d’investissement. FORGE prend en charge vos simulations en quelques secondes, grâce à un moteur optimisé dont les règles d’exécution sont entièrement documentées. Évaluez vos décisions, affinez vos règles de gestion et explorez de nouvelles idées à partir des résultats obtenus.</p></div></div>
-        <div class="fc-row"><div class="pane fc" id="fc0"><div class="pane-h">Vos idées<span>01</span></div><div class="fc-b"><svg class="fc-i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.6 10.8c.7.5 1.1 1.3 1.1 2.1V16h5v-.1c0-.8.4-1.6 1.1-2.1A6 6 0 0 0 12 3z"/></svg><p>Portefeuilles, allocations et règles de gestion</p></div></div><div class="pane fc" id="fc1"><div class="pane-h">FORGE simule<span>02</span></div><div class="fc-b"><svg class="fc-i" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1.5"/><rect x="9.5" y="9.5" width="5" height="5"/><path d="M10 2.5v3.5M14 2.5v3.5M10 18v3.5M14 18v3.5M2.5 10h3.5M2.5 14h3.5M18 10h3.5M18 14h3.5"/></svg><p>Exécution rapide et fiable de vos stratégies</p></div></div><div class="pane fc" id="fc2"><div class="pane-h">Vous analysez<span>03</span></div><div class="fc-b"><svg class="fc-i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21v-5M9 21v-8M14 21v-6M19 21v-11"/><path d="M3 11l6-5 5 3 7-6"/><path d="M17 3h4v4"/></svg><p>Performances, risques et nouvelles hypothèses</p></div></div></div>
-        <p class="loopl" id="loopl"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14.3-4.9L4 8"/><path d="M4 3v5h5"/><path d="M4 13a8 8 0 0 0 14.3 4.9L20 16"/><path d="M20 21v-5h-5"/></svg>Testez. Comparez. Affinez. Recommencez.</p>
-        <div class="pane"><div class="pane-h">Votre recherche, essai après essai<span>simulations réelles de la démo, 2017 → 2023 · chaque essai est compté</span></div>
-        <ol class="log" id="log"></ol></div>
+    <div class="schema" id="schema" data-slide-scroll tabindex="0" aria-label="Le concept FORGE">
+      <div class="diagram-page">
+        <div class="diagram-intro"><p class="sch-cap">Le concept</p>
+          <h2 class="sch-title">Définissez la logique. <span class="hl">FORGE se charge de l’exécution.</span></h2>
+          <p class="sch-sub">Avec ou sans connaissances en programmation, FORGE vous offre un environnement spécialement conçu pour simplifier la création, l’intégration et le développement de vos propres outils financiers, à l’aide de votre IA ou directement en Python.</p>
+          <p class="sch-sub">Concentrez toute votre énergie sur votre logique d’investissement. FORGE prend en charge l’exécution de vos simulations en quelques secondes, grâce à un moteur optimisé dont les règles sont entièrement documentées.</p>
+        </div>
+        <div class="concept-flow" aria-label="Des idées aux résultats">
+          <section class="diagram-card concept-node concept-edge concept-ideas flow-output" id="cp0"><div class="pane-h">Vos idées</div><div class="diagram-body"><svg class="diagram-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 21h4M8 15c0-2-4-4-3-8a7 7 0 0 1 14 0c1 4-3 6-3 8v1H8z"/></svg><h3>Votre logique d’investissement</h3><ul><li>Objectifs</li><li>Convictions</li><li>Hypothèses</li></ul></div></section>
+          <section class="diagram-card concept-node concept-dev flow-output" id="cp1"><div class="pane-h">Développement</div><div class="diagram-body"><h3>Environnement de développement FORGE</h3><div class="dev-flow"><div class="dev-routes"><div class="dev-route"><b>Votre IA</b><span>Langage naturel</span></div><div class="dev-route"><b>Python</b><span>Programmation</span></div></div><div class="dev-tools"><h4>Vos outils personnalisés</h4><div class="tool-grid"><div class="diagram-chip">Allocations</div><div class="diagram-chip">Règles de gestion</div><div class="diagram-chip">Indicateurs</div><div class="diagram-chip">Algorithmes</div><div class="diagram-chip">Graphiques</div><div class="diagram-chip">Outils d’analyse</div></div></div></div></div></section>
+          <section class="diagram-card concept-node concept-engine flow-output" id="cp2"><div class="pane-h">Exécution</div><div class="diagram-body"><h3>MOTEUR FORGE</h3><p>Infrastructure de simulation</p><div class="diagram-stack"><div class="diagram-chip">Application des règles de gestion</div><div class="diagram-chip">Exécution des ordres</div><div class="diagram-chip">Coûts et contraintes</div><div class="diagram-chip">Valorisation du portefeuille</div></div></div></section>
+          <section class="diagram-card concept-node concept-edge concept-result" id="cp3"><div class="pane-h">Résultats</div><div class="diagram-body"><svg class="diagram-icon" viewBox="0 0 48 36" aria-hidden="true"><path d="M7 32V21M17 32V12M27 32V24M37 32V7" stroke-width="4" stroke="#8592a6"/><path d="M3 22 17 9 27 18 37 5 46 2"/></svg><h3>Votre analyse</h3><ul><li>Performances</li><li>Risques</li><li>Robustesse</li></ul></div></section>
+        </div>
       </div>
     </div>
     <!-- Page 3: the environment is open: views written in the strategy's own code -->
-    <div class="schema" id="openwin">
+    <div class="schema" id="openwin" data-slide-scroll tabindex="0">
       <div class="ow">
         <div><p class="sch-cap">Un environnement ouvert et personnalisable</p>
           <h2 class="sch-title">Votre stratégie. Vos outils. <span class="hl">Votre environnement.</span></h2>
-          <p class="sch-sub">Partez sans coder avec votre IA, ou écrivez vous-même votre code. L’interface de FORGE réunit vos stratégies, indicateurs et graphiques. Vous pouvez les étendre en Python pour créer un environnement d’analyse adapté à votre méthode de gestion.</p>
-          <p class="ow-data"><b>Vos données, vos sources.</b> La démonstration utilise des historiques de prix au format CSV (forexsb). Vous pouvez brancher vos propres données ou celles de votre fournisseur.</p>
+          <p class="sch-sub">FORGE ne vous impose ni méthode de gestion ni environnement d’analyse prédéfini. De la simple allocation de portefeuille aux stratégies algorithmiques les plus sophistiquées, créez vos propres indicateurs, graphiques et paramètres de simulation.</p>
+          <p class="sch-sub">Organisez votre espace de travail autour de votre logique d’investissement et faites-le évoluer au fil de vos recherches.</p>
+          <p class="ow-data"><b>Vos données, vos sources.</b> Connectez FORGE à votre fournisseur de données ou importez directement vos fichiers CSV. Seules les données au format OHLCV sont actuellement prises en charge.</p>
         </div>
         <div class="pane"><div class="pane-h">Terminal d’analyse personnalisé<span>vues écrites dans le code de la stratégie</span></div>
           <div class="ow-shot"><img src="next/states/open_a.jpg" alt="Terminal FORGE d’origine"><img class="ow-l ow-l1" src="next/states/open_b.jpg" alt="" style="clip-path:inset(28.90% 21.88% 37.47% 57.01%)"><i class="ow-f ow-f1" style="left:57.01%;top:28.90%;width:21.11%;height:33.63%"></i><img class="ow-l ow-l2" src="next/states/open_b.jpg" alt="" style="clip-path:inset(62.97% 38.33% 0.00% 23.61%)"><i class="ow-f ow-f2" style="left:23.61%;top:62.97%;width:38.06%;height:37.03%"></i><img class="ow-l ow-l3" src="next/states/open_b.jpg" alt="" style="clip-path:inset(62.97% 0.00% 0.00% 61.94%)"><i class="ow-f ow-f3" style="left:61.94%;top:62.97%;width:38.06%;height:37.03%"></i><img class="ow-c" src="next/states/open_c.jpg" alt="Le même terminal avec les vues écrites dans le code de la stratégie et le thème jaune"></div></div>
@@ -679,6 +754,23 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
         <h2 class="sch-title">Chaque stratégie est du code, <span class="hl">lisible et modifiable.</span></h2>
         <p class="sch-sub">Ce que votre IA écrit arrive directement dans l’éditeur de FORGE, <strong>organisé dans un arbre</strong> : indicateurs, allocateur, paramètres, graphiques.</p>
         <p class="sch-sub">Conçu pour faciliter la programmation, cet environnement vous permet de <strong>développer, modifier et tester librement vos idées</strong>, avec une IA ou directement dans le code. Chaque modification peut être <strong>simulée immédiatement</strong>.</p></div></div>
+    </div>
+    <div class="schema agentic-window" id="agentwin" data-slide-scroll tabindex="0" aria-label="Architecture agentique envisagée">
+      <div class="diagram-page">
+        <div class="agent-heading"><p class="sch-cap">Architecture agentique envisagée</p></div>
+        <div class="agent-map">
+          <section class="diagram-card agent-investor flow-output"><div class="pane-h">Investisseur</div><div class="diagram-body"><svg class="diagram-icon" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="14" r="9"/><path d="M7 45v-8q17-14 34 0v8"/></svg><h3>Définition du cadre</h3><div class="diagram-stack"><div class="diagram-chip">Objectifs</div><div class="diagram-chip">Univers d’investissement</div><div class="diagram-chip">Contraintes de risque</div><div class="diagram-chip">Hypothèses</div></div></div></section>
+          <section class="diagram-card agent-llm flow-output agent-out"><i class="agent-result-link" aria-hidden="true"></i><div class="pane-h">Agent IA</div><div class="diagram-body"><h3>LLM</h3><p>Modèle indépendant de FORGE</p><div class="diagram-stack"><div class="diagram-chip">Conception de stratégies</div><div class="diagram-chip">Génération et modification du code</div><div class="diagram-chip">Analyse des résultats</div><div class="diagram-chip">Exploration de nouvelles pistes</div></div></div></section>
+          <div class="provider-request">Requête de données</div>
+          <div class="diagram-card agent-provider"><b>DATA PROVIDER</b><span>Données OHLCV</span></div>
+          <section class="diagram-card agent-api flow-output agent-out"><i class="agent-result-link" aria-hidden="true"></i><i class="agent-market-link" aria-hidden="true"></i><i class="agent-market-in" aria-hidden="true"></i><div class="diagram-body"><h3>API</h3><b>FORGE</b><hr><ul><li>Commandes</li><li>Données</li><li>Résultats</li></ul></div></section>
+          <section class="diagram-card agent-forge"><div class="pane-h">Infrastructure de recherche</div><div class="diagram-body"><h3>FORGE</h3><p class="forge-caption">Exécution, traçabilité et validation</p><div class="agent-capabilities"><section><h4>Exécution</h4><div class="diagram-stack"><div class="diagram-chip">Simulation des stratégies</div><div class="diagram-chip">Frais de transaction et slippage</div><div class="diagram-chip">Contraintes d’exécution</div><div class="diagram-chip">Valorisation du portefeuille</div></div></section><section><h4>Contrôle de la recherche</h4><div class="diagram-stack"><div class="diagram-chip">Comptabilisation des essais</div><div class="diagram-chip">Historique des modifications</div><div class="diagram-chip">Surveillance des données OOS</div><div class="diagram-chip">12 tests de robustesse</div></div></section></div></div></section>
+        </div>
+        <p class="agent-return">Boucle de recherche itérative</p>
+        <div class="flow-legend"><span style="--flow-color:#b3a0f0">Instructions et code</span><span style="--flow-color:#67c5aa">Données de marché</span><span style="--flow-color:var(--accent)">Résultats et diagnostics</span></div>
+        <div class="agent-guarantees"><span>Transparence du code</span><span>Traçabilité des essais</span><span>Règles d’exécution entièrement documentées</span></div>
+        <p class="agent-note">Architecture agentique envisagée à partir de l’API et de l’infrastructure existantes.</p>
+      </div>
     </div>
     <!-- The end of the demo: the code and the terminal side by side, seen from the left; who made it -->
     <div class="depart-o" id="departo"><div class="dep-in">
@@ -771,12 +863,6 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
     <p class="sub bench-next">FORGE est en tête sur la stratégie classique ; vectorbt l’est sur la gestion avancée, l’allocation et la grille. Le moteur actuel est écrit en Python compilé (Numba). Le prochain chantier est son portage en C, pour gagner en vitesse sur ces cas et permettre des tests de robustesse encore plus fournis.</p>
   </div>
 
-  <div class="blk" id="agents">
-    <p class="cap">Intégration agentique</p>
-    <h2>Un framework pour vos <span class="hl">chaînes d’agents.</span></h2>
-    <p class="sub">Le moteur Python de FORGE peut servir d’outil de simulation dans une chaîne d’agents pilotée par un LLM : proposer une stratégie, lancer un backtest, lire les résultats, puis itérer. Cette intégration demanderait une couche API exposant les fonctions du moteur à l’agent. Ce raccordement reste à développer.</p>
-  </div>
-
   <div class="blk end" id="fin">
     <div class="fin-contact">
       <p class="cap">CONTACT</p>
@@ -859,7 +945,8 @@ const ALL_STEPS = [
    n: 'L’arbre', h: 'La stratégie, représentée par un arbre', p: 'Pour vous repérer facilement dans votre stratégie, FORGE organise le code en différentes branches : indicateurs, allocateur, paramètres, graphiques… Chaque branche correspond à une fonctionnalité que vous pouvez ouvrir et modifier indépendamment.'},
   {state: 'ide_max', code: true, label: 'Le code', nx: 'code',
    n: 'Le code', h: 'Le code de votre IA, ou le vôtre', p: 'Un clic sur l’allocateur ouvre son code, ici le filtre de tendance. Reprenez ce que votre IA a écrit ou codez directement ici : chaque modification est appliquée et simulée aussitôt, et le terminal à droite se met à jour.'},
-  {state: 'ide_tree', depart: true, label: 'Contact'},
+  {state: 'ide', agentic: true, label: 'Agents IA'},
+  {state: 'ide', depart: true, label: 'Contact'},
 ];
 // Every step is driven by scrolling or the arrow keys. ?auto plays them on their own (tools/site/record.py).
 const AUTO = new URLSearchParams(location.search).has('auto');
@@ -890,7 +977,8 @@ const TOUR = [
    n: 'L’arbre', h: 'La stratégie, représentée par un arbre', p: 'Pour vous repérer facilement dans votre stratégie, FORGE organise le code en différentes branches : indicateurs, allocateur, paramètres, graphiques… Chaque branche correspond à une fonctionnalité que vous pouvez ouvrir et modifier indépendamment.'},
   {state: 'ide_max', code: true, label: 'Le code', nx: 'code',
    n: 'Le code', h: 'Le code de votre IA, ou le vôtre', p: 'Un clic sur l’allocateur ouvre son code, ici le filtre de tendance. Reprenez ce que votre IA a écrit ou codez directement ici : chaque modification est appliquée et simulée aussitôt, et le terminal à droite se met à jour.'},
-  {state: 'ide_tree', depart: true, label: 'Contact'},
+  {state: 'ide', agentic: true, label: 'Agents IA'},
+  {state: 'ide', depart: true, label: 'Contact'},
 ];
 const STEPS = AUTO || new URLSearchParams(location.search).has('tuto') ? ALL_STEPS : TOUR;
 const $ = id => document.getElementById(id);
@@ -913,7 +1001,7 @@ function prepareStep(step) {
   if (!step) return Promise.resolve();
   const names = [step.state, ...(step.drag?.frames || []),
     ...(step.play || []).flatMap(([state, , next]) => [state, next]).filter(Boolean)];
-  if (step.code || step.depart) names.push('ed_tree', 'ed_alloc', 'ide');
+  if (step.code || step.depart || step.agentic) names.push('ed_tree', 'ed_alloc', 'ide');
   if (names.includes('bench')) names.push('a2');
   if (names.includes('bencht')) names.push('a2t');
   const documents = new Set();
@@ -937,7 +1025,6 @@ function prepareStep(step) {
 
 async function boot() {
   try { targets = await (await fetch('next/states/targets.json')).json(); } catch (_) {}
-  buildPlane();
   const names = [...new Set(STEPS.flatMap(s => [s.state, ...(s.drag?.frames || []), ...(s.play || []).flatMap(([st, , nx]) => [st, nx]).filter(Boolean)]))];
   { const img = new Image(); img.src = 'next/hero.jpg'; img.className = 'shot'; img.alt = ''; $('screen').append(img); frames.shot = img; }
   const mk = src => { const f = document.createElement('iframe'); f.dataset.src = `next/states/${src}.html`; f.title = 'FORGE'; f.tabIndex = -1;
@@ -959,6 +1046,7 @@ async function boot() {
   }
   STEPS.forEach((s, k) => {
     const b = document.createElement('button'); b.innerHTML = `<span>${s.label}</span><i></i>`;
+    b.setAttribute('aria-label', s.label);
     b.onclick = () => scrollToStep(k); $('rail').append(b);
   });
   $('demo').style.height = `${STEPS.length * innerHeight}px`;
@@ -977,7 +1065,12 @@ async function boot() {
   }, 2500);
   stepByGesture();
   $('replay').onclick = () => scrollToStep(0, true);
-  addEventListener('scroll', onScroll, {passive: true}); addEventListener('resize', () => { $('demo').style.height = `${STEPS.length * innerHeight}px`; layout(); place(current); });
+  addEventListener('scroll', onScroll, {passive: true}); addEventListener('resize', () => {
+    const inWalkthrough = current >= 0 && !document.body.classList.contains('past-demo');
+    $('demo').style.height = `${STEPS.length * innerHeight}px`;
+    if (inWalkthrough) scrollToStep(current, true);
+    layout(); place(current);
+  });
   layout(); onScroll(true);
 }
 
@@ -985,6 +1078,10 @@ async function boot() {
 // a gesture always moves on, and stops the current step's animation. A trackpad gesture is a burst of wheel
 // events that swells then fades (inertia). Its tail is ignored; a new gesture is recognised by a pause
 // (> 180 ms), a change of direction, or a swell (the movement grows again while the tail was fading).
+function canScrollSlide(target, dir) {
+  const panel = target.closest?.('[data-slide-scroll]');
+  return !!panel && (dir > 0 ? panel.scrollTop + panel.clientHeight < panel.scrollHeight - 2 : panel.scrollTop > 2);
+}
 function stepByGesture() {
   const lastTop = () => $('demo').offsetTop + (STEPS.length - 1) * innerHeight;
   const inDemo = dir => scrollY <= lastTop() + 2 && !(current === 0 && dir < 0 && scrollY <= $('demo').offsetTop + 2);
@@ -1007,22 +1104,23 @@ function stepByGesture() {
   // the wheel has been quiet for 250 ms (a trackpad's inertia tail never re-triggers), and never twice within 450 ms.
   let lastT = 0, stepT = 0;
   addEventListener('wheel', e => {
-    const dir = Math.sign(e.deltaY); if (!dir || !inDemo(dir)) return;   // after the demo: free scroll
+    const dir = Math.sign(e.deltaY); if (!dir || !inDemo(dir) || canScrollSlide(e.target, dir)) return;   // after the demo: free scroll
     e.preventDefault();
     const t = performance.now(), fresh = t - lastT > 400 && t - stepT > 800 && Math.abs(e.deltaY) >= 4; lastT = t;   // inertia ends with sparse tiny deltas
     if (fresh) { stepT = t; go(dir); }
   }, {passive: false});
-  let y0 = null;
-  addEventListener('touchstart', e => { y0 = e.touches[0].clientY; }, {passive: true});
-  addEventListener('touchmove', e => { if (y0 != null && inDemo(Math.sign(y0 - e.touches[0].clientY))) e.preventDefault(); }, {passive: false});
+  let y0 = null, nativeTouch = false;
+  addEventListener('touchstart', e => { y0 = e.touches[0].clientY; nativeTouch = false; }, {passive: true});
+  addEventListener('touchmove', e => { if (y0 == null) return; const dir = Math.sign(y0 - e.touches[0].clientY); if (canScrollSlide(e.target, dir)) nativeTouch = true; if (!nativeTouch && inDemo(dir)) e.preventDefault(); }, {passive: false});
   addEventListener('touchend', e => {
     if (y0 == null) return; const dy = y0 - e.changedTouches[0].clientY; y0 = null;
+    if (nativeTouch) return;
     if (Math.abs(dy) > 8 && inDemo(Math.sign(dy))) go(Math.sign(dy));
   });
   // One key press = one step, always, even in the middle of an animation (go() stops it).
   addEventListener('keydown', e => {
     const dir = {ArrowDown: 1, PageDown: 1, ' ': 1, ArrowRight: 1, ArrowUp: -1, PageUp: -1, ArrowLeft: -1}[e.key];
-    if (!dir || e.target.closest?.('input,textarea,select') || !inDemo(dir)) return;
+    if (!dir || e.target.closest?.('input,textarea,select') || !inDemo(dir) || canScrollSlide(e.target, dir)) return;
     e.preventDefault(); if (!e.repeat) go(dir);
   }, {capture: true});
 
@@ -1043,13 +1141,14 @@ function layout(focus) {
   let s = view.s, cx = view.x + W * s / 2, cy = view.y + H * s / 2, ry = 0, rx = 0;
   if (pose !== 'flat' && !AUTO) {
     if (phone) { const low = pose === 'hero' || pose === 'depart'; s = vw * 1.25 / W; cx = vw / 2; cy = vh - H * s * (low ? .22 : .5); rx = low ? 32 : 14; }
+    else if (pose === 'agentic') { s = Math.min(vw * .9 / W, vh * .64 / H); cx = vw * .5; cy = vh * .84; ry = -8; rx = 8; }
     else if (pose === 'hero') { s = Math.min(vw * .6 / W, vh * .74 / H); cx = vw * .72; cy = vh * .54; ry = -34; rx = 5; }
     else if (pose === 'depart') { s = Math.min(vw * .56 / W, vh * .72 / H); cx = vw * .3; cy = vh * .54; ry = 34; rx = 5; }
     else { s = Math.min(vw * .86 / W, vh * .92 / H); cx = vw * .5; cy = vh * .52; ry = -12; rx = 2; }
   }
   const sc = $('screen');
   sc.style.transform = `translate(${cx}px,${cy}px) rotateY(${ry}deg) rotateX(${rx}deg) scale(${s}) translate(${-W / 2}px,${-H / 2}px)`;
-  sc.classList.toggle('posed', pose !== 'flat' && !AUTO); sc.classList.toggle('dim', pose === 'schema' && !AUTO);
+  sc.classList.toggle('posed', pose !== 'flat' && !AUTO); sc.classList.toggle('dim', pose === 'schema' && !AUTO); sc.classList.toggle('parked', pose === 'agentic' && !AUTO);
 }
 function flatView(focus) {
   const vw = innerWidth, vh = $('stage').clientHeight, phone = vw <= 760;
@@ -1084,7 +1183,7 @@ function onScroll(force) {
     if (!document.body.classList.contains('past-demo')) {
       document.body.classList.add('past-demo'); ++entryId;
       clearTimeout(timer); clearTimeout(nextTimer); clearTimeout(codeTimer);
-      stopVal(); stopOpen(); stopLoop(); stopChat(); stopScroll(); stopCross();
+      stopVal(); stopOpen(); stopLoop(); stopAgent(); stopChat(); stopScroll(); stopCross();
     }
     return;
   }
@@ -1103,7 +1202,7 @@ function onScroll(force) {
 }
 
 async function enter(k, forward) {
-  const entry = ++entryId; stopOpen(); stopLoop();
+  const entry = ++entryId; stopOpen(); stopLoop(); stopAgent();
   clearTimeout(timer); stopChat(); stopScroll(); $('screen').classList.remove('instant'); const step = STEPS[k], prev = current; current = k;
   // The "continue" prompt comes back once this step has played (not on the hero, which has its own, nor at the end).
   clearTimeout(nextTimer); $('next').classList.remove('on', 'big');
@@ -1112,21 +1211,22 @@ async function enter(k, forward) {
     nextTimer = setTimeout(() => $('next').classList.add('on'), step.schema ? 8000 : Math.min(9000, Math.max(2500, stepTime(step) - 2500)));
   [...$('rail').children].forEach((b, i) => b.classList.toggle('on', i === k));
   $('bubble').classList.remove('on'); $('ring').classList.remove('on'); $('done').classList.remove('on'); $('found').classList.remove('on');
-  $('schema').classList.toggle('on', !!step.schema); stopVal(); stopCross(); $('edwin').classList.toggle('on', !!step.edintro); $('testwin').classList.toggle('on', !!step.tests); $('openwin').classList.toggle('on', !!step.open); clearTimeout(codeTimer); $('fly')?.classList.remove('on'); $('joinann').classList.remove('on');
+  $('schema').classList.toggle('on', !!step.schema); $('agentwin').classList.toggle('on', !!step.agentic); stopVal(); stopCross(); $('edwin').classList.toggle('on', !!step.edintro); $('testwin').classList.toggle('on', !!step.tests); $('openwin').classList.toggle('on', !!step.open); clearTimeout(codeTimer); $('fly')?.classList.remove('on'); $('joinann').classList.remove('on');
   $('departo').classList.toggle('on', !!step.depart); document.body.classList.toggle('at-depart', !!step.depart);
-  pose = step.hero ? 'hero' : step.depart ? 'depart' : step.schema || step.open || step.val || step.cross || step.edintro || step.tests ? 'schema' : 'flat';
+  pose = step.hero ? 'hero' : step.depart ? 'depart' : step.agentic ? 'agentic' : step.schema || step.open || step.val || step.cross || step.edintro || step.tests ? 'schema' : 'flat';
 
   await prepareStep(step);
   if (entry !== entryId) return;
   if (!AUTO) void prepareStep(STEPS[k + 1]);
   if (step.schema) { $('cursor').classList.remove('on'); show(step.state); layout(); schemaPhase(step.schema, prev); return; }
+  if (step.agentic) { $('cursor').classList.remove('on'); show(reduce ? 'ide' : 'ide_tree'); layout(); startAgent(); return; }
   if (step.val) { $('cursor').classList.remove('on'); show(step.state); layout(); startVal(); return; }
   if (step.cross) { $('cursor').classList.remove('on'); show(step.state); layout(); startCross(); return; }
   if (step.edintro || step.tests || step.open) { $('cursor').classList.remove('on'); show(step.state); layout(); if (step.open) startOpen(); return; }
   if (step.depart) {   // pop out: the maximised field is left (Esc), the editor goes back to its tree
     // Swap the editor first, then turn the screen: no layer change while the 3D transform runs (it stuttered).
     $('cursor').classList.remove('on');
-    if (forward && !reduce) { show('ide_max'); layout(); timer = setTimeout(() => show(step.state), 1100); } else { show(step.state); layout(); }
+    if (forward && !reduce) { show('ide_tree'); layout(); timer = setTimeout(() => show(step.state), 1100); } else { show(step.state); layout(); }
     return; }
   if (step.code) {
     // Coming from the tree step on a desktop, the cursor already rests on the allocator: click at once.
@@ -1383,55 +1483,33 @@ function place(k) {
   if (step === STEPS[current]) nextOn('bubble');
 }
 
-// ---------- how it works: three cards, then the demo's trials in the log ----------
-// The real numbers of the demo (study period 2017 → Aug 2023): the 1/N reference, then three trials. The target
-// zone is "better than 1/N on both axes": less volatility, more return. The third trial lands in it.
-const RR = {
-  ref: {v: 19.6, r: 17.2, what: '1/N rebalancé'},
-  trials: [
-    {v: 19.9, r: 14.5, what: 'max Sharpe, plafond 35 %'},
-    {v: 18.2, r: 16.9, what: 'plafond 20 %'},
-    {v: 16.1, r: 17.6, what: '+ filtre de tendance'},
-  ],
-};
-const pct = x => `${x.toFixed(1).replace('.', ',')} %`;
-const inZone = p => p.v < RR.ref.v && p.r > RR.ref.r;
-// Each trial goes round the loop: the idea, FORGE simulates, you analyse; then its line lands in the log.
-function buildPlane() {
-  const row = (cls, cells) => { const li = document.createElement('li'); li.className = cls; li.innerHTML = cells; $('log').append(li); return li; };
-  row('hd', '<span></span><span>stratégie</span><span class="n"><span class="lg">volatilité</span><span class="sh">vol.</span></span><span class="n"><span class="lg">rendement</span><span class="sh">rend.</span></span><span></span>');
-  row('', `<span class="k">référence</span><span>${RR.ref.what}</span><span class="n">${pct(RR.ref.v)}</span><span class="n">${pct(RR.ref.r)}</span><span></span>`);
-  RR.trials.forEach((p, i) => row('', `<span class="k">essai ${i + 1}</span><span>${p.what}</span><span class="n">${pct(p.v)}</span><span class="n">${pct(p.r)}</span>`
-    + (inZone(p) ? '<span class="v">✓</span><span class="met">objectif atteint</span>' : '<span class="x">✗</span>')));
-  row('wide', `<span class="k">validation</span><span><span class="sq" id="sq">${'<i></i>'.repeat(12)}</span>12 tests de robustesse</span>`);
-  row('wide', '<span class="k">déploiement</span><span>ordres de rebalancement →</span>');
-}
-let loopTimers = [], loopRaf = null;
-function stopLoop() { loopTimers.forEach(clearTimeout); loopTimers = []; cancelAnimationFrame(loopRaf); loopRaf = null; }
-const cards = on => [0, 1, 2].forEach(k => $(`fc${k}`).classList.toggle('on', on === k || on === 'all'));
-function planeReset() {
-  [...$('log').children].forEach(li => li.classList.remove('on', 'win'));
-  [...$('sq').children].forEach(q => q.classList.remove('on')); cards(null); $('loopl').classList.remove('spin');
-}
-function trialOn(i) {
-  const li = $('log').children[i + 2]; li.classList.add('on'); if (inZone(RR.trials[i])) li.classList.add('win');
-}
+// Highlight the four stages without hiding any of the explanatory content.
+let loopTimers = [];
+function stopLoop() { loopTimers.forEach(clearTimeout); loopTimers = []; }
 function schemaPhase() {
-  stopLoop(); planeReset();
-  const log = $('log').children, later = (ms, f) => loopTimers.push(setTimeout(f, ms));
-  if (reduce) { [...log].forEach(li => li.classList.add('on')); RR.trials.forEach((_, i) => trialOn(i));
-    [...$('sq').children].forEach(q => q.classList.add('on')); cards('all'); return; }
-  later(900, () => { log[0].classList.add('on'); log[1].classList.add('on'); $('loopl').classList.add('spin'); });
-  const T0 = 1300, LAP = 1500;
-  RR.trials.forEach((_, i) => {
-    const t = T0 + i * LAP;
-    later(t, () => cards(0)); later(t + 380, () => cards(1)); later(t + 760, () => cards(2));
-    later(t + 1100, () => trialOn(i));
-  });
-  const tVal = T0 + RR.trials.length * LAP;
-  later(tVal, () => { cards(null); $('loopl').classList.remove('spin'); log[log.length - 2].classList.add('on'); });
-  [...$('sq').children].forEach((q, j) => later(tVal + 250 + j * 60, () => q.classList.add('on')));
-  later(tVal + 250 + 12 * 60 + 300, () => log[log.length - 1].classList.add('on'));
+  stopLoop();
+  const panels = [0, 1, 2, 3].map(i => $(`cp${i}`));
+  panels.forEach(panel => panel.classList.remove('active'));
+  if (reduce) return;
+  const cycle = () => {
+    panels.forEach((panel, i) => loopTimers.push(setTimeout(() => {
+      panels.forEach(p => p.classList.toggle('active', p === panel));
+    }, 400 + i * 1300)));
+    loopTimers.push(setTimeout(cycle, 6800));
+  };
+  cycle();
+}
+let agentTimer = null;
+function stopAgent() { clearTimeout(agentTimer); }
+function startAgent() {
+  if (reduce || AUTO) return;
+  let tree = true;
+  const cycle = () => {
+    if (!STEPS[current]?.agentic) return;
+    tree = !tree; show(tree ? 'ide_tree' : 'ide');
+    agentTimer = setTimeout(cycle, 4200);
+  };
+  agentTimer = setTimeout(cycle, 1600);
 }
 
 // ---------- automatic mode (?auto): plays the terminal steps on their own, for the recorded video ----------
@@ -1439,6 +1517,7 @@ const FIRST_TERMINAL_STEP = STEPS.findIndex(s => !s.hero && !s.schema && !s.open
 // Time on screen: the animation that leads in or plays, then reading time for the bubble.
 function stepTime(s) {
   if (s.val) return 12500;
+  if (s.agentic) return 14000;
   if (s.depart) return 6000;
   if (s.cross) return 19000;
   if (s.tests) return 9000;
