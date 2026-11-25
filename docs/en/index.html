@@ -81,9 +81,6 @@ a{color:inherit}
   background:var(--panel);color:var(--text);text-decoration:none;cursor:pointer}
 .btn.primary{background:var(--accent);border-color:var(--accent);color:#06121c;font-weight:600}
 .btn:hover{filter:brightness(1.12)}
-.hint{position:absolute;left:50%;bottom:20px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;
-  font:500 12px var(--sans);color:var(--muted);transition:opacity .4s;cursor:pointer;background:none;border:0}
-.hint svg{width:22px;height:22px;stroke:var(--text);animation:nudge 1.6s ease-in-out infinite}
 @keyframes nudge{0%,100%{transform:translateY(0);opacity:.6}50%{transform:translateY(6px);opacity:1}}
 
 /* bubble: square comic box with a small pointer */
@@ -184,6 +181,7 @@ a{color:inherit}
 @keyframes caret{50%{opacity:0}}
 .bubble.free{left:24px!important;top:auto!important;bottom:28px}
 .bubble.free::before{display:none}
+@media(min-width:761px){.bubble.free.commit-note{left:auto!important;right:120px;bottom:28px}}
 
 /* end of the demo: what we were looking for has been found */
 .found{position:absolute;z-index:8;left:50%;top:84px;transform:translate(-50%,-10px);display:flex;align-items:center;gap:18px;padding:16px 22px;
@@ -205,9 +203,9 @@ a{color:inherit}
 .next.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}
 .next{transition:opacity .4s,transform .8s cubic-bezier(.4,0,.2,1),bottom .8s cubic-bezier(.4,0,.2,1)}
 body.at-hero .next{bottom:54px}
-.next.big{bottom:50%;transform:translate(-50%,50%) scale(1.7)}
+body.at-hero .next.big{bottom:50%;transform:translate(-50%,50%) scale(1.7)}
 .next svg{width:18px;height:18px;stroke:var(--text);animation:nudge 1.6s ease-in-out infinite}
-.next .short{display:none}
+.next:focus,.next:focus-visible{outline:none}
 .next kbd{font:500 12px var(--mono);border:1px solid #3a4558;padding:0 6px;color:var(--muted)}
 
 /* the recorded demo, after the schema */
@@ -243,12 +241,17 @@ body.at-hero .next{bottom:54px}
 /* the editor and the terminal side by side (each a 1000 x 1250 page shown at 0.8) */
 .screen .ide{position:absolute;inset:0;opacity:0;transition:opacity .35s ease;background:var(--bg)}
 .screen .ide.on{opacity:1}
+.screen .ide.join{background:transparent;z-index:1}
+.screen > iframe.handoff{opacity:1;visibility:visible}
 .ide .pane-l,.ide .pane-r{position:absolute;top:0;height:1000px;overflow:hidden;background:var(--bg)}
+.pane-action{position:absolute;right:12px;bottom:24px;z-index:8;border:1px solid var(--accent);background:#0b0e14f5;color:var(--text);padding:9px 14px;font:16px var(--mono);opacity:0;transition:opacity .15s}.pane-action.on{opacity:1}
 .ide .pane-l{left:0;width:533px;box-shadow:1px 0 0 #243044;z-index:1}.ide .pane-r{left:533px;width:1067px}
 /* Left third: the incoming editor fades in on top, the outgoing one stays opaque until it is covered
    (two simultaneous fades let the dark background show through: a flash). */
 .screen .ide iframe{height:1250px;transform:scale(.8);transform-origin:0 0;opacity:0;transition:opacity 0s linear .32s}
-.screen .ide .pane-l iframe{width:666px}.screen .ide .pane-r iframe{width:1334px;opacity:1}
+.screen .ide .pane-l iframe{width:666px}.screen .ide .pane-r iframe{width:1334px;opacity:0}
+.screen .ide[data-right=base] .r-base,.screen .ide[data-right=custom] .r-custom,.screen .ide[data-right=gold] .r-gold{opacity:1;z-index:1}
+.ide[data-left=purple] .l-purple{opacity:1;z-index:1}
 .ide[data-left=box] .l-box,.ide[data-left=max] .l-max,.ide[data-left=tree] .l-tree{opacity:1;z-index:1;transition:opacity .3s ease}
 /* Before the join: why the editor and the terminal share the screen */
 .joinann{position:absolute;z-index:8;left:50%;bottom:30px;transform:translate(-50%,10px);display:flex;align-items:center;gap:16px;padding:14px 20px 14px 16px;
@@ -388,7 +391,6 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
 .tk-track span{display:flex;align-items:center;gap:28px;padding-right:28px;font:500 12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
 .tk-track span::after{content:"";width:5px;height:5px;background:var(--accent);transform:rotate(45deg)}
 @keyframes tk{to{transform:translateX(-50%)}}
-.hero .hint{bottom:52px}
 /* under the hood 1: the engine and its calls */
 #moteur .eng-wrap{background:var(--bg);box-shadow:none}
 #moteur .pane-h{font-family:var(--mono);flex-wrap:wrap}
@@ -485,7 +487,7 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
   .hero{padding:72px 18px 28px;place-items:start;align-content:start}
   .hero-inner{max-width:none}
   .pillars,.brand small{display:none}
-  .next{white-space:nowrap}.next .long{display:none}.next .short{display:inline}
+  .next{white-space:nowrap;max-width:calc(100% - 32px)}body.at-hero .next{bottom:18px}
   .ow{grid-template-columns:1fr;gap:12px}.ow .ow-data{margin-top:8px}.ow .sch-cap{display:none}.ow .sch-sub,.ow-data{font-size:13px}
   .hero h1{font-size:30px}
   .hero .lead{font-size:15px;margin-top:var(--s4)}
@@ -494,7 +496,6 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
   .mark{margin-bottom:var(--s4);gap:12px}.mark i{width:22px;height:22px;border-width:4px}.mark b{font-size:32px}.mark span{font-size:10.5px;padding-left:12px}
   .pillars{grid-template-columns:1fr;gap:10px;margin-top:var(--s4)}.pillars div{padding-top:8px;font-size:13px}.pillars b{font-size:15px}
   .ctas{margin-top:var(--s5)}
-  .hint{position:static;transform:none;margin:var(--s4) auto 0}
   .bubble{left:16px!important;right:16px;top:auto!important;bottom:76px;width:auto}
   .bubble::before{display:none}
   .bubble.free{left:16px!important;bottom:76px}
@@ -550,8 +551,9 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
 .dev-route b{display:block;font-size:17px;color:var(--accent)}
 .dev-route span{display:block;margin-top:4px;color:var(--muted);font-size:14px}
 .dev-route::after{content:"";position:absolute;left:100%;top:50%;height:1px;width:24px;background:var(--accent)}
+.dev-route::before{content:"";position:absolute;left:calc(100% + 17px);top:calc(50% - 4px);border-left:7px solid var(--accent);border-top:4px solid transparent;border-bottom:4px solid transparent}
 .dev-tools{padding:14px 10px;background:var(--panel);border:1px solid var(--line);position:relative}
-.dev-tools::before{content:"";position:absolute;left:-13px;top:25%;bottom:25%;width:1px;background:var(--accent)}
+
 .dev-tools h4{margin:0 0 12px;font:500 12px/1.5 var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--muted);text-align:center}
 .tool-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .diagram-chip{display:flex;align-items:center;justify-content:center;min-height:40px;padding:8px;background:#192530;color:var(--text);text-align:center;font-size:14px;line-height:1.3}
@@ -564,7 +566,39 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
 .concept-result .diagram-icon{stroke:var(--accent)}
 .concept-result ul,.concept-ideas ul{margin-top:24px}
 #openwin .sch-sub + .sch-sub{margin-top:16px}
-#agentwin{background:linear-gradient(180deg,#0b0e14f2,#0b0e14e6 68%,#0b0e1466);padding-top:74px}
+#agentwin{background:#0b0e1499;padding-top:74px}
+#agentwin .diagram-page{transform-origin:top center}
+@media(min-width:1101px){#agentwin .diagram-page{margin:0 auto}#agentwin .agent-map{gap:18px 24px;grid-template-rows:64px auto}#agentwin .diagram-body{padding:14px 10px}#agentwin .diagram-stack{gap:8px}#agentwin .diagram-chip{padding:7px 6px;min-height:34px}#agentwin .agent-return{margin:12px 0}.agent-heading{margin-bottom:10px}#agentwin .flow-legend{margin-bottom:12px}#agentwin .agent-guarantees{padding-top:12px;font-size:14px}#agentwin .agent-note{margin-top:10px}}
+/* Agent framing follows the concept panels: 2px outer frame, 1px inner dividers. */
+.agent-map > .diagram-card{border-width:var(--agent-frame-width,2px);border-radius:0;box-shadow:none}
+.agent-map .diagram-card > .pane-h{border-bottom-width:var(--agent-divider-width,1px)}
+.agent-capabilities section{border-width:var(--agent-divider-width,1px);border-radius:0}
+.agent-intro a{color:var(--accent);text-underline-offset:3px}
+.agent-intro a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+@keyframes agentCardIn{from{opacity:0}to{opacity:1}}
+@keyframes agentLinkIn{from{opacity:0}to{opacity:1}}
+.agentic-window.on.revealing .agent-map > .diagram-card{animation:agentCardIn .45s ease-out both}
+.agentic-window.revealing .agent-investor{animation-delay:0s!important}
+.agentic-window.revealing .agent-llm{animation-delay:.08s!important}
+.agentic-window.revealing .agent-provider{animation-delay:.16s!important}
+.agentic-window.revealing .agent-api{animation-delay:.24s!important}
+.agentic-window.revealing .agent-forge{animation-delay:.32s!important}
+.agentic-window.on.revealing .provider-request,.agentic-window.on.revealing .agent-result-link,.agentic-window.on.revealing .agent-market-link,.agentic-window.on.revealing .agent-market-in{animation:agentLinkIn .35s .35s ease-out both}
+.agentic-window.on.revealing .agent-return,.agentic-window.on.revealing .flow-legend,.agentic-window.on.revealing .agent-guarantees,.agentic-window.on.revealing .agent-note{animation:agentLinkIn .4s .42s ease-out both}
+@media(prefers-reduced-motion:reduce){.agentic-window .agent-map > *,.agentic-window .provider-request,.agentic-window .agent-result-link,.agentic-window .agent-market-link,.agentic-window .agent-market-in,.agentic-window .agent-return,.agentic-window .flow-legend,.agentic-window .agent-guarantees,.agentic-window .agent-note{animation:none!important;transform:none!important}}
+.agent-intro{overflow-y:auto;overscroll-behavior:contain;visibility:hidden}
+.agent-intro.on{visibility:visible;pointer-events:auto}
+.agent-intro:not(.on),.agentic-window:not(.on){visibility:hidden;transition:none}
+.agentic-window.on{visibility:visible}
+@media(max-width:760px){.agent-intro{display:block;padding:72px 30px 76px 16px}.agent-intro .vw-in{margin:auto}.agent-intro .sch-title{font-size:26px}.agent-intro .sch-sub{font-size:16px}.agent-intro .sch-sub + .sch-sub{margin-top:16px}}
+.agent-map{position:relative;isolation:isolate}
+.agent-map > .diagram-card{z-index:1}.agent-map .provider-request{z-index:2}
+.agent-links{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;z-index:0;grid-column:auto!important;grid-row:auto!important}
+.agent-link{fill:none;stroke-width:1.5;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.agent-map.svg-connectors .flow-output::before,.agent-map.svg-connectors .flow-output::after,.agent-map.svg-connectors .agent-provider::before,.agent-map.svg-connectors .agent-provider::after,.agent-map.svg-connectors .provider-request::before,.agent-map.svg-connectors .provider-request::after,.agent-map.svg-connectors .agent-result-link,.agent-map.svg-connectors .agent-market-link,.agent-map.svg-connectors .agent-market-in{display:none!important}
+.agent-map.svg-connectors .provider-request{border-top:0}
+.agentic-window.revealing .agent-link{animation:agentLinkIn .35s .35s ease-out both}
+@media(prefers-reduced-motion:reduce){.agentic-window .agent-link{animation:none!important}}
 .agent-heading{margin-bottom:16px}
 .agent-heading .sch-cap{color:var(--accent)}
 .agent-map{display:grid;grid-template-columns:.9fr 1.25fr .65fr 2.4fr;grid-template-rows:78px auto;gap:24px 30px;align-items:stretch;padding-top:4px}
@@ -633,7 +667,7 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
 @media(max-width:760px){
   .hero{overflow-y:auto;overscroll-behavior:contain;display:block;padding-bottom:80px}
   .hero h1{font-size:32px}.hero .lead{font-size:16px}.hero .lead + .lead{font-size:15px}
-  .hero .mark{margin-bottom:22px}.hero .ticker{display:none}.hero .hint{margin-top:22px}
+  .hero .mark{margin-bottom:22px}.hero .ticker{display:none}
   #schema,#agentwin{padding:72px 30px 76px 16px}#schema .sch-cap,#openwin .sch-cap{display:block}
   #schema .sch-title{font-size:26px}#schema .sch-sub,#openwin .sch-sub,#openwin .ow-data{font-size:16px}
   .concept-flow{grid-template-columns:1fr;gap:24px}.concept-dev .diagram-body{padding:18px 12px}
@@ -642,7 +676,7 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
   .flow-output::after{left:50%;top:100%;width:1px;height:24px}.flow-output::before{right:auto;left:calc(50% - 4px);top:calc(100% + 18px);border-left:4px solid transparent;border-right:4px solid transparent;border-top:7px solid var(--accent);border-bottom:0}
   .concept-dev::before,.concept-dev::after{display:block}
   .dev-flow{grid-template-columns:1fr;gap:20px}.dev-routes{grid-template-columns:1fr 1fr;gap:12px}
-  .dev-route::after,.dev-tools::before{display:none}.dev-tools{padding:14px}
+  .dev-route::after{left:50%;top:100%;width:1px;height:20px}.dev-route::before{left:calc(50% - 4px);top:calc(100% + 13px);border-left:4px solid transparent;border-right:4px solid transparent;border-top:7px solid var(--accent);border-bottom:0}.dev-tools{padding:14px}
   #openwin{overflow-y:auto;overscroll-behavior:contain;align-items:start;padding-bottom:76px}
   #openwin .ow{margin:auto}#openwin .sch-title{font-size:26px}#openwin .ow-data{margin-top:18px}
   .agent-map{grid-template-columns:1fr;gap:24px}.agent-map > *{grid-column:1;grid-row:auto}
@@ -684,19 +718,18 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
         </div>
       </div>
       <div class="ticker" aria-label="Supported instruments"><div class="tk-track"><span>ETF</span><span>Dividend-paying equities</span><span>Forex</span><span>Metals</span><span>Commodities</span><span>Energy</span><span>CFD</span><span>Bond ETFs</span><span>Indices</span><span aria-hidden="true">ETF</span><span aria-hidden="true">Dividend-paying equities</span><span aria-hidden="true">Forex</span><span aria-hidden="true">Metals</span><span aria-hidden="true">Commodities</span><span aria-hidden="true">Energy</span><span aria-hidden="true">CFD</span><span aria-hidden="true">Bond ETFs</span><span aria-hidden="true">Indices</span></div></div>
-      <button class="hint" id="hint" type="button">Scroll or press ↓<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v15M5 12l7 7 7-7"/></svg></button>
     </div>
 
     <div class="schema" id="schema" data-slide-scroll tabindex="0" aria-label="The FORGE concept">
       <div class="diagram-page">
         <div class="diagram-intro"><p class="sch-cap">The concept</p>
           <h2 class="sch-title">Define the logic. <span class="hl">FORGE handles execution.</span></h2>
-          <p class="sch-sub">With or without programming knowledge, FORGE gives you an environment designed to simplify the creation, integration and development of your own financial tools, with your AI or directly in Python.</p>
-          <p class="sch-sub">Focus all your energy on your investment logic. FORGE runs your simulations in seconds, using an optimised engine whose rules are fully documented.</p>
+          <p class="sch-sub">With or without programming knowledge, FORGE gives you an environment specifically designed for creating, integrating and developing your own investment strategies, with help from your AI or by writing the Python code yourself.</p>
+          <p class="sch-sub">Focus all your energy on your investment logic. FORGE automatically handles the execution of your simulations. The engine performs the calculations in milliseconds in this demonstration, following fully documented rules.</p>
         </div>
         <div class="concept-flow" aria-label="From ideas to results">
           <section class="diagram-card concept-node concept-edge concept-ideas flow-output" id="cp0"><div class="pane-h">Your ideas</div><div class="diagram-body"><svg class="diagram-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 21h4M8 15c0-2-4-4-3-8a7 7 0 0 1 14 0c1 4-3 6-3 8v1H8z"/></svg><h3>Your investment logic</h3><ul><li>Objectives</li><li>Convictions</li><li>Hypotheses</li></ul></div></section>
-          <section class="diagram-card concept-node concept-dev flow-output" id="cp1"><div class="pane-h">Development</div><div class="diagram-body"><h3>FORGE development environment</h3><div class="dev-flow"><div class="dev-routes"><div class="dev-route"><b>Your AI</b><span>Natural language</span></div><div class="dev-route"><b>Python</b><span>Programming</span></div></div><div class="dev-tools"><h4>Your custom tools</h4><div class="tool-grid"><div class="diagram-chip">Allocations</div><div class="diagram-chip">Management rules</div><div class="diagram-chip">Indicators</div><div class="diagram-chip">Algorithms</div><div class="diagram-chip">Charts</div><div class="diagram-chip">Analysis tools</div></div></div></div></div></section>
+          <section class="diagram-card concept-node concept-dev flow-output" id="cp1"><div class="pane-h">Development</div><div class="diagram-body"><h3>FORGE development environment</h3><div class="dev-flow"><div class="dev-routes"><div class="dev-route"><b>Your AI</b><span>Generated Python code</span></div><div class="dev-route"><b>Your Python code</b><span>Direct programming</span></div></div><div class="dev-tools"><h4>Your custom tools</h4><div class="tool-grid"><div class="diagram-chip">Allocations</div><div class="diagram-chip">Management rules</div><div class="diagram-chip">Indicators</div><div class="diagram-chip">Algorithms</div><div class="diagram-chip">Charts</div><div class="diagram-chip">Analysis tools</div></div></div></div></div></section>
           <section class="diagram-card concept-node concept-engine flow-output" id="cp2"><div class="pane-h">Execution</div><div class="diagram-body"><h3>FORGE ENGINE</h3><p>Simulation infrastructure</p><div class="diagram-stack"><div class="diagram-chip">Applying management rules</div><div class="diagram-chip">Order execution</div><div class="diagram-chip">Costs and constraints</div><div class="diagram-chip">Portfolio valuation</div></div></div></section>
           <section class="diagram-card concept-node concept-edge concept-result" id="cp3"><div class="pane-h">Results</div><div class="diagram-body"><svg class="diagram-icon" viewBox="0 0 48 36" aria-hidden="true"><path d="M7 32V21M17 32V12M27 32V24M37 32V7" stroke-width="4" stroke="#8592a6"/><path d="M3 22 17 9 27 18 37 5 46 2"/></svg><h3>Your analysis</h3><ul><li>Performance</li><li>Risk</li><li>Robustness</li></ul></div></section>
         </div>
@@ -732,7 +765,7 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
       <div class="vw-in"><div class="vw-head ed-head"><p class="sch-cap">Before deployment</p>
         <h2 class="sch-title">Good performance is not enough. <span class="hl">12 robustness tests.</span></h2>
         <p class="sch-sub">A strategy that performed well in the past may not do so under different conditions.</p>
-        <p class="sch-sub">FORGE runs it through <strong>12 robustness tests</strong>: out-of-sample data, other assets, Monte Carlo, stress tests and parameter sensitivity.</p>
+        <p class="sch-sub">FORGE runs it through <strong>12 robustness tests</strong>, including out-of-sample and cross-asset tests, Monte Carlo simulations, stress tests and parameter sensitivity analysis.</p>
         <p class="sch-sub"><strong>Thousands of simulations in seconds</strong> to test your strategy before the markets do.</p>
         <p class="sch-sub">Here are two:</p></div></div>
     </div>
@@ -754,6 +787,13 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
         <h2 class="sch-title">Every strategy is code, <span class="hl">readable and editable.</span></h2>
         <p class="sch-sub">Your AI’s output goes straight into the FORGE editor, <strong>organised as a tree</strong>: indicators, allocator, parameters, charts.</p>
         <p class="sch-sub">Designed to make programming easier, this environment lets you <strong>freely develop, modify and test your ideas</strong>, with an AI or directly in code. Every change can be <strong>simulated immediately</strong>.</p></div></div>
+    </div>
+    <div class="valwin agent-intro" id="agentintro" data-slide-scroll tabindex="0" aria-label="Introduction to agentic research">
+      <div class="vw-in"><div class="vw-head ed-head"><p class="sch-cap">DEVELOPMENT OUTLOOK</p>
+        <h2 class="sch-title">Infrastructure for <span class="hl">agentic financial research.</span></h2>
+        <p class="sch-sub">FORGE already has an API that allows LLMs to interact directly with the framework and carry out their own research autonomously.</p>
+        <p class="sch-sub">Far from being a black box, the framework keeps strategy code fully accessible and follows <a href="#schema" data-concept-link>documented execution rules</a>.</p>
+        <p class="sch-sub">Every trial is accounted for, every change is versioned, and the use of out-of-sample data is monitored. Simulations incorporate transaction costs, slippage and execution constraints.</p></div></div>
     </div>
     <div class="schema agentic-window" id="agentwin" data-slide-scroll tabindex="0" aria-label="Proposed agent architecture">
       <div class="diagram-page">
@@ -804,7 +844,7 @@ body.at-depart .rail{opacity:0!important;pointer-events:none}
     <div class="done" id="done"></div>
     <div class="cursor" id="cursor"><i class="tap"></i><i class="tap t2"></i><svg viewBox="0 0 22 22"><path d="M3 2 L3 18 L7.5 13.8 L10.6 20.5 L13.4 19.2 L10.3 12.6 L16.4 12.4 Z" fill="#fff" stroke="#0b0e14" stroke-width="1.3" stroke-linejoin="round"/></svg></div>
     <nav class="rail" id="rail" aria-label="Demo steps"></nav>
-    <button class="next" id="next" type="button" aria-label="Next step"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v15M5 12l7 7 7-7"/></svg><span class="long">Press <kbd>↓</kbd> to continue</span><span class="short">Next</span></button>
+    <button class="next" id="next" type="button" aria-label="Next step"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v15M5 12l7 7 7-7"/></svg><span class="long">Press <kbd>↓</kbd> to continue</span></button>
     <button class="btn replay" id="replay" hidden>↺ Replay the demo</button>
   </div>
 </section>
@@ -935,16 +975,20 @@ const ALL_STEPS = [
    n: 'Step 16', h: 'Paste the new version', p: 'The same process: paste, then Apply. The trend filter comes with its own setting.'},
   {state: 'a2', from: 'apply', target: 'tiles', cursor: false, label: 'New results',
    n: 'Step 17', h: 'New results', p: 'With the trend filter: annual return 17.6 %, volatility 16.1 %, Sharpe 1.09, maximum drawdown −26.7 %.'},
+  {state: 'a2', accounting: true, target: 'trials', cursor: false, label: 'Trials', nx: 'bubble',
+   n: 'Trials', h: 'Every tested setting is accounted for', p: 'This counter accumulates settings tried on these data, including earlier research. The demonstration goes from 2,645 to 2,649 settings here. Code history will show its three versions after the tree.'},
   {state: 'bench', from: 'compare', target: 'equity', cursor: false, label: 'Benchmarks',
    n: 'Step 18', h: 'Compare with benchmarks', p: 'Alongside: rebalanced 1/N (17.2 % per year, volatility 19.6 %, Sharpe 0.91, drawdown −30.9 %) and iteration 1 with its latest settings (16.9 %, 18.2 %, 0.95, −27.8 %). The new version improves all four: a satisfactory result, so we stop here.'},
   {state: 'bench', tests: true, label: 'Validation'},
   {state: 'bench', val: true, label: 'Sealed period', nx: 'val'},
   {state: 'bench', cross: true, label: 'Other assets'},
-  {state: 'ed_tree', edintro: true, label: 'The editor'},
-  {state: 'ed_tree', target: 'alloc', cursor: true, label: 'The tree', nx: 'bubble',
+  {state: 'ed_tree', editorFlow: 'history-aim', label: 'The editor', nx: 'editor'},
+  {state: 'ed_tree', editorFlow: 'history-open', commits: true, label: 'History', nx: 'editor'},
+  {state: 'ed_tree', editorFlow: 'allocator-aim', target: 'alloc', cursor: true, label: 'The tree', nx: 'editor',
    n: 'The tree', h: 'The strategy as a tree', p: 'To help you navigate your strategy, FORGE organises code into branches: indicators, allocator, parameters, charts… Each branch is a function you can open and edit independently.'},
-  {state: 'ide_max', code: true, label: 'The code', nx: 'code',
+  {state: 'ide_max', code: true, editorFlow: 'allocator-open', label: 'The code', nx: 'code',
    n: 'The code', h: 'Your AI’s code, or your own', p: 'Click the allocator to open its code, here the trend filter. Edit your AI’s output or write code directly here: each change is applied and simulated immediately, and the terminal on the right updates.'},
+  {state: 'ide', agentintro: true, label: 'Agentic research', nx: 'agentintro'},
   {state: 'ide', agentic: true, label: 'AI agents'},
   {state: 'ide', depart: true, label: 'Contact'},
 ];
@@ -966,17 +1010,21 @@ const TOUR = [
    n: 'Action 5', h: 'Paste, apply: simulated', p: 'FORGE organises the code and displays its settings on the left. Study period 2017 → August 2023; the remainder stays locked for final validation.'},
   {state: 'a1t', play: [['a1t', 'copy', null, 'Copied ✓']], chat: 'tour', label: 'Improve', nx: 'chat',
    n: 'Action 6', h: 'Your AI analyses and improves', p: 'One click copies the results for your AI. It proposes new logic, which you paste in the same way.'},
-  {state: 'bencht', play: [['a1t', 'paste', 'p2t', 'Pasted ✓'], ['p2t', 'apply', 'a2t'], ['a2t', 'compare', 'bencht']], target: 'equity', label: 'Compare',
+  {state: 'a2t', accounting: true, play: [['a1t', 'paste', 'p2t', 'Pasted ✓'], ['p2t', 'apply', 'a2t']], target: 'trials', cursor: false, label: 'Trials', nx: 'bubble',
+   n: 'Trials', h: 'Every tested setting is accounted for', p: 'This counter accumulates settings tried on these data, including earlier research. The demonstration goes from 2,645 to 2,649 settings here. Code history will show its three versions after the tree.'},
+  {state: 'bencht', play: [['a2t', 'compare', 'bencht']], target: 'equity', label: 'Compare',
    found: true,
    n: 'Action 7', h: 'Compare with benchmarks', p: 'New version: 17.6 % per year, volatility 16.1 %, Sharpe 1.09, drawdown −26.7 %. Rebalanced 1/N: 17.2 %, 19.6 %, 0.91, −30.9 %. Better on all four: time for the 12 validation tests.'},
   {state: 'bencht', tests: true, label: 'Validation'},
   {state: 'bencht', val: true, label: 'Sealed period', nx: 'val'},
   {state: 'bencht', cross: true, label: 'Other assets'},
-  {state: 'ed_tree', edintro: true, label: 'The editor'},
-  {state: 'ed_tree', target: 'alloc', cursor: true, label: 'The tree', nx: 'bubble',
+  {state: 'ed_tree', editorFlow: 'history-aim', label: 'The editor', nx: 'editor'},
+  {state: 'ed_tree', editorFlow: 'history-open', commits: true, label: 'History', nx: 'editor'},
+  {state: 'ed_tree', editorFlow: 'allocator-aim', target: 'alloc', cursor: true, label: 'The tree', nx: 'editor',
    n: 'The tree', h: 'The strategy as a tree', p: 'To help you navigate your strategy, FORGE organises code into branches: indicators, allocator, parameters, charts… Each branch is a function you can open and edit independently.'},
-  {state: 'ide_max', code: true, label: 'The code', nx: 'code',
+  {state: 'ide_max', code: true, editorFlow: 'allocator-open', label: 'The code', nx: 'code',
    n: 'The code', h: 'Your AI’s code, or your own', p: 'Click the allocator to open its code, here the trend filter. Edit your AI’s output or write code directly here: each change is applied and simulated immediately, and the terminal on the right updates.'},
+  {state: 'ide', agentintro: true, label: 'Agentic research', nx: 'agentintro'},
   {state: 'ide', agentic: true, label: 'AI agents'},
   {state: 'ide', depart: true, label: 'Contact'},
 ];
@@ -985,6 +1033,7 @@ const $ = id => document.getElementById(id);
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const W = 1600, H = 1000;
 let targets = {}, frames = {}, current = -1, timer = null, nextTimer = null, entryId = 0;
+let codePlaybackActive=false, heroNoticeShown=false, heroNoticeTimer=null;
 function loadFrame(f) {
   if (!f.dataset.src) return Promise.resolve();
   if (!f.ready) f.ready = new Promise(resolve => {
@@ -1001,7 +1050,8 @@ function prepareStep(step) {
   if (!step) return Promise.resolve();
   const names = [step.state, ...(step.drag?.frames || []),
     ...(step.play || []).flatMap(([state, , next]) => [state, next]).filter(Boolean)];
-  if (step.code || step.depart || step.agentic) names.push('ed_tree', 'ed_alloc', 'ide');
+  if (step.code || step.depart || step.agentic || step.agentintro) names.push('ed_tree', 'ed_alloc', 'ide');
+
   if (names.includes('bench')) names.push('a2');
   if (names.includes('bencht')) names.push('a2t');
   const documents = new Set();
@@ -1012,6 +1062,16 @@ function prepareStep(step) {
   }
   if (step.code) $('fly')?.querySelectorAll('iframe').forEach(f => documents.add(f));
   return Promise.all([...documents].map(loadFrame)).then(() => {
+    if (step.accounting) {
+      const r = frames[step.state]?.contentDocument?.querySelector('.tile[data-metric="trials"]')?.getBoundingClientRect();
+      if (r) { targets[step.state] ||= {}; targets[step.state].trials = [r.x,r.y,r.width,r.height]; }
+    }
+    if (names.includes('ed_tree')) {
+      bindHistoryButton(frames.ed_tree?.contentDocument);
+      const button=[...(frames.ed_tree?.contentDocument?.querySelectorAll('button.editor-tree-card')||[])].find(e=>/^(Allocateur|Allocator)$/.test(e.querySelector('.editor-tree-card-name')?.textContent.trim()));
+      const r=button?.getBoundingClientRect();
+      if(r){targets.ed_tree ||= {};targets.ed_tree.alloc=[r.x,r.y,r.width,r.height];}
+    }
     // Copy the drawn distribution only when both real documents have finished loading.
     for (const [comparison, result] of [['bench', 'a2'], ['bencht', 'a2t']]) {
       if (!names.includes(comparison)) continue;
@@ -1032,8 +1092,9 @@ async function boot() {
   if (names.some(n => n.startsWith('ide'))) {   // the editor (left third) and the terminal (right two thirds)
     const d = document.createElement('div'); d.className = 'ide'; d.dataset.left = 'box';
     const l = document.createElement('div'), r = document.createElement('div'); l.className = 'pane-l'; r.className = 'pane-r';
-    for (const [cls, src] of [['l-box', 'ed3_box'], ['l-max', 'ed3_max'], ['l-tree', 'ed3_tree']]) { const f = mk(src); f.className = cls; l.append(f); }
-    r.append(mk('term23')); d.append(l, r); $('screen').append(d); frames.ide = d;
+    for (const [cls, src] of [['l-box', 'ed3_box'], ['l-max', 'ed3_max'], ['l-tree', 'ed3_tree'], ['l-purple', 'editor_purple']]) { const f = mk(src); f.className = cls; l.append(f); }
+    for (const [cls, src] of [['r-base','term23'],['r-custom','term_custom'],['r-gold','term_gold']]) { const f = mk(src); f.className = cls; r.append(f); }
+    d.dataset.right = 'base'; d.append(l, r); $('screen').append(d); frames.ide = d;
     for (const n of ['ed_tree', 'ed_alloc']) if (!names.includes(n)) names.push(n);
     const fly = document.createElement('div'); fly.className = 'fly'; fly.id = 'fly'; fly.append(mk('ed_alloc')); $('screen').append(fly);
   }
@@ -1051,25 +1112,16 @@ async function boot() {
   });
   $('demo').style.height = `${STEPS.length * innerHeight}px`;
   $('start').onclick = e => { e.preventDefault(); scrollToStep(1); };
-  $('hint').onclick = () => scrollToStep(1);
+  document.querySelectorAll('[data-concept-link]').forEach(a=>a.onclick=e=>{e.preventDefault();scrollToStep(STEPS.findIndex(s=>s.schema));});
   $('next').onclick = () => scrollToStep(Math.min(STEPS.length - 1, current + 1));
   if (AUTO) return autoplay();
-  // Desktop: people's first reflex is the wheel. After a moment on the hero, a large notice asks for the arrow key,
-  // then shrinks into the usual bottom prompt.
-  if (matchMedia('(pointer: fine)').matches) setTimeout(() => {
-    if (current !== 0) return;
-    const n = $('next'), l = n.querySelector('.long'), txt = l.innerHTML;
-    l.innerHTML = 'Use the <kbd>↓</kbd> arrow key on your keyboard rather than the scroll wheel'; $('hint').style.opacity = 0;
-    n.classList.add('big', 'on');
-    setTimeout(() => { n.classList.remove('big'); setTimeout(() => { l.innerHTML = txt; }, 700); }, 3200);
-  }, 2500);
   stepByGesture();
   $('replay').onclick = () => scrollToStep(0, true);
   addEventListener('scroll', onScroll, {passive: true}); addEventListener('resize', () => {
     const inWalkthrough = current >= 0 && !document.body.classList.contains('past-demo');
     $('demo').style.height = `${STEPS.length * innerHeight}px`;
     if (inWalkthrough) scrollToStep(current, true);
-    layout(); place(current);
+    layout(); place(current); if(STEPS[current]?.agentic)fitAgentDiagram();
   });
   layout(); onScroll(true);
 }
@@ -1136,12 +1188,14 @@ function scrollToStep(k, instant) {
 // seen from the side (pose 'hero'); under the schema it is pushed back and blurred (pose 'schema').
 let view = {s: 1, x: 0, y: 0}, pose = 'flat';
 function layout(focus) {
+  const step=STEPS[current];
+  if(!focus && (step?.commits || step?.editorFlow==='history-aim')){const doc=frames.ed_tree?.contentDocument,panel=doc?.getElementById('editor-history'),r=(panel?.hidden ? historyButton(doc) : doc?.getElementById('editor-history-graph'))?.getBoundingClientRect();if(r)focus=panel?.hidden ? [r.x-200,r.y-50,640,300] : [r.x,r.y,Math.min(r.width,620),r.height];}
+  if(!focus && step?.target)focus=targets[step.state]?.[step.target];
   flatView(focus);
   const vw = innerWidth, vh = $('stage').clientHeight, phone = vw <= 760;
   let s = view.s, cx = view.x + W * s / 2, cy = view.y + H * s / 2, ry = 0, rx = 0;
   if (pose !== 'flat' && !AUTO) {
     if (phone) { const low = pose === 'hero' || pose === 'depart'; s = vw * 1.25 / W; cx = vw / 2; cy = vh - H * s * (low ? .22 : .5); rx = low ? 32 : 14; }
-    else if (pose === 'agentic') { s = Math.min(vw * .9 / W, vh * .64 / H); cx = vw * .5; cy = vh * .84; ry = -8; rx = 8; }
     else if (pose === 'hero') { s = Math.min(vw * .6 / W, vh * .74 / H); cx = vw * .72; cy = vh * .54; ry = -34; rx = 5; }
     else if (pose === 'depart') { s = Math.min(vw * .56 / W, vh * .72 / H); cx = vw * .3; cy = vh * .54; ry = 34; rx = 5; }
     else { s = Math.min(vw * .86 / W, vh * .92 / H); cx = vw * .5; cy = vh * .52; ry = -12; rx = 2; }
@@ -1169,7 +1223,8 @@ function show(state) {
   const base = state.startsWith('ide') ? 'ide' : state;
   for (const [n, f] of Object.entries(frames)) f.classList.toggle('on', n === base);
   if (base === 'ide') {
-    frames.ide.dataset.left = {ide: 'box', ide_max: 'max', ide_tree: 'tree'}[state];
+    frames.ide.dataset.left = state === 'ide_editor' || state === 'ide_terminal_reset' ? 'purple' : state === 'ide_max' ? 'max' : state === 'ide_tree' ? 'tree' : 'box';
+    frames.ide.dataset.right = state === 'ide_gold' || state === 'ide_editor' ? 'gold' : state === 'ide_custom' || state === 'ide_terminal_reset' ? 'custom' : 'base';
     // Arriving on the double screen from the editor: the editor goes to the left third, the terminal slides in.
     if (!String(shown).startsWith('ide') && shown && !reduce) { const d = frames.ide; d.classList.remove('join'); void d.offsetWidth; d.classList.add('join'); }
   }
@@ -1182,8 +1237,8 @@ function onScroll(force) {
   if (outside) {
     if (!document.body.classList.contains('past-demo')) {
       document.body.classList.add('past-demo'); ++entryId;
-      clearTimeout(timer); clearTimeout(nextTimer); clearTimeout(codeTimer);
-      stopVal(); stopOpen(); stopLoop(); stopAgent(); stopChat(); stopScroll(); stopCross();
+      clearTimeout(timer); clearTimeout(nextTimer); clearTimeout(codeTimer);frames.ed_alloc?.classList.remove('handoff');
+      stopVal(); stopOpen(); stopLoop(); stopAgent(); stopFinale(); stopChat(); stopScroll(); stopCross();
     }
     return;
   }
@@ -1202,37 +1257,43 @@ function onScroll(force) {
 }
 
 async function enter(k, forward) {
-  const entry = ++entryId; stopOpen(); stopLoop(); stopAgent();
-  clearTimeout(timer); stopChat(); stopScroll(); $('screen').classList.remove('instant'); const step = STEPS[k], prev = current; current = k;
+  const entry = ++entryId; stopOpen(); stopLoop(); stopAgent(); stopFinale(!!STEPS[k]?.editorFlow && !STEPS[k]?.code);
+  clearTimeout(timer);clearTimeout(heroNoticeTimer);frames.ed_alloc?.classList.remove('handoff');codePlaybackActive=false; stopChat(); stopScroll(); $('screen').classList.remove('instant'); const step = STEPS[k], prev = current; current = k;
   // The "continue" prompt comes back once this step has played (not on the hero, which has its own, nor at the end).
-  clearTimeout(nextTimer); $('next').classList.remove('on', 'big');
+  clearTimeout(nextTimer); $('next').classList.remove('on','big');
   // A step with `nx` shows it at a set moment of its own animation (nextOn); the others after a delay.
+  if (step.hero && !AUTO)nextTimer=setTimeout(()=>{
+    if(STEPS[current]!==step)return;const prompt=$('next');prompt.classList.add('on');
+    if(!heroNoticeShown){heroNoticeShown=true;if(!reduce && innerWidth>760){prompt.classList.add('big');heroNoticeTimer=setTimeout(()=>prompt.classList.remove('big'),3200);}}
+  },reduce?0:1100);
   if (!step.hero && !step.nx && k < STEPS.length - 1 && !AUTO)
     nextTimer = setTimeout(() => $('next').classList.add('on'), step.schema ? 8000 : Math.min(9000, Math.max(2500, stepTime(step) - 2500)));
   [...$('rail').children].forEach((b, i) => b.classList.toggle('on', i === k));
-  $('bubble').classList.remove('on'); $('ring').classList.remove('on'); $('done').classList.remove('on'); $('found').classList.remove('on');
-  $('schema').classList.toggle('on', !!step.schema); $('agentwin').classList.toggle('on', !!step.agentic); stopVal(); stopCross(); $('edwin').classList.toggle('on', !!step.edintro); $('testwin').classList.toggle('on', !!step.tests); $('openwin').classList.toggle('on', !!step.open); clearTimeout(codeTimer); $('fly')?.classList.remove('on'); $('joinann').classList.remove('on');
+  $('bubble').classList.toggle('commit-note',!!step.commits); $('bubble').classList.remove('on'); $('ring').classList.remove('on'); $('done').classList.remove('on'); $('found').classList.remove('on');
+  $('schema').classList.toggle('on', !!step.schema); $('agentwin').classList.toggle('on', !!step.agentic); $('agentintro').classList.toggle('on', !!step.agentintro); stopVal(); stopCross(); $('edwin').classList.toggle('on', !!step.edintro); $('testwin').classList.toggle('on', !!step.tests); $('openwin').classList.toggle('on', !!step.open); clearTimeout(codeTimer); $('fly')?.classList.remove('on'); $('joinann').classList.remove('on');
   $('departo').classList.toggle('on', !!step.depart); document.body.classList.toggle('at-depart', !!step.depart);
-  pose = step.hero ? 'hero' : step.depart ? 'depart' : step.agentic ? 'agentic' : step.schema || step.open || step.val || step.cross || step.edintro || step.tests ? 'schema' : 'flat';
+  pose = step.hero ? 'hero' : step.depart ? 'depart' : (step.agentic || step.agentintro) ? 'schema' : step.schema || step.open || step.val || step.cross || step.edintro || step.tests ? 'schema' : 'flat';
 
   await prepareStep(step);
   if (entry !== entryId) return;
   if (!AUTO) void prepareStep(STEPS[k + 1]);
   if (step.schema) { $('cursor').classList.remove('on'); show(step.state); layout(); schemaPhase(step.schema, prev); return; }
-  if (step.agentic) { $('cursor').classList.remove('on'); show(reduce ? 'ide' : 'ide_tree'); layout(); startAgent(); return; }
+  if (step.editorFlow && !step.code) { startEditorFlow(step,STEPS[prev]); return; }
+  if (step.agentintro) { $('cursor').classList.remove('on'); show('ide'); layout(); if(reduce)nextOn('agentintro');else finalLater(1100,()=>{if(STEPS[current]===step)nextOn('agentintro');}); return; }
+  if (step.agentic) { $('cursor').classList.remove('on'); show('ide'); layout(); fitAgentDiagram(); revealAgentDiagram(); return; }
   if (step.val) { $('cursor').classList.remove('on'); show(step.state); layout(); startVal(); return; }
   if (step.cross) { $('cursor').classList.remove('on'); show(step.state); layout(); startCross(); return; }
   if (step.edintro || step.tests || step.open) { $('cursor').classList.remove('on'); show(step.state); layout(); if (step.open) startOpen(); return; }
   if (step.depart) {   // pop out: the maximised field is left (Esc), the editor goes back to its tree
     // Swap the editor first, then turn the screen: no layer change while the 3D transform runs (it stuttered).
     $('cursor').classList.remove('on');
-    if (forward && !reduce) { show('ide_tree'); layout(); timer = setTimeout(() => show(step.state), 1100); } else { show(step.state); layout(); }
+    if (forward && !reduce) { show('ide_tree'); layout(); timer = setTimeout(() => { show(step.state); startPersonalisation(); }, 1100); } else { show(step.state); layout(); startPersonalisation(); }
     return; }
   if (step.code) {
     // Coming from the tree step on a desktop, the cursor already rests on the allocator: click at once.
     const fromTree = STEPS[prev]?.state === 'ed_tree' && STEPS[prev]?.target === 'alloc' && $('cursor').classList.contains('on') && innerWidth > 760;
-    const end = () => { show(step.state); settle(k); $('joinann').classList.remove('on'); nextOn('code'); };
-    if (forward && !reduce) playCode(end, fromTree); else end(); return; }
+    const end = () => { clearCodeMarks();codePlaybackActive=false;show(step.state);settle(k);$('joinann').classList.remove('on');nextOn('code'); };
+    if (forward && !reduce) {codePlaybackActive=true;playCode(end,fromTree);} else end();return; }
   stopLoop();
   // The clicks that lead here: `from` (one click on the previous state) or `play` ([state, target, next state]).
   const acts = step.play || (step.from && prev >= 0 ? [[STEPS[prev].state, step.from, step.state]] : []);
@@ -1258,30 +1319,40 @@ function startCross() { $('crosswin').classList.add('on'); const v = $('crossvid
 // The editor: click the allocator in the tree (Pod Lab's box opening, replayed with its own geometry),
 // then the editor joins the terminal, then the field's full-screen button.
 let codeTimer = null;
-function playCode(done, fromTree) {
-  const later = (ms, f) => { codeTimer = setTimeout(f, ms); }, node = targets.ed_tree?.alloc, box = targets.ed_alloc?.box,
-    fs = targets.ed3_box?.cbfs && targets.ed3_box.cbfs.map(v => v * .8);
-  show('ed_tree'); layout(); if (!node || !box) return done();
-  if (!fromTree) moveCursor(node);
-  later(fromTree ? 0 : 950, () => {
-    clickAt(node);
-    later(800, () => flight());   // the press (cursor and ripples, ~0.8 s) ends before the box flies
-  });
-  const flight = () => {
-    const fly = $('fly'), f = fly.firstChild, [x, y, w, hh] = box, [sx, sy, sw, sh] = node;
-    Object.assign(fly.style, {left: `${x}px`, top: `${y}px`, width: `${w}px`, height: `${hh}px`, transition: 'none',
-      transform: `translate(${sx - x}px,${sy - y}px) scale(${sw / w},${sh / hh})`});
-    Object.assign(f.style, {left: `${-x}px`, top: `${-y}px`});
-    fly.classList.add('on'); void fly.offsetWidth;
-    fly.style.transition = 'transform 420ms cubic-bezier(.2,.75,.25,1)'; fly.style.transform = 'none';
-    later(460, () => { show('ed_alloc'); $('cursor').classList.remove('on');
-      setTimeout(() => fly.classList.remove('on'), 420);
-      // Just before the join, say why the two share the screen; it stays until the step's bubble (freeBubble).
-      later(1000, () => { $('joinann').classList.add('on');
-        later(1500, () => { show('ide');
-          later(1100, () => { if (!fs) return done(); layout(fs); moveCursor(fs);
-            later(950, () => { clickAt(fs, 'Full screen'); later(520, () => { show('ide_max'); later(500, done); }); }); }); }); }); });
-  };
+function clearCodeMarks() { $('done').classList.remove('on');$('press').classList.remove('go');$('cursor').classList.remove('click','on'); }
+function fullscreenTarget() {
+  const frame=frames.ide?.querySelector('.l-box'),doc=frame?.contentDocument;
+  const button=[...(doc?.querySelectorAll('#editor-detail .editor-box button')||[])].find(b=>b.getClientRects().length && /^(Full screen|Plein écran)$/.test(b.getAttribute('aria-label')||b.title||''));
+  if(!button)return null;const r=button.getBoundingClientRect();
+  return [r.x*.8,r.y*.8,r.width*.8,r.height*.8];
+}
+function playCode(done,fromTree) {
+  const playback=entryId;
+  const later=(ms,fn)=>{codeTimer=setTimeout(()=>{if(entryId===playback && STEPS[current]?.code)fn();},ms);};
+  const node=targets.ed_tree?.alloc,element=frames.ed_alloc?.contentDocument?.querySelector('#editor-detail .editor-box');
+  const r=element?.getBoundingClientRect(),box=r&&r.width?[r.x,r.y,r.width,r.height]:targets.ed_alloc?.box;
+  $('next').classList.remove('on');$('done').classList.remove('on');show('ed_tree');layout();
+  if(!node||!box)return done();
+  if(!fromTree)moveCursor(node);
+  later(fromTree?100:1100,()=>{clickAt(node);later(500,flight);});
+  function flight(){
+    clearCodeMarks();const fly=$('fly'),f=fly.firstChild,[x,y,w,h]=box,[sx,sy,sw,sh]=node;
+    Object.assign(fly.style,{left:`${x}px`,top:`${y}px`,width:`${w}px`,height:`${h}px`,transition:'none',transform:`translate(${sx-x}px,${sy-y}px) scale(${sw/w},${sh/h})`});
+    Object.assign(f.style,{left:`${-x}px`,top:`${-y}px`});fly.classList.add('on');void fly.offsetWidth;
+    fly.style.transition='transform 320ms cubic-bezier(.2,.75,.25,1)';fly.style.transform='none';
+    later(600,()=>{
+      show('ed_alloc');
+      later(700,()=>{fly.classList.remove('on');$('joinann').classList.add('on');
+        later(900,()=>{frames.ed_alloc.classList.add('handoff');show('ide');
+          later(1700,()=>{frames.ed_alloc.classList.remove('handoff');
+            $('joinann').classList.remove('on');const fs=fullscreenTarget();
+            if(!fs)return done();layout(fs);moveCursor(fs);
+            later(1400,()=>{clickAt(fs);later(500,()=>{clearCodeMarks();show('ide_max');later(800,done);});});
+          });
+        });
+      });
+    });
+  }
 }
 
 // The Validation step: the sealed period is still locked; the cursor opens it, the results replace the card.
@@ -1310,6 +1381,7 @@ function startVal() {
 }
 // The "continue" prompt of a step with `nx`, at the moment its animation names.
 function nextOn(kind) {
+  if(codePlaybackActive)return;
   if (AUTO || current < 0 || current >= STEPS.length - 1 || STEPS[current].nx !== kind) return;
   clearTimeout(nextTimer); $('next').classList.add('on');
 }
@@ -1470,7 +1542,8 @@ function place(k) {
   const step = STEPS[k], t = step?.target && targets[step.state]?.[step.target];
   if (!t || step.hero) return;
   const [x, y, w, h] = toScreen(t), vw = innerWidth, vh = $('stage').clientHeight, b = $('bubble'); b.classList.remove('free');
-  Object.assign($('ring').style, {left: `${x - 6}px`, top: `${y - 6}px`, width: `${w + 12}px`, height: `${h + 12}px`});
+  const allocator=step.state==='ed_tree' && step.target==='alloc', pad=allocator ? 2 : 6;
+  Object.assign($('ring').style, {left: `${x-pad}px`, top: `${y-pad}px`, width: `${w+2*pad}px`, height: `${h+2*pad}px`,borderRadius:allocator ? `${4*view.s+2}px` : '0',boxShadow:allocator ? '0 0 0 2px var(--tuto-soft)' : ''});
   $('ring').classList.add('on');
   $('b-n').textContent = step.n; $('b-h').textContent = step.h; $('b-p').textContent = step.p;
   // Prefer the right of the target, then below, then above; keep inside the screen.
@@ -1479,6 +1552,7 @@ function place(k) {
   if (!step.below && x + w + 24 + bw < vw - 60) { left = x + w + 24; top = Math.max(70, Math.min(vh - bh - 20, y + h / 2 - 30)); b.classList.add('side'); b.style.setProperty('--py', `${Math.max(14, y + h / 2 - top - 6)}px`); }
   else if (y + h + 20 + bh < vh) { left = Math.max(16, Math.min(vw - bw - 16, x)); top = y + h + 20; b.style.setProperty('--px', `${Math.max(14, Math.min(bw - 26, x + w / 2 - left))}px`); }
   else { left = Math.max(16, Math.min(vw - bw - 16, x)); top = y - bh - 20; b.classList.add('below'); }
+  if(step.accounting && vw>760)left=Math.min(left,vw-bw-120);
   b.style.left = `${left}px`; b.style.top = `${top}px`; b.classList.add('on');
   if (step === STEPS[current]) nextOn('bubble');
 }
@@ -1499,6 +1573,128 @@ function schemaPhase() {
   };
   cycle();
 }
+
+// Original captured history and faster, independent conclusion scenes.
+let finaleTimers = [];
+function stopFinale(keepHistory=false) { finaleTimers.forEach(clearTimeout); finaleTimers = []; frames.ide?.querySelector('.pane-action')?.remove(); $('agentwin').classList.remove('revealing'); if(commitPlayback && !keepHistory){setEditorHistory(frames.ed_tree?.contentDocument,false);commitPlayback=false;} }
+function finalLater(ms, fn) { finaleTimers.push(setTimeout(fn, ms)); }
+// Restore the original editor's History toggle on the existing document.
+let commitPlayback=false;
+function historyButton(doc) { return [...(doc?.querySelectorAll('#editor-tiles button')||[])].find(b=>/^(Historique|History)$/.test(b.querySelector('strong')?.textContent.trim())); }
+function setEditorHistory(doc,open) {
+  const button=historyButton(doc), panel=doc?.getElementById('editor-history');if(!button||!panel)return;
+  panel.hidden=!open;panel.open=open;button.classList.toggle('is-open',open);button.setAttribute('aria-expanded',String(open));
+}
+function bindHistoryButton(doc) {
+  const button=historyButton(doc);if(!button||button.dataset.historyBound)return;
+  button.dataset.historyBound='true';button.addEventListener('click',()=>setEditorHistory(doc,doc.getElementById('editor-history').hidden));
+}
+function startEditorFlow(step,previous) {
+  show('ed_tree');const doc=frames.ed_tree?.contentDocument;bindHistoryButton(doc);commitPlayback=true;
+  const button=historyButton(doc),panel=doc?.getElementById('editor-history');if(!button||!panel)return;
+  const rect=e=>{const r=e.getBoundingClientRect();return [r.x,r.y,r.width,r.height];};
+  const later=(ms,fn)=>{if(reduce)fn();else finalLater(ms,()=>{if(STEPS[current]===step)fn();});};
+  const clickHistory=()=>{const target=rect(button);moveCursor(target);clickAt(target);button.click();};
+  if(step.editorFlow==='history-aim'){
+    setEditorHistory(doc,false);layout();moveCursor(rect(button));
+    later(750,()=>nextOn('editor'));return;
+  }
+  if(step.editorFlow==='history-open'){
+    layout();moveCursor(rect(button));
+    later(previous?.editorFlow==='history-aim'?100:750,()=>{
+      if(panel.hidden)clickHistory();layout();
+      later(1200,()=>nextOn('editor'));
+    });return;
+  }
+  // A second scroll closes history before anything points at the allocator.
+  layout(panel.hidden?targets.ed_tree.alloc:rect(button));
+  if(!panel.hidden){moveCursor(rect(button));}
+  later(previous?.editorFlow==='history-open'&&innerWidth>760?100:panel.hidden?0:750,()=>{
+    if(!panel.hidden)clickHistory();
+    later(350,()=>{$('cursor').classList.remove('click');$('press').classList.remove('go');});
+    const allocator=[...doc.querySelectorAll('button.editor-tree-card')].find(e=>/^(Allocateur|Allocator)$/.test(e.querySelector('.editor-tree-card-name')?.textContent.trim()));
+    if(!allocator)return;targets.ed_tree.alloc=rect(allocator);layout(targets.ed_tree.alloc);moveCursor(targets.ed_tree.alloc);
+    later(750,()=>{place(current);nextOn('editor');});
+  });
+}
+function revealAgentDiagram() {
+  const panel=$('agentwin');panel.classList.remove('revealing');
+  if(reduce || AUTO)return;
+  void panel.offsetWidth;panel.classList.add('revealing');
+}
+function drawAgentLinks() {
+  const panel=$('agentwin'),map=panel.querySelector('.agent-map'),page=panel.querySelector('.diagram-page');
+  const ns='http://www.w3.org/2000/svg',z=parseFloat(page.style.zoom)||1,base=map.getBoundingClientRect();
+  if(!base.width||!base.height)return;
+  const rect=selector=>{const e=map.querySelector(selector),r=e.getBoundingClientRect();return {x:(r.left-base.left)/z,y:(r.top-base.top)/z,w:r.width/z,h:r.height/z};};
+  const nodes={investor:rect('.agent-investor'),llm:rect('.agent-llm'),provider:rect('.agent-provider'),api:rect('.agent-api'),forge:rect('.agent-forge')};
+  const make=(tag,attrs)=>{const e=document.createElementNS(ns,tag);Object.entries(attrs).forEach(([k,v])=>e.setAttribute(k,String(v)));return e;};
+  let svg=map.querySelector('.agent-links');if(!svg){svg=make('svg',{class:'agent-links','aria-hidden':'true'});map.prepend(svg);}svg.replaceChildren();
+  svg.setAttribute('viewBox',`0 0 ${base.width/z} ${base.height/z}`);const defs=make('defs',{});svg.append(defs);
+  const colors={code:'#b3a0f0',market:'#67c5aa',result:'#29c5ff'},pad=1/z;
+  for(const [name,color] of Object.entries(colors)){const m=make('marker',{id:`agent-arrow-${name}`,viewBox:'0 0 8 8',refX:8,refY:4,markerWidth:8,markerHeight:8,orient:'auto',markerUnits:'userSpaceOnUse'});m.append(make('path',{d:'M0 0L8 4L0 8Z',fill:color}));defs.append(m);}
+  const link=(id,points,type)=>{const d=points.map(([x,y],i)=>`${i?'L':'M'}${x.toFixed(2)} ${y.toFixed(2)}`).join(' ');svg.append(make('path',{class:'agent-link',d,stroke:colors[type],'marker-end':`url(#agent-arrow-${type})`,'data-edge':id}));};
+  const center=n=>[n.x+n.w/2,n.y+n.h/2];
+  const connect=(from,to,type,id,lane=0)=>{
+    const a=nodes[from],b=nodes[to],ac=center(a),bc=center(b);
+    const vertical=Math.min(a.y+a.h,b.y+b.h)-Math.max(a.y,b.y),horizontal=Math.min(a.x+a.w,b.x+b.w)-Math.max(a.x,b.x);
+    if(vertical>20){const y=Math.max(a.y,b.y)+vertical*(.5+lane*.2);link(id,ac[0]<bc[0]?[[a.x+a.w+pad,y],[b.x-pad,y]]:[[a.x-pad,y],[b.x+b.w+pad,y]],type);}
+    else if(horizontal>20){const x=Math.max(a.x,b.x)+horizontal/2+lane*9;link(id,ac[1]<bc[1]?[[x,a.y+a.h+pad],[x,b.y-pad]]:[[x,a.y-pad],[x,b.y+b.h+pad]],type);}
+    else {const down=ac[1]<bc[1],sy=down?a.y+a.h+pad:a.y-pad,ey=down?b.y-pad:b.y+b.h+pad,my=(sy+ey)/2+lane*5;link(id,[[ac[0]+lane*7,sy],[ac[0]+lane*7,my],[bc[0]+lane*7,my],[bc[0]+lane*7,ey]],type);}
+  };
+  connect('investor','llm','result','investor-llm');
+  if(innerWidth>1100){
+    const l=nodes.llm,p=nodes.provider,a=nodes.api,label=rect('.provider-request');
+    const stem=Math.max(l.x+12,Math.min(l.x+l.w-12,label.x-8)),y=Math.max(p.y+8,Math.min(p.y+p.h-8,label.y-8));
+    link('llm-provider',[[stem,l.y-pad],[stem,y],[p.x-pad,y]],'code');
+    connect('provider','api','market','provider-api');
+    connect('llm','api','code','llm-api',-1);connect('api','llm','result','api-llm',1);
+  }else if(innerWidth<=760){connect('llm','provider','code','llm-provider');connect('provider','api','market','provider-api');}
+  else {
+    connect('llm','provider','code','llm-provider');connect('llm','api','code','llm-api',-1);connect('api','llm','result','api-llm',1);
+    const p=nodes.provider,a=nodes.api,l=nodes.llm,i=nodes.investor,x=(i.x+i.w+l.x)/2;
+    link('provider-api',[[p.x-pad,p.y+p.h*.7],[x,p.y+p.h*.7],[x,a.y+a.h*.3],[a.x+a.w+pad,a.y+a.h*.3]],'market');
+  }
+  connect('api','forge','code','api-forge',-1);connect('api','forge','market','api-forge-market',0);connect('forge','api','result','forge-api',1);
+  map.classList.add('svg-connectors');
+}
+function fitAgentDiagram() {
+  const panel=$('agentwin'), page=panel.querySelector('.diagram-page'); page.style.zoom='';
+  page.style.removeProperty('--agent-frame-width');page.style.removeProperty('--agent-divider-width');
+  if(innerWidth<=1100){drawAgentLinks();return;}
+  const css=getComputedStyle(panel), available=panel.clientHeight-parseFloat(css.paddingTop)-parseFloat(css.paddingBottom);
+  const scale=Math.min(1,available/page.scrollHeight,(panel.clientWidth-parseFloat(css.paddingLeft)-parseFloat(css.paddingRight))/page.scrollWidth);
+  page.style.zoom=scale;
+  // Preserve the site's visible stroke hierarchy after the diagram is fitted.
+  page.style.setProperty('--agent-frame-width',`${2.02/scale}px`);
+  page.style.setProperty('--agent-divider-width',`${1.02/scale}px`);
+  drawAgentLinks();
+}
+function paneAction(text, selector) {
+  const pane=frames.ide.querySelector('.pane-l'); let hint=pane.querySelector('.pane-action');
+  if(!hint){hint=document.createElement('span');hint.className='pane-action';pane.append(hint);}
+  hint.textContent=text; hint.classList.add('on');
+  const active=pane.querySelector({box:'.l-box',max:'.l-max',tree:'.l-tree',purple:'.l-purple'}[frames.ide.dataset.left]);
+  const doc=active?.contentDocument;
+  const button=selector==='fullscreen' ? [...(doc?.querySelectorAll('button')||[])].find(b=>b.closest('#editor-detail')&&b.getClientRects().length&&/^(Full screen|Plein écran)$/.test(b.getAttribute('aria-label')||b.title||'')) : selector==='tree' ? doc?.getElementById('editor-back-tree') : null;
+  if(button){button.style.outline='3px solid #29c5ff';finalLater(450,()=>button.style.outline='');}
+  finalLater(1100,()=>hint.classList.remove('on'));
+}
+function startPersonalisation() {
+  if (reduce || AUTO) return;
+  const labels=["Full screen", "Escape", "Back to the tree", "Open allocator"];
+  const sequence=[['ide_custom'],['ide_gold'],['ide_editor'],['ide_terminal_reset'],['ide'],
+    ['ide_max',labels[0],'fullscreen'],['ide',labels[1]],['ide_tree',labels[2],'tree'],['ide',labels[3]]];
+  const cycle=()=>{
+    sequence.forEach(([state,label,selector],i)=>finalLater(1800+i*2100,()=>{
+      if(!STEPS[current]?.depart)return;
+      if(label)paneAction(label,selector);
+      if(label)finalLater(350,()=>{if(STEPS[current]?.depart)show(state);});else show(state);
+    }));
+    finalLater(22000,()=>{if(STEPS[current]?.depart)cycle();});
+  };cycle();
+}
+
 let agentTimer = null;
 function stopAgent() { clearTimeout(agentTimer); }
 function startAgent() {
@@ -1516,7 +1712,10 @@ function startAgent() {
 const FIRST_TERMINAL_STEP = STEPS.findIndex(s => !s.hero && !s.schema && !s.open);
 // Time on screen: the animation that leads in or plays, then reading time for the bubble.
 function stepTime(s) {
+  if (s.editorFlow && !s.code) return s.editorFlow==='history-open'?5000:2800;
+  if (s.accounting) return 6500;
   if (s.val) return 12500;
+  if (s.agentintro) return 8000;
   if (s.agentic) return 14000;
   if (s.depart) return 6000;
   if (s.cross) return 19000;
