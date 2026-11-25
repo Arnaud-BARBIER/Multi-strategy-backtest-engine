@@ -1264,7 +1264,7 @@ async function enter(k, forward) {
   // A step with `nx` shows it at a set moment of its own animation (nextOn); the others after a delay.
   if (step.hero && !AUTO)nextTimer=setTimeout(()=>{
     if(STEPS[current]!==step)return;const prompt=$('next');prompt.classList.add('on');
-    if(!heroNoticeShown){heroNoticeShown=true;if(!reduce && innerWidth>760){prompt.classList.add('big');heroNoticeTimer=setTimeout(()=>prompt.classList.remove('big'),3200);}}
+    if(!heroNoticeShown){heroNoticeShown=true;if(!reduce && innerWidth>760){prompt.classList.add('big');heroNoticeTimer=setTimeout(()=>prompt.classList.remove('big'),1600);}}
   },reduce?0:1100);
   if (!step.hero && !step.nx && k < STEPS.length - 1 && !AUTO)
     nextTimer = setTimeout(() => $('next').classList.add('on'), step.schema ? 8000 : Math.min(9000, Math.max(2500, stepTime(step) - 2500)));
