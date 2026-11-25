@@ -29,7 +29,7 @@ Known limitation:
 
 def fetchdata(ticker, start, end):
     df=pd.read_csv(
-        f'/Users/arnaudbarbier/Desktop/Quant reaserch/Metals/{ticker}.csv',
+        f'/Users/arnaudbarbier/Quant reaserch/Metals/{ticker}.csv',
         header=None,
         names=['Datetime', 'Open', 'High', 'Low', 'Close', 'Volume']
     )

@@ -1837,7 +1837,7 @@ class NJITEngine:
 
 #------------------------------- tests ------------------------------------
 
-pipeline = DataPipeline("/Users/arnaudbarbier/Desktop/Quant reaserch/Metals/CSV/Metals")
+pipeline = DataPipeline("/Users/arnaudbarbier/Quant reaserch/Metals/CSV/Metals")
 cfg = BacktestConfig(
     # signal defaults
     period_1=30,

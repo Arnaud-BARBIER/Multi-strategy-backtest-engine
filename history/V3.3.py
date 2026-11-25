@@ -1145,7 +1145,7 @@ class BacktestEngine:
             "period_cvar"         : round(pr_cvar, 4) if not np.isnan(pr_cvar) else np.nan,
         }
     
-pipeline = DataPipeline("/Users/arnaudbarbier/Desktop/Quant reaserch/Metals")
+pipeline = DataPipeline("/Users/arnaudbarbier/Quant reaserch/Metals")
 
 cfg = BacktestConfig(
     strategy='close_vs_ema',
