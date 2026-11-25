@@ -37,3 +37,17 @@ averages and the `individual_sharpe` pane under the candles.
 - Exact metrics: annual return .17603038755922906, volatility .1611225113321582, Sharpe 1.0874035216788729, drawdown -.266643949899779.
 - Browser QA: 1333×1250 capture, joined demo forward/back at 1288×723; all six cell rectangles unchanged, no horizontal overflow. Candles 231/476px = 48.5% of execution cell.
 - Evidence: `/tmp/forge-term23/{capture.log,qa.log,geometry_before.json,geometry_after.json,chk/ide.png}`; levers: not concerned.
+
+## Item 2 execution — 25 November 2026
+- Captured the unchanged `compose.html` at 1600×1000 DPR1.8 → `tools/site/og/ide.jpg` (2880×1800); removed temporary `_og.html`.
+- Captured `card.html` via file:// at 1200×627 DPR2, fonts loaded; resized with Lanczos to 1200×627 JPEG quality88 → `docs/og5.jpg`; removed `og4.jpg`.
+- Verified visually: editor tree (Mon portefeuille → Allocateur and branches), moving averages, bands and individual-Sharpe pane visible in the final card.
+- Updated FR/EN preview sources and regenerated both homes. All four HTML files differ only by the requested og4→og5 path; Umami/other OG metadata preserved, no noindex.
+- Checks: exact JPEG dimensions/format, temporary-file cleanup, geometry and branding assertions, `git diff --check` all pass. No push.
+- Persistent QA evidence: `forge_demo_recovery/2026-11-25/term23_indicators_work/`; levers: not concerned.
+
+For the director
+- Items1–2 complete: real term23 indicators, unchanged report cells, candle budget48.5%, updated og5 card.
+- Current code, isolated restored state, JIT off; no engine edit or compilation.
+- Desktop1288×723 forward/back QA and FR/EN metadata checks pass.
+- Cross-asset recording and other director tasks were outside this session. No push.
